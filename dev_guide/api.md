@@ -16,6 +16,7 @@ smonitor.configure(
     capture_warnings=True,
     trace_depth=3,
     show_traceback=True,
+    profile='user',
     handlers=None,
 )
 ```
@@ -26,17 +27,23 @@ Parameters
 - `capture_warnings`: intercept `warnings.warn`.
 - `trace_depth`: breadcrumb depth to include in output.
 - `show_traceback`: include enhanced traceback when errors occur.
+- `profile`: output/profile style (`'user'`, `'dev'`, `'qa'`, `'agent'`, `'debug'`).
 - `handlers`: optional list of handler instances to override defaults.
 
 Behavior
 - Idempotent: calling `configure` multiple times updates the global state.
 - If no handlers are provided, a default console handler is created.
+- `configure(profile=...)` must override any `_smonitor.py` defaults.
 
 ### emit(level, message, *, source=None, extra=None)
 Emit a raw diagnostic event.
 
 ```python
 smonitor.emit('WARNING', 'Selection is ambiguous', source='molsysmt.select')
+```
+Extended signature (optional fields):
+```
+emit(level, message, *, source=None, extra=None, category=None, code=None, tags=None)
 ```
 
 ### report()
@@ -72,7 +79,7 @@ Behavior
 
 ## 3) Configuration Discovery
 
-`_monitor.py` files can be placed at a project root and auto-loaded by `smonitor.config.discovery`.
+`_smonitor.py` files can be placed at a project root and auto-loaded by `smonitor.config.discovery`.
 
 Suggested contents:
 ```python
@@ -82,6 +89,7 @@ RULES = {
     }
 }
 ```
+Additionally, `_smonitor.py` can define `PROFILE`, `PROFILES`, `ROUTES`, `FILTERS`, `CODES`, and `SIGNALS`.
 
 ## 4) Minimal Console Output
 

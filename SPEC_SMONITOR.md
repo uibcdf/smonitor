@@ -38,7 +38,7 @@ monitor/
     file.py         # Standard logging output to disk
     json.py         # Structured data for automated audits and telemetry
   config/
-    discovery.py    # Auto-resolves _monitor.py in project roots
+    discovery.py    # Auto-resolves _smonitor.py in project roots
 ```
 
 ---
@@ -97,7 +97,7 @@ smonitor.report()
 ```
 
 ### 4.4 Symmetry with the "Digest" family
-`monitor` will automatically find a `_monitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
+`monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
 
 ---
 
@@ -121,3 +121,183 @@ To implement `monitor` across the UIBCDF suite:
 ---
 
 > **Tagline:** `smonitor` — The precision telemetry system for the scientific Python stack.
+
+---
+
+# v0.2 (Draft) — Expanded Design Skeleton
+
+**Status:** DRAFT  
+**Notes:** This section extends v0.1 without breaking the original vision. It formalizes configuration discovery via `_smonitor.py`, profiles, and a policy engine, and introduces a communication style guide for user-facing messages.
+
+## 1. Configuration Sources and Priority
+
+Configuration can be provided by multiple sources. Higher priority overrides lower priority:
+
+1. **Runtime call**: `smonitor.configure(...)`
+2. **CLI arguments** (if a CLI exists): `--profile dev`, `--level INFO`, etc.
+3. **Environment variables**: e.g., `SMONITOR_PROFILE=dev`
+4. **Project file**: `_smonitor.py` at project root
+5. **Internal defaults**
+
+The active profile may be changed at runtime, and must override `_smonitor.py`.
+
+## 2. `_smonitor.py` Schema (Project Root)
+
+Every library in the ecosystem can define `_smonitor.py` in its root. This file declares preferences and rules; `smonitor` decides the final output.
+
+```python
+# _smonitor.py
+
+PROFILE = "user"  # Default profile for this project
+
+SMONITOR = {
+    "level": "WARNING",
+    "trace_depth": 3,
+    "show_traceback": False,
+    "capture_warnings": True,
+    "capture_logging": True,
+    "handlers": ["console"],
+}
+
+PROFILES = {
+    "user": {
+        "level": "WARNING",
+        "show_traceback": False,
+        "style": "user",
+    },
+    "dev": {
+        "level": "INFO",
+        "show_traceback": True,
+        "style": "dev",
+    },
+    "qa": {
+        "level": "INFO",
+        "show_traceback": True,
+        "style": "qa",
+    },
+    "agent": {
+        "level": "WARNING",
+        "show_traceback": False,
+        "style": "agent",
+    },
+    "debug": {
+        "level": "DEBUG",
+        "show_traceback": True,
+        "style": "debug",
+    },
+}
+
+# Policy Engine rules (routing + filtering)
+ROUTES = [
+    {"when": {"level": "WARNING", "source_prefix": "molsysmt.select"},
+     "send_to": ["console", "json"]},
+]
+
+FILTERS = [
+    {"when": {"code": "MSM-W010"}, "rate_limit": "1/100"},
+]
+
+# Message metadata (user/dev/qa/agent hints)
+CODES = {
+    "MSM-W010": {
+        "title": "Selection ambiguous",
+        "user_message": "La selección es ambigua.",
+        "user_hint": "Especifica la selección con más detalle.",
+        "dev_hint": "Usa selectors explícitos.",
+    },
+}
+
+# Optional: signal contracts for docs/tests
+SIGNALS = {
+    "molsysmt.select": {
+        "warnings": ["MSM-W010"],
+        "errors": ["MSM-E120"],
+        "extra_required": ["selection"],
+    }
+}
+```
+
+## 3. Policy Engine
+
+The policy engine applies declarative rules to events **after** normalization and **before** handler dispatch. It can:
+
+- route events to handlers,
+- filter or rate-limit repetitive events,
+- transform or enrich event fields.
+
+### 3.1 Rule Format: `when`
+
+`when` supports exact matches and operators. Supported keys:
+
+- `level`, `source`, `source_prefix`, `category`, `code`, `tags`, `exception_type`, `library`
+
+Operators:
+
+- `eq` (default), `in`, `prefix`, `contains`, `regex`
+
+Examples:
+
+```python
+{"when": {"level": "WARNING", "source_prefix": "molsysmt.form"}}
+{"when": {"code": {"in": ["MSM-W010", "MSM-W011"]}}}
+{"when": {"category": {"regex": ".*Dep.*"}}}
+{"when": {"tags": {"contains": "io"}}}
+```
+
+## 4. Communication Style Guide (By Profile)
+
+### 4.1 Global rules
+- Always explain **what happened** and **how to fix it**.
+- No blame; messages should feel helpful and collaborative.
+- Links are optional; never required to understand the message.
+
+### 4.2 Profile: `user`
+Tone: clear, friendly, minimal jargon.
+
+```
+Error: <qué pasó>.
+Solución: <qué hacer>.
+Ejemplo: <ejemplo correcto>.
+Más ayuda: <URL opcional>.
+```
+
+### 4.3 Profile: `dev`
+Tone: precise, technical, contextual.
+
+```
+Error [CODE]: <mensaje>
+Context: function=..., arg=..., value=...
+Hint: ...
+```
+
+### 4.4 Profile: `qa`
+Tone: systematic, reproducible.
+
+```
+[CODE] <mensaje> | function=... | input=...
+Expected: yes/no
+```
+
+### 4.5 Profile: `agent`
+Tone: structured, parsable.
+
+```
+code=... category=... action=... extra.foo=...
+```
+
+### 4.6 Profile: `debug`
+Tone: deep diagnostics.
+
+```
+Error [CODE] (event_id=...):
+Context chain: ...
+Traceback (last N frames): ...
+```
+
+## 5. User-Facing Clarity Requirement
+
+All exceptions and warnings intended for end users must:
+
+1. Describe the problem in plain language.
+2. Suggest a concrete fix or next step.
+3. Avoid internal jargon unless the profile is `dev`/`debug`.

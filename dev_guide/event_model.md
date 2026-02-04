@@ -9,6 +9,13 @@ Each emitted event is a dictionary with the following keys:
 - `message`: human-readable message.
 - `context`: breadcrumb stack and metadata.
 - `extra`: optional structured data.
+Optional fields:
+- `category`: logical category or warning class name.
+- `code`: stable event code (e.g., `MSM-W010`).
+- `library`: top-level library id (e.g., `molsysmt`).
+- `exception_type`: exception class name.
+- `event_id`: unique event identifier.
+- `tags`: list of tags (e.g., `["io","selection"]`).
 
 Example:
 ```json
@@ -48,6 +55,7 @@ Handlers receive the full event dict and must:
 - be side-effect safe
 - avoid raising exceptions (errors should be swallowed or logged)
 - support a minimal `handle(event)` interface
+Handlers may also honor the active `profile` to format messages differently.
 
 ## Severity Routing
 - The manager filters by `level` before dispatching.

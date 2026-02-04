@@ -9,6 +9,9 @@
 - Rich, human-friendly output with optional structured logs.
 - Symmetry with `arg_digest` and `dep_digest` through a `@signal` decorator.
 - Zero-surprise behavior: opt-in with graceful fallback when disabled.
+- Configuration discovery via `_smonitor.py` in project roots.
+- Policy-driven routing and filtering of events (Policy Engine).
+- Profile-based communication styles (user/dev/qa/agent/debug).
 
 ## Architecture Overview
 ```
@@ -26,7 +29,9 @@ smonitor/
     file.py         # Text file output
     json.py         # Structured output
   config/
-    discovery.py    # Auto-load _monitor.py rules
+    discovery.py    # Auto-load _smonitor.py rules
+  policy/
+    engine.py       # Policy Engine (routing/filtering/transforms)
 ```
 
 ## Event Model
@@ -36,6 +41,8 @@ All events emitted by smonitor should normalize to a single payload shape:
 - `message`: human-readable text
 - `context`: call-chain and metadata from `context.py`
 - `extra`: structured dict for domain-specific data
+Optional fields:
+- `category`, `code`, `library`, `exception_type`, `event_id`, `tags`
 
 ## Core Components
 
@@ -45,6 +52,7 @@ Singleton responsible for:
 - registering handlers
 - routing events to handlers
 - holding the active context stack
+- evaluating policy rules and profiles
 
 ### 2) core.context
 - Uses `contextvars` to store a per-task call-chain
@@ -69,6 +77,14 @@ Singleton responsible for:
 ### exception bridge (emitters.error)
 - Optional `sys.excepthook` integration for unhandled exceptions
 - Attach call-chain context for top-level crashes
+ 
+## Policy Engine
+- Declarative routing/filtering/transforms applied after normalization and before handler dispatch.
+- Uses `when` matchers on event fields (level/source/code/category/tags/etc.).
+ 
+## Profiles
+- Profiles define communication style: `user`, `dev`, `qa`, `agent`, `debug`.
+- Runtime `configure(profile=...)` overrides `_smonitor.py` and environment/CLI.
 
 ## Handlers
 
@@ -110,7 +126,7 @@ smonitor.configure(
 
 ### Phase 2: Ecosystem integration
 - Add `@signal` to key entrypoints in arg_digest and dep_digest
-- Provide `_monitor.py` in each library to customize hints and formatting
+- Provide `_smonitor.py` in each library to customize hints and formatting
 
 ### Phase 3: MolSysMT adoption
 - Replace `msm.config.setup_logging()` with `smonitor.configure()`

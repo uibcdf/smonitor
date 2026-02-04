@@ -4,6 +4,7 @@
 - Create package layout: `core/`, `emitters/`, `handlers/`, `config/`.
 - Add empty `__init__.py` in each subpackage.
 - Add a small `__version__` and `__all__` definition in the top-level package.
+- Add `policy/` package for policy engine.
 
 ## Phase 1 — Core MVP
 - Implement `core.context` with contextvars:
@@ -15,6 +16,7 @@
   - `configure(...)`
   - `emit(event)`
   - `add_handler(handler)` / `remove_handler(handler)`
+- Add profile support in manager (`profile`, `style`) with runtime override.
 - Implement `core.decorator`:
   - `@signal` that wraps functions
   - ensures push/pop
@@ -29,6 +31,8 @@
   - optionally `LoggerAdapter` with extra context
 - `emitters.error`:
   - optional `sys.excepthook` integration
+- Implement policy engine (routing/filtering/transforms) and integrate before handler dispatch.
+- Add `_smonitor.py` discovery in `config.discovery`.
 
 ## Phase 3 — Handlers
 - `handlers.console`:
@@ -38,16 +42,19 @@
   - text logs with timestamps
 - `handlers.json`:
   - JSON lines for telemetry
+- Ensure handlers honor active `profile` for formatting.
 
 ## Phase 4 — Integration
 - Add `@signal` to `arg_digest` and `dep_digest` entrypoints.
-- Add `_monitor.py` in MolSysMT root for hints and formatting.
+- Add `_smonitor.py` in MolSysMT root for hints and formatting.
 - Replace MolSysMT logging setup with `smonitor.configure`.
+- Update to `_smonitor.py` naming and profile-based output controls.
 
 ## Phase 5 — Docs & Examples
 - Document the event model.
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
+- Document `_smonitor.py` schema, policy engine, and communication styles by profile.
 
 ## Milestones
 - M1: Core MVP and a single console handler.
