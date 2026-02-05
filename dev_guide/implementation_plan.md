@@ -5,6 +5,7 @@
 - Add empty `__init__.py` in each subpackage.
 - Add a small `__version__` and `__all__` definition in the top-level package.
 - Add `policy/` package for policy engine.
+Status: **Done** (structure + package scaffold committed)
 
 ## Phase 1 — Core MVP
 - Implement `core.context` with contextvars:
@@ -21,6 +22,7 @@
   - `@signal` that wraps functions
   - ensures push/pop
   - on exception: emit error event and re-raise
+Status: **Done** (core context, manager, @signal; args_summary flag added)
 
 ## Phase 2 — Emitters
 - `emitters.warn`:
@@ -33,6 +35,7 @@
   - optional `sys.excepthook` integration
 - Implement policy engine (routing/filtering/transforms) and integrate before handler dispatch.
 - Add `_smonitor.py` discovery in `config.discovery`.
+Status: **Done (initial)** (warnings/logging/exceptions emitters; policy engine core; discovery stub)
 
 ## Phase 3 — Handlers
 - `handlers.console`:
@@ -43,18 +46,21 @@
 - `handlers.json`:
   - JSON lines for telemetry
 - Ensure handlers honor active `profile` for formatting.
+Status: **Partial** (console handler plain; file/json pending)
 
 ## Phase 4 — Integration
 - Add `@signal` to `arg_digest` and `dep_digest` entrypoints.
 - Add `_smonitor.py` in MolSysMT root for hints and formatting.
 - Replace MolSysMT logging setup with `smonitor.configure`.
 - Update to `_smonitor.py` naming and profile-based output controls.
+Status: **Not started**
 
 ## Phase 5 — Docs & Examples
 - Document the event model.
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
 - Document `_smonitor.py` schema, policy engine, and communication styles by profile.
+Status: **Partial** (Sphinx scaffold + API stub; content pending)
 
 ## Milestones
 - M1: Core MVP and a single console handler.

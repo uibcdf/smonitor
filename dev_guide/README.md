@@ -12,3 +12,10 @@ This folder collects the initial developer documentation for `smonitor`.
 ## Scope
 These documents define the initial plan and interfaces. They are not a finalized specification and may evolve as implementation starts.
 The authoritative checkpoint for v0.2 decisions is `SPEC_SMONITOR.md` (section v0.2 Draft).
+
+## Current Status (Checkpoint)
+- Core scaffold, manager/context, and `@signal` implemented.
+- Emitters for warnings/logging/exceptions implemented (initial).
+- Policy engine core implemented (routing/filtering with rate limit stub).
+- Console handler implemented (plain).
+- Sphinx docs scaffold and tests added.
