@@ -46,21 +46,21 @@ Status: **Done (initial)** (warnings/logging/exceptions emitters; policy engine 
 - `handlers.json`:
   - JSON lines for telemetry
 - Ensure handlers honor active `profile` for formatting.
-Status: **Partial** (console handler plain; file/json pending)
+Status: **Partial** (console/file/json implemented; rich formatting pending)
 
 ## Phase 4 — Integration
 - Add `@signal` to `arg_digest` and `dep_digest` entrypoints.
 - Add `_smonitor.py` in MolSysMT root for hints and formatting.
 - Replace MolSysMT logging setup with `smonitor.configure`.
 - Update to `_smonitor.py` naming and profile-based output controls.
-Status: **Not started**
+Status: **Started** (integration helpers added in `smonitor.integrations`; real adoption pending)
 
 ## Phase 5 — Docs & Examples
 - Document the event model.
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
 - Document `_smonitor.py` schema, policy engine, and communication styles by profile.
-Status: **Partial** (Sphinx scaffold + API stub; content pending)
+Status: **Partial** (Sphinx scaffold + config/policy/integration stubs; content pending)
 
 ## Milestones
 - M1: Core MVP and a single console handler.

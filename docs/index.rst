@@ -10,6 +10,9 @@ Contents
    :maxdepth: 2
 
    api
+   configuration
+   policy
+   integration
 
 API Reference
 -------------

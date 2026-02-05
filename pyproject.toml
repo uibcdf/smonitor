@@ -20,7 +20,15 @@ classifiers = [
 rich = ["rich>=13"]
 
 [tool.setuptools]
-packages = ["smonitor", "smonitor.core", "smonitor.emitters", "smonitor.handlers", "smonitor.config", "smonitor.policy"]
+packages = [
+  "smonitor",
+  "smonitor.core",
+  "smonitor.emitters",
+  "smonitor.handlers",
+  "smonitor.config",
+  "smonitor.policy",
+  "smonitor.integrations",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
