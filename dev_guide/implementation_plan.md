@@ -35,7 +35,7 @@ Status: **Done** (core context, manager, @signal; args_summary flag added)
   - optional `sys.excepthook` integration
 - Implement policy engine (routing/filtering/transforms) and integrate before handler dispatch.
 - Add `_smonitor.py` discovery in `config.discovery`.
-Status: **Done (initial)** (warnings/logging/exceptions emitters; policy engine core; discovery stub)
+Status: **Done (initial)** (warnings/logging/exceptions emitters; policy engine core; discovery stub; logging captureWarnings integration)
 
 ## Phase 3 — Handlers
 - `handlers.console`:
@@ -60,12 +60,17 @@ Status: **Started** (integration helpers added in `smonitor.integrations`; real 
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
 - Document `_smonitor.py` schema, policy engine, and communication styles by profile.
-Status: **Partial** (Sphinx scaffold + config/policy/integration/docs/examples; content pending)
+Status: **Partial** (Sphinx scaffold + config/policy/integration/docs/examples; catalog generator added)
 
 ## Additional Hardening
 - Add CLI for validation/reporting and profile selection.
 - Add environment variable support.
 Status: **Done** (CLI + env config added)
+
+## Additional QA
+- Add event schema validation in dev/qa profiles.
+- Add optional strict SIGNALS enforcement.
+Status: **Done**
 
 ## Milestones
 - M1: Core MVP and a single console handler.

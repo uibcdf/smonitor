@@ -42,6 +42,8 @@ monitor/
     validation.py   # Validate _smonitor.py schema (keys, types)
   cli/
     main.py         # CLI for config validation and reports
+  validation.py     # Event schema validation (dev/qa)
+  docs_utils.py     # Utilities to render CODES/SIGNALS tables
 ```
 
 ---
@@ -74,7 +76,8 @@ smonitor.configure(
     trace_depth=3,         # How many levels of parent-calls to show
     show_traceback=True,   # Enhanced error context
     profile='user',        # Output profile: user/dev/qa/agent/debug
-    profiling=False        # Attach duration to context frames
+    profiling=False,       # Attach duration to context frames
+    strict_signals=False   # Enforce SIGNALS contracts in dev/qa
 )
 ```
 
@@ -109,6 +112,13 @@ not full performance analysis.
 ### 4.6 Profile-Aware Messaging (CODES)
 Libraries can define `CODES` in `_smonitor.py` to provide profile-specific messages and hints.
 If an event is emitted with a `code` and an empty `message`, smonitor fills it from `CODES`.
+
+### 4.7 Event Schema Validation (dev/qa)
+In `dev` and `qa` profiles, smonitor validates event schema and attaches a `schema_warning`
+if required fields are missing or invalid.
+
+### 4.8 Catalog Generation
+Smonitor can render simple tables of `CODES` and `SIGNALS` for docs (optional tooling).
 
 ### 4.4 Symmetry with the "Digest" family
 `monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
@@ -206,7 +216,7 @@ PROFILES = {
 # SMONITOR_PROFILE, SMONITOR_LEVEL, SMONITOR_TRACE_DEPTH,
 # SMONITOR_CAPTURE_WARNINGS, SMONITOR_CAPTURE_LOGGING,
 # SMONITOR_CAPTURE_EXCEPTIONS, SMONITOR_SHOW_TRACEBACK,
-# SMONITOR_ARGS_SUMMARY, SMONITOR_PROFILING
+# SMONITOR_ARGS_SUMMARY, SMONITOR_PROFILING, SMONITOR_STRICT_SIGNALS
 
 # Policy Engine rules (routing + filtering)
 ROUTES = [
@@ -230,6 +240,7 @@ CODES = {
 
 # CLI
 # smonitor --validate-config
+# smonitor --check --check-level WARNING --check-code MSM-W010 --check-source molsysmt.select
 # smonitor --profile dev --report
 
 # Optional: signal contracts for docs/tests
