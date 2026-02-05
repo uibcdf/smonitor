@@ -23,6 +23,7 @@ class FileHandler:
         code = event.get("code")
         context = event.get("context") or {}
         prefix = f"[{code}] " if code else ""
+        message = str(message).replace("\n", "\\n")
         if profile == "user":
             return f"{ts} {level} | {message}"
         if profile == "qa":

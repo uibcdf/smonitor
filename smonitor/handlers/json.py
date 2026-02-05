@@ -19,5 +19,10 @@ class JsonHandler:
         payload.setdefault("source", event.get("source"))
         payload.setdefault("code", event.get("code"))
         payload.setdefault("category", event.get("category"))
+        # Ensure extra is JSON-serializable
+        try:
+            json.dumps(payload)
+        except Exception:
+            payload["extra"] = {"_error": "non-serializable extra"}
         with open(self.path, self.mode, encoding="utf-8") as fh:
             fh.write(json.dumps(payload, ensure_ascii=False) + "\n")
