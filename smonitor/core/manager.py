@@ -24,6 +24,8 @@ class ManagerConfig:
     strict_signals: bool = False
     strict_schema: bool = False
     enabled: bool = True
+    profiling_buffer_size: int = 1000
+    profiling_hooks: list | None = None
 
 
 class Manager:
@@ -40,6 +42,7 @@ class Manager:
         }
         self._handler_errors: Dict[str, int] = {}
         self._timings: Dict[str, List[float]] = {}
+        self._timeline: List[Dict[str, Any]] = []
 
     @property
     def config(self) -> ManagerConfig:
@@ -66,6 +69,8 @@ class Manager:
         strict_signals: Optional[bool] = None,
         strict_schema: Optional[bool] = None,
         enabled: Optional[bool] = None,
+        profiling_buffer_size: Optional[int] = None,
+        profiling_hooks: Optional[List[Any]] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -97,6 +102,10 @@ class Manager:
             self._config.strict_schema = strict_schema
         if enabled is not None:
             self._config.enabled = enabled
+        if profiling_buffer_size is not None:
+            self._config.profiling_buffer_size = profiling_buffer_size
+        if profiling_hooks is not None:
+            self._config.profiling_hooks = profiling_hooks
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
@@ -137,6 +146,17 @@ class Manager:
 
     def record_timing(self, key: str, duration_ms: float) -> None:
         self._timings.setdefault(key, []).append(duration_ms)
+        # timeline buffer
+        if self._config.profiling_buffer_size > 0:
+            self._timeline.append(
+                {
+                    "key": key,
+                    "duration_ms": duration_ms,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            )
+            if len(self._timeline) > self._config.profiling_buffer_size:
+                self._timeline.pop(0)
 
     def emit(
         self,
@@ -271,10 +291,32 @@ class Manager:
                 "p95_ms": p95,
                 "max_ms": max(values_sorted),
             }
+        # Aggregate by module prefix
+        timings_by_module: Dict[str, Dict[str, float]] = {}
+        for key, summary in timings_summary.items():
+            module = key.rsplit(".", 1)[0] if "." in key else key
+            mod = timings_by_module.setdefault(module, {"count": 0, "p50_ms": 0.0, "p95_ms": 0.0, "max_ms": 0.0})
+            mod["count"] += summary["count"]
+            mod["p50_ms"] = max(mod["p50_ms"], summary["p50_ms"])
+            mod["p95_ms"] = max(mod["p95_ms"], summary["p95_ms"])
+            mod["max_ms"] = max(mod["max_ms"], summary["max_ms"])
+
+        profiling_meta = {}
+        hooks = self._config.profiling_hooks or []
+        for hook in hooks:
+            try:
+                data = hook()
+                if isinstance(data, dict):
+                    profiling_meta.update(data)
+            except Exception:
+                continue
         return {
             **self._counts,
             "handler_errors": dict(self._handler_errors),
             "timings": timings_summary,
+            "timings_by_module": timings_by_module,
+            "timeline": list(self._timeline),
+            "profiling_meta": profiling_meta,
             "peak_memory": None,
         }
 

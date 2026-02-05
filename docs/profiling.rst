@@ -19,6 +19,30 @@ Example
   work()
   print(smonitor.report()["timings"])
 
+Timeline buffer
+---------------
+
+`profiling_buffer_size` controls how many recent timings are stored in memory.
+
+:: 
+
+  smonitor.configure(profiling=True, profiling_buffer_size=200)
+  print(smonitor.report()["timeline"][:5])
+
+GPU and accelerator hooks
+-------------------------
+
+You can provide `profiling_hooks` (list of callables) to include accelerator
+metadata in `report()` without hard dependencies.
+
+Example (pseudo-code):: 
+
+  def gpu_hook():
+      # Use pynvml or torch if available
+      return {"gpu_name": "A100", "gpu_mem_used_mb": 1024}
+
+  smonitor.configure(profiling=True, profiling_hooks=[gpu_hook])
+
 Output (example)
 ----------------
 
