@@ -39,6 +39,9 @@ monitor/
     json.py         # Structured data for automated audits and telemetry
   config/
     discovery.py    # Auto-resolves _smonitor.py in project roots
+    validation.py   # Validate _smonitor.py schema (keys, types)
+  cli/
+    main.py         # CLI for config validation and reports
 ```
 
 ---
@@ -102,6 +105,10 @@ smonitor.report()
 When enabled (`profiling=True`), each context frame includes a `duration_ms` field
 with the function execution time. This is lightweight and intended for QA/dev profiling,
 not full performance analysis.
+
+### 4.6 Profile-Aware Messaging (CODES)
+Libraries can define `CODES` in `_smonitor.py` to provide profile-specific messages and hints.
+If an event is emitted with a `code` and an empty `message`, smonitor fills it from `CODES`.
 
 ### 4.4 Symmetry with the "Digest" family
 `monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
@@ -220,6 +227,10 @@ CODES = {
         "dev_hint": "Usa selectors explícitos.",
     },
 }
+
+# CLI
+# smonitor --validate-config
+# smonitor --profile dev --report
 
 # Optional: signal contracts for docs/tests
 SIGNALS = {
