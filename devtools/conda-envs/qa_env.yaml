@@ -1,0 +1,12 @@
+channels:
+  - uibcdf
+  - conda-forge
+
+dependencies:
+  - python
+  - pip
+  - pytest
+  - pytest-cov
+  - pytest-xdist
+  - ruff
+  - versioningit

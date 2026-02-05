@@ -16,6 +16,12 @@ Tests:
 conda env create -f devtools/conda-envs/test_env.yaml -n smonitor-test
 ```
 
+QA:
+
+```bash
+conda env create -f devtools/conda-envs/qa_env.yaml -n smonitor-qa
+```
+
 Docs:
 
 ```bash
