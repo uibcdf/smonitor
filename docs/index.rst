@@ -18,6 +18,7 @@ Contents
    message_guide
    schema_validation
    catalog
+   cookbook
 
 API Reference
 -------------

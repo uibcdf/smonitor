@@ -31,6 +31,7 @@ packages = [
   "smonitor.config",
   "smonitor.policy",
   "smonitor.integrations",
+  "smonitor.templates",
 ]
 
 [tool.pytest.ini_options]
