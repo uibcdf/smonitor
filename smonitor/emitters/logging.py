@@ -9,6 +9,8 @@ from ..core.manager import get_manager
 class SmonitorLoggingHandler(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         manager = get_manager()
+        if getattr(record, "smonitor", False):
+            return
         try:
             message = record.getMessage()
         except Exception:

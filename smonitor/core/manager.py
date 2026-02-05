@@ -22,6 +22,8 @@ class ManagerConfig:
     args_summary: bool = False
     profiling: bool = False
     strict_signals: bool = False
+    strict_schema: bool = False
+    enabled: bool = True
 
 
 class Manager:
@@ -36,6 +38,7 @@ class Manager:
             "warnings_total": 0,
             "errors_total": 0,
         }
+        self._handler_errors: Dict[str, int] = {}
 
     @property
     def config(self) -> ManagerConfig:
@@ -60,6 +63,8 @@ class Manager:
         codes: Optional[Dict[str, Dict[str, Any]]] = None,
         signals: Optional[Dict[str, Dict[str, Any]]] = None,
         strict_signals: Optional[bool] = None,
+        strict_schema: Optional[bool] = None,
+        enabled: Optional[bool] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -87,6 +92,10 @@ class Manager:
             self._signals = signals
         if strict_signals is not None:
             self._config.strict_signals = strict_signals
+        if strict_schema is not None:
+            self._config.strict_schema = strict_schema
+        if enabled is not None:
+            self._config.enabled = enabled
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
@@ -137,6 +146,19 @@ class Manager:
         tags: Optional[List[str]] = None,
         exception_type: Optional[str] = None,
     ) -> Dict[str, Any]:
+        if not self._config.enabled:
+            return {
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "level": level,
+                "source": source,
+                "message": message,
+                "context": None,
+                "extra": extra or {},
+                "category": category,
+                "code": code,
+                "tags": tags,
+                "exception_type": exception_type,
+            }
         code_meta = self._codes.get(code) if code else None
         if code_meta and (message is None or message == ""):
             # Fallback to code-specific message per profile
@@ -161,6 +183,8 @@ class Manager:
             "tags": tags,
             "exception_type": exception_type,
         }
+        # mark as smonitor-emitted
+        event["extra"].setdefault("smonitor", True)
 
         # Interpolate message and hint using extra fields if templated
         if event["message"] and "{" in event["message"]:
@@ -208,7 +232,7 @@ class Manager:
         if self._config.profile in {"dev", "qa"}:
             errors = validate_event(event)
             if errors:
-                if self._config.strict_signals:
+                if self._config.strict_schema:
                     raise ValueError("; ".join(errors))
                 event["extra"].setdefault("schema_warning", "; ".join(errors))
 
@@ -223,13 +247,15 @@ class Manager:
                 handler.handle(routed_event, profile=self._config.profile)
             except Exception:
                 # Handlers must not raise
-                pass
+                name = getattr(handler, "name", handler.__class__.__name__)
+                self._handler_errors[name] = self._handler_errors.get(name, 0) + 1
 
         return event
 
     def report(self) -> Dict[str, Any]:
         return {
             **self._counts,
+            "handler_errors": dict(self._handler_errors),
             "peak_memory": None,
         }
 

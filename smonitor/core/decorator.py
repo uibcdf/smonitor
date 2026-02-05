@@ -22,6 +22,8 @@ def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] 
         @wraps(fn)
         def wrapper(*args: Any, **kwargs: Any):
             manager = get_manager()
+            if not manager.config.enabled:
+                return fn(*args, **kwargs)
             manager.record_call()
             start = perf_counter() if manager.config.profiling else None
             args_summary = _summarize_args(args, kwargs) if manager.config.args_summary else None

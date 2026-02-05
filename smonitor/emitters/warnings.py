@@ -20,6 +20,7 @@ def _smonitor_showwarning(message, category, filename, lineno, file=None, line=N
         str(message),
         source=source,
         category=getattr(category, "__name__", str(category)),
+        extra={"smonitor": True},
     )
 
 
