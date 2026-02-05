@@ -31,3 +31,26 @@ Examples
   ROUTES = [
     {"when": {"level": "ERROR"}, "transform": {"tags": ["critical"]}}
   ]
+
+Advanced transforms
+-------------------
+
+::
+
+  ROUTES = [
+    {
+      "when": {"level": "WARNING"},
+      "rename": {"source": "origin"},
+      "drop_fields": ["exception_type"],
+      "add_tags": ["review"],
+    }
+  ]
+
+Rate limit windows
+------------------
+
+:: 
+
+  FILTERS = [
+    {"when": {"code": "MSM-W010"}, "rate_limit": "1/100@60"}
+  ]

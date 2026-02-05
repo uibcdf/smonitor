@@ -39,6 +39,13 @@ Strict signals (dev/qa)
 
   # Missing required extras in SIGNALS will raise ValueError
 
+CLI check with JSON
+-------------------
+
+::
+
+  smonitor --check --check-event '{"level":"WARNING","message":"x","source":"molsysmt.select","code":"MSM-W010","extra":{"selection":"atom_name==","example":"atom_name==\\'CA\\'"}}'
+
 Generate catalog
 ----------------
 

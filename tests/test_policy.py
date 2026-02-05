@@ -58,3 +58,24 @@ def test_policy_drop_and_transform():
     ev, hs = engine.apply(event_x, handlers)
     assert hs
     assert ev["tags"] == ["critical"]
+
+
+def test_policy_rename_drop_add_tags():
+    engine = PolicyEngine()
+    engine.set_routes(
+        [
+            {
+                "when": {"level": "WARNING"},
+                "rename": {"source": "origin"},
+                "drop_fields": ["exception_type"],
+                "add_tags": ["review"],
+            }
+        ]
+    )
+    handlers = [DummyHandler("console")]
+    event = {"level": "WARNING", "source": "s", "exception_type": "E", "tags": ["x"]}
+    ev, _ = engine.apply(event, handlers)
+    assert "origin" in ev and ev["origin"] == "s"
+    assert "source" not in ev
+    assert "exception_type" not in ev
+    assert ev["tags"] == ["x", "review"]

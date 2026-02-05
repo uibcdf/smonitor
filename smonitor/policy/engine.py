@@ -46,6 +46,20 @@ class PolicyEngine:
             transform = rule.get("transform")
             if isinstance(transform, dict):
                 event.update(transform)
+            rename = rule.get("rename")
+            if isinstance(rename, dict):
+                for old, new in rename.items():
+                    if old in event:
+                        event[new] = event.pop(old)
+            drop_fields = rule.get("drop_fields")
+            if isinstance(drop_fields, list):
+                for key in drop_fields:
+                    event.pop(key, None)
+            add_tags = rule.get("add_tags")
+            if isinstance(add_tags, list):
+                current = event.get("tags") or []
+                if isinstance(current, list):
+                    event["tags"] = list(dict.fromkeys(current + add_tags))
             names = rule.get("send_to") or []
             if names:
                 target_handlers = [h for h in target_handlers if getattr(h, "name", None) in names or h.__class__.__name__ in names]
