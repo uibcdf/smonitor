@@ -72,6 +72,28 @@ Status: **Done** (CLI + env config added)
 - Add optional strict SIGNALS enforcement.
 Status: **Done**
 
+## Plan to 1.0 (Stable)
+
+**H1 — Ecosystem integration (minimum)**
+- Integrate with MolSysMT (replace logging setup with smonitor.configure).
+- Integrate with ArgDigest or DepDigest (add @signal, emit codes).
+
+**H2 — Emitter hardening**
+- Prevent duplicate emissions (warnings/logging).
+- Guard against handler feedback loops.
+
+**H3 — Handler UX**
+- Rich console formatting finalized for user/dev/qa.
+- File/JSON outputs stabilized.
+
+**H4 — Documentation**
+- User guide with real examples.
+- Developer guide for CODES/SIGNALS.
+- Troubleshooting section.
+
+**H5 — Release**
+- Versioning, conda build, docs publish.
+
 ## Milestones
 - M1: Core MVP and a single console handler.
 - M2: Warnings + logging emitters.
