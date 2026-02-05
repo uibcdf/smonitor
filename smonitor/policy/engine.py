@@ -69,8 +69,13 @@ class PolicyEngine:
                 if not self._match_ops(event.get(key), value):
                     return False
             else:
-                if event.get(key) != value:
-                    return False
+                field_value = event.get(key)
+                if isinstance(field_value, list):
+                    if value not in field_value:
+                        return False
+                else:
+                    if field_value != value:
+                        return False
         return True
 
     def _match_ops(self, field_value: Any, ops: Dict[str, Any]) -> bool:

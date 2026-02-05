@@ -11,5 +11,7 @@ class JsonHandler:
         self.name = "json"
 
     def handle(self, event: Dict[str, Any], *, profile: str = "user") -> None:
+        payload = dict(event)
+        payload["profile"] = profile
         with open(self.path, self.mode, encoding="utf-8") as fh:
-            fh.write(json.dumps(event, ensure_ascii=False) + "\n")
+            fh.write(json.dumps(payload, ensure_ascii=False) + "\n")

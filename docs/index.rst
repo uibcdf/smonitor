@@ -13,6 +13,7 @@ Contents
    configuration
    policy
    integration
+   examples
 
 API Reference
 -------------

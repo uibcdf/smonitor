@@ -21,5 +21,15 @@ class FileHandler:
         source = event.get("source") or ""
         message = event.get("message") or ""
         code = event.get("code")
+        context = event.get("context") or {}
         prefix = f"[{code}] " if code else ""
+        if profile == "user":
+            return f"{ts} {level} | {message}"
+        if profile == "qa":
+            return f"{ts} {prefix}{level} {source} | {message}"
+        if profile in {"dev", "debug"}:
+            chain = " -> ".join(context.get("chain", []))
+            return f"{ts} {prefix}{level} {source} | {message} | {chain}"
+        if profile == "agent":
+            return f"{ts} code={code} level={level} source={source} message={message}"
         return f"{ts} {prefix}{level} {source} | {message}"

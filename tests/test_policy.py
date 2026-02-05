@@ -23,3 +23,12 @@ def test_policy_rate_limit():
     # Third allowed again
     _, hs3 = engine.apply(event, handlers)
     assert hs3
+
+
+def test_policy_tags_membership():
+    engine = PolicyEngine()
+    engine.set_filters([{"when": {"tags": "io"}, "rate_limit": "1/1"}])
+    handlers = [DummyHandler("console")]
+    event = {"tags": ["io", "selection"]}
+    _, hs = engine.apply(event, handlers)
+    assert hs
