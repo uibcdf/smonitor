@@ -15,6 +15,7 @@ Contents
    integration
    examples
    codes
+   message_guide
 
 API Reference
 -------------

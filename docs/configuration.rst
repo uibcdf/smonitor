@@ -43,6 +43,7 @@ The CLI can validate `_smonitor.py` and print reports:
 ::
 
   smonitor --validate-config
+  smonitor --check
   smonitor --profile dev --report
 
 Config Validation

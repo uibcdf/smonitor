@@ -15,6 +15,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--report", action="store_true")
     parser.add_argument("--validate-config", action="store_true")
     parser.add_argument("--config-path", default=None)
+    parser.add_argument("--check", action="store_true", help="Validate config and simulate event")
     return parser.parse_args()
 
 
@@ -33,6 +34,20 @@ def main() -> int:
                 print(f"- {err}")
             return 2
         print(json.dumps(cfg, indent=2, default=str))
+        return 0
+
+    if args.check:
+        base = Path(args.config_path) if args.config_path else Path.cwd()
+        cfg = load_project_config(base)
+        errors = validate_config(cfg)
+        if errors:
+            print("Invalid _smonitor.py:")
+            for err in errors:
+                print(f"- {err}")
+            return 2
+        smonitor.configure(profile=args.profile, level=args.level)
+        smonitor.emit("INFO", "smonitor check event", source="smonitor.cli", code=None)
+        print("OK")
         return 0
 
     smonitor.configure(profile=args.profile, level=args.level)
