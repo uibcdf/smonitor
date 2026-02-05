@@ -139,6 +139,8 @@ class Manager:
                 message = code_meta.get("user_message", "")
             elif self._config.profile == "qa":
                 message = code_meta.get("qa_message", "")
+            elif self._config.profile == "agent":
+                message = code_meta.get("agent_message", "")
             else:
                 message = code_meta.get("dev_message", "") or code_meta.get("message", "")
 
@@ -155,9 +157,30 @@ class Manager:
             "exception_type": exception_type,
         }
 
+        # Interpolate message and hint using extra fields if templated
+        if event["message"] and "{" in event["message"]:
+            try:
+                event["message"] = event["message"].format(**event["extra"])
+            except Exception:
+                pass
+
         if code_meta:
             event["extra"].setdefault("title", code_meta.get("title"))
-            event["extra"].setdefault("hint", code_meta.get("user_hint") if self._config.profile == "user" else code_meta.get("dev_hint"))
+            if self._config.profile == "user":
+                event["extra"].setdefault("hint", code_meta.get("user_hint"))
+            elif self._config.profile == "qa":
+                event["extra"].setdefault("hint", code_meta.get("qa_hint") or code_meta.get("dev_hint"))
+            elif self._config.profile == "agent":
+                event["extra"].setdefault("hint", code_meta.get("agent_hint") or code_meta.get("dev_hint"))
+            else:
+                event["extra"].setdefault("hint", code_meta.get("dev_hint"))
+
+        hint = event["extra"].get("hint")
+        if hint and "{" in hint:
+            try:
+                event["extra"]["hint"] = hint.format(**event["extra"])
+            except Exception:
+                pass
 
         if level == "WARNING":
             self._counts["warnings_total"] += 1
