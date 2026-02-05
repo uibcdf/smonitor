@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import wraps
 from time import perf_counter
+from random import random
 from typing import Any, Callable, Optional
 
 from .context import Frame, pop_frame, push_frame
@@ -25,7 +26,10 @@ def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] 
             if not manager.config.enabled:
                 return fn(*args, **kwargs)
             manager.record_call()
-            start = perf_counter() if manager.config.profiling else None
+            if manager.config.profiling and random() <= manager.config.profiling_sample_rate:
+                start = perf_counter()
+            else:
+                start = None
             args_summary = _summarize_args(args, kwargs) if manager.config.args_summary else None
             frame = Frame(
                 function=fn.__name__,

@@ -29,6 +29,15 @@ Timeline buffer
   smonitor.configure(profiling=True, profiling_buffer_size=200)
   print(smonitor.report()["timeline"][:5])
 
+Sampling
+--------
+
+`profiling_sample_rate` controls sampling (0.0–1.0).
+
+::
+
+  smonitor.configure(profiling=True, profiling_sample_rate=0.1)
+
 GPU and accelerator hooks
 -------------------------
 
@@ -42,6 +51,15 @@ Example (pseudo-code)::
       return {"gpu_name": "A100", "gpu_mem_used_mb": 1024}
 
   smonitor.configure(profiling=True, profiling_hooks=[gpu_hook])
+
+Export timeline
+---------------
+
+::
+
+  from smonitor.profiling import export_timeline
+  export_timeline(\"timeline.json\", format=\"json\")
+  export_timeline(\"timeline.csv\", format=\"csv\")
 
 Output (example)
 ----------------

@@ -26,6 +26,7 @@ class ManagerConfig:
     enabled: bool = True
     profiling_buffer_size: int = 1000
     profiling_hooks: list | None = None
+    profiling_sample_rate: float = 1.0
 
 
 class Manager:
@@ -71,6 +72,7 @@ class Manager:
         enabled: Optional[bool] = None,
         profiling_buffer_size: Optional[int] = None,
         profiling_hooks: Optional[List[Any]] = None,
+        profiling_sample_rate: Optional[float] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -106,6 +108,8 @@ class Manager:
             self._config.profiling_buffer_size = profiling_buffer_size
         if profiling_hooks is not None:
             self._config.profiling_hooks = profiling_hooks
+        if profiling_sample_rate is not None:
+            self._config.profiling_sample_rate = profiling_sample_rate
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
