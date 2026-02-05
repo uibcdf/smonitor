@@ -93,14 +93,18 @@ class Manager:
         from ..emitters.warnings import enable_warnings, disable_warnings
         from ..emitters.logging import enable_logging, disable_logging
         from ..emitters.exceptions import enable_exceptions, disable_exceptions
-        if self._config.capture_warnings:
-            enable_warnings()
-        else:
-            disable_warnings()
         if self._config.capture_logging:
-            enable_logging()
+            enable_logging(capture_warnings=self._config.capture_warnings)
+            if self._config.capture_warnings:
+                disable_warnings()
+            else:
+                enable_warnings()
         else:
             disable_logging()
+            if self._config.capture_warnings:
+                enable_warnings()
+            else:
+                disable_warnings()
         if self._config.capture_exceptions:
             enable_exceptions()
         else:

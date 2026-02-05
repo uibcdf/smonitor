@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import smonitor
-from smonitor.config import load_project_config
+from smonitor.config import load_project_config, validate_config
 
 
 def _parse_args() -> argparse.Namespace:
@@ -26,6 +26,12 @@ def main() -> int:
         if not cfg:
             print("No _smonitor.py found")
             return 1
+        errors = validate_config(cfg)
+        if errors:
+            print("Invalid _smonitor.py:")
+            for err in errors:
+                print(f"- {err}")
+            return 2
         print(json.dumps(cfg, indent=2, default=str))
         return 0
 

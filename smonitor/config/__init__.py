@@ -78,3 +78,27 @@ def extract_signals(project_cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     if not project_cfg:
         return {}
     return project_cfg.get("SIGNALS") or {}
+
+
+def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
+    if not project_cfg:
+        return []
+    errors: list[str] = []
+    allowed_top = {"PROFILE", "SMONITOR", "PROFILES", "ROUTES", "FILTERS", "CODES", "SIGNALS"}
+    for key in project_cfg.keys():
+        if key not in allowed_top:
+            errors.append(f"Unknown top-level key: {key}")
+
+    if "SMONITOR" in project_cfg and not isinstance(project_cfg["SMONITOR"], dict):
+        errors.append("SMONITOR must be a dict")
+    if "PROFILES" in project_cfg and not isinstance(project_cfg["PROFILES"], dict):
+        errors.append("PROFILES must be a dict")
+    if "ROUTES" in project_cfg and not isinstance(project_cfg["ROUTES"], list):
+        errors.append("ROUTES must be a list")
+    if "FILTERS" in project_cfg and not isinstance(project_cfg["FILTERS"], list):
+        errors.append("FILTERS must be a list")
+    if "CODES" in project_cfg and not isinstance(project_cfg["CODES"], dict):
+        errors.append("CODES must be a dict")
+    if "SIGNALS" in project_cfg and not isinstance(project_cfg["SIGNALS"], dict):
+        errors.append("SIGNALS must be a dict")
+    return errors

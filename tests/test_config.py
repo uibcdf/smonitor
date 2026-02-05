@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from smonitor.config import load_project_config, build_effective_config, extract_policy, load_env_config
+from smonitor.config import load_project_config, build_effective_config, extract_policy, load_env_config, validate_config
 
 
 def test_build_effective_config_profile(tmp_path: Path):
@@ -35,3 +35,11 @@ def test_load_env_config(monkeypatch):
     assert cfg["level"] == "INFO"
     assert cfg["trace_depth"] == 5
     assert cfg["capture_warnings"] is True
+
+
+def test_validate_config_unknown_key(tmp_path: Path):
+    cfg_file = tmp_path / "_smonitor.py"
+    cfg_file.write_text("FOO = 1")
+    cfg = load_project_config(tmp_path)
+    errors = validate_config(cfg)
+    assert errors and "Unknown top-level key" in errors[0]

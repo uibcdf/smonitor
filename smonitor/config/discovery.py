@@ -14,8 +14,9 @@ def load_config_from_path(path: Path) -> Optional[Dict[str, Any]]:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     data: Dict[str, Any] = {}
-    for key in ["PROFILE", "SMONITOR", "PROFILES", "ROUTES", "FILTERS", "CODES", "SIGNALS"]:
-        if hasattr(module, key):
+    # Load all uppercase symbols to allow validation of unknown keys
+    for key in dir(module):
+        if key.isupper():
             data[key] = getattr(module, key)
     return data
 

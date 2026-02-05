@@ -65,7 +65,6 @@ class RichConsoleHandler(ConsoleHandler):
         self._console = Console(theme=theme)
 
     def handle(self, event: Dict[str, Any], *, profile: str = "user") -> None:
-        message = self._format(event, profile)
         level = (event.get("level") or "INFO").lower()
         style = "info"
         if level == "warning":
@@ -74,4 +73,29 @@ class RichConsoleHandler(ConsoleHandler):
             style = "error"
         elif level == "debug":
             style = "debug"
+
+        if profile in {"dev", "debug", "qa"}:
+            from rich.table import Table
+
+            table = Table(show_header=True, header_style="bold")
+            table.add_column("Level", style=style, width=8)
+            table.add_column("Source", style="dim")
+            table.add_column("Message")
+            table.add_column("Code", style="dim", width=10)
+            table.add_row(
+                (event.get("level") or "INFO"),
+                (event.get("source") or ""),
+                (event.get("message") or ""),
+                (event.get("code") or ""),
+            )
+            hint = (event.get("extra") or {}).get("hint")
+            if hint:
+                table.add_row("", "", f"Hint: {hint}", "")
+            chain = (event.get("context") or {}).get("chain", [])
+            if chain:
+                table.add_row("", "", "Context: " + " -> ".join(chain), "")
+            self._console.print(table)
+            return
+
+        message = self._format(event, profile)
         self._console.print(message, style=style)

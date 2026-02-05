@@ -22,17 +22,24 @@ class SmonitorLoggingHandler(logging.Handler):
 
 
 _installed_handler: Optional[SmonitorLoggingHandler] = None
+_capture_warnings_enabled = False
 
 
-def enable_logging() -> None:
-    global _installed_handler
+def enable_logging(*, capture_warnings: bool = False) -> None:
+    global _installed_handler, _capture_warnings_enabled
     if _installed_handler is None:
         _installed_handler = SmonitorLoggingHandler()
         logging.getLogger().addHandler(_installed_handler)
+    if capture_warnings and not _capture_warnings_enabled:
+        logging.captureWarnings(True)
+        _capture_warnings_enabled = True
 
 
 def disable_logging() -> None:
-    global _installed_handler
+    global _installed_handler, _capture_warnings_enabled
     if _installed_handler is not None:
         logging.getLogger().removeHandler(_installed_handler)
         _installed_handler = None
+    if _capture_warnings_enabled:
+        logging.captureWarnings(False)
+        _capture_warnings_enabled = False

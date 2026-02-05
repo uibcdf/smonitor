@@ -44,3 +44,9 @@ The CLI can validate `_smonitor.py` and print reports:
 
   smonitor --validate-config
   smonitor --profile dev --report
+
+Config Validation
+-----------------
+
+`smonitor --validate-config` checks `_smonitor.py` for unknown keys and basic
+type errors (SMONITOR/PROFILES/ROUTES/FILTERS/CODES/SIGNALS).
