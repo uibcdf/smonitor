@@ -106,6 +106,12 @@ Status: **Done**
 - Phase C: Sentinel server + public dashboard.
 - Phase D: LLM triage on aggregated reports.
 
+## Future: smonitor ↔ smonitor-sentinel UX
+- User opt‑in with clear consent.
+- Local‑first bundles for manual sharing.
+- Public health dashboard by library/version.
+- Developer workflow: codes → docs → fixes.
+
 ## Future: AI Support & Repair (Post‑1.0)
 - Structured outputs (CODES/SIGNALS, bundles) for agents.
 - Triage + dedup pipelines based on `code` and `trace_hash`.

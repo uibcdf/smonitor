@@ -152,6 +152,30 @@ To implement `monitor` across the UIBCDF suite:
 - **Telemetry & Sentinel (Opt‑in)**: A privacy‑first telemetry client (opt‑in) that can export local bundles and optionally send anonymized reports to a central “Sentinel” dashboard. Includes safe schemas, rate limiting, and LLM triage on aggregated data.
 - **AI Support & Repair (Opt‑in)**: Agent/LLM workflows consume structured smonitor outputs (CODES/SIGNALS, bundles) to triage issues, suggest fixes, and open PRs with guardrails and human review.
 
+### Sentinel Integration (Future)
+
+**Goal:** allow users and developers to opt‑in to anonymous diagnostics and a public status dashboard.
+
+**Local‑first workflow**
+1. Users run `smonitor export` to generate a local bundle.
+2. Users decide whether to share the bundle.
+3. Developers use the bundle to reproduce/triage issues.
+
+**Opt‑in telemetry workflow**
+1. User explicitly enables telemetry (`telemetry=True` + `telemetry_url`).
+2. Smonitor sends **safe schema** events only (no raw data by default).
+3. Sentinel aggregates and deduplicates.
+4. Dashboard shows health trends by library/version.
+
+**Developer usage**
+- Use `CODES`/`SIGNALS` so telemetry is actionable.
+- Monitor top codes and regressions.
+- Link codes to docs/FAQ to reduce support load.
+
+**User usage**
+- See public health status before upgrading.
+- Opt‑in for better support without filing issues manually.
+
 ---
 
 > **Tagline:** `smonitor` — The precision telemetry system for the scientific Python stack.
