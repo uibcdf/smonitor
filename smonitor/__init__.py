@@ -1,5 +1,16 @@
 from __future__ import annotations
 
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("smonitor")
+except PackageNotFoundError:
+    # Package is not installed
+    try:
+        from ._version import __version__
+    except ImportError:
+        __version__ = "0.0.0+unknown"
+
 from pathlib import Path
 
 from .core.manager import get_manager
@@ -15,8 +26,6 @@ __all__ = [
     "signal",
     "get_manager",
 ]
-
-__version__ = "0.1.0"
 
 
 def configure(**kwargs):

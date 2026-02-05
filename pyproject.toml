@@ -1,26 +1,31 @@
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "smonitor"
-version = "0.1.0"
-description = "Centralized diagnostic & telemetry system for the scientific Python stack"
+dynamic = ["version"]
+description = "SMonitor — Centralized diagnostic & telemetry system for the scientific Python stack"
 readme = "README.md"
+authors = [
+  { name = "UIBCDF Development Team" }
+]
+license = { text = "MIT" }
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
-authors = [{ name = "UIBCDF Development Team" }]
+dependencies = []
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
 ]
 
-[project.scripts]
-smonitor = "smonitor.cli:main"
-
 [project.optional-dependencies]
 rich = ["rich>=13"]
+
+[project.urls]
+Homepage = "https://github.com/uibcdf/smonitor"
+Repository = "https://github.com/uibcdf/smonitor"
+Documentation = "https://uibcdf.github.io/smonitor"
+
+[build-system]
+requires = ["setuptools>=68", "versioningit~=3.0" ,"wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = [
@@ -34,6 +39,28 @@ packages = [
   "smonitor.templates",
 ]
 
+[tool.setuptools.package-data]
+"smonitor.templates" = ["_smonitor.py", "README.md"]
+
+[project.scripts]
+smonitor = "smonitor.cli:main"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.versioningit]
+default-version = "0.0.0+unknown"
+
+[tool.versioningit.format]
+distance = "{base_version}+{distance}.{vcs}{rev}"
+dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
+distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
+
+[tool.versioningit.vcs]
+method = "git"
+match = ["*"]
+default-tag = "0.0.0"
+
+[tool.versioningit.write]
+file = "smonitor/_version.py"

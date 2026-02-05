@@ -1,0 +1,14 @@
+channels:
+  - uibcdf
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - pip
+  - sphinx
+  - myst-parser
+  - pydata-sphinx-theme
+  - nbsphinx
+  - ipykernel
+  - pandoc
+  - versioningit
