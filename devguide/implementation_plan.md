@@ -100,6 +100,17 @@ Status: **Done**
 - Export to JSON/CSV.
 Status: **Done**
 
+## Future: Telemetry & Sentinel (Post‑1.0)
+- Phase A: Local export bundles (privacy‑first).
+- Phase B: Opt‑in telemetry client with rate limits.
+- Phase C: Sentinel server + public dashboard.
+- Phase D: LLM triage on aggregated reports.
+
+## Future: AI Support & Repair (Post‑1.0)
+- Structured outputs (CODES/SIGNALS, bundles) for agents.
+- Triage + dedup pipelines based on `code` and `trace_hash`.
+- Suggested fixes with human approval.
+
 ## Milestones
 - M1: Core MVP and a single console handler.
 - M2: Warnings + logging emitters.

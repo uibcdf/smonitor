@@ -109,6 +109,13 @@ make -C docs html
 Current release: **0.1.0** (early, foundational).  
 Integration with ecosystem libraries is planned for the 1.0 release.
 
+## AI Support (Future)
+
+Smonitor is designed to enable opt‑in AI/LLM support workflows:
+- structured CODES/SIGNALS for triage,
+- local bundles for reproducible diagnosis,
+- guarded repair suggestions with human review.
+
 ## License
 
 MIT

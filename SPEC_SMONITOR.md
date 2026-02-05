@@ -149,6 +149,8 @@ To implement `monitor` across the UIBCDF suite:
 - **AI-Agent Instructions**: Export signals as machine-readable instructions for LLM agents to better debug the library state.
 - **Performance Profiling**: Combine diagnostics with time-tracking to identify bottlenecks in the call-stack without heavy external profilers.
 - **CLI & Env Controls**: Provide a lightweight CLI and environment variables to toggle profiles and validate configuration.
+- **Telemetry & Sentinel (Opt‑in)**: A privacy‑first telemetry client (opt‑in) that can export local bundles and optionally send anonymized reports to a central “Sentinel” dashboard. Includes safe schemas, rate limiting, and LLM triage on aggregated data.
+- **AI Support & Repair (Opt‑in)**: Agent/LLM workflows consume structured smonitor outputs (CODES/SIGNALS, bundles) to triage issues, suggest fixes, and open PRs with guardrails and human review.
 
 ---
 
