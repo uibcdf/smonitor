@@ -30,6 +30,8 @@ class PolicyEngine:
             when = rule.get("when", {})
             if not self._match(event, when):
                 continue
+            if rule.get("drop") is True:
+                return event, []
             rate = rule.get("rate_limit")
             if rate and not self._allow_rate(event, rate):
                 return event, []
@@ -40,6 +42,9 @@ class PolicyEngine:
             when = rule.get("when", {})
             if not self._match(event, when):
                 continue
+            transform = rule.get("transform")
+            if isinstance(transform, dict):
+                event.update(transform)
             names = rule.get("send_to") or []
             if names:
                 target_handlers = [h for h in target_handlers if getattr(h, "name", None) in names or h.__class__.__name__ in names]

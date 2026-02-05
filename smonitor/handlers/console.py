@@ -37,3 +37,35 @@ class ConsoleHandler:
             return f"{prefix}{level} {source} | {message} | {ctx_chain}"
         # user (default)
         return f"{level}: {message}"
+
+
+class RichConsoleHandler(ConsoleHandler):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "console_rich"
+        try:
+            from rich.console import Console
+            from rich.theme import Theme
+        except Exception as exc:  # pragma: no cover - fallback
+            raise ImportError("rich is not installed") from exc
+        theme = Theme(
+            {
+                "debug": "dim",
+                "info": "cyan",
+                "warning": "yellow",
+                "error": "bold red",
+            }
+        )
+        self._console = Console(theme=theme)
+
+    def handle(self, event: Dict[str, Any], *, profile: str = "user") -> None:
+        message = self._format(event, profile)
+        level = (event.get("level") or "INFO").lower()
+        style = "info"
+        if level == "warning":
+            style = "warning"
+        elif level == "error":
+            style = "error"
+        elif level == "debug":
+            style = "debug"
+        self._console.print(message, style=style)

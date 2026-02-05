@@ -32,3 +32,19 @@ def test_policy_tags_membership():
     event = {"tags": ["io", "selection"]}
     _, hs = engine.apply(event, handlers)
     assert hs
+
+
+def test_policy_drop_and_transform():
+    engine = PolicyEngine()
+    engine.set_filters([{"when": {"code": "DROP"}, "drop": True}])
+    engine.set_routes([{"when": {"code": "X"}, "transform": {"tags": ["critical"]}}])
+    handlers = [DummyHandler("console")]
+
+    event_drop = {"code": "DROP"}
+    _, hs_drop = engine.apply(event_drop, handlers)
+    assert hs_drop == []
+
+    event_x = {"code": "X"}
+    ev, hs = engine.apply(event_x, handlers)
+    assert hs
+    assert ev["tags"] == ["critical"]

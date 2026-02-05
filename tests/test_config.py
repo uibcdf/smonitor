@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from smonitor.config import load_project_config, build_effective_config, extract_policy
+from smonitor.config import load_project_config, build_effective_config, extract_policy, load_env_config
 
 
 def test_build_effective_config_profile(tmp_path: Path):
@@ -23,3 +23,15 @@ def test_extract_policy(tmp_path: Path):
     cfg = load_project_config(tmp_path)
     policy = extract_policy(cfg)
     assert policy["routes"]
+
+
+def test_load_env_config(monkeypatch):
+    monkeypatch.setenv("SMONITOR_PROFILE", "dev")
+    monkeypatch.setenv("SMONITOR_LEVEL", "INFO")
+    monkeypatch.setenv("SMONITOR_TRACE_DEPTH", "5")
+    monkeypatch.setenv("SMONITOR_CAPTURE_WARNINGS", "1")
+    cfg = load_env_config()
+    assert cfg["profile"] == "dev"
+    assert cfg["level"] == "INFO"
+    assert cfg["trace_depth"] == 5
+    assert cfg["capture_warnings"] is True

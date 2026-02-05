@@ -46,7 +46,7 @@ Status: **Done (initial)** (warnings/logging/exceptions emitters; policy engine 
 - `handlers.json`:
   - JSON lines for telemetry
 - Ensure handlers honor active `profile` for formatting.
-Status: **Partial** (console/file/json implemented; rich formatting pending)
+Status: **Partial** (console/file/json implemented; rich handler added as optional)
 
 ## Phase 4 — Integration
 - Add `@signal` to `arg_digest` and `dep_digest` entrypoints.
@@ -60,7 +60,12 @@ Status: **Started** (integration helpers added in `smonitor.integrations`; real 
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
 - Document `_smonitor.py` schema, policy engine, and communication styles by profile.
-Status: **Partial** (Sphinx scaffold + config/policy/integration stubs; content pending)
+Status: **Partial** (Sphinx scaffold + config/policy/integration/docs/examples; content pending)
+
+## Additional Hardening
+- Add CLI for validation/reporting and profile selection.
+- Add environment variable support.
+Status: **Done** (CLI + env config added)
 
 ## Milestones
 - M1: Core MVP and a single console handler.

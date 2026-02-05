@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -27,6 +28,34 @@ def build_effective_config(project_cfg: Optional[Dict[str, Any]], overrides: Dic
     # Apply overrides (highest priority)
     effective.update({k: v for k, v in overrides.items() if v is not None})
     return effective
+
+
+def load_env_config() -> Dict[str, Any]:
+    def _get_bool(key: str) -> Optional[bool]:
+        val = os.getenv(key)
+        if val is None:
+            return None
+        return val.strip().lower() in {"1", "true", "yes", "on"}
+
+    def _get_int(key: str) -> Optional[int]:
+        val = os.getenv(key)
+        if val is None:
+            return None
+        try:
+            return int(val)
+        except ValueError:
+            return None
+
+    return {
+        "profile": os.getenv("SMONITOR_PROFILE"),
+        "level": os.getenv("SMONITOR_LEVEL"),
+        "trace_depth": _get_int("SMONITOR_TRACE_DEPTH"),
+        "capture_warnings": _get_bool("SMONITOR_CAPTURE_WARNINGS"),
+        "capture_logging": _get_bool("SMONITOR_CAPTURE_LOGGING"),
+        "capture_exceptions": _get_bool("SMONITOR_CAPTURE_EXCEPTIONS"),
+        "show_traceback": _get_bool("SMONITOR_SHOW_TRACEBACK"),
+        "args_summary": _get_bool("SMONITOR_ARGS_SUMMARY"),
+    }
 
 
 def extract_policy(project_cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:

@@ -16,6 +16,9 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 
+[project.scripts]
+smonitor = "smonitor.cli:main"
+
 [project.optional-dependencies]
 rich = ["rich>=13"]
 

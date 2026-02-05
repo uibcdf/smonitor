@@ -24,5 +24,10 @@ Examples
   ]
 
   FILTERS = [
-    {"when": {"code": "MSM-W010"}, "rate_limit": "1/100"}
+    {"when": {"code": "MSM-W010"}, "rate_limit": "1/100"},
+    {"when": {"code": "MSM-W999"}, "drop": True},
+  ]
+
+  ROUTES = [
+    {"when": {"level": "ERROR"}, "transform": {"tags": ["critical"]}}
   ]
