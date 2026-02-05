@@ -55,6 +55,7 @@ def load_env_config() -> Dict[str, Any]:
         "capture_exceptions": _get_bool("SMONITOR_CAPTURE_EXCEPTIONS"),
         "show_traceback": _get_bool("SMONITOR_SHOW_TRACEBACK"),
         "args_summary": _get_bool("SMONITOR_ARGS_SUMMARY"),
+        "profiling": _get_bool("SMONITOR_PROFILING"),
     }
 
 

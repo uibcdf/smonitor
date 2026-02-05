@@ -42,3 +42,15 @@ def test_args_summary_in_context():
     event = bar(1, y=3)
     context = event.get("context")
     assert context and context["frames"][0]["args"] is not None
+
+
+def test_profiling_adds_duration():
+    smonitor.configure(profiling=True)
+
+    @smonitor.signal
+    def baz():
+        return smonitor.emit("INFO", "ctx", source="test")
+
+    event = baz()
+    context = event.get("context")
+    assert context and context["frames"][0]["duration_ms"] is not None

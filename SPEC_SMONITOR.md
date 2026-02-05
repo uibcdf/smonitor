@@ -69,7 +69,9 @@ smonitor.configure(
     theme='rich',          # Use colors, tables, and enhanced formatting
     capture_warnings=True, # Intercept all warnings.warn()
     trace_depth=3,         # How many levels of parent-calls to show
-    show_traceback=True    # Enhanced error context
+    show_traceback=True,   # Enhanced error context
+    profile='user',        # Output profile: user/dev/qa/agent/debug
+    profiling=False        # Attach duration to context frames
 )
 ```
 
@@ -96,6 +98,11 @@ smonitor.report()
 # Peak memory: 450MB
 ```
 
+### 4.5 Optional Profiling
+When enabled (`profiling=True`), each context frame includes a `duration_ms` field
+with the function execution time. This is lightweight and intended for QA/dev profiling,
+not full performance analysis.
+
 ### 4.4 Symmetry with the "Digest" family
 `monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
 
@@ -117,6 +124,7 @@ To implement `monitor` across the UIBCDF suite:
 - **Live Dashboard**: A tiny web or terminal dashboard showing real-time execution signals and library health.
 - **AI-Agent Instructions**: Export signals as machine-readable instructions for LLM agents to better debug the library state.
 - **Performance Profiling**: Combine diagnostics with time-tracking to identify bottlenecks in the call-stack without heavy external profilers.
+- **CLI & Env Controls**: Provide a lightweight CLI and environment variables to toggle profiles and validate configuration.
 
 ---
 
@@ -186,6 +194,12 @@ PROFILES = {
         "style": "debug",
     },
 }
+
+# Environment variables
+# SMONITOR_PROFILE, SMONITOR_LEVEL, SMONITOR_TRACE_DEPTH,
+# SMONITOR_CAPTURE_WARNINGS, SMONITOR_CAPTURE_LOGGING,
+# SMONITOR_CAPTURE_EXCEPTIONS, SMONITOR_SHOW_TRACEBACK,
+# SMONITOR_ARGS_SUMMARY, SMONITOR_PROFILING
 
 # Policy Engine rules (routing + filtering)
 ROUTES = [

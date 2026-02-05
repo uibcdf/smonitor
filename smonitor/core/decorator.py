@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import wraps
+from time import perf_counter
 from typing import Any, Callable, Optional
 
 from .context import Frame, pop_frame, push_frame
@@ -22,6 +23,7 @@ def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] 
         def wrapper(*args: Any, **kwargs: Any):
             manager = get_manager()
             manager.record_call()
+            start = perf_counter() if manager.config.profiling else None
             args_summary = _summarize_args(args, kwargs) if manager.config.args_summary else None
             frame = Frame(
                 function=fn.__name__,
@@ -41,6 +43,8 @@ def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] 
                 )
                 raise
             finally:
+                if start is not None:
+                    frame.duration_ms = (perf_counter() - start) * 1000.0
                 pop_frame()
         return wrapper
 

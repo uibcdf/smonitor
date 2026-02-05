@@ -13,6 +13,7 @@ class Frame:
     args: Optional[Dict[str, Any]] = None
     time: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     tags: Optional[List[str]] = None
+    duration_ms: Optional[float] = None
 
 
 _context_stack: ContextVar[List[Frame]] = ContextVar("smonitor_context_stack", default=[])

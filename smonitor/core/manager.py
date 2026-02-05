@@ -19,6 +19,7 @@ class ManagerConfig:
     profile: str = "user"
     capture_exceptions: bool = False
     args_summary: bool = False
+    profiling: bool = False
 
 
 class Manager:
@@ -51,6 +52,7 @@ class Manager:
         routes: Optional[List[Dict[str, Any]]] = None,
         filters: Optional[List[Dict[str, Any]]] = None,
         args_summary: Optional[bool] = None,
+        profiling: Optional[bool] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -70,6 +72,8 @@ class Manager:
             self._config.profile = profile
         if args_summary is not None:
             self._config.args_summary = args_summary
+        if profiling is not None:
+            self._config.profiling = profiling
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
