@@ -6,6 +6,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from .context import get_context
 from ..policy.engine import PolicyEngine
+from ..validation import validate_event
 
 
 @dataclass
@@ -198,6 +199,12 @@ class Manager:
                     "contract_warning",
                     "Missing code for event (dev/qa profile).",
                 )
+
+        # Event schema validation (dev/qa only)
+        if self._config.profile in {"dev", "qa"}:
+            errors = validate_event(event)
+            if errors:
+                event["extra"].setdefault("schema_warning", "; ".join(errors))
 
         if level == "WARNING":
             self._counts["warnings_total"] += 1

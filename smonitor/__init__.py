@@ -5,6 +5,7 @@ from pathlib import Path
 from .core.manager import get_manager
 from .core.decorator import signal
 from .handlers.console import ConsoleHandler
+from .handlers.console import RichConsoleHandler
 from .config import load_project_config, build_effective_config, extract_policy, load_env_config, extract_codes, extract_signals
 
 __all__ = [
@@ -30,7 +31,11 @@ def configure(**kwargs):
     if "handlers" not in kwargs or kwargs["handlers"] is None:
         # Default to a console handler if none provided
         if not manager._handlers:
-            manager.add_handler(ConsoleHandler())
+            theme = effective.get("theme", "plain")
+            if theme == "rich":
+                manager.add_handler(RichConsoleHandler())
+            else:
+                manager.add_handler(ConsoleHandler())
     manager.configure(**effective, **policy, codes=codes, signals=signals)
     return manager
 

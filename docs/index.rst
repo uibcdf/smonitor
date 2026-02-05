@@ -16,6 +16,7 @@ Contents
    examples
    codes
    message_guide
+   schema_validation
 
 API Reference
 -------------

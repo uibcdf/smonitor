@@ -28,9 +28,11 @@ class ConsoleHandler:
             extra = event.get("extra") or {}
             hint = extra.get("hint")
             cw = extra.get("contract_warning")
+            sw = extra.get("schema_warning")
             hint_part = f" | Hint: {hint}" if hint else ""
             cw_part = f" | Contract: {cw}" if cw else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{cw_part}"
+            sw_part = f" | Schema: {sw}" if sw else ""
+            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{cw_part}{sw_part}"
         if profile == "qa":
             prefix = f"[{code}] " if code else ""
             return f"{prefix}{level} {source} | {message}"
@@ -42,9 +44,11 @@ class ConsoleHandler:
             extra = event.get("extra") or {}
             hint = extra.get("hint")
             cw = extra.get("contract_warning")
+            sw = extra.get("schema_warning")
             hint_part = f" | Hint: {hint}" if hint else ""
             cw_part = f" | Contract: {cw}" if cw else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{cw_part}"
+            sw_part = f" | Schema: {sw}" if sw else ""
+            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{cw_part}{sw_part}"
         # user (default)
         hint = (event.get("extra") or {}).get("hint")
         hint_part = f" | {hint}" if hint else ""
@@ -105,12 +109,15 @@ class RichConsoleHandler(ConsoleHandler):
             extra = event.get("extra") or {}
             hint = extra.get("hint")
             contract = extra.get("contract_warning")
+            schema = extra.get("schema_warning")
             if hint or contract:
                 body = []
                 if hint:
                     body.append(f"Hint: {hint}")
                 if contract:
                     body.append(f"Contract: {contract}")
+                if schema:
+                    body.append(f"Schema: {schema}")
                 self._console.print(Panel("\n".join(body), title="Notes", style="dim"))
             return
 

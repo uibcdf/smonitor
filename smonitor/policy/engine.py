@@ -58,7 +58,10 @@ class PolicyEngine:
             total_n = int(total)
         except Exception:
             return True
-        key = event.get("code") or event.get("message") or "__default__"
+        if event.get("code"):
+            key = f"{event.get('code')}|{event.get('source')}"
+        else:
+            key = event.get("message") or "__default__"
         count = self._state.counters.get(key, 0) + 1
         self._state.counters[key] = count
         return (count - 1) % total_n < keep_n
