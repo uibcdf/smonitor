@@ -120,6 +120,13 @@ if required fields are missing or invalid.
 ### 4.8 Catalog Generation
 Smonitor can render simple tables of `CODES` and `SIGNALS` for docs (optional tooling).
 
+### 4.9 Profiling Extensions
+Profiling can be enhanced with:
+- **Sampling** (`profiling_sample_rate`)
+- **Timeline buffer** (`profiling_buffer_size`)
+- **Spans** for manual blocks
+- **Export** to JSON/CSV
+
 ### 4.4 Symmetry with the "Digest" family
 `monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
 

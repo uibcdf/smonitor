@@ -53,6 +53,23 @@ CODES = {
 }
 ```
 
+## Profiling
+
+Enable lightweight profiling with `profiling=True`. It records durations per
+`@signal` and aggregates stats in `report()`. You can also use spans and export
+timelines:
+
+```python
+from smonitor.profiling import span, export_timeline
+
+smonitor.configure(profiling=True, profiling_sample_rate=1.0)
+
+with span("io.load", path="data.h5"):
+    pass
+
+export_timeline("timeline.json", format="json")
+```
+
 ## Policy Engine
 
 Use `ROUTES` and `FILTERS` in `_smonitor.py` to route or filter events.

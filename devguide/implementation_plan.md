@@ -94,6 +94,12 @@ Status: **Done**
 **H5 — Release**
 - Versioning, conda build, docs publish.
 
+## Profiling (Developer Utility)
+- Timeline buffer and sampling.
+- Spans for manual blocks.
+- Export to JSON/CSV.
+Status: **Done**
+
 ## Milestones
 - M1: Core MVP and a single console handler.
 - M2: Warnings + logging emitters.

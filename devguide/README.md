@@ -24,3 +24,4 @@ The authoritative checkpoint for v0.2 decisions is `SPEC_SMONITOR.md` (section v
 - Event schema validation (dev/qa) added.
 - CODES templating and SIGNALS soft enforcement added.
 - Catalog generation utilities added for docs.
+- Profiling expanded (timeline, sampling, spans, export).
