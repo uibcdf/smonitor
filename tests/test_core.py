@@ -56,3 +56,5 @@ def test_profiling_adds_duration():
     event = baz()
     context = event.get("context")
     assert context and context["frames"][0]["duration_ms"] is not None
+    report = smonitor.report()
+    assert "timings" in report

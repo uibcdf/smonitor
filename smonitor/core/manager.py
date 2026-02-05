@@ -39,6 +39,7 @@ class Manager:
             "errors_total": 0,
         }
         self._handler_errors: Dict[str, int] = {}
+        self._timings: Dict[str, List[float]] = {}
 
     @property
     def config(self) -> ManagerConfig:
@@ -133,6 +134,9 @@ class Manager:
 
     def record_call(self) -> None:
         self._counts["calls_total"] += 1
+
+    def record_timing(self, key: str, duration_ms: float) -> None:
+        self._timings.setdefault(key, []).append(duration_ms)
 
     def emit(
         self,
@@ -253,9 +257,24 @@ class Manager:
         return event
 
     def report(self) -> Dict[str, Any]:
+        timings_summary = {}
+        for key, values in self._timings.items():
+            if not values:
+                continue
+            values_sorted = sorted(values)
+            n = len(values_sorted)
+            p50 = values_sorted[int(0.5 * (n - 1))]
+            p95 = values_sorted[int(0.95 * (n - 1))]
+            timings_summary[key] = {
+                "count": n,
+                "p50_ms": p50,
+                "p95_ms": p95,
+                "max_ms": max(values_sorted),
+            }
         return {
             **self._counts,
             "handler_errors": dict(self._handler_errors),
+            "timings": timings_summary,
             "peak_memory": None,
         }
 

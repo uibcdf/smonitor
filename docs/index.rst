@@ -19,6 +19,7 @@ Contents
    schema_validation
    catalog
    cookbook
+   profiling
 
 API Reference
 -------------

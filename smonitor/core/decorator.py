@@ -47,6 +47,8 @@ def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] 
             finally:
                 if start is not None:
                     frame.duration_ms = (perf_counter() - start) * 1000.0
+                    key = f"{fn.__module__}.{fn.__name__}"
+                    manager.record_timing(key, frame.duration_ms)
                 pop_frame()
         return wrapper
 
