@@ -20,3 +20,10 @@ def validate_event(event: Dict[str, Any]) -> List[str]:
         errors.append("Missing code/category")
 
     return errors
+
+
+def enforce_schema(event: Dict[str, Any], *, strict: bool = False) -> List[str]:
+    errors = validate_event(event)
+    if errors and strict:
+        raise ValueError("; ".join(errors))
+    return errors

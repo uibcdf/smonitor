@@ -208,6 +208,8 @@ class Manager:
         if self._config.profile in {"dev", "qa"}:
             errors = validate_event(event)
             if errors:
+                if self._config.strict_signals:
+                    raise ValueError("; ".join(errors))
                 event["extra"].setdefault("schema_warning", "; ".join(errors))
 
         if level == "WARNING":

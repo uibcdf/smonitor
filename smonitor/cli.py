@@ -19,6 +19,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--check-level", default="INFO")
     parser.add_argument("--check-code", default=None)
     parser.add_argument("--check-source", default="smonitor.cli")
+    parser.add_argument("--check-event", default=None, help="JSON event override for check")
     return parser.parse_args()
 
 
@@ -48,12 +49,24 @@ def main() -> int:
                 print(f"- {err}")
             return 2
         smonitor.configure(profile=args.profile, level=args.level)
-        smonitor.emit(
-            args.check_level,
-            "smonitor check event",
-            source=args.check_source,
-            code=args.check_code,
-        )
+        if args.check_event:
+            event = json.loads(args.check_event)
+            smonitor.emit(
+                event.get("level", "INFO"),
+                event.get("message", "smonitor check event"),
+                source=event.get("source", args.check_source),
+                code=event.get("code", args.check_code),
+                extra=event.get("extra"),
+                category=event.get("category"),
+                tags=event.get("tags"),
+            )
+        else:
+            smonitor.emit(
+                args.check_level,
+                "smonitor check event",
+                source=args.check_source,
+                code=args.check_code,
+            )
         print("OK")
         return 0
 

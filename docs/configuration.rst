@@ -46,6 +46,7 @@ The CLI can validate `_smonitor.py` and print reports:
   smonitor --validate-config
   smonitor --check
   smonitor --check --check-level WARNING --check-code MSM-W010 --check-source molsysmt.select
+  smonitor --check --check-event '{"level":"WARNING","message":"x","source":"molsysmt.select","code":"MSM-W010"}'
   smonitor --profile dev --report
 
 Config Validation
@@ -53,3 +54,12 @@ Config Validation
 
 `smonitor --validate-config` checks `_smonitor.py` for unknown keys and basic
 type errors (SMONITOR/PROFILES/ROUTES/FILTERS/CODES/SIGNALS).
+
+Strict signals (dev/qa)
+-----------------------
+
+::
+
+  smonitor.configure(profile="dev", strict_signals=True)
+
+  # Missing required extras in SIGNALS will raise ValueError
