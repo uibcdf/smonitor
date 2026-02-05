@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smonitor"
+version = "0.1.0"
+description = "Centralized diagnostic & telemetry system for the scientific Python stack"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "UIBCDF Development Team" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+rich = ["rich>=13"]
+
+[tool.setuptools]
+packages = ["smonitor", "smonitor.core", "smonitor.emitters", "smonitor.handlers", "smonitor.config", "smonitor.policy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

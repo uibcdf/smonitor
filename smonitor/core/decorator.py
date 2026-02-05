@@ -1,0 +1,49 @@
+from __future__ import annotations
+
+from functools import wraps
+from typing import Any, Callable, Optional
+
+from .context import Frame, pop_frame, push_frame
+from .manager import get_manager
+
+
+def _summarize_args(args: tuple[Any, ...], kwargs: dict[str, Any]) -> dict[str, Any]:
+    summary: dict[str, Any] = {}
+    if args:
+        summary["args"] = [repr(a)[:80] for a in args]
+    if kwargs:
+        summary["kwargs"] = {k: repr(v)[:80] for k, v in kwargs.items()}
+    return summary
+
+
+def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] = None):
+    def decorator(fn: Callable[..., Any]):
+        @wraps(fn)
+        def wrapper(*args: Any, **kwargs: Any):
+            manager = get_manager()
+            manager.record_call()
+            args_summary = _summarize_args(args, kwargs) if manager.config.args_summary else None
+            frame = Frame(
+                function=fn.__name__,
+                module=fn.__module__,
+                args=args_summary,
+                tags=tags,
+            )
+            push_frame(frame)
+            try:
+                return fn(*args, **kwargs)
+            except Exception as exc:
+                manager.emit(
+                    "ERROR",
+                    str(exc),
+                    source=fn.__module__,
+                    exception_type=exc.__class__.__name__,
+                )
+                raise
+            finally:
+                pop_frame()
+        return wrapper
+
+    if func is not None:
+        return decorator(func)
+    return decorator

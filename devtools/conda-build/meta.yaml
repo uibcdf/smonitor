@@ -1,0 +1,23 @@
+package:
+  name: smonitor
+  version: "{{ environ['GIT_DESCRIBE_TAG'] }}"
+
+source:
+  path: ../../   # repo root
+
+build:
+  number: 1
+
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+    - versioningit
+  run:
+    - python
+
+about:
+  home: "https://github.com/uibcdf/smonitor"
+  license: "MIT"
+  summary: "Centralized diagnostic & telemetry system for the scientific Python stack"

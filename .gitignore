@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+*.egg-info/
+*.pyc
+.dist/
+.build/
+
+# Sphinx build
+_docs/
+docs/_build/
