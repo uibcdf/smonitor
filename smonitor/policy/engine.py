@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 @dataclass
 class PolicyState:
     counters: Dict[str, int] = field(default_factory=dict)
+    last_seen: Dict[str, float] = field(default_factory=dict)
 
 
 class PolicyEngine:
@@ -51,8 +52,15 @@ class PolicyEngine:
         return event, target_handlers
 
     def _allow_rate(self, event: Dict[str, Any], rate: str) -> bool:
-        # rate format: "1/100" -> allow 1 of each 100 events per key
+        # rate format: "1/100" or "1/100@seconds" -> allow 1 of each 100 events per key
         try:
+            window_s = None
+            if "@" in rate:
+                rate, window = rate.split("@", 1)
+                try:
+                    window_s = float(window)
+                except ValueError:
+                    window_s = None
             keep, total = rate.split("/")
             keep_n = int(keep)
             total_n = int(total)
@@ -62,6 +70,15 @@ class PolicyEngine:
             key = f"{event.get('code')}|{event.get('source')}"
         else:
             key = event.get("message") or "__default__"
+        from time import time
+
+        now = time()
+        if window_s is not None:
+            last = self._state.last_seen.get(key, 0.0)
+            if now - last > window_s:
+                self._state.counters[key] = 0
+            self._state.last_seen[key] = now
+
         count = self._state.counters.get(key, 0) + 1
         self._state.counters[key] = count
         return (count - 1) % total_n < keep_n

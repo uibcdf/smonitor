@@ -21,6 +21,7 @@ class ManagerConfig:
     capture_exceptions: bool = False
     args_summary: bool = False
     profiling: bool = False
+    strict_signals: bool = False
 
 
 class Manager:
@@ -58,6 +59,7 @@ class Manager:
         profiling: Optional[bool] = None,
         codes: Optional[Dict[str, Dict[str, Any]]] = None,
         signals: Optional[Dict[str, Dict[str, Any]]] = None,
+        strict_signals: Optional[bool] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -83,6 +85,8 @@ class Manager:
             self._codes = codes
         if signals is not None:
             self._signals = signals
+        if strict_signals is not None:
+            self._config.strict_signals = strict_signals
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
@@ -190,15 +194,15 @@ class Manager:
                 required = contract.get("extra_required", [])
                 missing = [k for k in required if k not in event["extra"]]
                 if missing:
-                    event["extra"].setdefault(
-                        "contract_warning",
-                        f"Missing extra fields: {', '.join(missing)}",
-                    )
+                    msg = f"Missing extra fields: {', '.join(missing)}"
+                    if self._config.strict_signals:
+                        raise ValueError(msg)
+                    event["extra"].setdefault("contract_warning", msg)
             elif code is None:
-                event["extra"].setdefault(
-                    "contract_warning",
-                    "Missing code for event (dev/qa profile).",
-                )
+                msg = "Missing code for event (dev/qa profile)."
+                if self._config.strict_signals:
+                    raise ValueError(msg)
+                event["extra"].setdefault("contract_warning", msg)
 
         # Event schema validation (dev/qa only)
         if self._config.profile in {"dev", "qa"}:

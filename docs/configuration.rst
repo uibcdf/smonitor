@@ -34,6 +34,7 @@ Environment Variables
 - `SMONITOR_SHOW_TRACEBACK`
 - `SMONITOR_ARGS_SUMMARY`
 - `SMONITOR_PROFILING`
+- `SMONITOR_STRICT_SIGNALS`
 
 CLI
 ---
@@ -44,6 +45,7 @@ The CLI can validate `_smonitor.py` and print reports:
 
   smonitor --validate-config
   smonitor --check
+  smonitor --check --check-level WARNING --check-code MSM-W010 --check-source molsysmt.select
   smonitor --profile dev --report
 
 Config Validation

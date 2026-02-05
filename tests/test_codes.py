@@ -38,3 +38,14 @@ def test_contract_warning_missing_extra():
     manager.configure(profile="dev", signals={"mod.fn": {"extra_required": ["foo"]}})
     event = smonitor.emit("WARNING", "msg", source="mod.fn", extra={})
     assert "contract_warning" in event["extra"]
+
+
+def test_strict_signals_raises():
+    manager = get_manager()
+    manager.configure(profile="dev", strict_signals=True, signals={"mod.fn": {"extra_required": ["foo"]}})
+    try:
+        smonitor.emit("WARNING", "msg", source="mod.fn", extra={})
+    except ValueError as exc:
+        assert "Missing extra fields" in str(exc)
+    else:
+        raise AssertionError("Expected ValueError")

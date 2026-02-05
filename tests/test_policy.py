@@ -25,6 +25,16 @@ def test_policy_rate_limit():
     assert hs3
 
 
+def test_policy_rate_limit_window():
+    engine = PolicyEngine()
+    engine.set_filters([{"when": {"code": "X"}, "rate_limit": "1/2@0.01"}])
+    handlers = [DummyHandler("console")]
+    event = {"code": "X"}
+    _, hs1 = engine.apply(event, handlers)
+    _, hs2 = engine.apply(event, handlers)
+    assert hs1 and hs2 == []
+
+
 def test_policy_tags_membership():
     engine = PolicyEngine()
     engine.set_filters([{"when": {"tags": "io"}, "rate_limit": "1/1"}])

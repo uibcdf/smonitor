@@ -8,3 +8,4 @@ __pycache__/
 # Sphinx build
 _docs/
 docs/_build/
+docs/_generated_*.md

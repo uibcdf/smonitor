@@ -17,6 +17,7 @@ Contents
    codes
    message_guide
    schema_validation
+   catalog
 
 API Reference
 -------------

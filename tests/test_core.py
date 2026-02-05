@@ -7,13 +7,14 @@ from smonitor.core.manager import get_manager
 
 
 def test_configure_defaults_add_handler():
-    manager = smonitor.configure()
+    manager = smonitor.configure(profile="user", strict_signals=False)
     assert manager is get_manager()
     assert manager._handlers
 
 
 def test_emit_increments_counts():
     manager = get_manager()
+    smonitor.configure(profile="user", strict_signals=False)
     start = manager.report()["warnings_total"]
     smonitor.emit("WARNING", "warn test")
     assert manager.report()["warnings_total"] == start + 1
@@ -21,6 +22,7 @@ def test_emit_increments_counts():
 
 def test_signal_records_call_and_context():
     manager = get_manager()
+    smonitor.configure(profile="user", strict_signals=False)
     start_calls = manager.report()["calls_total"]
 
     @smonitor.signal
@@ -33,7 +35,7 @@ def test_signal_records_call_and_context():
 
 
 def test_args_summary_in_context():
-    smonitor.configure(args_summary=True)
+    smonitor.configure(profile="user", strict_signals=False, args_summary=True)
 
     @smonitor.signal
     def bar(x, y=2):
@@ -45,7 +47,7 @@ def test_args_summary_in_context():
 
 
 def test_profiling_adds_duration():
-    smonitor.configure(profiling=True)
+    smonitor.configure(profile="user", strict_signals=False, profiling=True)
 
     @smonitor.signal
     def baz():
