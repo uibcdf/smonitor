@@ -82,6 +82,7 @@ class RichConsoleHandler(ConsoleHandler):
 
         if profile in {"dev", "debug", "qa"}:
             from rich.table import Table
+            from rich.panel import Panel
 
             table = Table(show_header=True, header_style="bold")
             table.add_column("Level", style=style, width=8)
@@ -101,6 +102,16 @@ class RichConsoleHandler(ConsoleHandler):
             if chain:
                 table.add_row("", "", "Context: " + " -> ".join(chain), "")
             self._console.print(table)
+            extra = event.get("extra") or {}
+            hint = extra.get("hint")
+            contract = extra.get("contract_warning")
+            if hint or contract:
+                body = []
+                if hint:
+                    body.append(f"Hint: {hint}")
+                if contract:
+                    body.append(f"Contract: {contract}")
+                self._console.print(Panel("\n".join(body), title="Notes", style="dim"))
             return
 
         message = self._format(event, profile)
