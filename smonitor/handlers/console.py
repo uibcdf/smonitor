@@ -25,7 +25,9 @@ class ConsoleHandler:
         if profile == "dev":
             ctx_chain = " -> ".join(context.get("chain", []))
             prefix = f"[{code}] " if code else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}"
+            hint = (event.get("extra") or {}).get("hint")
+            hint_part = f" | Hint: {hint}" if hint else ""
+            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
         if profile == "qa":
             prefix = f"[{code}] " if code else ""
             return f"{prefix}{level} {source} | {message}"
@@ -34,9 +36,13 @@ class ConsoleHandler:
         if profile == "debug":
             ctx_chain = " -> ".join(context.get("chain", []))
             prefix = f"[{code}] " if code else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}"
+            hint = (event.get("extra") or {}).get("hint")
+            hint_part = f" | Hint: {hint}" if hint else ""
+            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
         # user (default)
-        return f"{level}: {message}"
+        hint = (event.get("extra") or {}).get("hint")
+        hint_part = f" | {hint}" if hint else ""
+        return f"{level}: {message}{hint_part}"
 
 
 class RichConsoleHandler(ConsoleHandler):

@@ -5,7 +5,7 @@ from pathlib import Path
 from .core.manager import get_manager
 from .core.decorator import signal
 from .handlers.console import ConsoleHandler
-from .config import load_project_config, build_effective_config, extract_policy, load_env_config
+from .config import load_project_config, build_effective_config, extract_policy, load_env_config, extract_codes, extract_signals
 
 __all__ = [
     "configure",
@@ -25,11 +25,13 @@ def configure(**kwargs):
     effective = build_effective_config(project_cfg, env_cfg)
     effective.update({k: v for k, v in kwargs.items() if v is not None})
     policy = extract_policy(project_cfg)
+    codes = extract_codes(project_cfg)
+    signals = extract_signals(project_cfg)
     if "handlers" not in kwargs or kwargs["handlers"] is None:
         # Default to a console handler if none provided
         if not manager._handlers:
             manager.add_handler(ConsoleHandler())
-    manager.configure(**effective, **policy)
+    manager.configure(**effective, **policy, codes=codes, signals=signals)
     return manager
 
 

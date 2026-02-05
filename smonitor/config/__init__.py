@@ -66,3 +66,15 @@ def extract_policy(project_cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         "routes": project_cfg.get("ROUTES"),
         "filters": project_cfg.get("FILTERS"),
     }
+
+
+def extract_codes(project_cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not project_cfg:
+        return {}
+    return project_cfg.get("CODES") or {}
+
+
+def extract_signals(project_cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not project_cfg:
+        return {}
+    return project_cfg.get("SIGNALS") or {}

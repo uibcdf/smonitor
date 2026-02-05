@@ -14,6 +14,7 @@ Contents
    policy
    integration
    examples
+   codes
 
 API Reference
 -------------

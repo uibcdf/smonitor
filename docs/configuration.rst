@@ -11,7 +11,7 @@ Schema
 - `SMONITOR`: base config (level, trace_depth, capture_warnings, etc.)
 - `PROFILES`: per-profile overrides
 - `ROUTES`, `FILTERS`: policy engine rules
-- `CODES`, `SIGNALS`: metadata for docs/tests
+- `CODES`, `SIGNALS`: metadata for docs/tests and message templates
 
 Priority
 --------

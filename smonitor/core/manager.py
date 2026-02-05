@@ -27,6 +27,8 @@ class Manager:
         self._config = ManagerConfig()
         self._handlers: List[Any] = []
         self._policy = PolicyEngine()
+        self._codes: Dict[str, Dict[str, Any]] = {}
+        self._signals: Dict[str, Dict[str, Any]] = {}
         self._counts = {
             "calls_total": 0,
             "warnings_total": 0,
@@ -53,6 +55,8 @@ class Manager:
         filters: Optional[List[Dict[str, Any]]] = None,
         args_summary: Optional[bool] = None,
         profiling: Optional[bool] = None,
+        codes: Optional[Dict[str, Dict[str, Any]]] = None,
+        signals: Optional[Dict[str, Dict[str, Any]]] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -74,6 +78,10 @@ class Manager:
             self._config.args_summary = args_summary
         if profiling is not None:
             self._config.profiling = profiling
+        if codes is not None:
+            self._codes = codes
+        if signals is not None:
+            self._signals = signals
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
@@ -120,6 +128,16 @@ class Manager:
         tags: Optional[List[str]] = None,
         exception_type: Optional[str] = None,
     ) -> Dict[str, Any]:
+        code_meta = self._codes.get(code) if code else None
+        if code_meta and (message is None or message == ""):
+            # Fallback to code-specific message per profile
+            if self._config.profile == "user":
+                message = code_meta.get("user_message", "")
+            elif self._config.profile == "qa":
+                message = code_meta.get("qa_message", "")
+            else:
+                message = code_meta.get("dev_message", "") or code_meta.get("message", "")
+
         event = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "level": level,
@@ -132,6 +150,10 @@ class Manager:
             "tags": tags,
             "exception_type": exception_type,
         }
+
+        if code_meta:
+            event["extra"].setdefault("title", code_meta.get("title"))
+            event["extra"].setdefault("hint", code_meta.get("user_hint") if self._config.profile == "user" else code_meta.get("dev_hint"))
 
         if level == "WARNING":
             self._counts["warnings_total"] += 1
