@@ -182,6 +182,23 @@ class Manager:
             except Exception:
                 pass
 
+        # Soft enforcement for signals/contracts in dev/qa profiles
+        if self._config.profile in {"dev", "qa"} and source:
+            contract = self._signals.get(source)
+            if contract:
+                required = contract.get("extra_required", [])
+                missing = [k for k in required if k not in event["extra"]]
+                if missing:
+                    event["extra"].setdefault(
+                        "contract_warning",
+                        f"Missing extra fields: {', '.join(missing)}",
+                    )
+            elif code is None:
+                event["extra"].setdefault(
+                    "contract_warning",
+                    "Missing code for event (dev/qa profile).",
+                )
+
         if level == "WARNING":
             self._counts["warnings_total"] += 1
         if level == "ERROR":

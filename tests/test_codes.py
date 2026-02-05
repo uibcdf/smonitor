@@ -31,3 +31,10 @@ def test_codes_template_with_extra():
     event = smonitor.emit("WARNING", "", code="X002", extra={"v": "X", "alt": "Y"})
     assert event["message"] == "Value X is bad"
     assert event["extra"]["hint"] == "Use Y"
+
+
+def test_contract_warning_missing_extra():
+    manager = get_manager()
+    manager.configure(profile="dev", signals={"mod.fn": {"extra_required": ["foo"]}})
+    event = smonitor.emit("WARNING", "msg", source="mod.fn", extra={})
+    assert "contract_warning" in event["extra"]

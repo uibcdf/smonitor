@@ -25,9 +25,12 @@ class ConsoleHandler:
         if profile == "dev":
             ctx_chain = " -> ".join(context.get("chain", []))
             prefix = f"[{code}] " if code else ""
-            hint = (event.get("extra") or {}).get("hint")
+            extra = event.get("extra") or {}
+            hint = extra.get("hint")
+            cw = extra.get("contract_warning")
             hint_part = f" | Hint: {hint}" if hint else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
+            cw_part = f" | Contract: {cw}" if cw else ""
+            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{cw_part}"
         if profile == "qa":
             prefix = f"[{code}] " if code else ""
             return f"{prefix}{level} {source} | {message}"
@@ -36,9 +39,12 @@ class ConsoleHandler:
         if profile == "debug":
             ctx_chain = " -> ".join(context.get("chain", []))
             prefix = f"[{code}] " if code else ""
-            hint = (event.get("extra") or {}).get("hint")
+            extra = event.get("extra") or {}
+            hint = extra.get("hint")
+            cw = extra.get("contract_warning")
             hint_part = f" | Hint: {hint}" if hint else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
+            cw_part = f" | Contract: {cw}" if cw else ""
+            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{cw_part}"
         # user (default)
         hint = (event.get("extra") or {}).get("hint")
         hint_part = f" | {hint}" if hint else ""
