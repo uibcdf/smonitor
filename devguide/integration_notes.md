@@ -19,6 +19,11 @@
 - Use `smonitor.integrations.emit_from_catalog(...)` for consistent emission.
 - Migrate `MOLSYSMT_LOG_LEVEL` / `MOLSYSMT_SIMPLE_WARNINGS` to `smonitor` profile/config.
 
+## MolSysViewer integration
+- Ensure `smonitor` is configured on import (`ensure_configured`).
+- Replace direct `warnings.warn`/`logging` with catalog emission.
+- Use catalog-driven messages for frontend init failures and payload diagnostics.
+
 ## Testing strategy
 - Unit-test context stack push/pop under nested calls.
 - Validate that warnings are captured and formatted correctly.

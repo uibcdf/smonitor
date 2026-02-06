@@ -152,6 +152,7 @@ To implement `smonitor` across the UIBCDF suite:
 
 Integration is complete across the current ecosystem:
 - MolSysMT
+- MolSysViewer
 - ArgDigest
 - DepDigest
 - PyUnitWizard

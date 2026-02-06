@@ -8,6 +8,7 @@ This folder collects developer documentation for `smonitor`.
 3) `api.md` — Public API sketch and expected behavior.
 4) `implementation_plan.md` — Phased implementation checklist.
 5) `integration_notes.md` — How to integrate with arg_digest, dep_digest, and MolSysMT.
+6) `standards/SMONITOR_GUIDE.md` — Canonical guide to sync into ecosystem repos.
 
 ## Scope
 These documents track the evolving implementation. The authoritative checkpoint
@@ -26,4 +27,4 @@ for 0.10 decisions is `SPEC_SMONITOR.md` (section 0.2 Draft).
 - CODES templating and SIGNALS soft enforcement.
 - Profiling expanded (timeline, sampling, spans, export).
 - Local bundle export (CLI + event buffer).
-- Ecosystem integration completed (MolSysMT, ArgDigest, DepDigest, PyUnitWizard).
+- Ecosystem integration completed (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).

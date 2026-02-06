@@ -6,49 +6,34 @@ smonitor provides thin integration helpers for ecosystem libraries.
 MolSysMT
 --------
 
-Replace MolSysMT logging setup with:
+Use package-level configuration and ensure smonitor is configured on import:
 
 ::
 
-  from smonitor.integrations import configure_molsysmt
-  configure_molsysmt(profile="user")
+  from smonitor.integrations import ensure_configured
+  from molsysmt._private.smonitor import PACKAGE_ROOT
+  ensure_configured(PACKAGE_ROOT)
 
-Suggested `_smonitor.py` for MolSysMT (package root)
-------------------------------------
+The package `_smonitor.py` controls default profiles and messages.
 
-:: 
+MolSysViewer
+------------
 
-  PROFILE = "user"
+Use package-level configuration and emit catalog-driven diagnostics for
+frontend init failures and payload issues.
 
-  SMONITOR = {
-    "level": "WARNING",
-    "capture_warnings": True,
-    "capture_logging": True,
-    "trace_depth": 3,
-  }
+ArgDigest / DepDigest / PyUnitWizard
+-----------------------------------
 
-  PROFILES = {
-    "user": {"level": "WARNING", "style": "user"},
-    "dev": {"level": "INFO", "style": "dev"},
-  }
-
-  ROUTES = [
-    {"when": {"source_prefix": "molsysmt."}, "send_to": ["console"]},
-  ]
-
-ArgDigest / DepDigest
----------------------
-
-Use the same pattern to centralize diagnostics:
-
-::
-
-  from smonitor.integrations import configure_argdigest, configure_depdigest
-  configure_argdigest(profile="dev")
-  configure_depdigest(profile="dev")
+Use the same package-level pattern and emit via catalog entries.
 
 Catalog pattern
 ---------------
 
 Keep library-specific catalogs under `A/_private/smonitor/catalog.py` with optional
 metadata in `A/_private/smonitor/meta.py`. Load them in `A/_smonitor.py`.
+
+Canonical guide
+---------------
+
+Use `standards/SMONITOR_GUIDE.md` as the source of truth for integration.

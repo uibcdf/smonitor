@@ -60,6 +60,15 @@ Libraries can keep their diagnostics catalog in `A/_private/smonitor/catalog.py`
 (CODES/SIGNALS + metadata) and call `smonitor.integrations.emit_from_catalog(...)`
 to emit structured events.
 
+## Canonical Guide
+
+The canonical integration guide is `standards/SMONITOR_GUIDE.md`. Use it as the
+source of truth and sync it to sibling repos with:
+
+```bash
+python devtools/sync_smonitor_guide.py
+```
+
 ## Profiling
 
 Enable lightweight profiling with `profiling=True`. It records durations per
