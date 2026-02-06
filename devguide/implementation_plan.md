@@ -94,7 +94,7 @@ Status: **Done**
 **H5 — Release**
 - Versioning, conda build, docs publish.
 
-## 0.9 Status
+## 0.10 Status
 - Feature complete; hardening and docs polish remain before 1.0.
 
 ## Profiling (Developer Utility)

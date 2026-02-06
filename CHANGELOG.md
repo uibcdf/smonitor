@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-02-06
+### Documentation
+- Updated README, SPEC, and devguide to reflect 0.10 status and completed ecosystem integration.
+- Clarified smonitor name (Signal Monitor) and next steps toward 1.0.
+
 ## [0.9.0] - 2026-02-06
 ### Added
 - Strict config validation (`strict_config`, `SMONITOR_STRICT_CONFIG`) and full project validation.

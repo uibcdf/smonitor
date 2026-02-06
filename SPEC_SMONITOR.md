@@ -1,6 +1,6 @@
 # SPEC_SMONITOR.md — Centralized Diagnostic & Telemetry System
 
-**Version:** v0.9 (Draft)  
+**Version:** v0.10 (Draft)  
 **Status:** FEATURE COMPLETE (hardening phase)  
 **Author:** UIBCDF Development Team  
 **Project Name:** `smonitor`
