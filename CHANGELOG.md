@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [0.10.0] - 2026-02-06
 ### Documentation
 - Updated README, SPEC, and devguide to reflect 0.10 status and completed ecosystem integration.
-- Clarified smonitor name (Signal Monitor) and next steps toward 1.0.
+- Clarified smonitor name (Signal Monitor) and next steps beyond 0.10.0.
 
 ## [0.9.0] - 2026-02-06
 ### Added

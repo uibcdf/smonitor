@@ -72,7 +72,7 @@ Status: **Done** (CLI + env config added)
 - Add optional strict SIGNALS enforcement.
 Status: **Done**
 
-## Plan to 1.0 (Stable)
+## Plan to 0.10 (Stable)
 
 **H1 — Ecosystem integration (minimum)** (Done)
 - MolSysMT, ArgDigest, DepDigest, PyUnitWizard integrated.
@@ -95,7 +95,7 @@ Status: **Done**
 - Versioning, conda build, docs publish.
 
 ## 0.10 Status
-- Feature complete; hardening and docs polish remain before 1.0.
+- Feature complete; hardening and docs polish remain before 0.10.0 finalization.
 
 ## Profiling (Developer Utility)
 - Timeline buffer and sampling.
@@ -103,13 +103,13 @@ Status: **Done**
 - Export to JSON/CSV.
 Status: **Done**
 
-## Future: Telemetry & Sentinel (Post‑1.0)
+## Future: Telemetry & Sentinel (Post‑0.10)
 - Phase A: Local export bundles (privacy‑first). **Done**
 - Phase B: Opt‑in telemetry client with rate limits.
 - Phase C: Sentinel server + public dashboard.
 - Phase D: LLM triage on aggregated reports.
 
-## Future: Project Metadata (Post‑1.0)
+## Future: Project Metadata (Post‑0.10)
 - Load `doc_url`, `issues_url`, `api_url` from `pyproject.toml` under `[tool.smonitor]`.
 - Inject metadata into emitted events for consistent user hints.
 
@@ -119,7 +119,7 @@ Status: **Done**
 - Public health dashboard by library/version.
 - Developer workflow: codes → docs → fixes.
 
-## Future: AI Support & Repair (Post‑1.0)
+## Future: AI Support & Repair (Post‑0.10)
 - Structured outputs (CODES/SIGNALS, bundles) for agents.
 - Triage + dedup pipelines based on `code` and `trace_hash`.
 - Suggested fixes with human approval.

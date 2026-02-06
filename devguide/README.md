@@ -11,7 +11,7 @@ This folder collects developer documentation for `smonitor`.
 
 ## Scope
 These documents track the evolving implementation. The authoritative checkpoint
-for v0.10 decisions is `SPEC_SMONITOR.md` (section v0.2 Draft).
+for 0.10 decisions is `SPEC_SMONITOR.md` (section 0.2 Draft).
 
 ## Current Status (Checkpoint)
 - Core scaffold, manager/context, and `@signal` implemented.

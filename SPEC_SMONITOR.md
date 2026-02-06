@@ -1,6 +1,6 @@
 # SPEC_SMONITOR.md — Centralized Diagnostic & Telemetry System
 
-**Version:** v0.10 (Draft)  
+**Version:** 0.10 (Draft)  
 **Status:** FEATURE COMPLETE (hardening phase)  
 **Author:** UIBCDF Development Team  
 **Project Name:** `smonitor`
@@ -200,10 +200,10 @@ All use `_smonitor.py` at package root, catalogs in `A/_private/smonitor/catalog
 
 ---
 
-# v0.2 (Draft) — Expanded Design Skeleton
+# 0.2 (Draft) — Expanded Design Skeleton
 
 **Status:** DRAFT  
-**Notes:** This section extends v0.1 without breaking the original vision. It formalizes configuration discovery via `_smonitor.py`, profiles, and a policy engine, and introduces a communication style guide for user-facing messages.
+**Notes:** This section extends 0.1 without breaking the original vision. It formalizes configuration discovery via `_smonitor.py`, profiles, and a policy engine, and introduces a communication style guide for user-facing messages.
 
 ## 1. Configuration Sources and Priority
 
