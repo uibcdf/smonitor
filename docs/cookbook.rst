@@ -46,6 +46,13 @@ CLI check with JSON
 
   smonitor --check --check-event '{"level":"WARNING","message":"x","source":"molsysmt.select","code":"MSM-W010","extra":{"selection":"atom_name==","example":"atom_name==\\'CA\\'"}}'
 
+CLI exit codes
+--------------
+
+- `0`: success
+- `1`: no `_smonitor.py` found (validate)
+- `2`: invalid configuration
+
 Generate catalog
 ----------------
 

@@ -86,6 +86,12 @@ type errors (SMONITOR/PROFILES/ROUTES/FILTERS/CODES/SIGNALS).
 If `strict_config=True` (or `SMONITOR_STRICT_CONFIG=1`), invalid config raises
 an exception at `smonitor.configure(...)`.
 
+CLI returns non-zero exit codes:
+
+- `0` on success
+- `1` if no `_smonitor.py` is found (validate)
+- `2` if config is invalid
+
 Strict signals (dev/qa)
 -----------------------
 
