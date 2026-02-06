@@ -1,6 +1,6 @@
 # smonitor
 
-**smonitor** is a centralized diagnostic and telemetry system for the scientific Python stack.  
+**smonitor** (Signal Monitor) is a centralized diagnostic and telemetry system for the scientific Python stack.  
 It unifies logs, warnings, errors, and execution context across an ecosystem of libraries.
 
 ## Why smonitor
