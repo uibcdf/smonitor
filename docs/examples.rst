@@ -8,7 +8,7 @@ User profile
 
   import smonitor
   smonitor.configure(profile="user")
-  smonitor.emit("WARNING", "Selección ambigua", source="molsysmt.select")
+  smonitor.emit("WARNING", "Selection ambiguous", source="molsysmt.select")
 
 Dev profile
 -----------

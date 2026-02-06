@@ -284,9 +284,9 @@ FILTERS = [
 CODES = {
     "MSM-W010": {
         "title": "Selection ambiguous",
-        "user_message": "La selección es ambigua.",
-        "user_hint": "Especifica la selección con más detalle.",
-        "dev_hint": "Usa selectors explícitos.",
+        "user_message": "The selection is ambiguous.",
+        "user_hint": "Use a more specific selection.",
+        "dev_hint": "Use explicit selectors.",
     },
 }
 
@@ -343,10 +343,10 @@ Examples:
 Tone: clear, friendly, minimal jargon.
 
 ```
-Error: <qué pasó>.
-Solución: <qué hacer>.
+Error: <what happened>.
+Solution: <what to do>.
 Ejemplo: <ejemplo correcto>.
-Más ayuda: <URL opcional>.
+More help: <optional URL>.
 ```
 
 ### 4.3 Profile: `dev`

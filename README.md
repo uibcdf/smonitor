@@ -47,8 +47,8 @@ SMONITOR = {
 CODES = {
     "MSM-W010": {
         "title": "Selection ambiguous",
-        "user_message": "La selección '{selection}' es ambigua.",
-        "user_hint": "Especifica la selección con más detalle (ejemplo: {example}).",
+        "user_message": "Selection '{selection}' is ambiguous.",
+        "user_hint": "Use a more specific selection (example: {example}).",
     }
 }
 ```
