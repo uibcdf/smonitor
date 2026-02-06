@@ -106,6 +106,10 @@ Status: **Done**
 - Phase C: Sentinel server + public dashboard.
 - Phase D: LLM triage on aggregated reports.
 
+## Future: Project Metadata (Post‑1.0)
+- Load `doc_url`, `issues_url`, `api_url` from `pyproject.toml` under `[tool.smonitor]`.
+- Inject metadata into emitted events for consistent user hints.
+
 ## Future: smonitor ↔ smonitor-sentinel UX
 - User opt‑in with clear consent.
 - Local‑first bundles for manual sharing.
