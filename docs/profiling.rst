@@ -38,6 +38,8 @@ Sampling
 
   smonitor.configure(profiling=True, profiling_sample_rate=0.1)
 
+Sampling also applies to `span(...)` context blocks.
+
 GPU and accelerator hooks
 -------------------------
 
@@ -60,6 +62,9 @@ Export timeline
   from smonitor.profiling import export_timeline
   export_timeline(\"timeline.json\", format=\"json\")
   export_timeline(\"timeline.csv\", format=\"csv\")
+
+Timeline entries may include a `span=True` flag and an optional `meta` dict
+when recorded via `span(...)`.
 
 Output (example)
 ----------------

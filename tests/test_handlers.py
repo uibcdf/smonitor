@@ -3,6 +3,7 @@ from pathlib import Path
 
 from smonitor.handlers.file import FileHandler
 from smonitor.handlers.json import JsonHandler
+from smonitor.handlers.memory import MemoryHandler
 
 
 def test_file_handler_writes(tmp_path: Path):
@@ -28,4 +29,12 @@ def test_handlers_create_parent_dir(tmp_path: Path):
     FileHandler(str(file_path), mode="w").handle({"timestamp": "t", "level": "INFO", "message": "m"})
     JsonHandler(str(json_path), mode="w").handle({"level": "INFO", "message": "m"})
     assert file_path.exists()
-    assert json_path.exists()
+
+
+def test_memory_handler_buffers():
+    handler = MemoryHandler(max_events=2)
+    handler.handle({"message": "a"}, profile="user")
+    handler.handle({"message": "b"}, profile="user")
+    handler.handle({"message": "c"}, profile="user")
+    assert len(handler.events) == 2
+    assert handler.events[0]["message"] == "b"

@@ -281,6 +281,7 @@ ROUTES = [
 
 FILTERS = [
     {"when": {"code": "MSM-W010"}, "rate_limit": "1/100"},
+    {"when": {"level": "INFO"}, "sample": 0.1},
 ]
 
 # Message metadata (user/dev/qa/agent hints)

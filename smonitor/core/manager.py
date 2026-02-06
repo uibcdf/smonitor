@@ -153,17 +153,27 @@ class Manager:
     def record_call(self) -> None:
         self._counts["calls_total"] += 1
 
-    def record_timing(self, key: str, duration_ms: float) -> None:
+    def record_timing(
+        self,
+        key: str,
+        duration_ms: float,
+        *,
+        span: bool = False,
+        meta: Optional[Dict[str, Any]] = None,
+    ) -> None:
         self._timings.setdefault(key, []).append(duration_ms)
         # timeline buffer
         if self._config.profiling_buffer_size > 0:
-            self._timeline.append(
-                {
-                    "key": key,
-                    "duration_ms": duration_ms,
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
-                }
-            )
+            entry = {
+                "key": key,
+                "duration_ms": duration_ms,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+            if span:
+                entry["span"] = True
+            if meta:
+                entry["meta"] = meta
+            self._timeline.append(entry)
             if len(self._timeline) > self._config.profiling_buffer_size:
                 self._timeline.pop(0)
 

@@ -13,24 +13,17 @@ def span(name: str, **meta: Any):
     if not manager.config.profiling:
         yield
         return
+    if manager.config.profiling_sample_rate < 1.0:
+        from random import random
+        if random() > manager.config.profiling_sample_rate:
+            yield
+            return
     start = perf_counter()
     try:
         yield
     finally:
         duration_ms = (perf_counter() - start) * 1000.0
-        manager.record_timing(name, duration_ms)
-        if manager.config.profiling_buffer_size > 0:
-            manager._timeline.append(
-                {
-                    "key": name,
-                    "duration_ms": duration_ms,
-                    "timestamp": None,
-                    "span": True,
-                    "meta": meta,
-                }
-            )
-            if len(manager._timeline) > manager.config.profiling_buffer_size:
-                manager._timeline.pop(0)
+        manager.record_timing(name, duration_ms, span=True, meta=meta)
 
 
 def export_timeline(path: str, format: str = "json") -> None:

@@ -26,6 +26,7 @@ Examples
   FILTERS = [
     {"when": {"code": "MSM-W010"}, "rate_limit": "1/100"},
     {"when": {"code": "MSM-W999"}, "drop": True},
+    {"when": {"level": "INFO"}, "sample": 0.1},
   ]
 
   ROUTES = [
@@ -43,6 +44,8 @@ Advanced transforms
       "rename": {"source": "origin"},
       "drop_fields": ["exception_type"],
       "add_tags": ["review"],
+      "set": {"category": "validation"},
+      "set_extra": {"owner": "qa"},
     }
   ]
 

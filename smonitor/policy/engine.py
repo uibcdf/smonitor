@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from random import random
 from typing import Any, Dict, Iterable, List, Tuple
 
 
@@ -37,6 +38,12 @@ class PolicyEngine:
             when = rule.get("when", {})
             if not self._match(event, when):
                 continue
+            sample = rule.get("sample")
+            if isinstance(sample, (int, float)):
+                if sample <= 0:
+                    return event, []
+                if sample < 1.0 and random() > sample:
+                    return event, []
             if rule.get("drop") is True:
                 return event, []
             rate = rule.get("rate_limit")
@@ -52,6 +59,16 @@ class PolicyEngine:
             transform = rule.get("transform")
             if isinstance(transform, dict):
                 event.update(transform)
+            set_fields = rule.get("set")
+            if isinstance(set_fields, dict):
+                event.update(set_fields)
+            set_extra = rule.get("set_extra")
+            if isinstance(set_extra, dict):
+                extra = event.get("extra")
+                if not isinstance(extra, dict):
+                    extra = {}
+                extra.update(set_extra)
+                event["extra"] = extra
             rename = rule.get("rename")
             if isinstance(rename, dict):
                 for old, new in rename.items():

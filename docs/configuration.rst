@@ -25,6 +25,7 @@ Schema
 Common options in `SMONITOR`:
 
 - `event_buffer_size`: number of recent events kept in memory for bundle export
+- `strict_config`: if True, invalid `_smonitor.py` raises at configure time
 
 Priority
 --------
@@ -52,6 +53,7 @@ Environment Variables
 - `SMONITOR_EVENT_BUFFER`
 - `SMONITOR_STRICT_SIGNALS`
 - `SMONITOR_STRICT_SCHEMA`
+- `SMONITOR_STRICT_CONFIG`
 - `SMONITOR_ENABLED`
 
 Logging Capture
@@ -80,6 +82,9 @@ Config Validation
 
 `smonitor --validate-config` checks `_smonitor.py` for unknown keys and basic
 type errors (SMONITOR/PROFILES/ROUTES/FILTERS/CODES/SIGNALS).
+
+If `strict_config=True` (or `SMONITOR_STRICT_CONFIG=1`), invalid config raises
+an exception at `smonitor.configure(...)`.
 
 Strict signals (dev/qa)
 -----------------------

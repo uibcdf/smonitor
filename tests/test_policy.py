@@ -79,3 +79,25 @@ def test_policy_rename_drop_add_tags():
     assert "source" not in ev
     assert "exception_type" not in ev
     assert ev["tags"] == ["x", "review"]
+
+
+def test_policy_sample_and_set_extra():
+    engine = PolicyEngine()
+    engine.set_filters([{"when": {"code": "X"}, "sample": 0.0}])
+    handlers = [DummyHandler("console")]
+    event = {"code": "X", "extra": {"a": 1}}
+    _, hs = engine.apply(event, handlers)
+    assert hs == []
+
+    engine.set_filters([])
+    engine.set_routes(
+        [
+            {
+                "when": {"code": "X"},
+                "set_extra": {"b": 2},
+            }
+        ]
+    )
+    ev, _ = engine.apply(event, handlers)
+    assert ev["extra"]["a"] == 1
+    assert ev["extra"]["b"] == 2
