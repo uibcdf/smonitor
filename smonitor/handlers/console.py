@@ -121,5 +121,16 @@ class RichConsoleHandler(ConsoleHandler):
                 self._console.print(Panel("\n".join(body), title="Notes", style="dim"))
             return
 
+        if profile == "user":
+            from rich.panel import Panel
+
+            hint = (event.get("extra") or {}).get("hint")
+            body = event.get("message") or ""
+            if hint:
+                body = f"{body}\n\nHint: {hint}"
+            title = event.get("level") or "INFO"
+            self._console.print(Panel(body, title=title, style=style))
+            return
+
         message = self._format(event, profile)
         self._console.print(message, style=style)

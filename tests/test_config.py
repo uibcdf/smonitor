@@ -43,3 +43,23 @@ def test_validate_config_unknown_key(tmp_path: Path):
     cfg = load_project_config(tmp_path)
     errors = validate_config(cfg)
     assert errors and "Unknown top-level key" in errors[0]
+
+
+def test_validate_config_unknown_smonitor_key(tmp_path: Path):
+    cfg_file = tmp_path / "_smonitor.py"
+    cfg_file.write_text("SMONITOR = {'bad': 1}\n")
+    cfg = load_project_config(tmp_path)
+    errors = validate_config(cfg)
+    assert any("Unknown SMONITOR key" in e for e in errors)
+
+
+def test_validate_config_profile_types(tmp_path: Path):
+    cfg_file = tmp_path / "_smonitor.py"
+    cfg_file.write_text(
+        "SMONITOR = {'trace_depth': 'nope'}\n"
+        "PROFILES = {'dev': {'level': 1}}\n"
+    )
+    cfg = load_project_config(tmp_path)
+    errors = validate_config(cfg)
+    assert any("SMONITOR.trace_depth must be an int" in e for e in errors)
+    assert any("PROFILES.dev.level must be a string" in e for e in errors)

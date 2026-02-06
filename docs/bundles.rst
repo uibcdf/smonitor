@@ -10,6 +10,8 @@ CLI export
 .. code-block:: bash
 
    smonitor export --out smonitor_bundle --max-events 500
+   smonitor export --out smonitor_bundle --since 2026-02-06T00:00:00
+   smonitor export --out smonitor_bundle --drop-extra --redact extra.password
 
 This produces a directory with:
 
@@ -17,6 +19,13 @@ This produces a directory with:
 - `events.jsonl` (recent events, optional)
 
 Use `--out bundle.json` to generate a single JSON file instead of a directory.
+
+Privacy filters
+---------------
+
+- `--drop-extra` removes `extra` entirely.
+- `--drop-context` removes `context`.
+- `--redact` replaces specific dotted fields with `***`.
 
 Configuration
 -------------

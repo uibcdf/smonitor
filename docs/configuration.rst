@@ -58,6 +58,7 @@ The CLI can validate `_smonitor.py` and print reports:
   smonitor --check --check-event '{"level":"WARNING","message":"x","source":"molsysmt.select","code":"MSM-W010"}'
   smonitor --profile dev --report
   smonitor export --out smonitor_bundle --max-events 500
+  smonitor export --out smonitor_bundle --drop-extra --redact extra.password
 
 Config Validation
 -----------------

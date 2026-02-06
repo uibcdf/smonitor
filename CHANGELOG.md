@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 - Added local bundle export (`smonitor export`) with optional event buffering.
+- Bundle privacy filters (`--drop-extra`, `--drop-context`, `--redact`) and `--since` filtering.
 - Hardened file/json handlers (auto-create parent dirs, safer JSON serialization).
 - Expanded event schema validation (types + ISO timestamp checks).
 - Added docs for bundles and troubleshooting.

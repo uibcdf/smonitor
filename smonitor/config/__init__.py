@@ -91,6 +91,26 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         return []
     errors: list[str] = []
     allowed_top = {"PROFILE", "SMONITOR", "PROFILES", "ROUTES", "FILTERS", "CODES", "SIGNALS"}
+    allowed_smonitor = {
+        "level",
+        "theme",
+        "capture_warnings",
+        "capture_logging",
+        "capture_exceptions",
+        "trace_depth",
+        "show_traceback",
+        "profile",
+        "handlers",
+        "args_summary",
+        "profiling",
+        "profiling_buffer_size",
+        "profiling_sample_rate",
+        "profiling_hooks",
+        "strict_signals",
+        "strict_schema",
+        "enabled",
+        "event_buffer_size",
+    }
     for key in project_cfg.keys():
         if key not in allowed_top:
             errors.append(f"Unknown top-level key: {key}")
@@ -107,4 +127,49 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         errors.append("CODES must be a dict")
     if "SIGNALS" in project_cfg and not isinstance(project_cfg["SIGNALS"], dict):
         errors.append("SIGNALS must be a dict")
+
+    def _validate_block(prefix: str, cfg: Dict[str, Any]) -> None:
+        for key in cfg:
+            if key not in allowed_smonitor:
+                errors.append(f"Unknown {prefix} key: {key}")
+        bool_keys = {
+            "capture_warnings",
+            "capture_logging",
+            "capture_exceptions",
+            "show_traceback",
+            "args_summary",
+            "profiling",
+            "strict_signals",
+            "strict_schema",
+            "enabled",
+        }
+        int_keys = {"trace_depth", "profiling_buffer_size", "event_buffer_size"}
+        float_keys = {"profiling_sample_rate"}
+        str_keys = {"level", "theme", "profile"}
+        for key in bool_keys:
+            if key in cfg and not isinstance(cfg[key], bool):
+                errors.append(f"{prefix}.{key} must be a bool")
+        for key in int_keys:
+            if key in cfg and not isinstance(cfg[key], int):
+                errors.append(f"{prefix}.{key} must be an int")
+        for key in float_keys:
+            if key in cfg and not isinstance(cfg[key], (float, int)):
+                errors.append(f"{prefix}.{key} must be a float")
+        for key in str_keys:
+            if key in cfg and not isinstance(cfg[key], str):
+                errors.append(f"{prefix}.{key} must be a string")
+        if "handlers" in cfg and not isinstance(cfg["handlers"], list):
+            errors.append(f"{prefix}.handlers must be a list")
+
+    smonitor_cfg = project_cfg.get("SMONITOR") or {}
+    if isinstance(smonitor_cfg, dict):
+        _validate_block("SMONITOR", smonitor_cfg)
+
+    profiles = project_cfg.get("PROFILES") or {}
+    if isinstance(profiles, dict):
+        for name, profile_cfg in profiles.items():
+            if not isinstance(profile_cfg, dict):
+                errors.append(f"PROFILE {name} must be a dict")
+                continue
+            _validate_block(f"PROFILES.{name}", profile_cfg)
     return errors

@@ -15,7 +15,12 @@ def _parse_args() -> argparse.Namespace:
     export_parser = subparsers.add_parser("export", help="Export a local smonitor bundle")
     export_parser.add_argument("--out", default="smonitor_bundle")
     export_parser.add_argument("--max-events", type=int, default=None)
+    export_parser.add_argument("--since", default=None, help="ISO timestamp (filter events)")
     export_parser.add_argument("--no-events", action="store_true")
+    export_parser.add_argument("--append-events", action="store_true", help="Append to events.jsonl")
+    export_parser.add_argument("--drop-extra", action="store_true")
+    export_parser.add_argument("--drop-context", action="store_true")
+    export_parser.add_argument("--redact", action="append", default=[], help="Redact dotted fields (e.g. extra.password)")
     export_parser.add_argument("--force", action="store_true")
     export_parser.add_argument("--config-path", default=None)
     export_parser.add_argument("--profile", default=None)
@@ -49,7 +54,12 @@ def main() -> int:
             args.out,
             include_events=not args.no_events,
             max_events=args.max_events,
+            since=args.since,
+            drop_extra=args.drop_extra,
+            drop_context=args.drop_context,
+            redact_fields=args.redact,
             force=args.force,
+            append_events=args.append_events,
             config_base=base,
         )
         print(str(out_path))
