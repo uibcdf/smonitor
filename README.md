@@ -1,9 +1,9 @@
-# smonitor
+# SMonitor
 
-**smonitor** (Signal Monitor) is a centralized diagnostic and telemetry system for the scientific Python stack.  
+**SMonitor** (Signal Monitor) is a centralized diagnostic and telemetry system for the scientific Python stack.  
 It unifies logs, warnings, errors, and execution context across an ecosystem of libraries.
 
-## Why smonitor
+## Why SMonitor
 
 - **Single configuration surface** for diagnostics across multiple libraries.
 - **Traceability** with breadcrumbs (call-chain context).
@@ -135,7 +135,7 @@ Next steps beyond 0.10.0:
 
 ## AI Support (Future)
 
-Smonitor is designed to enable opt‑in AI/LLM support workflows:
+SMonitor is designed to enable opt‑in AI/LLM support workflows:
 - structured CODES/SIGNALS for triage,
 - local bundles for reproducible diagnosis,
 - guarded repair suggestions with human review.
