@@ -4,6 +4,12 @@ Configuration
 Project configuration can be provided via `_smonitor.py` at the project root.
 Runtime `smonitor.configure(...)` always overrides project defaults.
 
+If you need to load a package-level `_smonitor.py`, pass `config_path`:
+
+::
+
+  smonitor.configure(config_path=Path(__file__).parent)
+
 Schema
 ------
 

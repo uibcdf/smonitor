@@ -12,6 +12,7 @@ except PackageNotFoundError:
         __version__ = "0.0.0+unknown"
 
 from pathlib import Path
+from typing import Optional
 
 from .core.manager import get_manager
 from .core.decorator import signal
@@ -33,7 +34,8 @@ __all__ = [
 
 def configure(**kwargs):
     manager = get_manager()
-    project_cfg = load_project_config(Path.cwd())
+    config_path: Optional[Path] = kwargs.pop("config_path", None)
+    project_cfg = load_project_config(config_path or Path.cwd())
     env_cfg = load_env_config()
     effective = build_effective_config(project_cfg, env_cfg)
     effective.update({k: v for k, v in kwargs.items() if v is not None})

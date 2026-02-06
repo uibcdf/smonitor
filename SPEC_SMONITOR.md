@@ -203,6 +203,7 @@ To implement `monitor` across the UIBCDF suite:
 Configuration can be provided by multiple sources. Higher priority overrides lower priority:
 
 1. **Runtime call**: `smonitor.configure(...)`
+   - Optional `config_path` allows loading a package-level `_smonitor.py`.
 2. **CLI arguments** (if a CLI exists): `--profile dev`, `--level INFO`, etc.
 3. **Environment variables**: e.g., `SMONITOR_PROFILE=dev`
 4. **Project file**: `_smonitor.py` at project root
