@@ -9,3 +9,6 @@ __pycache__/
 _docs/
 docs/_build/
 docs/_generated_*.md
+
+# In this library
+codex_session.sh
