@@ -27,3 +27,4 @@ The authoritative checkpoint for v0.2 decisions is `SPEC_SMONITOR.md` (section v
 - Profiling expanded (timeline, sampling, spans, export).
 - Local bundle export (CLI + event buffer).
 - Troubleshooting docs added.
+- Integrations support package-level catalogs (`A/_private/smonitor`).

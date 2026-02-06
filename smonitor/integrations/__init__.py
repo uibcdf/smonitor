@@ -16,19 +16,29 @@ def ensure_configured(package_root: Path) -> None:
     _configured_packages.add(key)
 
 
+def merge_extra(meta: Optional[Dict[str, Any]], extra: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = {}
+    if meta:
+        merged.update(meta)
+    if extra:
+        merged.update(extra)
+    return merged
+
+
 def emit_from_catalog(
     entry: Dict[str, Any],
     *,
     extra: Optional[Dict[str, Any]] = None,
     package_root: Optional[Path] = None,
-) -> None:
+    meta: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
     if package_root is not None:
         ensure_configured(package_root)
-    smonitor.emit(
+    return smonitor.emit(
         entry.get("level", "WARNING"),
         "",
         source=entry.get("source"),
         code=entry.get("code"),
         category=entry.get("category"),
-        extra=extra or {},
+        extra=merge_extra(meta, extra),
     )

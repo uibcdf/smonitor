@@ -29,11 +29,11 @@ do_work(3)
 
 ## Configuration
 
-Project-wide configuration is read from `_smonitor.py` at the repo root. Runtime
-`configure()` always overrides project defaults.
+Project-wide configuration is read from `_smonitor.py` at the **package root**.
+Runtime `configure()` always overrides project defaults.
 
 ```python
-# _smonitor.py
+# _smonitor.py (package root)
 PROFILE = "user"
 
 SMONITOR = {
@@ -52,6 +52,12 @@ CODES = {
     }
 }
 ```
+
+## Package Catalogs
+
+Libraries can keep their diagnostics catalog in `A/_private/smonitor/catalog.py`
+(CODES/SIGNALS + metadata) and call `smonitor.integrations.emit_from_catalog(...)`
+to emit structured events.
 
 ## Profiling
 

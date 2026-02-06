@@ -118,6 +118,10 @@ not full performance analysis.
 Libraries can define `CODES` in `_smonitor.py` to provide profile-specific messages and hints.
 If an event is emitted with a `code` and an empty `message`, smonitor fills it from `CODES`.
 
+**Catalog pattern:** libraries can keep `CODES`, `SIGNALS`, and metadata in
+`A/_private/smonitor/catalog.py` (plus optional `meta.py`) and load them in
+`A/_smonitor.py`.
+
 ### 4.7 Event Schema Validation (dev/qa)
 In `dev` and `qa` profiles, smonitor validates event schema and attaches a `schema_warning`
 if required fields are missing or invalid.
@@ -139,7 +143,7 @@ Smonitor can export local bundles for reproducible diagnosis:
 - Event buffering is configurable via `event_buffer_size`
 
 ### 4.4 Symmetry with the "Digest" family
-`monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
+`monitor` will automatically find a `_smonitor.py` file in the package root to load library-specific diagnostic rules, hints, and formatting preferences.
 
 ---
 

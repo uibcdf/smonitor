@@ -14,7 +14,9 @@
 ## MolSysMT integration
 - Replace or wrap `msm.config.setup_logging()` with `smonitor.configure()`.
 - Ensure `msm.config.capture_warnings` toggles the warning bridge.
-- Provide a project `_smonitor.py` with curated hints and formatting rules.
+- Provide a package `_smonitor.py` with curated hints and formatting rules.
+- Keep catalogs under `A/_private/smonitor/catalog.py` and metadata in `A/_private/smonitor/meta.py`.
+- Use `smonitor.integrations.emit_from_catalog(...)` for consistent emission.
 - Migrate `MOLSYSMT_LOG_LEVEL` / `MOLSYSMT_SIMPLE_WARNINGS` to `smonitor` profile/config.
 
 ## Testing strategy
