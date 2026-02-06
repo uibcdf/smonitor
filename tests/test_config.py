@@ -1,6 +1,13 @@
 from pathlib import Path
 
-from smonitor.config import load_project_config, build_effective_config, extract_policy, load_env_config, validate_config
+from smonitor.config import (
+    load_project_config,
+    build_effective_config,
+    extract_policy,
+    load_env_config,
+    validate_config,
+    validate_project_config,
+)
 
 
 def test_build_effective_config_profile(tmp_path: Path):
@@ -63,3 +70,27 @@ def test_validate_config_profile_types(tmp_path: Path):
     errors = validate_config(cfg)
     assert any("SMONITOR.trace_depth must be an int" in e for e in errors)
     assert any("PROFILES.dev.level must be a string" in e for e in errors)
+
+
+def test_validate_project_config_codes(tmp_path: Path):
+    cfg_file = tmp_path / "_smonitor.py"
+    cfg_file.write_text(
+        "CODES = {\n"
+        "  'X001': {'title': 'Test'}\n"
+        "}\n"
+    )
+    cfg = load_project_config(tmp_path)
+    errors = validate_project_config(cfg)
+    assert any("must define a message field" in e for e in errors)
+
+
+def test_validate_project_config_signals(tmp_path: Path):
+    cfg_file = tmp_path / "_smonitor.py"
+    cfg_file.write_text(
+        "SIGNALS = {\n"
+        "  'mod.fn': {'extra_required': 'nope'}\n"
+        "}\n"
+    )
+    cfg = load_project_config(tmp_path)
+    errors = validate_project_config(cfg)
+    assert any("extra_required must be a list of strings" in e for e in errors)

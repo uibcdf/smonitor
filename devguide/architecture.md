@@ -84,7 +84,7 @@ Singleton responsible for:
  
 ## Profiles
 - Profiles define communication style: `user`, `dev`, `qa`, `agent`, `debug`.
-- Runtime `configure(profile=...)` overrides `_smonitor.py` and environment/CLI.
+- Runtime `configure(profile=...)` overrides environment variables and `_smonitor.py`.
 
 ## Handlers
 

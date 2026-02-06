@@ -216,6 +216,7 @@ Configuration can be provided by multiple sources. Higher priority overrides low
 5. **Internal defaults**
 
 The active profile may be changed at runtime, and must override `_smonitor.py`.
+Precedence is: runtime `configure()` > environment variables > `_smonitor.py`.
 
 ## 2. `_smonitor.py` Schema (Project Root)
 
@@ -233,6 +234,7 @@ SMONITOR = {
     "capture_warnings": True,
     "capture_logging": True,
     "handlers": ["console"],
+    "strict_config": False,
 }
 
 PROFILES = {
@@ -268,7 +270,8 @@ PROFILES = {
 # SMONITOR_CAPTURE_WARNINGS, SMONITOR_CAPTURE_LOGGING,
 # SMONITOR_CAPTURE_EXCEPTIONS, SMONITOR_SHOW_TRACEBACK,
 # SMONITOR_ARGS_SUMMARY, SMONITOR_PROFILING, SMONITOR_STRICT_SIGNALS,
-# SMONITOR_PROFILING_BUFFER, SMONITOR_PROFILING_SAMPLE, SMONITOR_EVENT_BUFFER
+# SMONITOR_PROFILING_BUFFER, SMONITOR_PROFILING_SAMPLE, SMONITOR_EVENT_BUFFER,
+# SMONITOR_STRICT_CONFIG
 
 # Policy Engine rules (routing + filtering)
 ROUTES = [

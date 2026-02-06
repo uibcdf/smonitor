@@ -18,7 +18,15 @@ from .core.manager import get_manager
 from .core.decorator import signal
 from .handlers.console import ConsoleHandler
 from .handlers.console import RichConsoleHandler
-from .config import load_project_config, build_effective_config, extract_policy, load_env_config, extract_codes, extract_signals
+from .config import (
+    load_project_config,
+    build_effective_config,
+    extract_policy,
+    load_env_config,
+    extract_codes,
+    extract_signals,
+    validate_project_config,
+)
 from .bundle import export_bundle, collect_bundle
 from . import integrations
 
@@ -37,13 +45,29 @@ __all__ = [
 def configure(**kwargs):
     manager = get_manager()
     config_path: Optional[Path] = kwargs.pop("config_path", None)
+    codes_override = kwargs.pop("codes", None)
+    signals_override = kwargs.pop("signals", None)
+    routes_override = kwargs.pop("routes", None)
+    filters_override = kwargs.pop("filters", None)
+    strict_config = kwargs.pop("strict_config", None)
     project_cfg = load_project_config(config_path or Path.cwd())
     env_cfg = load_env_config()
     effective = build_effective_config(project_cfg, env_cfg)
     effective.update({k: v for k, v in kwargs.items() if v is not None})
+    if strict_config is None:
+        strict_config = effective.get("strict_config")
+    if "strict_config" in effective:
+        effective.pop("strict_config")
+    errors = validate_project_config(project_cfg)
+    if errors and strict_config:
+        raise ValueError("Invalid _smonitor.py: " + "; ".join(errors))
     policy = extract_policy(project_cfg)
-    codes = extract_codes(project_cfg)
-    signals = extract_signals(project_cfg)
+    if routes_override is not None:
+        policy["routes"] = routes_override
+    if filters_override is not None:
+        policy["filters"] = filters_override
+    codes = codes_override if codes_override is not None else extract_codes(project_cfg)
+    signals = signals_override if signals_override is not None else extract_signals(project_cfg)
     if "handlers" not in kwargs or kwargs["handlers"] is None:
         # Default to a console handler if none provided
         if not manager._handlers:

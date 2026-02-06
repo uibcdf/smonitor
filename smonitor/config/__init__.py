@@ -58,6 +58,7 @@ def load_env_config() -> Dict[str, Any]:
         "profiling": _get_bool("SMONITOR_PROFILING"),
         "strict_signals": _get_bool("SMONITOR_STRICT_SIGNALS"),
         "strict_schema": _get_bool("SMONITOR_STRICT_SCHEMA"),
+        "strict_config": _get_bool("SMONITOR_STRICT_CONFIG"),
         "enabled": _get_bool("SMONITOR_ENABLED"),
         "profiling_buffer_size": _get_int("SMONITOR_PROFILING_BUFFER"),
         "profiling_sample_rate": float(os.getenv("SMONITOR_PROFILING_SAMPLE", "1.0")),
@@ -108,6 +109,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         "profiling_hooks",
         "strict_signals",
         "strict_schema",
+        "strict_config",
         "enabled",
         "event_buffer_size",
     }
@@ -141,6 +143,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
             "profiling",
             "strict_signals",
             "strict_schema",
+            "strict_config",
             "enabled",
         }
         int_keys = {"trace_depth", "profiling_buffer_size", "event_buffer_size"}
@@ -172,4 +175,68 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
                 errors.append(f"PROFILE {name} must be a dict")
                 continue
             _validate_block(f"PROFILES.{name}", profile_cfg)
+    return errors
+
+
+def validate_codes_signals(codes: Optional[Dict[str, Any]], signals: Optional[Dict[str, Any]]) -> list[str]:
+    errors: list[str] = []
+
+    if codes is not None:
+        if not isinstance(codes, dict):
+            errors.append("CODES must be a dict")
+        else:
+            for code, entry in codes.items():
+                if not isinstance(code, str):
+                    errors.append(f"CODES key must be a string: {code}")
+                    continue
+                if not isinstance(entry, dict):
+                    errors.append(f"CODES[{code}] must be a dict")
+                    continue
+                title = entry.get("title")
+                if title is not None and not isinstance(title, str):
+                    errors.append(f"CODES[{code}].title must be a string")
+                message_fields = [
+                    "message",
+                    "user_message",
+                    "dev_message",
+                    "qa_message",
+                    "agent_message",
+                ]
+                if not any(field in entry for field in message_fields):
+                    errors.append(f"CODES[{code}] must define a message field")
+                for field in message_fields + ["user_hint", "dev_hint", "qa_hint", "agent_hint"]:
+                    if field in entry and not isinstance(entry[field], str):
+                        errors.append(f"CODES[{code}].{field} must be a string")
+
+    if signals is not None:
+        if not isinstance(signals, dict):
+            errors.append("SIGNALS must be a dict")
+        else:
+            for name, entry in signals.items():
+                if not isinstance(name, str):
+                    errors.append(f"SIGNALS key must be a string: {name}")
+                    continue
+                if not isinstance(entry, dict):
+                    errors.append(f"SIGNALS[{name}] must be a dict")
+                    continue
+                if "extra_required" in entry:
+                    extra_required = entry["extra_required"]
+                    if not isinstance(extra_required, list) or any(
+                        not isinstance(item, str) for item in extra_required
+                    ):
+                        errors.append(f"SIGNALS[{name}].extra_required must be a list of strings")
+                for field in ("warnings", "errors"):
+                    if field in entry:
+                        val = entry[field]
+                        if not isinstance(val, list) or any(not isinstance(item, str) for item in val):
+                            errors.append(f"SIGNALS[{name}].{field} must be a list of strings")
+
+    return errors
+
+
+def validate_project_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
+    if not project_cfg:
+        return []
+    errors = validate_config(project_cfg)
+    errors.extend(validate_codes_signals(project_cfg.get("CODES"), project_cfg.get("SIGNALS")))
     return errors

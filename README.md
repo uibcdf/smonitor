@@ -30,7 +30,7 @@ do_work(3)
 ## Configuration
 
 Project-wide configuration is read from `_smonitor.py` at the **package root**.
-Runtime `configure()` always overrides project defaults.
+Precedence is: runtime `configure()` > environment variables > `_smonitor.py`.
 
 ```python
 # _smonitor.py (package root)
@@ -42,6 +42,7 @@ SMONITOR = {
     "capture_warnings": True,
     "capture_logging": True,
     "theme": "plain",
+    "strict_config": False,
 }
 
 CODES = {

@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import smonitor
-from smonitor.config import load_project_config, validate_config
+from smonitor.config import load_project_config, validate_project_config
 from smonitor.bundle import export_bundle
 
 
@@ -43,7 +43,7 @@ def main() -> int:
     if args.command == "export":
         base = Path(args.config_path) if args.config_path else Path.cwd()
         cfg = load_project_config(base)
-        errors = validate_config(cfg)
+        errors = validate_project_config(cfg)
         if errors:
             print("Invalid _smonitor.py:")
             for err in errors:
@@ -71,7 +71,7 @@ def main() -> int:
         if not cfg:
             print("No _smonitor.py found")
             return 1
-        errors = validate_config(cfg)
+        errors = validate_project_config(cfg)
         if errors:
             print("Invalid _smonitor.py:")
             for err in errors:
@@ -82,7 +82,7 @@ def main() -> int:
 
     if args.check:
         cfg = load_project_config(base)
-        errors = validate_config(cfg)
+        errors = validate_project_config(cfg)
         if errors:
             print("Invalid _smonitor.py:")
             for err in errors:
