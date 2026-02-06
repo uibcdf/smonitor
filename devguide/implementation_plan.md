@@ -46,21 +46,21 @@ Status: **Done (initial)** (warnings/logging/exceptions emitters; policy engine 
 - `handlers.json`:
   - JSON lines for telemetry
 - Ensure handlers honor active `profile` for formatting.
-Status: **Partial** (console/file/json implemented; rich handler added as optional)
+Status: **Done** (console/file/json implemented; rich handler optional; memory handler added)
 
 ## Phase 4 — Integration
 - Add `@signal` to `arg_digest` and `dep_digest` entrypoints.
 - Add `_smonitor.py` in MolSysMT root for hints and formatting.
 - Replace MolSysMT logging setup with `smonitor.configure`.
 - Update to `_smonitor.py` naming and profile-based output controls.
-Status: **Started** (integration helpers added in `smonitor.integrations`; real adoption pending)
+Status: **Done** (integration helpers + adoption across MolSysMT, ArgDigest, DepDigest, PyUnitWizard)
 
 ## Phase 5 — Docs & Examples
 - Document the event model.
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
 - Document `_smonitor.py` schema, policy engine, and communication styles by profile.
-Status: **Partial** (Sphinx scaffold + config/policy/integration/docs/examples; catalog generator added)
+Status: **In Progress** (Sphinx docs updated; catalog generator added; final polish pending)
 
 ## Additional Hardening
 - Add CLI for validation/reporting and profile selection.
@@ -74,9 +74,8 @@ Status: **Done**
 
 ## Plan to 1.0 (Stable)
 
-**H1 — Ecosystem integration (minimum)**
-- Integrate with MolSysMT (replace logging setup with smonitor.configure).
-- Integrate with ArgDigest or DepDigest (add @signal, emit codes).
+**H1 — Ecosystem integration (minimum)** (Done)
+- MolSysMT, ArgDigest, DepDigest, PyUnitWizard integrated.
 
 **H2 — Emitter hardening**
 - Prevent duplicate emissions (warnings/logging).
@@ -85,6 +84,7 @@ Status: **Done**
 **H3 — Handler UX**
 - Rich console formatting finalized for user/dev/qa.
 - File/JSON outputs stabilized.
+- Memory handler added.
 
 **H4 — Documentation**
 - User guide with real examples.
@@ -93,6 +93,9 @@ Status: **Done**
 
 **H5 — Release**
 - Versioning, conda build, docs publish.
+
+## 0.9 Status
+- Feature complete; hardening and docs polish remain before 1.0.
 
 ## Profiling (Developer Utility)
 - Timeline buffer and sampling.

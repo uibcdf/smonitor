@@ -9,7 +9,7 @@ It unifies logs, warnings, errors, and execution context across an ecosystem of 
 - **Traceability** with breadcrumbs (call-chain context).
 - **Profile-aware messaging** (`user`, `dev`, `qa`, `agent`, `debug`).
 - **Structured events** for telemetry and tooling.
-- **Policy engine** for routing/filtering.
+- **Policy engine** for routing/filtering/transforms.
 
 ## Quick Start
 
@@ -48,7 +48,7 @@ SMONITOR = {
 CODES = {
     "MSM-W010": {
         "title": "Selection ambiguous",
-        "user_message": "Selection '{selection}' is ambiguous.",
+        "user_message": "Selection {selection} is ambiguous.",
         "user_hint": "Use a more specific selection (example: {example}).",
     }
 }
@@ -97,7 +97,8 @@ ROUTES = [
 ]
 
 FILTERS = [
-  {"when": {"code": "MSM-W010"}, "rate_limit": "1/100@60"}
+  {"when": {"code": "MSM-W010"}, "rate_limit": "1/100@60"},
+  {"when": {"level": "INFO"}, "sample": 0.1}
 ]
 ```
 
@@ -106,7 +107,7 @@ FILTERS = [
 ```bash
 smonitor --validate-config
 smonitor --check
-smonitor --check --check-event '{"level":"WARNING","message":"x"}'
+smonitor --check --check-event level:WARNING
 smonitor export --out smonitor_bundle --max-events 500
 ```
 
@@ -124,8 +125,13 @@ make -C docs html
 
 ## Status
 
-Current release: **0.2.0** (early, foundational).  
-Integration with ecosystem libraries is planned for the 1.0 release.
+Current release: **0.9.0** (feature complete, hardening phase).  
+Ecosystem integration is **complete** (MolSysMT, ArgDigest, DepDigest, PyUnitWizard).
+
+Next steps to 1.0:
+- finalize docs and examples,
+- confirm test environments,
+- stabilize public API surface.
 
 ## AI Support (Future)
 

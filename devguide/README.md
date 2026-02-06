@@ -1,6 +1,6 @@
 # smonitor Developer Guide
 
-This folder collects the initial developer documentation for `smonitor`.
+This folder collects developer documentation for `smonitor`.
 
 ## Recommended Reading Order
 1) `architecture.md` — High-level architecture and goals.
@@ -10,21 +10,20 @@ This folder collects the initial developer documentation for `smonitor`.
 5) `integration_notes.md` — How to integrate with arg_digest, dep_digest, and MolSysMT.
 
 ## Scope
-These documents define the initial plan and interfaces. They are not a finalized specification and may evolve as implementation starts.
-The authoritative checkpoint for v0.2 decisions is `SPEC_SMONITOR.md` (section v0.2 Draft).
+These documents track the evolving implementation. The authoritative checkpoint
+for v0.9 decisions is `SPEC_SMONITOR.md` (section v0.2 Draft).
 
 ## Current Status (Checkpoint)
 - Core scaffold, manager/context, and `@signal` implemented.
-- Emitters for warnings/logging/exceptions implemented (initial).
-- Policy engine core implemented (routing/filtering with rate limit stub).
+- Emitters for warnings/logging/exceptions implemented.
+- Policy engine implemented with routing, filtering, rate limits, sampling,
+  and transforms (`set`, `set_extra`).
 - Console/file/json handlers implemented (plain) + optional rich handler.
-- Config discovery + merging implemented for `_smonitor.py`.
-- Sphinx docs scaffold + config/policy/integration stubs added.
-- CLI added for report/validate and env var support.
-- Event schema validation (dev/qa) added.
-- CODES templating and SIGNALS soft enforcement added.
-- Catalog generation utilities added for docs.
+- `MemoryHandler` added for in-memory buffering.
+- Config discovery + merging for `_smonitor.py` implemented.
+- CLI added for validate/report/export; config validation hardened.
+- Event schema validation (dev/qa) and strict SIGNALS enforcement.
+- CODES templating and SIGNALS soft enforcement.
 - Profiling expanded (timeline, sampling, spans, export).
 - Local bundle export (CLI + event buffer).
-- Troubleshooting docs added.
-- Integrations support package-level catalogs (`A/_private/smonitor`).
+- Ecosystem integration completed (MolSysMT, ArgDigest, DepDigest, PyUnitWizard).

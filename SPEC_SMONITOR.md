@@ -1,15 +1,15 @@
 # SPEC_SMONITOR.md — Centralized Diagnostic & Telemetry System
 
-**Version:** v0.1 (Draft)  
-**Status:** CONCEPT  
+**Version:** v0.9 (Draft)  
+**Status:** FEATURE COMPLETE (hardening phase)  
 **Author:** UIBCDF Development Team  
-**Project Name:** `monitor`
+**Project Name:** `smonitor`
 
 ## 1. Motivation & Vision
 
 Currently, the UIBCDF ecosystem (MolSysMT, TopoMT, ArgDigest, DepDigest, PyUnitWizard) operates as a collection of independent modules. While each handles its own logging, warnings, and errors, the resulting output is often fragmented, redundant, or lacks global context.
 
-**Monitor** is designed to be the **Central Nervous System** of the suite. Its mission is to capture, coordinate, and present all internal events (logs, warnings, exceptions, and telemetry) in a unified, traceable, and user-friendly manner.
+**smonitor** is designed to be the **Central Nervous System** of the suite. Its mission is to capture, coordinate, and present all internal events (logs, warnings, exceptions, and telemetry) in a unified, traceable, and user-friendly manner.
 
 ### Core Goals:
 1.  **Orchestration**: Provide a single point of configuration for the diagnostic behavior of all sibling libraries.
@@ -24,7 +24,7 @@ Currently, the UIBCDF ecosystem (MolSysMT, TopoMT, ArgDigest, DepDigest, PyUnitW
 The library is structured into four main layers:
 
 ```
-monitor/
+smonitor/
   core/
     manager.py      # The global engine (Singleton dispatcher)
     decorator.py    # The @signal decorator logic
@@ -40,8 +40,7 @@ monitor/
   config/
     discovery.py    # Auto-resolves _smonitor.py in project roots
     validation.py   # Validate _smonitor.py schema (keys, types)
-  cli/
-    main.py         # CLI for config validation and reports
+  cli.py           # CLI for config validation and reports
   validation.py     # Event schema validation (dev/qa)
   docs_utils.py     # Utilities to render CODES/SIGNALS tables
 ```
@@ -86,11 +85,11 @@ smonitor.configure(
 ## 4. Key Features
 
 ### 4.1 Nested Traceability (The "Breadcrumb" Trail)
-When an event occurs, `monitor` reports the path of execution:
+When an event occurs, `smonitor` reports the path of execution:
 `[molsysmt.convert] -> [arg_digest] -> [pyunitwizard] | ERROR: Invalid Unit`
 
 ### 4.2 Standardized Warning Redirection
-Instead of messy Python warnings, `monitor` intercepts them and presents them as organized, high-value entries:
+Instead of messy Python warnings, `smonitor` intercepts them and presents them as organized, high-value entries:
 `MOLSYSMT | WARNING (selection.py:42): Selection string is ambiguous. Hint: Use 'atom_name:...'`
 
 **Logging capture policy**: smonitor avoids installing a logging handler if the
@@ -143,18 +142,21 @@ Smonitor can export local bundles for reproducible diagnosis:
 - Event buffering is configurable via `event_buffer_size`
 
 ### 4.4 Symmetry with the "Digest" family
-`monitor` will automatically find a `_smonitor.py` file in the package root to load library-specific diagnostic rules, hints, and formatting preferences.
+`smonitor` will automatically find a `_smonitor.py` file in the package root to load library-specific diagnostic rules, hints, and formatting preferences.
 
 ---
 
-## 5. Integration Strategy
+## 5. Integration Status
 
-To implement `monitor` across the UIBCDF suite:
+To implement `smonitor` across the UIBCDF suite:
 
-1.  **Phase 1: Base Library**: Build the core manager, the `@signal` decorator, and the context tracker.
-2.  **Phase 2: Emitter Injection**: Replace standard `logging` and `warnings` calls in `argdigest`, `depdigest`, etc., with `monitor.emit()`.
-3.  **Phase 3: MolSysMT Adoption**: Use `monitor` as the primary engine for `msm.config.setup_logging()`.
-4.  **Phase 4: Automated Documentation**: Integrate with Sphinx to show which functions are monitored and what signals they emit.
+Integration is complete across the current ecosystem:
+- MolSysMT
+- ArgDigest
+- DepDigest
+- PyUnitWizard
+
+All use `_smonitor.py` at package root, catalogs in `A/_private/smonitor/catalog.py`, and metadata in `A/_private/smonitor/meta.py`.
 
 ---
 
