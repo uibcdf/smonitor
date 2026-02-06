@@ -25,3 +25,5 @@ The authoritative checkpoint for v0.2 decisions is `SPEC_SMONITOR.md` (section v
 - CODES templating and SIGNALS soft enforcement added.
 - Catalog generation utilities added for docs.
 - Profiling expanded (timeline, sampling, spans, export).
+- Local bundle export (CLI + event buffer).
+- Troubleshooting docs added.

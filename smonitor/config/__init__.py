@@ -61,6 +61,7 @@ def load_env_config() -> Dict[str, Any]:
         "enabled": _get_bool("SMONITOR_ENABLED"),
         "profiling_buffer_size": _get_int("SMONITOR_PROFILING_BUFFER"),
         "profiling_sample_rate": float(os.getenv("SMONITOR_PROFILING_SAMPLE", "1.0")),
+        "event_buffer_size": _get_int("SMONITOR_EVENT_BUFFER"),
     }
 
 

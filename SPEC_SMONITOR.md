@@ -127,6 +127,12 @@ Profiling can be enhanced with:
 - **Spans** for manual blocks
 - **Export** to JSON/CSV
 
+### 4.10 Local Bundles (Privacy‑first)
+Smonitor can export local bundles for reproducible diagnosis:
+- `smonitor export --out smonitor_bundle`
+- Bundles include config, policy, codes/signals, report, and recent events
+- Event buffering is configurable via `event_buffer_size`
+
 ### 4.4 Symmetry with the "Digest" family
 `monitor` will automatically find a `_smonitor.py` file in the project root to load library-specific diagnostic rules, hints, and formatting preferences.
 
@@ -249,7 +255,8 @@ PROFILES = {
 # SMONITOR_PROFILE, SMONITOR_LEVEL, SMONITOR_TRACE_DEPTH,
 # SMONITOR_CAPTURE_WARNINGS, SMONITOR_CAPTURE_LOGGING,
 # SMONITOR_CAPTURE_EXCEPTIONS, SMONITOR_SHOW_TRACEBACK,
-# SMONITOR_ARGS_SUMMARY, SMONITOR_PROFILING, SMONITOR_STRICT_SIGNALS
+# SMONITOR_ARGS_SUMMARY, SMONITOR_PROFILING, SMONITOR_STRICT_SIGNALS,
+# SMONITOR_PROFILING_BUFFER, SMONITOR_PROFILING_SAMPLE, SMONITOR_EVENT_BUFFER
 
 # Policy Engine rules (routing + filtering)
 ROUTES = [

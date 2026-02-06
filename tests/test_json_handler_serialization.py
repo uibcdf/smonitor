@@ -7,4 +7,4 @@ def test_json_handler_non_serializable_extra(tmp_path):
     event = {"level": "INFO", "message": "m", "extra": {"x": set([1, 2])}}
     handler.handle(event)
     text = path.read_text(encoding="utf-8")
-    assert "_error" in text
+    assert "{1, 2}" in text

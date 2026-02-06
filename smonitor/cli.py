@@ -6,10 +6,20 @@ from pathlib import Path
 
 import smonitor
 from smonitor.config import load_project_config, validate_config
+from smonitor.bundle import export_bundle
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="smonitor")
+    subparsers = parser.add_subparsers(dest="command")
+    export_parser = subparsers.add_parser("export", help="Export a local smonitor bundle")
+    export_parser.add_argument("--out", default="smonitor_bundle")
+    export_parser.add_argument("--max-events", type=int, default=None)
+    export_parser.add_argument("--no-events", action="store_true")
+    export_parser.add_argument("--force", action="store_true")
+    export_parser.add_argument("--config-path", default=None)
+    export_parser.add_argument("--profile", default=None)
+    export_parser.add_argument("--level", default=None)
     parser.add_argument("--profile", default=None)
     parser.add_argument("--level", default=None)
     parser.add_argument("--report", action="store_true")
@@ -25,6 +35,26 @@ def _parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = _parse_args()
+    if args.command == "export":
+        base = Path(args.config_path) if args.config_path else Path.cwd()
+        cfg = load_project_config(base)
+        errors = validate_config(cfg)
+        if errors:
+            print("Invalid _smonitor.py:")
+            for err in errors:
+                print(f"- {err}")
+            return 2
+        smonitor.configure(profile=args.profile, level=args.level, handlers=[])
+        out_path = export_bundle(
+            args.out,
+            include_events=not args.no_events,
+            max_events=args.max_events,
+            force=args.force,
+            config_base=base,
+        )
+        print(str(out_path))
+        return 0
+
     base = Path(args.config_path) if args.config_path else Path.cwd()
     if args.validate_config:
         cfg = load_project_config(base)

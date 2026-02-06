@@ -13,6 +13,10 @@ Schema
 - `ROUTES`, `FILTERS`: policy engine rules
 - `CODES`, `SIGNALS`: metadata for docs/tests and message templates
 
+Common options in `SMONITOR`:
+
+- `event_buffer_size`: number of recent events kept in memory for bundle export
+
 Priority
 --------
 
@@ -34,6 +38,9 @@ Environment Variables
 - `SMONITOR_SHOW_TRACEBACK`
 - `SMONITOR_ARGS_SUMMARY`
 - `SMONITOR_PROFILING`
+- `SMONITOR_PROFILING_BUFFER`
+- `SMONITOR_PROFILING_SAMPLE`
+- `SMONITOR_EVENT_BUFFER`
 - `SMONITOR_STRICT_SIGNALS`
 - `SMONITOR_STRICT_SCHEMA`
 - `SMONITOR_ENABLED`
@@ -50,6 +57,7 @@ The CLI can validate `_smonitor.py` and print reports:
   smonitor --check --check-level WARNING --check-code MSM-W010 --check-source molsysmt.select
   smonitor --check --check-event '{"level":"WARNING","message":"x","source":"molsysmt.select","code":"MSM-W010"}'
   smonitor --profile dev --report
+  smonitor export --out smonitor_bundle --max-events 500
 
 Config Validation
 -----------------

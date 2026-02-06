@@ -25,6 +25,12 @@ class PolicyEngine:
     def set_filters(self, filters: List[Dict[str, Any]]) -> None:
         self._filters = filters or []
 
+    def get_routes(self) -> List[Dict[str, Any]]:
+        return list(self._routes)
+
+    def get_filters(self) -> List[Dict[str, Any]]:
+        return list(self._filters)
+
     def apply(self, event: Dict[str, Any], handlers: Iterable[Any]) -> Tuple[Dict[str, Any], List[Any]]:
         # Filters (rate limiting etc.)
         for rule in self._filters:

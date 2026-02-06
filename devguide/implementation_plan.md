@@ -101,7 +101,7 @@ Status: **Done**
 Status: **Done**
 
 ## Future: Telemetry & Sentinel (Post‑1.0)
-- Phase A: Local export bundles (privacy‑first).
+- Phase A: Local export bundles (privacy‑first). **Done**
 - Phase B: Opt‑in telemetry client with rate limits.
 - Phase C: Sentinel server + public dashboard.
 - Phase D: LLM triage on aggregated reports.

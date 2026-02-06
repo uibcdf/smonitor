@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any, Dict
 
 
@@ -19,10 +20,7 @@ class JsonHandler:
         payload.setdefault("source", event.get("source"))
         payload.setdefault("code", event.get("code"))
         payload.setdefault("category", event.get("category"))
-        # Ensure extra is JSON-serializable
-        try:
-            json.dumps(payload)
-        except Exception:
-            payload["extra"] = {"_error": "non-serializable extra"}
-        with open(self.path, self.mode, encoding="utf-8") as fh:
-            fh.write(json.dumps(payload, ensure_ascii=False) + "\n")
+        path = Path(self.path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open(self.mode, encoding="utf-8") as fh:
+            fh.write(json.dumps(payload, ensure_ascii=False, default=str) + "\n")

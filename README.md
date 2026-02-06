@@ -70,6 +70,16 @@ with span("io.load", path="data.h5"):
 export_timeline("timeline.json", format="json")
 ```
 
+## Bundles
+
+Generate a local diagnostics bundle for reproducible troubleshooting:
+
+```bash
+smonitor export --out smonitor_bundle --max-events 500
+```
+
+This creates `bundle.json` and `events.jsonl` (if buffering is enabled).
+
 ## Policy Engine
 
 Use `ROUTES` and `FILTERS` in `_smonitor.py` to route or filter events.
@@ -90,6 +100,7 @@ FILTERS = [
 smonitor --validate-config
 smonitor --check
 smonitor --check --check-event '{"level":"WARNING","message":"x"}'
+smonitor export --out smonitor_bundle --max-events 500
 ```
 
 ## Development
@@ -106,7 +117,7 @@ make -C docs html
 
 ## Status
 
-Current release: **0.1.0** (early, foundational).  
+Current release: **0.2.0** (early, foundational).  
 Integration with ecosystem libraries is planned for the 1.0 release.
 
 ## AI Support (Future)

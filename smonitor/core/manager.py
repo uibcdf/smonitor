@@ -27,6 +27,7 @@ class ManagerConfig:
     profiling_buffer_size: int = 1000
     profiling_hooks: list | None = None
     profiling_sample_rate: float = 1.0
+    event_buffer_size: int = 0
 
 
 class Manager:
@@ -44,6 +45,7 @@ class Manager:
         self._handler_errors: Dict[str, int] = {}
         self._timings: Dict[str, List[float]] = {}
         self._timeline: List[Dict[str, Any]] = []
+        self._event_buffer: List[Dict[str, Any]] = []
 
     @property
     def config(self) -> ManagerConfig:
@@ -73,6 +75,7 @@ class Manager:
         profiling_buffer_size: Optional[int] = None,
         profiling_hooks: Optional[List[Any]] = None,
         profiling_sample_rate: Optional[float] = None,
+        event_buffer_size: Optional[int] = None,
     ) -> None:
         if level is not None:
             self._config.level = level
@@ -110,6 +113,8 @@ class Manager:
             self._config.profiling_hooks = profiling_hooks
         if profiling_sample_rate is not None:
             self._config.profiling_sample_rate = profiling_sample_rate
+        if event_buffer_size is not None:
+            self._config.event_buffer_size = event_buffer_size
         if handlers is not None:
             self._handlers = list(handlers)
         if routes is not None:
@@ -278,7 +283,25 @@ class Manager:
                 name = getattr(handler, "name", handler.__class__.__name__)
                 self._handler_errors[name] = self._handler_errors.get(name, 0) + 1
 
+        self._record_event(routed_event)
         return event
+
+    def _record_event(self, event: Dict[str, Any]) -> None:
+        size = self._config.event_buffer_size
+        if size <= 0:
+            return
+        from copy import deepcopy
+
+        self._event_buffer.append(deepcopy(event))
+        if len(self._event_buffer) > size:
+            self._event_buffer.pop(0)
+
+    def recent_events(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        if limit is None:
+            return list(self._event_buffer)
+        if limit <= 0:
+            return []
+        return list(self._event_buffer[-limit:])
 
     def report(self) -> Dict[str, Any]:
         timings_summary = {}
@@ -322,7 +345,14 @@ class Manager:
             "timeline": list(self._timeline),
             "profiling_meta": profiling_meta,
             "peak_memory": None,
+            "events_buffered": len(self._event_buffer),
         }
+
+    def get_codes(self) -> Dict[str, Dict[str, Any]]:
+        return dict(self._codes)
+
+    def get_signals(self) -> Dict[str, Dict[str, Any]]:
+        return dict(self._signals)
 
 
 _manager_singleton: Optional[Manager] = None

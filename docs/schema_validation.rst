@@ -12,3 +12,6 @@ Required fields:
 Optional checks:
 - `level` in DEBUG/INFO/WARNING/ERROR
 - `code` or `category` present
+- `timestamp` is valid ISO format
+- `tags` is a list of strings
+- `extra` and `context` are dicts

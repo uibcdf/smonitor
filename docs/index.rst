@@ -14,12 +14,14 @@ Contents
    policy
    integration
    examples
+   bundles
    codes
    message_guide
    schema_validation
    catalog
    cookbook
    profiling
+   troubleshooting
 
 API Reference
 -------------

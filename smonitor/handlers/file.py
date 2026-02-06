@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 
@@ -12,7 +13,9 @@ class FileHandler:
 
     def handle(self, event: Dict[str, Any], *, profile: str = "user") -> None:
         line = self._format(event, profile)
-        with open(self.path, self.mode, encoding="utf-8") as fh:
+        path = Path(self.path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open(self.mode, encoding="utf-8") as fh:
             fh.write(line + "\n")
 
     def _format(self, event: Dict[str, Any], profile: str) -> str:
