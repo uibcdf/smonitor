@@ -20,6 +20,7 @@ from .handlers.console import ConsoleHandler
 from .handlers.console import RichConsoleHandler
 from .config import load_project_config, build_effective_config, extract_policy, load_env_config, extract_codes, extract_signals
 from .bundle import export_bundle, collect_bundle
+from . import integrations
 
 __all__ = [
     "configure",
@@ -29,6 +30,7 @@ __all__ = [
     "get_manager",
     "export_bundle",
     "collect_bundle",
+    "integrations",
 ]
 
 

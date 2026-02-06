@@ -204,6 +204,7 @@ Configuration can be provided by multiple sources. Higher priority overrides low
 
 1. **Runtime call**: `smonitor.configure(...)`
    - Optional `config_path` allows loading a package-level `_smonitor.py`.
+   - `smonitor.integrations.ensure_configured(package_root)` supports auto-config for libraries.
 2. **CLI arguments** (if a CLI exists): `--profile dev`, `--level INFO`, etc.
 3. **Environment variables**: e.g., `SMONITOR_PROFILE=dev`
 4. **Project file**: `_smonitor.py` at project root

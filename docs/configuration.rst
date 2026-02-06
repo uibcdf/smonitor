@@ -10,6 +10,9 @@ If you need to load a package-level `_smonitor.py`, pass `config_path`:
 
   smonitor.configure(config_path=Path(__file__).parent)
 
+For libraries that want automatic configuration at import time, use
+`smonitor.integrations.ensure_configured(package_root)`.
+
 Schema
 ------
 
