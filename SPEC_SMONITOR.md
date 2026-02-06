@@ -93,6 +93,11 @@ When an event occurs, `monitor` reports the path of execution:
 Instead of messy Python warnings, `monitor` intercepts them and presents them as organized, high-value entries:
 `MOLSYSMT | WARNING (selection.py:42): Selection string is ambiguous. Hint: Use 'atom_name:...'`
 
+**Logging capture policy**: smonitor avoids installing a logging handler if the
+root logger already has handlers, to reduce interference with user-configured
+logging. Warnings are captured via `logging.captureWarnings(True)` without
+modifying user warning filters.
+
 ### 4.3 Telemetry & Health Reports
 The system can produce a summary of the session or health statistics on demand:
 ```python

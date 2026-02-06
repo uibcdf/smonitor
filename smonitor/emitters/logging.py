@@ -29,9 +29,10 @@ _capture_warnings_enabled = False
 
 def enable_logging(*, capture_warnings: bool = False) -> None:
     global _installed_handler, _capture_warnings_enabled
-    if _installed_handler is None:
+    root_logger = logging.getLogger()
+    if _installed_handler is None and not root_logger.handlers:
         _installed_handler = SmonitorLoggingHandler()
-        logging.getLogger().addHandler(_installed_handler)
+        root_logger.addHandler(_installed_handler)
     if capture_warnings and not _capture_warnings_enabled:
         logging.captureWarnings(True)
         _capture_warnings_enabled = True

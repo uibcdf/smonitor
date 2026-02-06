@@ -45,6 +45,12 @@ Environment Variables
 - `SMONITOR_STRICT_SCHEMA`
 - `SMONITOR_ENABLED`
 
+Logging Capture
+---------------
+
+By default, smonitor avoids installing a logging handler if the root logger
+already has handlers. This minimizes interference with user-configured logging.
+
 CLI
 ---
 
