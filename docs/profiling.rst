@@ -1,23 +1,51 @@
 Profiling
 =========
 
-When `profiling=True`, smonitor records `duration_ms` per frame and aggregates
-basic timing stats in `report()`.
+When ``profiling=True``, smonitor records ``duration_ms`` per frame and aggregates
+basic timing stats in ``report()``.
 
-Example
--------
+Decorated Functions
+-------------------
 
-::
+The easiest way to profile is using the ``@signal`` decorator.
+
+.. code-block:: python
 
   import smonitor
   smonitor.configure(profiling=True)
 
   @smonitor.signal
   def work():
+      # execution time is automatically recorded
       return 1
 
   work()
   print(smonitor.report()["timings"])
+
+Manual Spans
+------------
+
+If you need to instrument a specific block of code inside a function, use the
+``span(...)`` context manager.
+
+.. code-block:: python
+
+  from smonitor.profiling import span
+  import smonitor
+
+  smonitor.configure(profiling=True)
+
+  def complex_calculation():
+      with span("data_loading", source="database"):
+          # Load data...
+          pass
+      
+      with span("processing", algorithm="fft"):
+          # Process data...
+          pass
+
+  complex_calculation()
+  print(smonitor.report()["timeline"])
 
 Timeline buffer
 ---------------
