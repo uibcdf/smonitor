@@ -89,11 +89,11 @@ Singleton responsible for:
 ## Handlers
 
 ### Handler Priority
-While the policy engine is functional, the system currently lacks production-ready handlers. Implementing the `ConsoleHandler` based on `rich` is the absolute priority to ensure the UIBCDF user experience (UX) meets the ecosystem's standards.
+The core visual experience is now anchored by an exceptional `RichConsoleHandler`. The manager is capable of automatic handler selection based on environment and requested theme.
 
 ### console handler
-- Uses `rich` for tables, colored levels, and compact stack traces
-- Should remain optional to avoid extra dependencies in minimal setups
+- **Exceptional Rich Handler**: Uses `rich` for elegant panels (user profile) and structured audit reports (dev/qa/debug profiles). Includes icon-driven gravity indicators and call-chain breadcrumbs.
+- Fallback plain formatting when `rich` is unavailable.
 
 ### file handler
 - Plain-text logs, optionally JSON lines
@@ -148,12 +148,12 @@ smonitor.configure(
 - Keep event payloads stable for tooling and tests.
 
 ## Suggested Development Checklist
-- [ ] Implement core manager and context stack
-- [ ] Implement @signal decorator
-- [ ] Implement warnings bridge
-- [ ] Implement logging bridge
-- [ ] Add console handler with rich
-- [ ] Add file and json handlers
-- [ ] Write smoke tests for context propagation
-- [ ] Integrate with dep_digest and arg_digest
+- [x] Implement core manager and context stack
+- [x] Implement @signal decorator
+- [x] Implement warnings bridge
+- [x] Implement logging bridge
+- [x] Add exceptional console handler with rich
+- [x] Add file and json handlers
+- [x] Write smoke tests for context propagation
+- [x] Integrate with dep_digest and arg_digest
 - [ ] Add docs and usage examples
