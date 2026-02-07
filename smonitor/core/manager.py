@@ -47,6 +47,35 @@ class Manager:
         self._timeline: List[Dict[str, Any]] = []
         self._event_buffer: List[Dict[str, Any]] = []
 
+    def _apply_config_dict(self, data: Dict[str, Any]) -> None:
+        """Applies a configuration dictionary (e.g. from _smonitor.py) to the manager."""
+        config_block = data.get("SMONITOR", {})
+        self.configure(
+            level=config_block.get("level"),
+            theme=config_block.get("theme"),
+            capture_warnings=config_block.get("capture_warnings"),
+            capture_logging=config_block.get("capture_logging"),
+            capture_exceptions=config_block.get("capture_exceptions"),
+            trace_depth=config_block.get("trace_depth"),
+            show_traceback=config_block.get("show_traceback"),
+            args_summary=config_block.get("args_summary"),
+            profiling=config_block.get("profiling"),
+            strict_signals=config_block.get("strict_signals"),
+            strict_schema=config_block.get("strict_schema"),
+            enabled=config_block.get("enabled"),
+            event_buffer_size=config_block.get("event_buffer_size"),
+        )
+        if profile := data.get("PROFILE"):
+            self.configure(profile=profile)
+        if routes := data.get("ROUTES"):
+            self.configure(routes=routes)
+        if filters := data.get("FILTERS"):
+            self.configure(filters=filters)
+        if codes := data.get("CODES"):
+            self.configure(codes=codes)
+        if signals := data.get("SIGNALS"):
+            self.configure(signals=signals)
+
     @property
     def config(self) -> ManagerConfig:
         return self._config
@@ -76,7 +105,17 @@ class Manager:
         profiling_hooks: Optional[List[Any]] = None,
         profiling_sample_rate: Optional[float] = None,
         event_buffer_size: Optional[int] = None,
+        config_path: Optional[str | Path] = None,
     ) -> None:
+        if config_path is not None:
+            from pathlib import Path
+            from ..config.discovery import load_config_from_path, discover_config
+            p = Path(config_path)
+            data = load_config_from_path(p) if p.is_file() else discover_config(p)
+            if data:
+                # Apply discovery data first, so manual args can override them below
+                self._apply_config_dict(data)
+
         if level is not None:
             self._config.level = level
         if theme is not None:

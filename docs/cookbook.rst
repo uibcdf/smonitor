@@ -53,6 +53,26 @@ CLI exit codes
 - `1`: no `_smonitor.py` found (validate)
 - `2`: invalid configuration
 
+MemoryHandler usage
+-------------------
+
+For testing or debugging purposes, you can use the ``MemoryHandler`` to
+capture events in-memory and inspect them later.
+
+.. code-block:: python
+
+  from smonitor.handlers.memory import MemoryHandler
+  import smonitor
+
+  mem = MemoryHandler()
+  smonitor.configure(handlers=[mem])
+
+  smonitor.emit("INFO", "Hello world")
+  
+  # Retrieve captured events
+  events = mem.get_events()
+  assert events[0]["message"] == "Hello world"
+
 Generate catalog
 ----------------
 
