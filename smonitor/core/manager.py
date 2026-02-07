@@ -115,8 +115,13 @@ class Manager:
             self._config.profiling_sample_rate = profiling_sample_rate
         if event_buffer_size is not None:
             self._config.event_buffer_size = event_buffer_size
+        
         if handlers is not None:
             self._handlers = list(handlers)
+        elif not self._handlers:
+            # Automatic setup of default console handler
+            self._setup_default_handler()
+
         if routes is not None:
             self._policy.set_routes(routes)
         if filters is not None:
@@ -142,6 +147,19 @@ class Manager:
             enable_exceptions()
         else:
             disable_exceptions()
+
+    def _setup_default_handler(self) -> None:
+        """Internal helper to setup the best available console handler based on theme."""
+        if self._config.theme == "rich":
+            try:
+                from ..handlers.console import RichConsoleHandler
+                self._handlers = [RichConsoleHandler()]
+                return
+            except (ImportError, Exception):
+                pass
+        
+        from ..handlers.console import ConsoleHandler
+        self._handlers = [ConsoleHandler()]
 
     def add_handler(self, handler: Any) -> None:
         self._handlers.append(handler)

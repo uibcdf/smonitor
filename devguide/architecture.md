@@ -88,6 +88,9 @@ Singleton responsible for:
 
 ## Handlers
 
+### Handler Priority
+While the policy engine is functional, the system currently lacks production-ready handlers. Implementing the `ConsoleHandler` based on `rich` is the absolute priority to ensure the UIBCDF user experience (UX) meets the ecosystem's standards.
+
 ### console handler
 - Uses `rich` for tables, colored levels, and compact stack traces
 - Should remain optional to avoid extra dependencies in minimal setups
@@ -100,6 +103,9 @@ Singleton responsible for:
 - Structured event output for telemetry or external ingestion
 
 ## Configuration API
+
+### Project Configuration Location
+The project configuration file (`_smonitor.py`) must always reside in the package root (e.g., `molsysmt/_smonitor.py`). Configurations in submodules are not permitted to ensure a single source of truth per library.
 
 ### configure(...)
 Expected API signature:

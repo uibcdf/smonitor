@@ -35,3 +35,11 @@
 - Context push/pop must be O(1).
 - Avoid expensive formatting unless a handler requests it.
 - Use lazy formatting in handlers (e.g., defer rich rendering).
+
+## Open Architectural Questions
+
+### Manager-Catalog Integration
+How should `Manager.emit()` interact with external Catalogs?
+- **Option A**: The Manager resolves the code (e.g., `code='MSM-W010'`) by looking up a catalog injected at configuration time.
+- **Option B**: Emitters are responsible for resolving the message and hints from the catalog before calling `emit`.
+- **Decision**: This remains an open point of debate. Resolving this is critical for maintaining clean scientific code and ensuring consistent messaging across the suite. This must be decided before Phase 2.
