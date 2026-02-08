@@ -44,20 +44,50 @@ ensure_configured(PACKAGE_ROOT)
 
 All diagnostic output must be driven by the catalog. **Never hardcode strings** in the scientific logic.
 
-### Pattern:
-```python
-from smonitor.integrations import emit_from_catalog
-from A._private.smonitor import CATALOG, META, PACKAGE_ROOT
+### 3.1. Standard Warning Helper
+Use the `DiagnosticBundle` to create consistent `warn` and `warn_once` helpers in your library's `_private/smonitor/emitter.py`:
 
-emit_from_catalog(
-    CATALOG["my_signal"],
-    package_root=PACKAGE_ROOT,
-    meta=META,
-    extra={"param": value}, # Data for template interpolation
-)
+```python
+# A/_private/smonitor/emitter.py
+from smonitor.integrations import DiagnosticBundle
+from . import CATALOG, META, PACKAGE_ROOT
+
+bundle = DiagnosticBundle(CATALOG, META, PACKAGE_ROOT)
+warn = bundle.warn
+warn_once = bundle.warn_once
+resolve = bundle.resolve
 ```
 
-**Note**: When using `emit_from_catalog`, the message is automatically resolved from `_smonitor.py` based on the active profile (`user`, `dev`, `debug`, etc.).
+### 3.2. Exceptions
+All custom exceptions must inherit from `CatalogException` (provided by `smonitor.integrations`). This ensures messages are automatically hydrated from the catalog.
+
+```python
+# A/_private/smonitor/exceptions.py
+from smonitor.integrations import CatalogException
+from . import CATALOG, META
+
+class MyLibException(CatalogException):
+    def __init__(self, **kwargs):
+        super().__init__(catalog=CATALOG, meta=META, **kwargs)
+
+class ArgumentError(MyLibException):
+    catalog_key = "ArgumentError"
+    # ... logic to prepare extra dict ...
+```
+
+### 3.3. Warnings
+Similarly, use `CatalogWarning` for warning classes:
+
+```python
+# A/_private/smonitor/warnings.py
+from smonitor.integrations import CatalogWarning
+from .emitter import bundle
+
+class MyLibWarning(CatalogWarning):
+    # ... setup catalog and meta ...
+```
+
+**Note**: The raw `emit_from_catalog` function is still available but `DiagnosticBundle` is the preferred high-level interface.
 
 ## 4. Telemetry with `@signal`
 
