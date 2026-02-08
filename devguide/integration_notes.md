@@ -16,18 +16,20 @@
 - Ensure `msm.config.capture_warnings` toggles the warning bridge.
 - Provide a package `_smonitor.py` with curated hints and formatting rules.
 - Keep catalogs under `A/_private/smonitor/catalog.py` and metadata in `A/_private/smonitor/meta.py`.
-- Use `smonitor.integrations.emit_from_catalog(...)` for consistent emission.
+- **Recommendation**: Use `smonitor.integrations.DiagnosticBundle` to centralize `warn` and `resolve` helpers.
+- **Recommendation**: Inherit from `CatalogException` and `CatalogWarning` for all diagnostic classes.
 - Migrate `MOLSYSMT_LOG_LEVEL` / `MOLSYSMT_SIMPLE_WARNINGS` to `smonitor` profile/config.
 
 ## MolSysViewer integration
 - Ensure `smonitor` is configured on import (`ensure_configured`).
-- Replace direct `warnings.warn`/`logging` with catalog emission.
+- Replace direct `warnings.warn`/`logging` with catalog emission via `DiagnosticBundle`.
 - Use catalog-driven messages for frontend init failures and payload diagnostics.
 
 ## Testing strategy
 - Unit-test context stack push/pop under nested calls.
 - Validate that warnings are captured and formatted correctly.
 - Verify that unhandled exceptions emit a final error event.
+- Use `Manager.resolve()` to test message interpolation without side effects.
 - Add tests for profile formatting (`user` vs `dev` vs `qa`).
 - Add tests for policy routing and rate-limiting.
 
@@ -40,6 +42,7 @@
 
 ### Manager-Catalog Integration
 How should `Manager.emit()` interact with external Catalogs?
-- **Option A**: The Manager resolves the code (e.g., `code='MSM-W010'`) by looking up a catalog injected at configuration time.
-- **Option B**: Emitters are responsible for resolving the message and hints from the catalog before calling `emit`.
-- **Decision**: This remains an open point of debate. Resolving this is critical for maintaining clean scientific code and ensuring consistent messaging across the suite. This must be decided before Phase 2.
+- **Decision**: Hybrid Approach. 
+    1.  `Manager.emit()` handles profile-based resolution if `CODES` are injected at config time.
+    2.  Integration helpers (`DiagnosticBundle`, `CatalogException`) resolve messages using `Manager.resolve()` to allow pre-flight formatting (essential for Exception messages).
+    3.  This ensures clean code in the libraries while keeping `smonitor` as the single source of truth for profile logic.

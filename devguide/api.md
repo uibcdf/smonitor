@@ -37,15 +37,18 @@ Behavior
 - If no handlers are provided, a default console handler is created.
 - `configure(profile=...)` must override any `_smonitor.py` defaults.
 
-### emit(level, message, *, source=None, extra=None)
+### emit(level, message, *, source=None, extra=None, category=None, code=None, tags=None)
 Emit a raw diagnostic event.
 
 ```python
 smonitor.emit('WARNING', 'Selection is ambiguous', source='molsysmt.select')
 ```
-Extended signature (optional fields):
-```
-emit(level, message, *, source=None, extra=None, category=None, code=None, tags=None)
+
+### resolve(message=None, *, code=None, extra=None)
+Resolve a message and hint from a code or template without emitting an event.
+
+```python
+msg, hint = smonitor.resolve(code='MSM-ERR-001', extra={'arg': 'x'})
 ```
 
 ### report()
@@ -79,7 +82,17 @@ Behavior
 - Pops the frame on exit.
 - If an exception is raised, emits an error event and re-raises.
 
-## 3) Configuration Discovery
+## 3) Integration Tools
+
+Standard base classes and helpers for library developers (available in `smonitor.integrations`).
+
+### CatalogException & CatalogWarning
+Base classes that automatically hydrate messages and hints from a catalog using a `catalog_key`.
+
+### DiagnosticBundle
+A container initialized with a catalog, metadata, and package root. It provides `warn`, `warn_once`, and `resolve` helpers tailored for a specific library.
+
+## 4) Configuration Discovery
 
 `_smonitor.py` files can be placed at a project root and auto-loaded by `smonitor.config.discovery`.
 
