@@ -234,6 +234,59 @@ class Manager:
             if len(self._timeline) > self._config.profiling_buffer_size:
                 self._timeline.pop(0)
 
+    def resolve(
+        self,
+        message: Optional[str] = None,
+        *,
+        code: Optional[str] = None,
+        extra: Optional[Dict[str, Any]] = None,
+    ) -> tuple[str, Optional[str]]:
+        """Resolves a message and hint from code/template without emitting an event."""
+        resolved_msg, hint, _ = self._resolve_message_and_hint(message or "", code, extra or {})
+        return resolved_msg, hint
+
+    def _resolve_message_and_hint(
+        self, message: str, code: Optional[str], extra: Dict[str, Any]
+    ) -> tuple[str, Optional[str], Optional[Dict[str, Any]]]:
+        """Internal helper to resolve profile-based messages and hints."""
+        code_meta = self._codes.get(code) if code else None
+        if code_meta and (message is None or message == ""):
+            # Fallback to code-specific message per profile
+            if self._config.profile == "user":
+                message = code_meta.get("user_message", "")
+            elif self._config.profile == "qa":
+                message = code_meta.get("qa_message", "")
+            elif self._config.profile == "agent":
+                message = code_meta.get("agent_message", "")
+            else:
+                message = code_meta.get("dev_message", "") or code_meta.get("message", "")
+
+        # Interpolate message using extra fields if templated
+        if message and "{" in message:
+            try:
+                message = message.format(**extra)
+            except Exception:
+                pass
+
+        hint = None
+        if code_meta:
+            if self._config.profile == "user":
+                hint = code_meta.get("user_hint")
+            elif self._config.profile == "qa":
+                hint = code_meta.get("qa_hint") or code_meta.get("dev_hint")
+            elif self._config.profile == "agent":
+                hint = code_meta.get("agent_hint") or code_meta.get("dev_hint")
+            else:
+                hint = code_meta.get("dev_hint")
+
+        if hint and "{" in hint:
+            try:
+                hint = hint.format(**extra)
+            except Exception:
+                pass
+
+        return message, hint, code_meta
+
     def emit(
         self,
         level: str,
@@ -259,17 +312,9 @@ class Manager:
                 "tags": tags,
                 "exception_type": exception_type,
             }
-        code_meta = self._codes.get(code) if code else None
-        if code_meta and (message is None or message == ""):
-            # Fallback to code-specific message per profile
-            if self._config.profile == "user":
-                message = code_meta.get("user_message", "")
-            elif self._config.profile == "qa":
-                message = code_meta.get("qa_message", "")
-            elif self._config.profile == "agent":
-                message = code_meta.get("agent_message", "")
-            else:
-                message = code_meta.get("dev_message", "") or code_meta.get("message", "")
+
+        extra_data = extra or {}
+        message, hint, code_meta = self._resolve_message_and_hint(message, code, extra_data)
 
         event = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -277,7 +322,7 @@ class Manager:
             "source": source,
             "message": message,
             "context": get_context(self._config.trace_depth),
-            "extra": extra or {},
+            "extra": extra_data,
             "category": category,
             "code": code,
             "tags": tags,
@@ -286,30 +331,12 @@ class Manager:
         # mark as smonitor-emitted
         event["extra"].setdefault("smonitor", True)
 
-        # Interpolate message and hint using extra fields if templated
-        if event["message"] and "{" in event["message"]:
-            try:
-                event["message"] = event["message"].format(**event["extra"])
-            except Exception:
-                pass
-
         if code_meta:
             event["extra"].setdefault("title", code_meta.get("title"))
-            if self._config.profile == "user":
-                event["extra"].setdefault("hint", code_meta.get("user_hint"))
-            elif self._config.profile == "qa":
-                event["extra"].setdefault("hint", code_meta.get("qa_hint") or code_meta.get("dev_hint"))
-            elif self._config.profile == "agent":
-                event["extra"].setdefault("hint", code_meta.get("agent_hint") or code_meta.get("dev_hint"))
-            else:
-                event["extra"].setdefault("hint", code_meta.get("dev_hint"))
+        
+        if hint:
+            event["extra"].setdefault("hint", hint)
 
-        hint = event["extra"].get("hint")
-        if hint and "{" in hint:
-            try:
-                event["extra"]["hint"] = hint.format(**event["extra"])
-            except Exception:
-                pass
 
         # Soft enforcement for signals/contracts in dev/qa profiles
         if self._config.profile in {"dev", "qa"} and source:

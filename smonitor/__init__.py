@@ -33,6 +33,7 @@ from . import integrations
 __all__ = [
     "configure",
     "emit",
+    "resolve",
     "report",
     "signal",
     "get_manager",
@@ -85,6 +86,11 @@ def emit(level, message, **kwargs):
     if not manager._handlers:
         manager.add_handler(ConsoleHandler())
     return manager.emit(level, message, **kwargs)
+
+
+def resolve(message=None, **kwargs):
+    manager = get_manager()
+    return manager.resolve(message, **kwargs)
 
 
 def report():
