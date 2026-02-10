@@ -28,6 +28,7 @@ class ManagerConfig:
     profiling_hooks: list | None = None
     profiling_sample_rate: float = 1.0
     event_buffer_size: int = 0
+    silence: list[str] = field(default_factory=list)
 
 
 class Manager:
@@ -64,6 +65,7 @@ class Manager:
             strict_schema=config_block.get("strict_schema"),
             enabled=config_block.get("enabled"),
             event_buffer_size=config_block.get("event_buffer_size"),
+            silence=config_block.get("silence"),
         )
         if profile := data.get("PROFILE"):
             self.configure(profile=profile)
@@ -106,6 +108,7 @@ class Manager:
         profiling_sample_rate: Optional[float] = None,
         event_buffer_size: Optional[int] = None,
         config_path: Optional[str | Path] = None,
+        silence: Optional[List[str]] = None,
     ) -> None:
         if config_path is not None:
             from pathlib import Path
@@ -154,6 +157,8 @@ class Manager:
             self._config.profiling_sample_rate = profiling_sample_rate
         if event_buffer_size is not None:
             self._config.event_buffer_size = event_buffer_size
+        if silence is not None:
+            self._config.silence = silence
         
         if handlers is not None:
             self._handlers = list(handlers)
@@ -312,6 +317,12 @@ class Manager:
                 "tags": tags,
                 "exception_type": exception_type,
             }
+
+        # Filter out silenced sources
+        if source and self._config.silence:
+            for s in self._config.silence:
+                if source == s or source.startswith(s + "."):
+                    return {}
 
         extra_data = extra or {}
         message, hint, code_meta = self._resolve_message_and_hint(message, code, extra_data)
