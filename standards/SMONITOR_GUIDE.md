@@ -25,6 +25,20 @@ SMonitor is not just a logging wrapper; it is a **Signal Orchestrator** that dec
 If the library is named `A`, the following files must exist relative to the repository root:
 
 - `_smonitor.py`: Runtime configuration and message templates (CODES).
+
+Example `_smonitor.py`:
+```python
+PROFILE = "user"
+
+SMONITOR = {
+    "level": "WARNING",
+    "trace_depth": 3,
+    "capture_warnings": True,
+    "capture_logging": True,
+    "theme": "plain",
+    "silence": ["pint", "networkx"], # Noisy loggers to ignore
+}
+```
 - `A/_private/smonitor/catalog.py`: Catalog entries (meta-data about each signal).
 - `A/_private/smonitor/meta.py`: Project metadata (URLs for documentation and issues).
 - `A/_private/smonitor/__init__.py`: Exports `CATALOG`, `META`, and `PACKAGE_ROOT`.

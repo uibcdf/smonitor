@@ -19,6 +19,7 @@ smonitor.configure(
     profile='user',
     handlers=None,
     config_path=None,
+    silence=['pint', 'networkx'],
 )
 ```
 
@@ -31,6 +32,7 @@ Parameters
 - `profile`: output/profile style (`'user'`, `'dev'`, `'qa'`, `'agent'`, `'debug'`).
 - `handlers`: optional list of handler instances to override defaults.
 - `config_path`: optional path to a directory or file to load `_smonitor.py` manually.
+- `silence`: optional list of logger names (or prefixes) to ignore completely.
 
 Behavior
 - Idempotent: calling `configure` multiple times updates the global state.
