@@ -18,7 +18,12 @@ def _summarize_args(args: tuple[Any, ...], kwargs: dict[str, Any]) -> dict[str, 
     return summary
 
 
-def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] = None):
+def signal(
+    func: Callable[..., Any] | None = None,
+    *,
+    tags: Optional[list[str]] = None,
+    exception_level: str = "ERROR",
+):
     def decorator(fn: Callable[..., Any]):
         @wraps(fn)
         def wrapper(*args: Any, **kwargs: Any):
@@ -42,7 +47,7 @@ def signal(func: Callable[..., Any] | None = None, *, tags: Optional[list[str]] 
                 return fn(*args, **kwargs)
             except Exception as exc:
                 manager.emit(
-                    "ERROR",
+                    exception_level,
                     str(exc),
                     source=fn.__module__,
                     exception_type=exc.__class__.__name__,
