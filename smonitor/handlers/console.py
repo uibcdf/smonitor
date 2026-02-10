@@ -28,7 +28,21 @@ class ConsoleHandler:
             extra = event.get("extra") or {}
             hint = extra.get("hint")
             hint_part = f" | Hint: {hint}" if hint else ""
-            return f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
+            
+            output = f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
+            
+            # Show arguments for ERRORs if captured in frames
+            if level == "ERROR" and "frames" in context:
+                args_details = []
+                for frame in context["frames"]:
+                    if frame.get("args"):
+                        func_name = f"{frame['module']}.{frame['function']}"
+                        args_str = str(frame["args"])
+                        args_details.append(f"  \u2514\u2500 {func_name}({args_str})")
+                if args_details:
+                    output += "\n" + "\n".join(args_details)
+            
+            return output
         if profile == "qa":
             prefix = f"[{code}] " if code else ""
             return f"{prefix}{level} {source} | {message}"

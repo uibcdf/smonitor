@@ -46,12 +46,22 @@ def signal(
             try:
                 return fn(*args, **kwargs)
             except Exception as exc:
-                manager.emit(
-                    exception_level,
-                    str(exc),
-                    source=fn.__module__,
-                    exception_type=exc.__class__.__name__,
-                )
+                # Capture args summary on error if not already captured
+                if frame.args is None:
+                    frame.args = _summarize_args(args, kwargs)
+                
+                # Prevent "Error Echo": only emit if this exception hasn't been handled by smonitor
+                if not getattr(exc, "__smonitor_emitted__", False):
+                    manager.emit(
+                        exception_level,
+                        str(exc),
+                        source=fn.__module__,
+                        exception_type=exc.__class__.__name__,
+                    )
+                    try:
+                        setattr(exc, "__smonitor_emitted__", True)
+                    except Exception:
+                        pass
                 raise
             finally:
                 if start is not None:
