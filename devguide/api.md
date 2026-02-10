@@ -72,10 +72,14 @@ Wrap a function to automatically push a context frame.
 ```python
 from smonitor import signal
 
-@signal
-def my_function(x):
+@signal(tags=["io"], exception_level="ERROR")
+def load_file(path):
     ...
 ```
+
+Parameters
+- `tags`: List of strings for categorizing the call (e.g. `["io", "parser"]`).
+- `exception_level`: Severity level for exceptions raised within the function (default: `"ERROR"`). Use `"DEBUG"` for exploratory functions that may fail normally.
 
 Behavior
 - Pushes a breadcrumb frame on entry.

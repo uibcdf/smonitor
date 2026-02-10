@@ -119,6 +119,23 @@ SIGNALS = {
 
 Missing fields will trigger warnings or errors in `dev` and `qa` profiles, ensuring diagnostic quality.
 
+## 6. Noise Control
+
+SMonitor captures all exceptions by default as `ERROR`. For functions that perform exploratory checks (e.g., "is this string a unit?"), this creates log noise.
+
+### Exploratory Functions
+Use `exception_level="DEBUG"` in the `@signal` decorator to silence expected failures in normal operation.
+
+```python
+@signal(tags=["check"], exception_level="DEBUG")
+def is_valid_format(data):
+    # If this raises, it will be logged as DEBUG, not ERROR
+    ...
+```
+
+### Assertive Parsing
+For functions that *must* succeed (e.g., "parse this unit"), keep the default `ERROR` level. If a user provides malformed input where a valid one is expected, it *is* an error.
+
 ## Required behavior (non-negotiable)
 
 1.  **Zero String Hardcoding**: If it's a warning or error, it belongs in the catalog.
