@@ -32,6 +32,8 @@
 - Use `Manager.resolve()` to test message interpolation without side effects.
 - Add tests for profile formatting (`user` vs `dev` vs `qa`).
 - Add tests for policy routing and rate-limiting.
+- Add tests for probing contracts: expected probe misses must be `DEBUG` and
+  must not leak as `ERROR` in `user` profile.
 
 ## Performance considerations
 - Context push/pop must be O(1).
@@ -46,3 +48,13 @@ How should `Manager.emit()` interact with external Catalogs?
     1.  `Manager.emit()` handles profile-based resolution if `CODES` are injected at config time.
     2.  Integration helpers (`DiagnosticBundle`, `CatalogException`) resolve messages using `Manager.resolve()` to allow pre-flight formatting (essential for Exception messages).
     3.  This ensures clean code in the libraries while keeping `smonitor` as the single source of truth for profile logic.
+
+## Probing Contract (Cross-Library)
+For integrations with `molsysmt`, `pyunitwizard`, `argdigest`, and `depdigest`:
+
+- Non-matching exploratory probes are expected and should be classified as
+  `DEBUG`.
+- `WARNING` and `ERROR` should be reserved for actionable anomalies and true
+  operation failures.
+- Prefer explicit codes/tags (for example `PUW-DBG-PROBE-001`) to make QA
+  triage deterministic.

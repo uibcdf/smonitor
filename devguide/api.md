@@ -88,6 +88,18 @@ Behavior
 - Pops the frame on exit.
 - If an exception is raised, emits an error event and re-raises.
 
+### Probing Semantics
+Exploratory predicates (`is_form`, `is_item`, `is_quantity`, `is_unit`) should
+emit expected misses at `DEBUG` level only.
+
+- Expected probe miss: `DEBUG` (telemetry), typically with a code/tag such as
+  `*-DBG-PROBE-*`.
+- Recoverable anomaly requiring user attention: `WARNING`.
+- Operation failure that prevents requested output: `ERROR`.
+
+In `user` profile, expected probe misses should not be surfaced as actionable
+errors.
+
 ## 3) Integration Tools
 
 Standard base classes and helpers for library developers (available in `smonitor.integrations`).
