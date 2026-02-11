@@ -8,6 +8,18 @@ from .context import get_context
 from ..policy.engine import PolicyEngine
 from ..validation import validate_event
 
+_LEVEL_ORDER = {
+    "DEBUG": 10,
+    "INFO": 20,
+    "WARNING": 30,
+    "ERROR": 40,
+    "CRITICAL": 50,
+}
+
+
+def _level_value(level: str) -> int:
+    return _LEVEL_ORDER.get(str(level).upper(), _LEVEL_ORDER["INFO"])
+
 
 @dataclass
 class ManagerConfig:
@@ -329,7 +341,7 @@ class Manager:
 
         event = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "level": level,
+            "level": str(level).upper(),
             "source": source,
             "message": message,
             "context": get_context(self._config.trace_depth),
@@ -348,6 +360,9 @@ class Manager:
         if hint:
             event["extra"].setdefault("hint", hint)
 
+        # Honor configured threshold before routing/printing.
+        if _level_value(event["level"]) < _level_value(self._config.level):
+            return event
 
         # Soft enforcement for signals/contracts in dev/qa profiles
         if self._config.profile in {"dev", "qa"} and source:
@@ -374,9 +389,9 @@ class Manager:
                     raise ValueError("; ".join(errors))
                 event["extra"].setdefault("schema_warning", "; ".join(errors))
 
-        if level == "WARNING":
+        if event["level"] == "WARNING":
             self._counts["warnings_total"] += 1
-        if level == "ERROR":
+        if event["level"] == "ERROR":
             self._counts["errors_total"] += 1
 
         routed_event, target_handlers = self._policy.apply(event, self._handlers)

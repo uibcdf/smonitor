@@ -67,8 +67,23 @@ def configure(**kwargs):
         policy["routes"] = routes_override
     if filters_override is not None:
         policy["filters"] = filters_override
-    codes = codes_override if codes_override is not None else extract_codes(project_cfg)
-    signals = signals_override if signals_override is not None else extract_signals(project_cfg)
+    if codes_override is not None:
+        codes = codes_override
+    else:
+        project_codes = extract_codes(project_cfg)
+        if project_codes:
+            codes = {**manager.get_codes(), **project_codes}
+        else:
+            codes = None
+
+    if signals_override is not None:
+        signals = signals_override
+    else:
+        project_signals = extract_signals(project_cfg)
+        if project_signals:
+            signals = {**manager.get_signals(), **project_signals}
+        else:
+            signals = None
     if "handlers" not in kwargs or kwargs["handlers"] is None:
         # Default to a console handler if none provided
         if not manager._handlers:

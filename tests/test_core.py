@@ -4,6 +4,7 @@ def test_import_smonitor():
 
 import smonitor
 from smonitor.core.manager import get_manager
+from smonitor.handlers.memory import MemoryHandler
 
 
 def test_configure_defaults_add_handler():
@@ -58,3 +59,20 @@ def test_profiling_adds_duration():
     assert context and context["frames"][0]["duration_ms"] is not None
     report = smonitor.report()
     assert "timings" in report
+
+
+def test_level_threshold_filters_console_routing():
+    memory = MemoryHandler(max_events=10)
+    smonitor.configure(
+        profile="user",
+        strict_signals=False,
+        level="WARNING",
+        handlers=[memory],
+        event_buffer_size=10,
+    )
+
+    smonitor.emit("DEBUG", "debug message", source="test")
+    smonitor.emit("WARNING", "warning message", source="test")
+
+    assert len(memory.events) == 1
+    assert memory.events[0]["level"] == "WARNING"
