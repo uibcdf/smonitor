@@ -43,6 +43,16 @@ SMONITOR = {
 - `A/_private/smonitor/meta.py`: Project metadata (URLs for documentation and issues).
 - `A/_private/smonitor/__init__.py`: Exports `CATALOG`, `META`, and `PACKAGE_ROOT`.
 
+### 1.1 Single Source of Truth for Templates
+
+`CODES` and `SIGNALS` must be resolved from exactly one authoritative place.
+
+Recommended pattern:
+- define `CATALOG`, `CODES`, and `SIGNALS` in `A/_private/smonitor/catalog.py`;
+- in `_smonitor.py`, import them from `A._private.smonitor.catalog`.
+
+This avoids drift where emitted catalog codes exist but template messages are missing at runtime.
+
 ## 2. Initialization Protocol
 
 In your library's `__init__.py`, ensure SMonitor is configured on import. This activates the "System Nervous System":
@@ -103,6 +113,16 @@ class MyLibWarning(CatalogWarning):
 
 **Note**: The raw `emit_from_catalog` function is still available but `DiagnosticBundle` is the preferred high-level interface.
 
+### 3.4 Emission Failures Must Not Be Silenced
+
+Do not swallow diagnostics emission errors with `except Exception: pass`.
+
+If emission fails in non-critical paths:
+- fallback to a plain Python warning/log line;
+- keep enough context (`caller`, signal key, exception text) for debugging.
+
+Silencing emission failures causes loss of traceability and empty/noisy diagnostics in downstream libraries.
+
 ## 4. Telemetry with `@signal`
 
 To enable execution traceability (breadcrumbs), decorate all major API entry points and internal orchestration functions.
@@ -155,6 +175,8 @@ For functions that *must* succeed (e.g., "parse this unit"), keep the default `E
 1.  **Zero String Hardcoding**: If it's a warning or error, it belongs in the catalog.
 2.  **Lazy Diagnostics**: Do not perform expensive string formatting before calling `emit`. Pass raw data in `extra` and let SMonitor handle the interpolation.
 3.  **Traceability First**: Use `@signal` generously in orchestration layers but avoid it in high-frequency tight loops.
+4.  **Template Wiring Integrity**: Every emitted catalog code must have a matching template in the active `_smonitor.py` configuration.
+5.  **No Silent Emission Failures**: Never hide failed catalog emissions without an explicit fallback diagnostic.
 
 ---
 *Document created on February 6, 2026, as the authority for SMonitor integration.*
