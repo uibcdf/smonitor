@@ -43,10 +43,11 @@ If your package is `A`, use:
 11. [Profiling in Your Library](../profiling-in-your-library.md)
 12. [Integration Testing Template](integration-testing-template.md)
 13. [Profile Decision Matrix](profile-decision-matrix.md)
-14. [Message Style by Profile](../message-style-by-profile.md)
-15. [Production Checklist](../production-checklist.md)
-16. [FAQ](../faq.md)
-17. [End-User Docs Pack for Library A](../end-users/for-library-maintainers.md)
+14. [AI Agents Workflow](ai-agents-workflow.md)
+15. [Message Style by Profile](../message-style-by-profile.md)
+16. [Production Checklist](../production-checklist.md)
+17. [FAQ](../faq.md)
+18. [End-User Docs Pack for Library A](../end-users/for-library-maintainers.md)
 
 ## Canonical contract
 
@@ -74,6 +75,7 @@ first-runnable-integration.md
 ../profiling-in-your-library.md
 integration-testing-template.md
 profile-decision-matrix.md
+ai-agents-workflow.md
 ../message-style-by-profile.md
 ../production-checklist.md
 ../faq.md

@@ -11,6 +11,7 @@ This folder collects developer documentation for `smonitor`.
 5) `integration_notes.md` — How to integrate with arg_digest, dep_digest, and MolSysMT.
 6) `../standards/SMONITOR_GUIDE.md` — Canonical guide to sync into ecosystem repos.
 7) `../SUPPORT.md` — Project support and incident-handling policy.
+8) `../docs/content/user/library-integrators/ai-agents-workflow.md` — Integrator contract for AI/LLM-enabled workflows.
 
 ## Scope
 These documents track implementation details. Product-level decisions and

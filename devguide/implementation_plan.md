@@ -108,6 +108,19 @@ Status: **Done**
 - Run integration smoke checks in ecosystem repositories.
 Status: **In Progress**
 
+## AI-Agent Readiness Plan (Integrator-Facing)
+
+Done:
+- `agent` profile documented and available in user docs.
+- Bundles/events provide machine-readable inputs for triage pipelines.
+- Standards include integration contract and end-user support artifacts.
+
+Pending hardening before 1.0:
+- Add explicit contract tests for machine-readability in `agent` profile outputs.
+- Add deterministic triage examples keyed by `code` + `trace_hash`.
+- Add redaction policy examples for bundle sharing in automated pipelines.
+- Add a compact "agent-ready checklist" to release gates.
+
 ## Profiling (Developer Utility)
 - Timeline buffer and sampling.
 - Spans for manual blocks.
