@@ -13,7 +13,7 @@ friction.
 
 1. Keep the message text and code ID (for example `MYLIB-W001`).
 2. Copy a minimal reproducer (small script or notebook cell).
-3. Share those with the maintainers of library `A`.
+3. Share those with the maintainers of the host library.
 
 ## Rule of thumb
 

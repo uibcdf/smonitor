@@ -12,7 +12,7 @@ Developers and QA can override profile/config at runtime or via environment.
 
 ## Where should warning/error templates live?
 
-In your catalog (`A/_private/smonitor/catalog.py`) as the single source of truth.
+In your catalog (`mylib/_private/smonitor/catalog.py`) as the single source of truth.
 Avoid duplicating templates in multiple files.
 
 ## Can I keep my custom exceptions?

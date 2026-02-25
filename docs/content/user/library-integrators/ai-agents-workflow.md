@@ -1,7 +1,7 @@
 # AI Agents Workflow for Library Integrators
 
 This page defines the minimum contract so AI agents can safely consume SMonitor
-signals from your library `A` without breaking human workflows.
+signals from your host library without breaking human workflows.
 
 ## Why this matters
 
@@ -13,7 +13,7 @@ If your team uses agents for triage, QA, or patch proposals, the agent needs:
 
 Without this, agent output is noisy and difficult to trust.
 
-## Required operational contract in `A`
+## Required operational contract in the host library
 
 1. Keep `code` values stable once published.
 2. Keep `signal` names stable and descriptive.

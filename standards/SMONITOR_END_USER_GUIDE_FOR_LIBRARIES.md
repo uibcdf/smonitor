@@ -1,16 +1,16 @@
 # SMonitor End-User Guide for Libraries
 
-This document is a canonical template for maintainers of library `A` that embeds
-SMonitor and needs a clear end-user section in `A` documentation.
+This document is a canonical template for maintainers of a host library that embeds
+SMonitor and needs a clear end-user section in the host library documentation.
 
 ## Purpose
 
-Help users of `A` interpret diagnostics as guidance, not noise.
+Help users of the host library interpret diagnostics as guidance, not noise.
 
-## Minimal section to include in library A docs
+## Minimal section to include in host library docs
 
 1. What these messages are:
-- warnings/errors produced by `A` with SMonitor support.
+- warnings/errors produced by the host library with SMonitor support.
 - messages are designed to help users complete tasks with fewer retries.
 2. How to interpret levels:
 - `WARNING`: operation usually continues, but quality/ambiguity should be reviewed.
@@ -27,12 +27,12 @@ Help users of `A` interpret diagnostics as guidance, not noise.
 5. Link to extended online docs:
 - https://uibcdf.github.io/smonitor/content/user/end-users/index.html
 
-## Required A-specific customization
+## Required Host-Library Customization
 
-Each library `A` should add:
-- common code IDs used in `A`,
-- how users change verbosity/profile in `A` (if exposed),
-- where users report issues for `A`.
+Each host library should add:
+- common code IDs used in the host library,
+- how users change verbosity/profile in the host library (if exposed),
+- where users report issues for the host library.
 
 ## Canonical companion
 

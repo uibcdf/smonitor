@@ -5,9 +5,9 @@ Use this checklist before releasing a library integrated with SMonitor.
 ## Integration contract
 
 - [ ] `_smonitor.py` exists in package root.
-- [ ] `A/_private/smonitor/catalog.py` defines all active warning/error codes.
-- [ ] `A/_private/smonitor/meta.py` provides docs/issues URLs.
-- [ ] `A/_private/smonitor/emitter.py` uses `DiagnosticBundle`.
+- [ ] `mylib/_private/smonitor/catalog.py` defines all active warning/error codes.
+- [ ] `mylib/_private/smonitor/meta.py` provides docs/issues URLs.
+- [ ] `mylib/_private/smonitor/emitter.py` uses `DiagnosticBundle`.
 - [ ] package `__init__.py` calls `ensure_configured(PACKAGE_ROOT)`.
 
 ## Message quality

@@ -17,7 +17,7 @@ resolve = bundle.resolve
 ```
 
 When to use:
-- whenever library `A` emits repeated warning families,
+- whenever the host library emits repeated warning families,
 - when you need stable `code` + templated message/hint resolution.
 
 ## `emit_from_catalog`
@@ -29,8 +29,8 @@ from smonitor.integrations import emit_from_catalog
 
 emit_from_catalog(
     CATALOG,
-    code="A-W001",
-    source="A.select",
+    code="MYLIB-W001",
+    source="mylib.select",
     extra={"selection": "all"},
 )
 ```
@@ -63,5 +63,5 @@ Use this helper in tests to reset integration state between scenarios.
 ## Practical rule
 
 Keep functional logic in SMonitor and keep library-specific data in
-`A/_private/smonitor/` (catalog + meta). This minimizes drift and keeps
+`mylib/_private/smonitor/` (catalog + meta). This minimizes drift and keeps
 ecosystem integrations uniform.

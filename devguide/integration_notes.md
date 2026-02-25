@@ -15,7 +15,7 @@
 - Replace or wrap `msm.config.setup_logging()` with `smonitor.configure()`.
 - Ensure `msm.config.capture_warnings` toggles the warning bridge.
 - Provide a package `_smonitor.py` with curated hints and formatting rules.
-- Keep catalogs under `A/_private/smonitor/catalog.py` and metadata in `A/_private/smonitor/meta.py`.
+- Keep catalogs under `molsysmt/_private/smonitor/catalog.py` and metadata in `molsysmt/_private/smonitor/meta.py`.
 - **Recommendation**: Use `smonitor.integrations.DiagnosticBundle` to centralize `warn` and `resolve` helpers.
 - **Recommendation**: Inherit from `CatalogException` and `CatalogWarning` for all diagnostic classes.
 - Migrate `MOLSYSMT_LOG_LEVEL` / `MOLSYSMT_SIMPLE_WARNINGS` to `smonitor` profile/config.

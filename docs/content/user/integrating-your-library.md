@@ -11,8 +11,8 @@ Treat SMonitor integration as a refactor of diagnostics architecture, not a supe
 ## Phase 1: Create a stable diagnostics boundary
 
 1. Add `_smonitor.py` in package root.
-2. Add `A/_private/smonitor/catalog.py` and `A/_private/smonitor/meta.py`.
-3. Add `A/_private/smonitor/emitter.py` with `DiagnosticBundle`.
+2. Add `mylib/_private/smonitor/catalog.py` and `mylib/_private/smonitor/meta.py`.
+3. Add `mylib/_private/smonitor/emitter.py` with `DiagnosticBundle`.
 4. Configure on import with `ensure_configured(PACKAGE_ROOT)`.
 
 Checkpoint:

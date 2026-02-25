@@ -1,6 +1,6 @@
-# Sync Policy: End-User Diagnostics Docs for Library A
+# Sync Policy: End-User Diagnostics Docs for Host library
 
-This policy defines how library `A` keeps its local end-user diagnostics docs
+This policy defines how a host library keeps its local end-user diagnostics docs
 aligned with SMonitor canonical content.
 
 ## Canonical sources (source of truth)
@@ -9,9 +9,9 @@ aligned with SMonitor canonical content.
 - `SMONITOR_END_USER_RESCUE_CARD.md`
 - `SMONITOR_END_USER_DOCS_TEMPLATE.md`
 
-## Local copy requirements in A
+## Local Copy Requirements in the Host Library
 
-Each local copy in `A` should include metadata header:
+Each local copy in the host library should include a metadata header:
 
 ```text
 Source: smonitor/standards/SMONITOR_END_USER_DOCS_TEMPLATE.md
@@ -22,20 +22,20 @@ Last sync date: YYYY-MM-DD
 ## Sync cadence
 
 Minimum recommended:
-- when `A` updates SMonitor dependency,
-- before each `A` release,
+- when the host library updates the SMonitor dependency,
+- before each host-library release,
 - whenever canonical standards above change.
 
 ## Drift detection
 
 Drift is present when:
-- local copy in `A` lacks required rescue/interpreting sections,
+- local copy in the host library lacks required rescue/interpreting sections,
 - sync metadata is missing or outdated,
 - local semantics contradict canonical guidance.
 
 ## Conflict rule
 
-`A` can customize wording and examples, but must preserve:
+The host library can customize wording and examples, but must preserve:
 - meaning of `WARNING` vs `ERROR`,
 - rescue flow,
 - support payload expectations,

@@ -1,7 +1,7 @@
 # Handlers and Routing Patterns
 
 This page gives practical guidance for choosing handlers and routing events in
-library `A`.
+a host library.
 
 ## Handler roles
 
@@ -31,7 +31,7 @@ ROUTES = [
 ]
 
 FILTERS = [
-    {"when": {"code": "A-W001"}, "rate_limit": "1/100@60"},
+    {"when": {"code": "MYLIB-W001"}, "rate_limit": "1/100@60"},
 ]
 ```
 

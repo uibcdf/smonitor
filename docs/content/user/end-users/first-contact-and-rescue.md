@@ -1,13 +1,13 @@
-# First Contact and Rescue for End Users of Library A with Embedded SMonitor
+# First Contact and Rescue for End Users of Host library with Embedded SMonitor
 
-You do not need to learn SMonitor internals to use library `A` successfully.
+You do not need to learn SMonitor internals to use a host library successfully.
 
 Treat these messages as in-product guidance to help you finish tasks with less
 trial and error.
 
 ## First contact
 
-When `A` shows a diagnostic:
+When the host library shows a diagnostic:
 - read the first line (`WARNING` or `ERROR`),
 - read the hint,
 - apply the suggested correction.

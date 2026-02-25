@@ -1,6 +1,6 @@
-# Reading Messages in Library A
+# Reading Messages in Host library
 
-When library `A` uses SMonitor, warnings and errors are designed to be actionable.
+When a host library uses SMonitor, warnings and errors are designed to be actionable.
 
 These messages are guidance, not blame. Their goal is to help you complete your
 task with fewer retries.
@@ -12,7 +12,7 @@ task with fewer retries.
 - how to fix it (`hint`),
 - optional code ID (for support and tracking).
 
-Depending on how library `A` is configured, you may see:
+Depending on how the host library is configured, you may see:
 - plain text output, or
 - richer visual cards (same diagnostic meaning, different presentation).
 

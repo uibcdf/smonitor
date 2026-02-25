@@ -1,8 +1,8 @@
 # SMonitor End-User Rescue Card
 
-Use this short block in library `A` docs, FAQ, or troubleshooting page.
+Use this short block in host library docs, FAQ, or troubleshooting page.
 
-## When you see a warning or error in library A
+## When you see a warning or error in the host library
 
 1. Read the message and hint.
 2. Apply the suggested fix.

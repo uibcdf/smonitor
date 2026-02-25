@@ -8,8 +8,8 @@ your library and your users.
 
 | Showcase | What you will find |
 |---|---|
-| [Library Integration Contract](library-integration-contract.md) | How a developer of library `A` wires `_smonitor.py`, `A/_private/smonitor`, and `@signal` with stable CODES/SIGNALS. |
-| [End-User First Contact and Rescue](end-user-first-contact-rescue.md) | How an end user of `A` interprets messages, changes profile/verbosity, and follows a rescue flow with optional bundle export. |
+| [Library Integration Contract](library-integration-contract.md) | How a developer of the host library wires `_smonitor.py`, `mylib/_private/smonitor`, and `@signal` with stable CODES/SIGNALS. |
+| [End-User First Contact and Rescue](end-user-first-contact-rescue.md) | How an end user of the host library interprets messages, changes profile/verbosity, and follows a rescue flow with optional bundle export. |
 | [QA + Agent Triage Pipeline](qa-agent-triage-pipeline.md) | How maintainers use strict checks, machine-readable outputs, and bundles for reproducible QA and AI-assisted triage. |
 
 ```{toctree}

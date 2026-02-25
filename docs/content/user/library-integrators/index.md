@@ -1,12 +1,12 @@
 # Library Integrators
 
-This route is for developers integrating SMonitor into their own library `A`.
+This route is for developers integrating SMonitor into their own host library.
 
 ## Outcome
 
 By the end of this route you should have:
-- `_smonitor.py` in `A/`,
-- catalog and metadata under `A/_private/smonitor/`,
+- `_smonitor.py` in `mylib/`,
+- catalog and metadata under `mylib/_private/smonitor/`,
 - `@signal` instrumentation on relevant API boundaries,
 - release checks for diagnostics quality.
 
@@ -24,9 +24,9 @@ By the end of this route you should have:
 When this route says "package root", it means the root of your Python package,
 not the repository root.
 
-If your package is `A`, use:
-- `A/_smonitor.py`
-- `A/_private/smonitor/...`
+If your package is `mylib`, use:
+- `mylib/_smonitor.py`
+- `mylib/_private/smonitor/...`
 
 ## Recommended sequence
 
@@ -49,7 +49,7 @@ If your package is `A`, use:
 17. [Message Style by Profile](../message-style-by-profile.md)
 18. [Production Checklist](../production-checklist.md)
 19. [FAQ](../faq.md)
-20. [End-User Docs Pack for Library A](../end-users/for-library-maintainers.md)
+20. [End-User Docs Pack for Host-Library Maintainers](../end-users/for-library-maintainers.md)
 
 ## Canonical contract
 

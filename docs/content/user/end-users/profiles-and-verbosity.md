@@ -12,12 +12,12 @@ Common profiles:
 - default to `user` for normal workflows,
 - switch to `dev` or `debug` only when troubleshooting.
 
-## First choice: use library `A` controls
+## First choice: use host-library controls
 
-Prefer controls documented by library `A` (for example, its own verbosity or
+Prefer controls documented by the host library (for example, its own verbosity or
 debug flags). In many projects, this is the intended user-facing interface.
 
-## Typical runtime override (only if `A` explicitly exposes SMonitor controls)
+## Typical runtime override (only if the host library explicitly exposes SMonitor controls)
 
 ```python
 import smonitor
@@ -25,8 +25,8 @@ import smonitor
 smonitor.configure(profile="dev", level="INFO")
 ```
 
-If `A` does not expose SMonitor profile controls directly, do not force it.
-Use the method recommended by maintainers of `A`.
+If the host library does not expose SMonitor profile controls directly, do not force it.
+Use the method recommended by maintainers of the host library.
 
 Some libraries intentionally keep SMonitor controls internal and only expose
 their own high-level verbosity/configuration flags. In that case, use the

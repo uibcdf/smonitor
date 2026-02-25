@@ -22,7 +22,7 @@ SMonitor is not just a logging wrapper; it is a **Signal Orchestrator** that dec
 
 ## 1. Required Configuration Structure
 
-If the library is named `A`, the following files must exist relative to the repository root:
+If the library package is named `mylib`, the following files must exist relative to the repository root:
 
 - `_smonitor.py`: Runtime configuration and message templates (CODES).
 
@@ -39,17 +39,17 @@ SMONITOR = {
     "silence": ["pint", "networkx"], # Noisy loggers to ignore
 }
 ```
-- `A/_private/smonitor/catalog.py`: Catalog entries (meta-data about each signal).
-- `A/_private/smonitor/meta.py`: Project metadata (URLs for documentation and issues).
-- `A/_private/smonitor/__init__.py`: Exports `CATALOG`, `META`, and `PACKAGE_ROOT`.
+- `mylib/_private/smonitor/catalog.py`: Catalog entries (meta-data about each signal).
+- `mylib/_private/smonitor/meta.py`: Project metadata (URLs for documentation and issues).
+- `mylib/_private/smonitor/__init__.py`: Exports `CATALOG`, `META`, and `PACKAGE_ROOT`.
 
 ### 1.1 Single Source of Truth for Templates
 
 `CODES` and `SIGNALS` must be resolved from exactly one authoritative place.
 
 Recommended pattern:
-- define `CATALOG`, `CODES`, and `SIGNALS` in `A/_private/smonitor/catalog.py`;
-- in `_smonitor.py`, import them from `A._private.smonitor.catalog`.
+- define `CATALOG`, `CODES`, and `SIGNALS` in `mylib/_private/smonitor/catalog.py`;
+- in `_smonitor.py`, import them from `mylib._private.smonitor.catalog`.
 
 This avoids drift where emitted catalog codes exist but template messages are missing at runtime.
 
@@ -72,7 +72,7 @@ All diagnostic output must be driven by the catalog. **Never hardcode strings** 
 Use the `DiagnosticBundle` to create consistent `warn` and `warn_once` helpers in your library's `_private/smonitor/emitter.py`:
 
 ```python
-# A/_private/smonitor/emitter.py
+# mylib/_private/smonitor/emitter.py
 from smonitor.integrations import DiagnosticBundle
 from . import CATALOG, META, PACKAGE_ROOT
 
@@ -86,7 +86,7 @@ resolve = bundle.resolve
 All custom exceptions must inherit from `CatalogException` (provided by `smonitor.integrations`). This ensures messages are automatically hydrated from the catalog.
 
 ```python
-# A/_private/smonitor/exceptions.py
+# mylib/_private/smonitor/exceptions.py
 from smonitor.integrations import CatalogException
 from . import CATALOG, META
 
@@ -103,7 +103,7 @@ class ArgumentError(MyLibException):
 Similarly, use `CatalogWarning` for warning classes:
 
 ```python
-# A/_private/smonitor/warnings.py
+# mylib/_private/smonitor/warnings.py
 from smonitor.integrations import CatalogWarning
 from .emitter import bundle
 
@@ -136,7 +136,7 @@ def get_atoms(molecular_system, selection="all"):
 ```
 
 **Benefits**:
-- On error, SMonitor reports the full call chain: `[A.api_func] -> [B.internal_logic] -> [ERROR]`.
+- On error, SMonitor reports the full call chain: `[mylib.api_func] -> [otherlib.internal_logic] -> [ERROR]`.
 - Performance telemetry can be enabled globally without changing the code.
 
 ## 5. Signal Contracts
@@ -145,7 +145,7 @@ Enforce structured data by defining required fields in `_smonitor.py`:
 
 ```python
 SIGNALS = {
-    "A.select": {
+    "mylib.select": {
         "extra_required": ["selection"],
     }
 }

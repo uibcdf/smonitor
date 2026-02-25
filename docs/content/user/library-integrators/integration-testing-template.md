@@ -1,7 +1,7 @@
 # Integration Testing Template
 
 Use this page to create a minimal pytest safety net for SMonitor wiring in
-library `A`.
+a host library.
 
 ## Goal
 
@@ -10,7 +10,7 @@ missing signal fields, broken emitters).
 
 ## Minimal test file
 
-Create `tests/test_smonitor_integration.py` in library `A`:
+Create `tests/test_smonitor_integration.py` in a host library:
 
 ```python
 import importlib

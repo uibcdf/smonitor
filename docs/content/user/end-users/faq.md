@@ -1,16 +1,16 @@
 # End-User FAQ
 
-## Do I need to install extra tools to use library `A`?
+## Do I need to install extra tools to use a host library?
 
-Usually no. If `A` integrates SMonitor, diagnostics are part of normal usage.
+Usually no. If the host library integrates SMonitor, diagnostics are part of normal usage.
 
 ## Do I need to learn SMonitor architecture?
 
-No. You can keep using `A` as usual and only use message hints when needed.
+No. You can keep using your host library as usual and only use message hints when needed.
 
 ## Can I disable extra diagnostics?
 
-Possibly, depending on what controls `A` exposes. Check `A`'s documentation
+Possibly, depending on what controls the host library exposes. Check your host library documentation
 for verbosity/debug options.
 
 ## Will SMonitor slow down my normal workflow?
@@ -24,4 +24,4 @@ Share:
 - exact warning/error text and code ID,
 - minimal reproducer,
 - version and environment info,
-- optional redacted bundle if `A` recommends it.
+- optional redacted bundle if the host library recommends it.

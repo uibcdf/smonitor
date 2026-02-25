@@ -34,7 +34,7 @@ If `rich` is not available, SMonitor falls back to plain console output.
 - `qa`: structured summary for reproducibility.
 - `agent`: machine-oriented plain text.
 
-## Recommendation for library A
+## Recommendation for host library
 
 - set `theme="plain"` as safe default in `_smonitor.py`,
 - allow dev/qa scripts to opt into `theme="rich"` at runtime,

@@ -136,9 +136,9 @@ Expected:
 ## Common wiring mistakes
 
 1. `_smonitor.py` in repo root instead of package root:
-- correct path is `A/_smonitor.py`.
+- correct path is `mylib/_smonitor.py`.
 2. `PACKAGE_ROOT` pointing to wrong level:
-- use `Path(__file__).resolve().parents[2]` from `A/_private/smonitor/__init__.py`.
+- use `Path(__file__).resolve().parents[2]` from `mylib/_private/smonitor/__init__.py`.
 3. Catalog not imported into `_smonitor.py`:
 - ensure `CODES` and `SIGNALS` are available at runtime.
 4. Circular imports during package init:

@@ -1,22 +1,22 @@
 # Library End Users
 
-This route is for people using a library `A` that already integrates SMonitor.
+This route is for people using a host library that already integrates SMonitor.
 
 You do not need to learn SMonitor internals to benefit from it.
 
-If you just want to keep working with library `A`, that is fine: you can use
-`A` normally and treat SMonitor messages as helpful guidance when they appear.
+If you just want to keep working with your host library, that is fine: you can use
+it normally and treat SMonitor messages as helpful guidance when they appear.
 
 ## What this route helps with
 
-- understanding warnings and errors shown by `A`,
+- understanding warnings and errors shown by the host library,
 - selecting useful diagnostics profile/verbosity in scripts and notebooks,
 - preparing high-quality bug reports for maintainers.
 
 ## Recommended sequence
 
 1. [First Contact and Rescue](first-contact-and-rescue.md)
-2. [Reading Messages in Library A](reading-messages.md)
+2. [Reading Messages in the Host Library](reading-messages.md)
 3. [Quick Response Playbook](quick-response-playbook.md)
 4. [Choosing Profiles and Verbosity](profiles-and-verbosity.md)
 5. [Using Bundles for Support](using-bundles-for-support.md)

@@ -1,6 +1,6 @@
 # QA + Agent Triage Pipeline
 
-This showcase targets maintainers of `A` running QA and AI-assisted triage.
+This showcase targets maintainers of the host library running QA and AI-assisted triage.
 
 ## Problem
 

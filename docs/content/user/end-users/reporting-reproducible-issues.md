@@ -5,7 +5,7 @@ Good reports make fixes faster.
 ## Minimum report payload
 
 Include:
-- library version (`A` and `smonitor` if available),
+- library version (host library and `smonitor` if available),
 - operating system and Python version,
 - minimal code snippet to reproduce,
 - exact error/warning message (including code ID),
@@ -40,7 +40,7 @@ What actually happened.
 Paste full warning/error text and code ID.
 
 ## Environment
-- library A version:
+- host library version:
 - smonitor version (if available):
 - Python:
 - OS:

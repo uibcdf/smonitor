@@ -118,8 +118,8 @@ Libraries can define `CODES` in `_smonitor.py` to provide profile-specific messa
 If an event is emitted with a `code` and an empty `message`, smonitor fills it from `CODES`.
 
 **Catalog pattern:** libraries can keep `CODES`, `SIGNALS`, and metadata in
-`A/_private/smonitor/catalog.py` (plus optional `meta.py`) and load them in
-`A/_smonitor.py`.
+`mylib/_private/smonitor/catalog.py` (plus optional `meta.py`) and load them in
+`mylib/_smonitor.py`.
 
 ### 4.7 Event Schema Validation (dev/qa)
 In `dev` and `qa` profiles, smonitor validates event schema and attaches a `schema_warning`
@@ -157,7 +157,7 @@ Integration is complete across the current ecosystem:
 - DepDigest
 - PyUnitWizard
 
-All use `_smonitor.py` at package root, catalogs in `A/_private/smonitor/catalog.py`, and metadata in `A/_private/smonitor/meta.py`.
+All use `_smonitor.py` at package root, catalogs in `mylib/_private/smonitor/catalog.py`, and metadata in `mylib/_private/smonitor/meta.py`.
 
 ## 5.1 0.11 Release Gates (Pre-1.0)
 

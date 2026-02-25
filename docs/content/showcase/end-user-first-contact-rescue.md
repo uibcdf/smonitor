@@ -1,6 +1,6 @@
 # End-User First Contact and Rescue
 
-This showcase targets people using library `A` that embeds SMonitor.
+This showcase targets people using a host library that embeds SMonitor.
 
 ## Problem
 
@@ -19,7 +19,7 @@ smonitor.configure(profile="user", verbosity="normal")
 
 # A emits a user-facing warning through SMonitor:
 # "Selection is ambiguous. Hint: use atom_name == 'CA'."
-A.select(query="all")
+mylib.select(query="all")
 ```
 
 Rescue flow for end users:
@@ -42,4 +42,4 @@ smonitor export --out smonitor_bundle --drop-extra --redact extra.password
 
 - notebooks and interactive scripts;
 - CLI workflows used by non-expert users;
-- support and issue-reporting templates in library `A`.
+- support and issue-reporting templates in the host library.

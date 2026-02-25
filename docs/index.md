@@ -2,8 +2,6 @@
 :html_theme.sidebar_secondary.remove:
 ```
 
-# SMonitor
-
 :::{figure} _static/logo.svg
 :width: 45%
 :align: center

@@ -56,7 +56,7 @@ CODES = {
 
 ## Package Catalogs
 
-Libraries can keep their diagnostics catalog in `A/_private/smonitor/catalog.py`
+Libraries can keep their diagnostics catalog in `mylib/_private/smonitor/catalog.py`
 (CODES/SIGNALS + metadata) and call `smonitor.integrations.emit_from_catalog(...)`
 to emit structured events.
 

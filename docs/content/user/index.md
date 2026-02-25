@@ -2,8 +2,8 @@
 
 SMonitor has two user profiles with different goals:
 
-1. **Library integrators**: developers who implement SMonitor in library `A`.
-2. **Library end users**: people who use `A` and receive SMonitor messages through `A`.
+1. **Library integrators**: developers who implement SMonitor in a host library.
+2. **Library end users**: people who use the host library and receive SMonitor messages through it.
 
 Use the route that matches your role.
 
