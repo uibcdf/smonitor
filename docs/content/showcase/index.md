@@ -1,16 +1,22 @@
 # Showcase
 
-This section shows SMonitor behavior in realistic scenarios.
+This section provides three realistic integration showcases. Each example
+targets a concrete use case so you can adapt the pattern that best matches
+your library and your users.
 
-## Recommended order
+## Example Catalog
 
-1. [Example Workflows](examples.md): end-to-end snippets for user/dev/debug contexts.
-2. [Visual Profiles](visual-profiles.md): how output changes by profile.
+| Showcase | What you will find |
+|---|---|
+| [Library Integration Contract](library-integration-contract.md) | How a developer of library `A` wires `_smonitor.py`, `A/_private/smonitor`, and `@signal` with stable CODES/SIGNALS. |
+| [End-User First Contact and Rescue](end-user-first-contact-rescue.md) | How an end user of `A` interprets messages, changes profile/verbosity, and follows a rescue flow with optional bundle export. |
+| [QA + Agent Triage Pipeline](qa-agent-triage-pipeline.md) | How maintainers use strict checks, machine-readable outputs, and bundles for reproducible QA and AI-assisted triage. |
 
 ```{toctree}
 :maxdepth: 1
 :hidden:
 
-examples.md
-visual-profiles.md
+library-integration-contract.md
+end-user-first-contact-rescue.md
+qa-agent-triage-pipeline.md
 ```
