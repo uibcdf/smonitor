@@ -5,7 +5,6 @@ from typing import Callable, Optional, Type
 
 from ..core.manager import get_manager
 
-
 _original_excepthook: Optional[Callable[[Type[BaseException], BaseException, object], None]] = None
 _enabled = False
 

@@ -5,7 +5,6 @@ from typing import Any, Callable, Optional
 
 from ..core.manager import get_manager
 
-
 _original_showwarning: Optional[Callable[..., Any]] = None
 _enabled = False
 

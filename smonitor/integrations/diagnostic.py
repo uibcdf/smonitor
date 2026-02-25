@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar
 
 import smonitor
+
 from .core import emit_from_catalog, merge_extra
 
 T = TypeVar("T", bound="CatalogException")

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from functools import wraps
-from time import perf_counter
 from random import random
+from time import perf_counter
 from typing import Any, Callable, Optional
 
 from .context import Frame, pop_frame, push_frame

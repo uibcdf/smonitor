@@ -27,8 +27,8 @@ def span(name: str, **meta: Any):
 
 
 def export_timeline(path: str, format: str = "json") -> None:
-    import json
     import csv
+    import json
 
     manager = get_manager()
     timeline = manager.report().get("timeline", [])

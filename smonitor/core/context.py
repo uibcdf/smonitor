@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from contextvars import ContextVar
 from typing import Any, Dict, List, Optional
 
 

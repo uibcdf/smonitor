@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
 
 try:
     __version__ = version("smonitor")
@@ -14,21 +14,20 @@ except PackageNotFoundError:
 from pathlib import Path
 from typing import Optional
 
-from .core.manager import get_manager
-from .core.decorator import signal
-from .handlers.console import ConsoleHandler
-from .handlers.console import RichConsoleHandler
+from . import integrations
+from .bundle import collect_bundle, export_bundle
 from .config import (
-    load_project_config,
     build_effective_config,
-    extract_policy,
-    load_env_config,
     extract_codes,
+    extract_policy,
     extract_signals,
+    load_env_config,
+    load_project_config,
     validate_project_config,
 )
-from .bundle import export_bundle, collect_bundle
-from . import integrations
+from .core.decorator import signal
+from .core.manager import get_manager
+from .handlers.console import ConsoleHandler, RichConsoleHandler
 
 __all__ = [
     "configure",

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from smonitor.config.discovery import discover_config
 
 

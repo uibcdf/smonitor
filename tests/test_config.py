@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from smonitor.config import (
-    load_project_config,
     build_effective_config,
     extract_policy,
     load_env_config,
+    load_project_config,
     validate_config,
     validate_project_config,
 )

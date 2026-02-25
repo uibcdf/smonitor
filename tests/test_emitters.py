@@ -1,4 +1,5 @@
 import logging
+
 import smonitor
 from smonitor.core.manager import get_manager
 from smonitor.emitters import warnings as sm_warnings

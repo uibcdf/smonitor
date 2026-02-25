@@ -1,5 +1,4 @@
 import smonitor
-from smonitor.core.manager import get_manager
 
 
 def test_handler_errors_counted():
