@@ -9,6 +9,7 @@ __pycache__/
 _docs/
 docs/_build/
 docs/_generated_*.md
+docs/api/autosummary/
 
 # In this library
 codex_session.sh

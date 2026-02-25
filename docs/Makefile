@@ -1,10 +1,26 @@
-# Minimal Makefile for Sphinx with catalog generation
-SPHINXBUILD ?= sphinx-build
-SOURCEDIR = .
-BUILDDIR = _build
+# Minimal makefile for Sphinx documentation
+#
 
-.PHONY: html
+export SPHINXWORKING=True
+
+# You can set these variables from the command line.
+SPHINXOPTS    = -j auto
+SPHINXBUILD   = sphinx-build
+SPHINXPROJ    = smonitor
+SOURCEDIR     = .
+BUILDDIR      = _build
+
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+.PHONY: help html Makefile
 
 html:
 	python _gen_catalog.py
-	$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"
+	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

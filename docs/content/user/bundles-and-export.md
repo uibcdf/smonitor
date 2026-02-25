@@ -1,0 +1,31 @@
+# Bundles and Export
+
+Local bundles are privacy-first exports that capture current SMonitor state and recent events.
+
+## Export examples
+
+```bash
+smonitor export --out smonitor_bundle --max-events 500
+smonitor export --out smonitor_bundle --since 2026-02-06T00:00:00
+smonitor export --out smonitor_bundle --drop-extra --redact extra.password
+```
+
+Generated artifacts:
+- `bundle.json` (config, policy, codes/signals, report)
+- `events.jsonl` (optional recent events)
+
+Use `--out bundle.json` for a single-file export.
+
+## Privacy controls
+
+- `--drop-extra`
+- `--drop-context`
+- `--redact`
+
+## Buffer requirement
+
+Event exports require buffering:
+
+```python
+SMONITOR = {"event_buffer_size": 500}
+```
