@@ -1,6 +1,6 @@
 # SPEC_SMONITOR.md — Centralized Diagnostic & Telemetry System
 
-**Version:** 0.10 (Draft)  
+**Version:** 0.10 (Draft, includes merged historical v0.1 snapshot)  
 **Status:** FEATURE COMPLETE (hardening phase)  
 **Author:** UIBCDF Development Team  
 **Project Name:** `smonitor`
@@ -396,3 +396,64 @@ All exceptions and warnings intended for end users must:
 1. Describe the problem in plain language.
 2. Suggest a concrete fix or next step.
 3. Avoid internal jargon unless the profile is `dev`/`debug`.
+
+---
+
+## Appendix A. Historical v0.1 Snapshot (Merged)
+
+This appendix merges the previous content of `SPEC_SMONITOR_backup.md` so the
+historical context remains in the main specification and no backup file is
+needed.
+
+### A.1 Historical identity and scope
+- Historical version label: `v0.1 (Draft)`.
+- Historical status label: `CONCEPT`.
+- Historical project name variant: `monitor` (later consolidated to `smonitor`).
+
+### A.2 Historical architecture snapshot
+
+The v0.1 draft described the same core model:
+- `core/` (`manager.py`, `decorator.py`, `context.py`)
+- `emitters/` (`log.py`, `warn.py`, `error.py`)
+- `handlers/` (`console.py`, `file.py`, `json.py`)
+- `config/` (`discovery.py`)
+
+The current spec preserves this architecture and extends it with:
+- explicit config validation,
+- CLI/report/bundle utilities,
+- event schema validation,
+- policy engine,
+- profiling/timeline support,
+- integration helpers and catalog-driven messaging.
+
+### A.3 Historical feature priorities
+
+The v0.1 draft prioritized:
+1. orchestration across sibling libraries,
+2. nested traceability (breadcrumbs),
+3. standardized warning redirection,
+4. session telemetry summary,
+5. symmetry with the digest family.
+
+These priorities remain valid and are implemented in the 0.10 hardening phase.
+
+### A.4 Historical integration strategy
+
+The v0.1 draft proposed phased adoption:
+1. base library scaffold,
+2. emitter injection in ecosystem libraries,
+3. MolSysMT adoption for logging/warnings,
+4. docs automation for monitored functions/signals.
+
+Current status:
+- phases 1 to 3 are implemented for current ecosystem integrations,
+- docs/catalog tooling exists and can continue evolving as future work.
+
+### A.5 Historical future ideas retained
+
+The following ideas from v0.1 are still aligned with current roadmap:
+- live status dashboard,
+- AI-agent/LLM diagnostic interfaces,
+- lightweight performance profiling augmentation.
+
+They now map to the "Future Ideas" and Sentinel-related sections in this spec.
