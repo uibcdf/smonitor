@@ -122,6 +122,28 @@ When `selection == "all"`, users get a warning that:
 - suggests a concrete fix,
 - stays consistent with your library profile.
 
+## Quick smoke command
+
+```bash
+python -c "import mylib; from mylib.api import select_atoms; select_atoms('all')"
+```
+
+Expected:
+- import does not fail,
+- one warning event with `MYLIB-W001`,
+- message/hint resolved from catalog.
+
+## Common wiring mistakes
+
+1. `_smonitor.py` in repo root instead of package root:
+- correct path is `A/_smonitor.py`.
+2. `PACKAGE_ROOT` pointing to wrong level:
+- use `Path(__file__).resolve().parents[2]` from `A/_private/smonitor/__init__.py`.
+3. Catalog not imported into `_smonitor.py`:
+- ensure `CODES` and `SIGNALS` are available at runtime.
+4. Circular imports during package init:
+- keep `_private/smonitor` modules lightweight and avoid importing heavy modules there.
+
 ## You are done when
 
 - importing `mylib` configures SMonitor without errors,

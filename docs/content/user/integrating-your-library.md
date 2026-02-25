@@ -58,6 +58,12 @@ Use this order to reduce risk:
 3. one subsystem at a time,
 4. then global rollout.
 
+## Instrumentation cost and expectations
+
+- `@signal` adds overhead, but usually acceptable at API/orchestration boundaries.
+- avoid decorating very hot inner loops or tiny utility functions called millions of times.
+- use sampling and profiling in `dev`/`qa` to measure impact before broad rollout.
+
 ## Common concerns
 
 ### "Will this break users?"
