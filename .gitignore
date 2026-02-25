@@ -12,3 +12,4 @@ docs/_generated_*.md
 
 # In this library
 codex_session.sh
+smonitor/_version.py
