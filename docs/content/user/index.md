@@ -15,6 +15,15 @@ Use this guide if you maintain a library and need to improve:
 - support turnaround,
 - consistency across modules.
 
+## Important path convention
+
+When this guide says "package root", it means the root of your Python package
+directory, not the repository root.
+
+If your package is `A`, use:
+- `A/_smonitor.py`
+- `A/_private/smonitor/...`
+
 ## What you will build
 
 By the end of this path you will have:

@@ -29,3 +29,9 @@ Event exports require buffering:
 ```python
 SMONITOR = {"event_buffer_size": 500}
 ```
+
+## You are done when
+
+- `smonitor export` generates the expected files,
+- sensitive fields are removed/redacted according to policy,
+- your support workflow can reproduce issues from the exported bundle.

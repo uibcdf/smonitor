@@ -28,6 +28,8 @@ python -m pip install --no-deps --editable .
 If your package is `mylib`, create `mylib/_smonitor.py`:
 
 ```python
+from mylib._private.smonitor.catalog import CODES, SIGNALS
+
 PROFILE = "user"
 
 SMONITOR = {
@@ -37,6 +39,10 @@ SMONITOR = {
     "capture_logging": True,
     "theme": "plain",
 }
+
+# Keep runtime templates/contracts in one source of truth.
+CODES = CODES
+SIGNALS = SIGNALS
 ```
 
 ## 3. Create the catalog
@@ -56,6 +62,31 @@ CATALOG = {
     },
     "signals": {},
 }
+
+CODES = CATALOG["codes"]
+SIGNALS = CATALOG["signals"]
+```
+
+Create `mylib/_private/smonitor/__init__.py`:
+
+```python
+from pathlib import Path
+
+from .catalog import CATALOG, CODES, SIGNALS
+
+PACKAGE_ROOT = Path(__file__).resolve().parents[2]
+```
+
+Create `mylib/_private/smonitor/emitter.py`:
+
+```python
+from smonitor.integrations import DiagnosticBundle
+
+from . import CATALOG, PACKAGE_ROOT
+
+bundle = DiagnosticBundle(CATALOG, meta={"library": "mylib"}, package_root=PACKAGE_ROOT)
+warn = bundle.warn
+warn_once = bundle.warn_once
 ```
 
 ## 4. Enable SMonitor on import
@@ -90,6 +121,12 @@ When `selection == "all"`, users get a warning that:
 - explains what happened,
 - suggests a concrete fix,
 - stays consistent with your library profile.
+
+## You are done when
+
+- importing `mylib` configures SMonitor without errors,
+- calling `select_atoms("all")` emits `MYLIB-W001`,
+- message and hint are resolved from catalog templates.
 
 ## Next
 

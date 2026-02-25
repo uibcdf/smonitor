@@ -75,3 +75,9 @@ Usually no. Keep defaults safe for users; let developers/QA override in runtime/
 ## Next
 
 Read [Edge Cases](edge-cases.md) before broad rollout.
+
+## You are done when
+
+- diagnostics are emitted from catalog-driven helpers across migrated modules,
+- key API boundaries are instrumented with `@signal`,
+- QA tests validate strict signal contracts and bundle export.

@@ -53,6 +53,21 @@ FILTERS = [
 ]
 ```
 
+## Activate catalog templates and contracts
+
+Your runtime catalog should be loaded in `_smonitor.py` so there is a single
+source of truth for CODES/SIGNALS:
+
+```python
+from mylib._private.smonitor.catalog import CODES, SIGNALS
+
+# Optional local aliases for readability
+CODES = CODES
+SIGNALS = SIGNALS
+```
+
+This prevents drift where code IDs are emitted but templates are missing.
+
 ## Environment variables you will actually use
 
 Common toggles during development:
