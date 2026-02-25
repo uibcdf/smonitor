@@ -97,6 +97,17 @@ Status: **Done**
 ## 0.10 Status
 - Feature complete; hardening and docs polish remain before 0.10.0 finalization.
 
+## 0.11 Plan (Pre-1.0 Stabilization)
+- Align all docs (`README`, `SPEC`, `devguide`, Sphinx pages) with actual behavior.
+- Validate release gates in clean environments:
+  - `pytest`
+  - docs build (`make -C docs html`)
+  - package build and CLI smoke checks
+- Freeze and document public API surface (and keep internals private-by-default).
+- Add API contract tests for exported symbols and core behavior.
+- Run integration smoke checks in ecosystem repositories.
+Status: **In Progress**
+
 ## Profiling (Developer Utility)
 - Timeline buffer and sampling.
 - Spans for manual blocks.

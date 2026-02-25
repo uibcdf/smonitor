@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 
 import smonitor
-from smonitor.config import load_project_config, validate_project_config
 from smonitor.bundle import export_bundle
+from smonitor.config import load_project_config, validate_project_config
 
 
 def _parse_args() -> argparse.Namespace:
@@ -17,10 +17,19 @@ def _parse_args() -> argparse.Namespace:
     export_parser.add_argument("--max-events", type=int, default=None)
     export_parser.add_argument("--since", default=None, help="ISO timestamp (filter events)")
     export_parser.add_argument("--no-events", action="store_true")
-    export_parser.add_argument("--append-events", action="store_true", help="Append to events.jsonl")
+    export_parser.add_argument(
+        "--append-events",
+        action="store_true",
+        help="Append to events.jsonl",
+    )
     export_parser.add_argument("--drop-extra", action="store_true")
     export_parser.add_argument("--drop-context", action="store_true")
-    export_parser.add_argument("--redact", action="append", default=[], help="Redact dotted fields (e.g. extra.password)")
+    export_parser.add_argument(
+        "--redact",
+        action="append",
+        default=[],
+        help="Redact dotted fields (e.g. extra.password)",
+    )
     export_parser.add_argument("--force", action="store_true")
     export_parser.add_argument("--config-path", default=None)
     export_parser.add_argument("--profile", default=None)

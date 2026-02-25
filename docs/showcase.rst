@@ -21,9 +21,13 @@ User Profile
 Designed for clarity and calm. It hides technical noise and focuses on the
 message and the solution (Hint).
 
-.. image:: _static/showcase_user.png
-   :align: center
-   :alt: User profile showcase
+Example output is available in ``docs/examples.rst`` and can be reproduced with:
+
+.. code-block:: python
+
+  import smonitor
+  smonitor.configure(profile="user", theme="rich")
+  smonitor.emit("WARNING", "Selection string is ambiguous", source="molsysmt.select")
 
 Developer Profile
 ~~~~~~~~~~~~~~~~~
@@ -31,9 +35,13 @@ Developer Profile
 Designed for precision. It provides a structured report of every event, including
 the exact call chain and structured extra data.
 
-.. image:: _static/showcase_dev.png
-   :align: center
-   :alt: Developer profile showcase
+Example output is available in ``docs/examples.rst`` and can be reproduced with:
+
+.. code-block:: python
+
+  import smonitor
+  smonitor.configure(profile="dev", theme="rich", args_summary=True)
+  smonitor.emit("ERROR", "Invalid units", source="pyunitwizard.convert")
 
 Symmetry with the Ecosystem
 ---------------------------

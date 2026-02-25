@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
-import warnings
 
-from .context import get_context
 from ..policy.engine import PolicyEngine
 from ..validation import validate_event
+from .context import get_context
 
 _LEVEL_ORDER = {
     "DEBUG": 10,
@@ -129,8 +130,7 @@ class Manager:
         handler_error_threshold: Optional[int] = None,
     ) -> None:
         if config_path is not None:
-            from pathlib import Path
-            from ..config.discovery import load_config_from_path, discover_config
+            from ..config.discovery import discover_config, load_config_from_path
             p = Path(config_path)
             data = load_config_from_path(p) if p.is_file() else discover_config(p)
             if data:
@@ -192,9 +192,9 @@ class Manager:
             self._policy.set_filters(filters)
 
         # Enable/disable emitters based on config
-        from ..emitters.warnings import enable_warnings, disable_warnings
-        from ..emitters.logging import enable_logging, disable_logging
-        from ..emitters.exceptions import enable_exceptions, disable_exceptions
+        from ..emitters.exceptions import disable_exceptions, enable_exceptions
+        from ..emitters.logging import disable_logging, enable_logging
+        from ..emitters.warnings import disable_warnings, enable_warnings
         if self._config.capture_logging:
             enable_logging(capture_warnings=self._config.capture_warnings)
             if self._config.capture_warnings:
@@ -421,7 +421,11 @@ class Manager:
                 self._handler_errors[name] = self._handler_errors.get(name, 0) + 1
                 threshold = self._config.handler_error_threshold
                 count = self._handler_errors[name]
-                if threshold > 0 and count >= threshold and name not in self._degraded_handlers_announced:
+                if (
+                    threshold > 0
+                    and count >= threshold
+                    and name not in self._degraded_handlers_announced
+                ):
                     warning_msg = (
                         f"Handler '{name}' reached error threshold "
                         f"({count}/{threshold}) and is considered degraded."
@@ -469,7 +473,10 @@ class Manager:
         timings_by_module: Dict[str, Dict[str, float]] = {}
         for key, summary in timings_summary.items():
             module = key.rsplit(".", 1)[0] if "." in key else key
-            mod = timings_by_module.setdefault(module, {"count": 0, "p50_ms": 0.0, "p95_ms": 0.0, "max_ms": 0.0})
+            mod = timings_by_module.setdefault(
+                module,
+                {"count": 0, "p50_ms": 0.0, "p95_ms": 0.0, "max_ms": 0.0},
+            )
             mod["count"] += summary["count"]
             mod["p50_ms"] = max(mod["p50_ms"], summary["p50_ms"])
             mod["p95_ms"] = max(mod["p95_ms"], summary["p95_ms"])
@@ -488,7 +495,9 @@ class Manager:
             **self._counts,
             "handler_errors": dict(self._handler_errors),
             "handler_errors_total": sum(self._handler_errors.values()),
-            "degraded_handlers": [name for name, count in self._handler_errors.items() if count > 0],
+            "degraded_handlers": [
+                name for name, count in self._handler_errors.items() if count > 0
+            ],
             "timings": timings_summary,
             "timings_by_module": timings_by_module,
             "timeline": list(self._timeline),

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+### Added
+- 0.11 pre-1.0 stabilization plan in `devguide/implementation_plan.md`.
+- API contract tests for public exports and core API behavior.
+
+### Changed
+- Documentation path consistency for canonical guide references.
+- Project status/docs updated for `0.11` pre-1.0 milestone planning.
 
 ## [0.10.0] - 2026-02-06
 ### Documentation

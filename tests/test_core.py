@@ -1,11 +1,12 @@
-def test_import_smonitor():
-    import smonitor  # noqa: F401
-
-
 import pytest
+
 import smonitor
 from smonitor.core.manager import get_manager
 from smonitor.handlers.memory import MemoryHandler
+
+
+def test_import_smonitor():
+    assert smonitor is not None
 
 
 def test_configure_defaults_add_handler():

@@ -1,6 +1,21 @@
 # smonitor Developer Guide — API Sketch
 
-This document defines a minimal public API for `smonitor` and the expected behavior of each entrypoint.
+This document defines the public API contract for `smonitor` and the expected behavior of each entrypoint.
+
+## 0) Public API Freeze Target (0.11)
+
+Symbols considered public for `0.11.x` stabilization:
+- `smonitor.configure`
+- `smonitor.emit`
+- `smonitor.resolve`
+- `smonitor.report`
+- `smonitor.signal`
+- `smonitor.get_manager`
+- `smonitor.export_bundle`
+- `smonitor.collect_bundle`
+- `smonitor.integrations`
+
+Anything outside this list is internal and may change without compatibility guarantees.
 
 ## 1) Public Functions
 

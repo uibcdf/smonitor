@@ -51,7 +51,7 @@ For developers, ``smonitor`` provides deep traceability and structured data.
       pass
 
 Nested Call-Chains (Breadcrumbs)
--------------------------------
+--------------------------------
 
 ``smonitor`` shines when multiple libraries are integrated.
 

@@ -60,7 +60,7 @@ Use package-level configuration and emit catalog-driven diagnostics for
 frontend init failures and payload issues.
 
 ArgDigest / DepDigest / PyUnitWizard
------------------------------------
+------------------------------------
 
 Use the same package-level pattern and emit via catalog entries.
 

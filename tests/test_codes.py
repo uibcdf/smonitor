@@ -18,7 +18,15 @@ def test_codes_fill_message_and_hint(tmp_path):
     # Configure using that config
     smonitor.configure(profile="user")
     manager = get_manager()
-    manager.configure(codes={'X001': {'title': 'Test', 'user_message': 'User msg', 'user_hint': 'User hint'}})
+    manager.configure(
+        codes={
+            "X001": {
+                "title": "Test",
+                "user_message": "User msg",
+                "user_hint": "User hint",
+            }
+        }
+    )
 
     event = smonitor.emit("WARNING", "", code="X001")
     assert event["message"] == "User msg"
@@ -27,7 +35,9 @@ def test_codes_fill_message_and_hint(tmp_path):
 
 def test_codes_template_with_extra():
     manager = get_manager()
-    manager.configure(codes={'X002': {'user_message': 'Value {v} is bad', 'user_hint': 'Use {alt}'}})
+    manager.configure(
+        codes={"X002": {"user_message": "Value {v} is bad", "user_hint": "Use {alt}"}}
+    )
     event = smonitor.emit("WARNING", "", code="X002", extra={"v": "X", "alt": "Y"})
     assert event["message"] == "Value X is bad"
     assert event["extra"]["hint"] == "Use Y"
@@ -42,7 +52,11 @@ def test_contract_warning_missing_extra():
 
 def test_strict_signals_raises():
     manager = get_manager()
-    manager.configure(profile="dev", strict_signals=True, signals={"mod.fn": {"extra_required": ["foo"]}})
+    manager.configure(
+        profile="dev",
+        strict_signals=True,
+        signals={"mod.fn": {"extra_required": ["foo"]}},
+    )
     try:
         smonitor.emit("WARNING", "msg", source="mod.fn", extra={})
     except ValueError as exc:

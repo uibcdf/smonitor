@@ -12,7 +12,10 @@ def load_project_config(start: Optional[Path] = None) -> Optional[Dict[str, Any]
     return discover_config(base)
 
 
-def build_effective_config(project_cfg: Optional[Dict[str, Any]], overrides: Dict[str, Any]) -> Dict[str, Any]:
+def build_effective_config(
+    project_cfg: Optional[Dict[str, Any]],
+    overrides: Dict[str, Any],
+) -> Dict[str, Any]:
     if not project_cfg:
         return dict(overrides)
 
@@ -161,7 +164,12 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
             "strict_config",
             "enabled",
         }
-        int_keys = {"trace_depth", "profiling_buffer_size", "event_buffer_size", "handler_error_threshold"}
+        int_keys = {
+            "trace_depth",
+            "profiling_buffer_size",
+            "event_buffer_size",
+            "handler_error_threshold",
+        }
         float_keys = {"profiling_sample_rate"}
         str_keys = {"level", "theme", "profile"}
         for key in bool_keys:
@@ -193,7 +201,10 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
     return errors
 
 
-def validate_codes_signals(codes: Optional[Dict[str, Any]], signals: Optional[Dict[str, Any]]) -> list[str]:
+def validate_codes_signals(
+    codes: Optional[Dict[str, Any]],
+    signals: Optional[Dict[str, Any]],
+) -> list[str]:
     errors: list[str] = []
 
     if codes is not None:
@@ -243,7 +254,9 @@ def validate_codes_signals(codes: Optional[Dict[str, Any]], signals: Optional[Di
                 for field in ("warnings", "errors"):
                     if field in entry:
                         val = entry[field]
-                        if not isinstance(val, list) or any(not isinstance(item, str) for item in val):
+                        if not isinstance(val, list) or any(
+                            not isinstance(item, str) for item in val
+                        ):
                             errors.append(f"SIGNALS[{name}].{field} must be a list of strings")
 
     return errors

@@ -28,7 +28,11 @@ def main() -> int:
         default=Path(__file__).resolve().parents[2],
         help="Root directory that contains smonitor and sibling repos",
     )
-    parser.add_argument("--dry-run", action="store_true", help="Print actions without writing files")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print actions without writing files",
+    )
     args = parser.parse_args()
 
     root = args.root.resolve()

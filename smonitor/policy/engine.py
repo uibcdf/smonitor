@@ -32,7 +32,11 @@ class PolicyEngine:
     def get_filters(self) -> List[Dict[str, Any]]:
         return list(self._filters)
 
-    def apply(self, event: Dict[str, Any], handlers: Iterable[Any]) -> Tuple[Dict[str, Any], List[Any]]:
+    def apply(
+        self,
+        event: Dict[str, Any],
+        handlers: Iterable[Any],
+    ) -> Tuple[Dict[str, Any], List[Any]]:
         # Filters (rate limiting etc.)
         for rule in self._filters:
             when = rule.get("when", {})
@@ -85,7 +89,14 @@ class PolicyEngine:
                     event["tags"] = list(dict.fromkeys(current + add_tags))
             names = rule.get("send_to") or []
             if names:
-                target_handlers = [h for h in target_handlers if getattr(h, "name", None) in names or h.__class__.__name__ in names]
+                target_handlers = [
+                    h
+                    for h in target_handlers
+                    if (
+                        getattr(h, "name", None) in names
+                        or h.__class__.__name__ in names
+                    )
+                ]
         return event, target_handlers
 
     def _allow_rate(self, event: Dict[str, Any], rate: str) -> bool:

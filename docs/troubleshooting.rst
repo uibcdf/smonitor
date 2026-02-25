@@ -22,7 +22,7 @@ Events are rejected in dev/qa
 - For strict signal contracts, include the required `extra` fields.
 
 Bundles are empty
-----------------
+-----------------
 
 - Set `event_buffer_size` in `_smonitor.py` or via `smonitor.configure(...)`.
 - Use `--max-events` to control how many buffered events are exported.

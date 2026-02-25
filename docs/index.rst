@@ -24,10 +24,4 @@ Contents
    profiling
    troubleshooting
 
-API Reference
--------------
-
-.. automodule:: smonitor
-   :members:
-   :undoc-members:
-   :show-inheritance:
+API reference is available in the ``api`` section above.

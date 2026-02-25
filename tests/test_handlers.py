@@ -26,7 +26,9 @@ def test_json_handler_writes(tmp_path: Path):
 def test_handlers_create_parent_dir(tmp_path: Path):
     file_path = tmp_path / "logs" / "out.log"
     json_path = tmp_path / "logs" / "out.jsonl"
-    FileHandler(str(file_path), mode="w").handle({"timestamp": "t", "level": "INFO", "message": "m"})
+    FileHandler(str(file_path), mode="w").handle(
+        {"timestamp": "t", "level": "INFO", "message": "m"}
+    )
     JsonHandler(str(json_path), mode="w").handle({"level": "INFO", "message": "m"})
     assert file_path.exists()
 

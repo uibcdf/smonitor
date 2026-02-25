@@ -1,7 +1,7 @@
 # SPEC_SMONITOR.md — Centralized Diagnostic & Telemetry System
 
-**Version:** 0.10 (Draft, includes merged historical v0.1 snapshot)  
-**Status:** FEATURE COMPLETE (hardening phase)  
+**Version:** 0.11 (Draft, includes merged historical v0.1 snapshot)  
+**Status:** PRE-1.0 STABILIZATION  
 **Author:** UIBCDF Development Team  
 **Project Name:** `smonitor`
 
@@ -158,6 +158,15 @@ Integration is complete across the current ecosystem:
 - PyUnitWizard
 
 All use `_smonitor.py` at package root, catalogs in `A/_private/smonitor/catalog.py`, and metadata in `A/_private/smonitor/meta.py`.
+
+## 5.1 0.11 Release Gates (Pre-1.0)
+
+Before `1.0.0`, `0.11.x` focuses on stabilization with explicit gates:
+- test gate: full `pytest` suite in clean env,
+- docs gate: Sphinx build without broken references,
+- package gate: wheel/sdist build + install/import smoke checks,
+- API gate: contract tests for exported public symbols,
+- ecosystem gate: smoke checks in integrated sibling libraries.
 
 ---
 

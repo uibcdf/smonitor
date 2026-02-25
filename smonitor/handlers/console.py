@@ -95,7 +95,8 @@ class RichConsoleHandler(ConsoleHandler):
                 from datetime import datetime
                 dt = datetime.fromisoformat(timestamp)
                 ts = dt.strftime("%H:%M:%S")
-            except: ts = ""
+            except ValueError:
+                ts = ""
 
         if profile == "user":
             self._handle_user(event, level, style, ts)
@@ -107,9 +108,9 @@ class RichConsoleHandler(ConsoleHandler):
             self._console.print(msg)
 
     def _handle_user(self, event: Dict[str, Any], level: str, style: str, ts: str) -> None:
+        from rich.box import ROUNDED
         from rich.panel import Panel
         from rich.text import Text
-        from rich.box import ROUNDED
 
         # Icon mapping
         icons = {"DEBUG": "⚙", "INFO": "ℹ", "WARNING": "⚠", "ERROR": "✘"}
@@ -150,9 +151,9 @@ class RichConsoleHandler(ConsoleHandler):
         )
 
     def _handle_technical(self, event: Dict[str, Any], level: str, style: str, ts: str) -> None:
+        from rich.rule import Rule
         from rich.table import Table
         from rich.text import Text
-        from rich.rule import Rule
 
         # Top Rule with Metadata
         source = event.get("source") or "unknown"
@@ -184,7 +185,8 @@ class RichConsoleHandler(ConsoleHandler):
             details.add_row("path", path_str)
 
         for k, v in extra.items():
-            if k in {"hint", "smonitor", "title", "contract_warning", "schema_warning"}: continue
+            if k in {"hint", "smonitor", "title", "contract_warning", "schema_warning"}:
+                continue
             details.add_row(k, str(v))
 
         # Specialized warnings
