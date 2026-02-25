@@ -14,10 +14,12 @@ If your goal is integrating SMonitor into your own package, start in the [User G
 6. [Catalog and Signals](catalog-and-signals.md)
 7. [Schema Validation](schema-validation.md)
 8. [Profiling](profiling.md)
-9. [Testing and Coverage](testing-and-coverage.md)
-10. [Editorial Guide](editorial-guide.md)
-11. [Release and Versioning](release-and-versioning.md)
-12. [Contributor Checklist](contributor-checklist.md)
+9. [Contract Versioning](contract-versioning.md)
+10. [Operability Minimum](operability-minimum.md)
+11. [Testing and Coverage](testing-and-coverage.md)
+12. [Editorial Guide](editorial-guide.md)
+13. [Release and Versioning](release-and-versioning.md)
+14. [Contributor Checklist](contributor-checklist.md)
 
 ## Canonical references
 
@@ -36,6 +38,8 @@ policy-engine.md
 catalog-and-signals.md
 schema-validation.md
 profiling.md
+contract-versioning.md
+operability-minimum.md
 testing-and-coverage.md
 editorial-guide.md
 release-and-versioning.md

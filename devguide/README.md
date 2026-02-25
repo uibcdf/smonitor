@@ -31,3 +31,12 @@ historical context live in `SPEC_SMONITOR.md`.
 - Profiling expanded (timeline, sampling, spans, export).
 - Local bundle export (CLI + event buffer).
 - Ecosystem integration completed (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).
+- Documentation architecture migrated to MyST with role-based routes:
+  integrators, end users, showcase scenarios, and contributor path.
+- Standards pack published for ecosystem adoption (`standards/`), including
+  end-user rescue/docs templates and sync policy.
+
+## Pending Focus (Pre-1.0)
+- Release-gate validation in clean environments (tests, docs, package smoke).
+- API contract tests for stable public surface and agent-readable outputs.
+- Post-0.10 roadmap design: opt-in telemetry client and Sentinel integration.

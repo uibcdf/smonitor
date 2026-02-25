@@ -60,7 +60,7 @@ Status: **Done** (integration helpers + adoption across MolSysMT, ArgDigest, Dep
 - Provide examples for warning interception and custom handlers.
 - Add a cookbook for context chain visualization.
 - Document `_smonitor.py` schema, policy engine, and communication styles by profile.
-Status: **In Progress** (Sphinx docs updated; catalog generator added; final polish pending)
+Status: **Done** (MyST docs migrated; role-based user routes, showcase scenarios, and standards-based adoption guides completed)
 
 ## Additional Hardening
 - Add CLI for validation/reporting and profile selection.
@@ -108,6 +108,11 @@ Status: **Done**
 - Run integration smoke checks in ecosystem repositories.
 Status: **In Progress**
 
+Progress checkpoint:
+- docs/routes largely stabilized and aligned with runtime behavior,
+- integrator guidance expanded (handlers, advanced integration API, AI-agent workflow),
+- end-user rescue flow and adoption templates published.
+
 ## AI-Agent Readiness Plan (Integrator-Facing)
 
 Done:
@@ -132,6 +137,12 @@ Status: **Done**
 - Phase B: Opt‑in telemetry client with rate limits.
 - Phase C: Sentinel server + public dashboard.
 - Phase D: LLM triage on aggregated reports.
+
+## Next Concrete Steps
+1. Add release-gate CI checks for package build/install smoke + docs build.
+2. Add explicit public API contract tests (top-level exports + integrations API).
+3. Add agent-profile payload contract tests and snapshot fixtures.
+4. Add a short operational runbook in docs for weekly maintenance loops.
 
 ## Future: Project Metadata (Post‑0.10)
 - Load `doc_url`, `issues_url`, `api_url` from `pyproject.toml` under `[tool.smonitor]`.
