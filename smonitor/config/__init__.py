@@ -46,6 +46,19 @@ def load_env_config() -> Dict[str, Any]:
         except ValueError:
             return None
 
+    def _get_float(key: str) -> Optional[float]:
+        val = os.getenv(key)
+        if val is None:
+            return None
+        try:
+            out = float(val)
+        except ValueError:
+            return None
+        # Keep sample rates within [0.0, 1.0]. Invalid values are ignored.
+        if out < 0.0 or out > 1.0:
+            return None
+        return out
+
     return {
         "profile": os.getenv("SMONITOR_PROFILE"),
         "level": os.getenv("SMONITOR_LEVEL"),
@@ -61,7 +74,7 @@ def load_env_config() -> Dict[str, Any]:
         "strict_config": _get_bool("SMONITOR_STRICT_CONFIG"),
         "enabled": _get_bool("SMONITOR_ENABLED"),
         "profiling_buffer_size": _get_int("SMONITOR_PROFILING_BUFFER"),
-        "profiling_sample_rate": float(os.getenv("SMONITOR_PROFILING_SAMPLE", "1.0")),
+        "profiling_sample_rate": _get_float("SMONITOR_PROFILING_SAMPLE"),
         "event_buffer_size": _get_int("SMONITOR_EVENT_BUFFER"),
     }
 

@@ -44,6 +44,18 @@ def test_load_env_config(monkeypatch):
     assert cfg["capture_warnings"] is True
 
 
+def test_load_env_config_invalid_profiling_sample(monkeypatch):
+    monkeypatch.setenv("SMONITOR_PROFILING_SAMPLE", "not-a-float")
+    cfg = load_env_config()
+    assert cfg["profiling_sample_rate"] is None
+
+
+def test_load_env_config_out_of_range_profiling_sample(monkeypatch):
+    monkeypatch.setenv("SMONITOR_PROFILING_SAMPLE", "1.5")
+    cfg = load_env_config()
+    assert cfg["profiling_sample_rate"] is None
+
+
 def test_validate_config_unknown_key(tmp_path: Path):
     cfg_file = tmp_path / "_smonitor.py"
     cfg_file.write_text("FOO = 1")
