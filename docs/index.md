@@ -24,22 +24,37 @@ Signal Monitor for the scientific Python stack.
 ```
 :::
 
-## Install
+## Install it
 
 ```bash
 conda install -c uibcdf smonitor
 ```
 
-## Start in one minute
+## Use it
 
 ```python
 import smonitor
 
-smonitor.configure(profile="user", theme="plain")
-smonitor.emit("WARNING", "Selection is ambiguous", source="mylib.select")
+smonitor.configure(profile="user", theme="rich")
+
+@smonitor.signal(name="mylib.select")
+def select(items, query):
+    if query == "all":
+        smonitor.emit(
+            "WARNING",
+            "Selection is ambiguous.",
+            code="MYLIB-W001",
+            source="mylib.select",
+            extra={"hint": "Use a more specific selector, for example atom_name == 'CA'."},
+        )
+    return items
 ```
 
-## Documentation map
+What happens here:
+- End users get a clear warning plus an actionable hint.
+- Library maintainers keep stable contracts (`code`, `signal`) for support and QA.
+- Teams can route the same events to bundles and machine-readable workflows.
+
 
 ```{eval-rst}
 
