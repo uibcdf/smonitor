@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Optional
+import warnings
 
 from .context import get_context
 from ..policy.engine import PolicyEngine
@@ -41,6 +42,7 @@ class ManagerConfig:
     profiling_sample_rate: float = 1.0
     event_buffer_size: int = 0
     silence: list[str] = field(default_factory=list)
+    handler_error_threshold: int = 0
 
 
 class Manager:
@@ -59,6 +61,8 @@ class Manager:
         self._timings: Dict[str, List[float]] = {}
         self._timeline: List[Dict[str, Any]] = []
         self._event_buffer: List[Dict[str, Any]] = []
+        self._runtime_warnings: List[str] = []
+        self._degraded_handlers_announced: set[str] = set()
 
     def _apply_config_dict(self, data: Dict[str, Any]) -> None:
         """Applies a configuration dictionary (e.g. from _smonitor.py) to the manager."""
@@ -78,6 +82,7 @@ class Manager:
             enabled=config_block.get("enabled"),
             event_buffer_size=config_block.get("event_buffer_size"),
             silence=config_block.get("silence"),
+            handler_error_threshold=config_block.get("handler_error_threshold"),
         )
         if profile := data.get("PROFILE"):
             self.configure(profile=profile)
@@ -121,6 +126,7 @@ class Manager:
         event_buffer_size: Optional[int] = None,
         config_path: Optional[str | Path] = None,
         silence: Optional[List[str]] = None,
+        handler_error_threshold: Optional[int] = None,
     ) -> None:
         if config_path is not None:
             from pathlib import Path
@@ -171,6 +177,8 @@ class Manager:
             self._config.event_buffer_size = event_buffer_size
         if silence is not None:
             self._config.silence = silence
+        if handler_error_threshold is not None:
+            self._config.handler_error_threshold = handler_error_threshold
         
         if handlers is not None:
             self._handlers = list(handlers)
@@ -411,6 +419,16 @@ class Manager:
                 # Handlers must not raise
                 name = getattr(handler, "name", handler.__class__.__name__)
                 self._handler_errors[name] = self._handler_errors.get(name, 0) + 1
+                threshold = self._config.handler_error_threshold
+                count = self._handler_errors[name]
+                if threshold > 0 and count >= threshold and name not in self._degraded_handlers_announced:
+                    warning_msg = (
+                        f"Handler '{name}' reached error threshold "
+                        f"({count}/{threshold}) and is considered degraded."
+                    )
+                    self._runtime_warnings.append(warning_msg)
+                    self._degraded_handlers_announced.add(name)
+                    warnings.warn(warning_msg, RuntimeWarning, stacklevel=2)
 
         self._record_event(routed_event)
         return event
@@ -477,6 +495,7 @@ class Manager:
             "profiling_meta": profiling_meta,
             "peak_memory": None,
             "events_buffered": len(self._event_buffer),
+            "runtime_warnings": list(self._runtime_warnings),
         }
 
     def get_codes(self) -> Dict[str, Dict[str, Any]]:

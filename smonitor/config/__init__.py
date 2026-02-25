@@ -76,6 +76,7 @@ def load_env_config() -> Dict[str, Any]:
         "profiling_buffer_size": _get_int("SMONITOR_PROFILING_BUFFER"),
         "profiling_sample_rate": _get_float("SMONITOR_PROFILING_SAMPLE"),
         "event_buffer_size": _get_int("SMONITOR_EVENT_BUFFER"),
+        "handler_error_threshold": _get_int("SMONITOR_HANDLER_ERROR_THRESHOLD"),
     }
 
 
@@ -125,6 +126,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         "strict_config",
         "enabled",
         "event_buffer_size",
+        "handler_error_threshold",
     }
     for key in project_cfg.keys():
         if key not in allowed_top:
@@ -159,7 +161,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
             "strict_config",
             "enabled",
         }
-        int_keys = {"trace_depth", "profiling_buffer_size", "event_buffer_size"}
+        int_keys = {"trace_depth", "profiling_buffer_size", "event_buffer_size", "handler_error_threshold"}
         float_keys = {"profiling_sample_rate"}
         str_keys = {"level", "theme", "profile"}
         for key in bool_keys:

@@ -37,11 +37,13 @@ def test_load_env_config(monkeypatch):
     monkeypatch.setenv("SMONITOR_LEVEL", "INFO")
     monkeypatch.setenv("SMONITOR_TRACE_DEPTH", "5")
     monkeypatch.setenv("SMONITOR_CAPTURE_WARNINGS", "1")
+    monkeypatch.setenv("SMONITOR_HANDLER_ERROR_THRESHOLD", "3")
     cfg = load_env_config()
     assert cfg["profile"] == "dev"
     assert cfg["level"] == "INFO"
     assert cfg["trace_depth"] == 5
     assert cfg["capture_warnings"] is True
+    assert cfg["handler_error_threshold"] == 3
 
 
 def test_load_env_config_invalid_profiling_sample(monkeypatch):
