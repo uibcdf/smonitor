@@ -367,6 +367,15 @@ class Manager:
         # Soft enforcement for signals/contracts in dev/qa profiles
         if self._config.profile in {"dev", "qa"} and source:
             contract = self._signals.get(source)
+            if contract is None:
+                # Backward-compatible fallback: match nearest source prefix.
+                # Example: source "pkg.mod.func" can match SIGNALS["pkg.mod"].
+                parts = source.split(".")
+                for idx in range(len(parts) - 1, 0, -1):
+                    prefix = ".".join(parts[:idx])
+                    contract = self._signals.get(prefix)
+                    if contract is not None:
+                        break
             if contract:
                 required = contract.get("extra_required", [])
                 missing = [k for k in required if k not in event["extra"]]
@@ -460,6 +469,8 @@ class Manager:
         return {
             **self._counts,
             "handler_errors": dict(self._handler_errors),
+            "handler_errors_total": sum(self._handler_errors.values()),
+            "degraded_handlers": [name for name, count in self._handler_errors.items() if count > 0],
             "timings": timings_summary,
             "timings_by_module": timings_by_module,
             "timeline": list(self._timeline),

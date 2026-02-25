@@ -2,6 +2,7 @@ def test_import_smonitor():
     import smonitor  # noqa: F401
 
 
+import pytest
 import smonitor
 from smonitor.core.manager import get_manager
 from smonitor.handlers.memory import MemoryHandler
@@ -76,3 +77,26 @@ def test_level_threshold_filters_console_routing():
 
     assert len(memory.events) == 1
     assert memory.events[0]["level"] == "WARNING"
+
+
+def test_signal_exception_source_keeps_module_contract_compatibility():
+    manager = smonitor.configure(
+        profile="dev",
+        strict_signals=True,
+        signals={__name__: {"extra_required": ["source_module"]}},
+        level="DEBUG",
+        event_buffer_size=5,
+    )
+
+    @smonitor.signal
+    def will_fail():
+        raise RuntimeError("boom")
+
+    with pytest.raises(RuntimeError, match="boom"):
+        will_fail()
+
+    events = manager.recent_events()
+    assert events
+    event = events[-1]
+    assert event["source"].startswith(__name__ + ".")
+    assert event["extra"]["source_module"] == __name__

@@ -52,11 +52,13 @@ def signal(
                 
                 # Prevent "Error Echo": only emit if this exception hasn't been handled by smonitor
                 if not getattr(exc, "__smonitor_emitted__", False):
+                    source = f"{fn.__module__}.{fn.__name__}"
                     manager.emit(
                         exception_level,
                         str(exc),
-                        source=fn.__module__,
+                        source=source,
                         exception_type=exc.__class__.__name__,
+                        extra={"source_module": fn.__module__},
                     )
                     try:
                         setattr(exc, "__smonitor_emitted__", True)

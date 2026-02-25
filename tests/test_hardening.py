@@ -12,6 +12,8 @@ def test_handler_errors_counted():
     smonitor.emit("WARNING", "x")
     report = manager.report()
     assert report["handler_errors"]["bad"] == 1
+    assert report["handler_errors_total"] == 1
+    assert "bad" in report["degraded_handlers"]
 
 
 def test_disabled_noop():
