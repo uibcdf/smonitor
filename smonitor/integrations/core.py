@@ -16,6 +16,14 @@ def ensure_configured(package_root: Path) -> None:
     _configured_packages.add(key)
 
 
+def reset_configured_packages() -> None:
+    """Clears the package configuration memoization cache.
+
+    Useful for test suites and dynamic multi-config sessions.
+    """
+    _configured_packages.clear()
+
+
 def merge_extra(meta: Optional[Dict[str, Any]], extra: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     merged: Dict[str, Any] = {}
     if meta:

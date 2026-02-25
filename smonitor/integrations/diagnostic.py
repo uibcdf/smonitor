@@ -11,6 +11,25 @@ T = TypeVar("T", bound="CatalogException")
 W = TypeVar("W", bound="CatalogWarning")
 
 
+def _catalog_entry(
+    catalog: Optional[Dict[str, Any]],
+    group: str,
+    key: Optional[str],
+) -> Optional[Dict[str, Any]]:
+    if not catalog or not key:
+        return None
+    nested = catalog.get(group, {})
+    if isinstance(nested, dict):
+        entry = nested.get(key)
+        if isinstance(entry, dict):
+            return entry
+    # Backward-compatible fallback for flat catalogs keyed directly by class/key.
+    flat = catalog.get(key)
+    if isinstance(flat, dict):
+        return flat
+    return None
+
+
 class CatalogException(Exception):
     """Base class for exceptions backed by an SMonitor catalog.
 
@@ -31,7 +50,7 @@ class CatalogException(Exception):
         target_code = code
         # If no code but we have a key, try to find the code in the catalog
         if not target_code and self.catalog_key and catalog:
-            entry = catalog.get("exceptions", {}).get(self.catalog_key)
+            entry = _catalog_entry(catalog, "exceptions", self.catalog_key)
             if entry:
                 target_code = entry.get("code")
 
@@ -62,7 +81,7 @@ class CatalogWarning(Warning):
     ):
         target_code = code
         if not target_code and self.catalog_key and catalog:
-            entry = catalog.get("warnings", {}).get(self.catalog_key)
+            entry = _catalog_entry(catalog, "warnings", self.catalog_key)
             if entry:
                 target_code = entry.get("code")
 
@@ -109,17 +128,36 @@ class DiagnosticBundle:
             cls_name = cat.__name__
             msg = message_or_warning
 
-        if cls_name in self.catalog.get("warnings", {}):
+        entry = _catalog_entry(self.catalog, "warnings", cls_name)
+        if entry:
             try:
                 emit_from_catalog(
-                    self.catalog["warnings"][cls_name],
+                    entry,
                     package_root=self.package_root,
                     extra=merge_extra(self.meta, {**(extra or {}), "message": msg}),
                     meta=self.meta,
                 )
                 return
-            except Exception:
-                pass
+            except Exception as exc:
+                # Do not silently swallow emission failures. Try a minimal
+                # fallback diagnostic; always preserve python warnings behavior.
+                try:
+                    smonitor.emit(
+                        "DEBUG",
+                        "Catalog warning emission failed",
+                        source="smonitor.integrations.diagnostic",
+                        category="integration",
+                        extra=merge_extra(
+                            self.meta,
+                            {
+                                "catalog_warning_class": cls_name,
+                                "original_message": msg,
+                                "emit_error": str(exc),
+                            },
+                        ),
+                    )
+                except Exception:
+                    pass
 
         if isinstance(message_or_warning, Warning):
             warnings.warn(message_or_warning, stacklevel=stacklevel)
