@@ -58,3 +58,19 @@ For integrations with `molsysmt`, `pyunitwizard`, `argdigest`, and `depdigest`:
   operation failures.
 - Prefer explicit codes/tags (for example `PUW-DBG-PROBE-001`) to make QA
   triage deterministic.
+
+## Recent hardening decisions
+
+- `DiagnosticBundle.warn` no longer silently swallows emission failures; it now
+  emits a fallback integration diagnostic and preserves plain `warnings.warn`.
+- `@signal` exception emission uses function-granular `source` (`module.func`),
+  while SIGNALS contracts keep module-prefix compatibility fallback.
+- `SMONITOR_PROFILING_SAMPLE` env parsing is now safe (invalid/out-of-range
+  values are ignored).
+- `reset_configured_packages()` is available in `smonitor.integrations` for
+  test/dynamic sessions.
+- `CatalogException` and `CatalogWarning` now support both nested and flat
+  catalog shapes.
+- Manager reports now include `handler_errors_total`, `degraded_handlers`, and
+  `runtime_warnings`; optional threshold warning via
+  `handler_error_threshold`.

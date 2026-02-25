@@ -51,6 +51,7 @@ Environment Variables
 - `SMONITOR_PROFILING_BUFFER`
 - `SMONITOR_PROFILING_SAMPLE`
 - `SMONITOR_EVENT_BUFFER`
+- `SMONITOR_HANDLER_ERROR_THRESHOLD`
 - `SMONITOR_STRICT_SIGNALS`
 - `SMONITOR_STRICT_SCHEMA`
 - `SMONITOR_STRICT_CONFIG`
@@ -100,3 +101,10 @@ Strict signals (dev/qa)
   smonitor.configure(profile="dev", strict_signals=True)
 
   # Missing required extras in SIGNALS will raise ValueError
+
+Handler degradation threshold
+-----------------------------
+
+Set `handler_error_threshold` (or `SMONITOR_HANDLER_ERROR_THRESHOLD`) to raise a
+runtime warning when the same handler fails repeatedly. The warning is also
+included in `report()["runtime_warnings"]`.
