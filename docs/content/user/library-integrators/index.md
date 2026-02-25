@@ -46,10 +46,16 @@ If your package is `A`, use:
 14. [Message Style by Profile](../message-style-by-profile.md)
 15. [Production Checklist](../production-checklist.md)
 16. [FAQ](../faq.md)
+17. [End-User Docs Pack for Library A](../end-users/for-library-maintainers.md)
 
 ## Canonical contract
 
 - [SMONITOR_GUIDE.md](https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_GUIDE.md)
+- [SMONITOR_END_USER_GUIDE_FOR_LIBRARIES.md](https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_END_USER_GUIDE_FOR_LIBRARIES.md)
+- [SMONITOR_END_USER_RESCUE_CARD.md](https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_END_USER_RESCUE_CARD.md)
+- [SMONITOR_END_USER_DOCS_TEMPLATE.md](https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_END_USER_DOCS_TEMPLATE.md)
+- [SMONITOR_END_USER_DOCS_ADOPTION_CHECKLIST.md](https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_END_USER_DOCS_ADOPTION_CHECKLIST.md)
+- [SMONITOR_END_USER_DOCS_SYNC_POLICY.md](https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_END_USER_DOCS_SYNC_POLICY.md)
 
 ```{toctree}
 :maxdepth: 1
