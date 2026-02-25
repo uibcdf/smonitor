@@ -112,6 +112,8 @@ Progress checkpoint:
 - docs/routes largely stabilized and aligned with runtime behavior,
 - integrator guidance expanded (handlers, advanced integration API, AI-agent workflow),
 - end-user rescue flow and adoption templates published.
+- QA CI now includes package artifact build (`sdist`/`wheel`) and wheel install + CLI smoke checks.
+- Agent-profile contract tests added for template resolution and machine-oriented handler payloads.
 
 ## AI-Agent Readiness Plan (Integrator-Facing)
 

@@ -50,3 +50,17 @@ jobs:
           export SMONITOR_PROFILE=qa
           export SMONITOR_STRICT_SCHEMA=1
           pytest -v
+
+      - name: Build package artifacts (sdist/wheel)
+        shell: bash -l {0}
+        run: |
+          python -m pip install build
+          python -m build
+
+      - name: Smoke install from wheel + CLI
+        shell: bash -l {0}
+        run: |
+          python -m pip install --force-reinstall dist/*.whl --no-deps
+          cd /tmp
+          python -c "import smonitor; print(smonitor.__version__)"
+          python -m smonitor.cli --check --check-event '{"level":"WARNING","message":"ok"}'
