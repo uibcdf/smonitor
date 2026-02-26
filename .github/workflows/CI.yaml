@@ -15,7 +15,7 @@ on:
 
 jobs:
   quick-test:
-    name: Quick test on ${{ matrix.cfg.os }}, Python ${{ matrix.cfg.python-version }}
+    name: Quick test on ubuntu-latest, Python 3.13
     if: >
       !(
         (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
@@ -30,16 +30,11 @@ jobs:
         || github.event_name == 'pull_request'
         || github.event_name == 'workflow_dispatch'
       )
-    runs-on: ${{ matrix.cfg.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 25
     concurrency:
-      group: ci-quick-${{ github.workflow }}-${{ github.ref }}-${{ matrix.cfg.os }}-${{ matrix.cfg.python-version }}
+      group: ci-quick-${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-    strategy:
-      fail-fast: false  # do not cancel all in-progress jobs if any job variation fails
-      matrix:
-        cfg:
-          - { os: ubuntu-latest, python-version: "3.13"}
 
     steps:
     - uses: actions/checkout@v6
@@ -54,7 +49,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.cfg.python-version }}
+        python-version: "3.13"
 
     - name: Setup conda env
       uses: mamba-org/setup-micromamba@v2
@@ -68,7 +63,7 @@ jobs:
           channel_priority: strict
 
         create-args: >-
-          python=${{ matrix.cfg.python-version }}
+          python=3.13
         cache-downloads: true
 
     - name: Info conda
@@ -113,17 +108,16 @@ jobs:
         cat ./coverage.xml
 
     - name: Upload coverage reports to Codecov
-      if: matrix.cfg.os == 'ubuntu-latest' && matrix.cfg.python-version == '3.13'
       uses: codecov/codecov-action@v5
       with:
         verbose: true
         file: ./coverage.xml
         flags: unittests
-        name: codecov-${{ matrix.cfg.os }}-py${{ matrix.cfg.python-version }}
+        name: codecov-ubuntu-latest-py3.13
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Upload test results to Codecov
-      if: matrix.cfg.os == 'ubuntu-latest' && matrix.cfg.python-version == '3.13' && ${{ !cancelled() }}
+      if: ${{ !cancelled() }}
       uses: codecov/codecov-action@v5
       with:
         report-type: test_results
