@@ -123,8 +123,7 @@ Done:
 - Standards include integration contract and end-user support artifacts.
 
 Pending hardening before 1.0:
-- Add explicit contract tests for machine-readability in `agent` profile outputs.
-- Add deterministic triage examples keyed by `code` + `trace_hash`.
+- Add deterministic triage examples keyed by stable contracts (`code` + context signature).
 - Add redaction policy examples for bundle sharing in automated pipelines.
 - Add a compact "agent-ready checklist" to release gates.
 
@@ -141,10 +140,37 @@ Status: **Done**
 - Phase D: LLM triage on aggregated reports.
 
 ## Next Concrete Steps
-1. Add release-gate CI checks for package build/install smoke + docs build.
+1. Add release-gate CI checks for package build/install smoke + docs build. **Done**
 2. Add explicit public API contract tests (top-level exports + integrations API). **Done**
 3. Add agent-profile payload contract tests and snapshot fixtures. **In Progress**
-4. Add a short operational runbook in docs for weekly maintenance loops.
+4. Add a short operational runbook in docs for weekly maintenance loops. **Done**
+
+## 1.0.0 Operational Checklist
+
+1. Stabilization window
+- Duration: 2-4 weeks on top of `0.11.x`.
+- Scope: bugfixes, hardening, tests/docs consistency only.
+
+2. Weekly control loop
+- Check CI health for SMonitor and integrated ecosystem libraries.
+- Review repeated warning/error codes and incident trends.
+- Review support bundles for reproducibility quality.
+
+3. PR acceptance rules
+- `pytest` passes.
+- `make -C docs html` passes.
+- QA CI smoke passes (`sdist`/`wheel` build + wheel install + CLI smoke).
+- No breaking public API change unless explicitly approved for post-1.0.
+
+4. Release-candidate freeze
+- Freeze public export surface.
+- Freeze semantics of published diagnostic codes/signals.
+- Update release notes with any contract-relevant change.
+
+5. Exit criteria for 1.0.0
+- No open high-severity defects in SMonitor.
+- CI stable across supported matrix for a sustained period.
+- Ecosystem smoke validations completed.
 
 ## Future: Project Metadata (Post‑0.10)
 - Load `doc_url`, `issues_url`, `api_url` from `pyproject.toml` under `[tool.smonitor]`.

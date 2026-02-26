@@ -2,9 +2,9 @@
 
 This document defines the public API contract for `smonitor` and the expected behavior of each entrypoint.
 
-## 0) Public API Freeze Target (0.11)
+## 0) Public API Freeze Target (1.0)
 
-Symbols considered public for `0.11.x` stabilization:
+Symbols considered public for `1.0.0` stabilization:
 - `smonitor.configure`
 - `smonitor.emit`
 - `smonitor.resolve`
@@ -16,6 +16,10 @@ Symbols considered public for `0.11.x` stabilization:
 - `smonitor.integrations`
 
 Anything outside this list is internal and may change without compatibility guarantees.
+
+Current status:
+- API contract tests exist for top-level exports.
+- API contract tests exist for `smonitor.integrations` exports.
 
 ## 1) Public Functions
 

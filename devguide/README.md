@@ -35,8 +35,27 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
+- Version `0.11.0` released as pre-1.0 stabilization checkpoint.
 
-## Pending Focus (Pre-1.0)
-- Release-gate validation in clean environments (tests, docs, package smoke).
-- API contract tests for stable public surface and agent-readable outputs.
-- Post-0.10 roadmap design: opt-in telemetry client and Sentinel integration.
+## Operational Stabilization Plan (Toward 1.0.0)
+1. Stabilization window (2-4 weeks): only bugfixes, hardening, and docs/test corrections.
+2. Weekly operation loop:
+   - review CI failures in SMonitor and integrated libraries,
+   - review recurring incident codes/signals,
+   - review quality of support bundles.
+3. Required PR gates:
+   - `pytest` full suite,
+   - docs build (`make -C docs html`),
+   - QA CI package smoke (`sdist`/`wheel` + install + CLI check).
+4. Freeze rules:
+   - no breaking API changes in public exports,
+   - no semantic repurposing of existing diagnostic codes.
+5. Exit criteria for `1.0.0`:
+   - no open high-severity bugs in SMonitor,
+   - sustained CI stability across defined matrix,
+   - ecosystem smoke checks validated.
+
+## Remaining Focus (Pre-1.0)
+- Raise focused coverage on critical low-coverage modules (`cli`, rich console handler, profiling, integration adapters).
+- Final consistency sweep across `README`, `SPEC`, `devguide`, and Sphinx docs.
+- Post-1.0 roadmap preparation: opt-in telemetry client and Sentinel integration.

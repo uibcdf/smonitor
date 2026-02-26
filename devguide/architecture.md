@@ -156,4 +156,6 @@ smonitor.configure(
 - [x] Add file and json handlers
 - [x] Write smoke tests for context propagation
 - [x] Integrate with dep_digest and arg_digest
-- [ ] Add docs and usage examples
+- [x] Add docs and usage examples
+- [x] Add API and integrations contract tests
+- [x] Add package smoke checks in QA CI
