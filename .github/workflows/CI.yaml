@@ -100,7 +100,7 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        pytest -n logical -v --cov-config=.coveragerc --cov=smonitor --cov-report=xml --junitxml=junit.xml --color=yes
+        pytest -n logical -v --cov-config=.coveragerc --cov --cov-report=xml --junitxml=junit.xml --color=yes
 
     - name: Check coverage
       shell: bash -l {0}
