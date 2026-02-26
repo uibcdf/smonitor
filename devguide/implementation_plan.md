@@ -142,8 +142,8 @@ Status: **Done**
 
 ## Next Concrete Steps
 1. Add release-gate CI checks for package build/install smoke + docs build.
-2. Add explicit public API contract tests (top-level exports + integrations API).
-3. Add agent-profile payload contract tests and snapshot fixtures.
+2. Add explicit public API contract tests (top-level exports + integrations API). **Done**
+3. Add agent-profile payload contract tests and snapshot fixtures. **In Progress**
 4. Add a short operational runbook in docs for weekly maintenance loops.
 
 ## Future: Project Metadata (Post‑0.10)

@@ -8,10 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - 0.11 pre-1.0 stabilization plan in `devguide/implementation_plan.md`.
 - API contract tests for public exports and core API behavior.
+- Integrations API contract tests (`smonitor.integrations` public exports + behavior).
+- Agent-profile contract tests for machine-oriented output and payload stability.
 
 ### Changed
 - Documentation path consistency for canonical guide references.
 - Project status/docs updated for `0.11` pre-1.0 milestone planning.
+- QA CI now builds `sdist`/`wheel` and runs wheel install + CLI smoke checks.
 
 ## [0.10.0] - 2026-02-06
 ### Documentation
