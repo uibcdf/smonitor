@@ -107,6 +107,13 @@ jobs:
       run: |
         head ./coverage.xml
         tail ./coverage.xml
+        python - <<'PY'
+        import xml.etree.ElementTree as ET
+        root = ET.parse("coverage.xml").getroot()
+        classes = root.findall(".//class")
+        print("coverage line-rate:", root.attrib.get("line-rate"))
+        print("sample filenames:", [c.attrib.get("filename") for c in classes[:8]])
+        PY
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
