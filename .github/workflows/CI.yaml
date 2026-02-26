@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
     timeout-minutes: 25
     concurrency:
-      group: ci-quick-${{ github.workflow }}-${{ github.ref }}
+      group: ci-quick-${{ github.workflow }}-${{ github.ref }}-${{ matrix.cfg.os }}-${{ matrix.cfg.python-version }}
       cancel-in-progress: true
     strategy:
       fail-fast: false  # do not cancel all in-progress jobs if any job variation fails
@@ -126,7 +126,7 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
     timeout-minutes: 90
     concurrency:
-      group: ci-full-${{ github.workflow }}-${{ github.ref }}
+      group: ci-full-${{ github.workflow }}-${{ github.ref }}-${{ matrix.cfg.os }}-${{ matrix.cfg.python-version }}
       cancel-in-progress: true
     strategy:
       fail-fast: false
