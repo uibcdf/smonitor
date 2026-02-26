@@ -6,6 +6,10 @@ dependencies:
   - python=3.13
   - pip
   - sphinx
+  - sphinx-copybutton
+  - sphinx-remove-toctrees
+  - sphinx-design
+  - sphinx-favicon
   - myst-nb
   - pydata-sphinx-theme
   - nbsphinx
