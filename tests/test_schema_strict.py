@@ -2,7 +2,7 @@ import smonitor
 
 
 def test_strict_schema_raises():
-    manager = smonitor.configure(profile="dev", strict_schema=True)
+    manager = smonitor.configure(profile="dev", strict_schema=True, level="DEBUG")
     assert manager.config.profile == "dev"
     try:
         smonitor.emit("NOPE", "", source="x", category=None, code=None)

@@ -43,12 +43,17 @@ jobs:
         run: |
           ruff check .
 
-      - name: Run tests (qa profile)
+      - name: Run tests (default profile)
+        shell: bash -l {0}
+        run: |
+          pytest -v
+
+      - name: Run strict schema smoke (qa profile)
         shell: bash -l {0}
         run: |
           export SMONITOR_PROFILE=qa
           export SMONITOR_STRICT_SCHEMA=1
-          pytest -v
+          pytest -v tests/test_schema_strict.py tests/test_validation.py
 
       - name: Build package artifacts (sdist/wheel)
         shell: bash -l {0}
