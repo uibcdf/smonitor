@@ -8,7 +8,7 @@
 
 Precision diagnostics for scientific Python ecosystems.
 
-```{image} https://img.shields.io/badge/release-0.11.0-white.svg
+```{image} https://img.shields.io/github/v/release/uibcdf/smonitor?color=white&label=release
 :target: https://github.com/uibcdf/smonitor/releases
 ```
 ```{image} https://img.shields.io/badge/license-MIT-white.svg
