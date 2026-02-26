@@ -100,7 +100,7 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        pytest -n logical -v --cov=smonitor --cov-report=xml --junitxml=junit.xml --color=yes
+        pytest -n logical -v --cov-config=.coveragerc --cov=smonitor --cov-report=xml --junitxml=junit.xml --color=yes
 
     - name: Check coverage
       shell: bash -l {0}
@@ -111,6 +111,7 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         verbose: true
+        codecov_yml_path: .codecov.yml
         files: ./coverage.xml
         flags: unittests
         name: codecov-ubuntu-latest-py3.13
@@ -121,5 +122,6 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         report_type: test_results
+        codecov_yml_path: .codecov.yml
         files: ./junit.xml
         token: ${{ secrets.CODECOV_TOKEN }}

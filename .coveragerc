@@ -1,0 +1,10 @@
+# .coveragerc
+
+[run]
+branch = True
+source = smonitor
+
+[report]
+show_missing = True
+omit =
+
