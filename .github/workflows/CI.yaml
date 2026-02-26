@@ -11,6 +11,7 @@ on:
     paths-ignore:
       - '**/*.md'
       - 'docs/**'
+  workflow_dispatch:
 
 jobs:
   quick-test:
@@ -27,6 +28,7 @@ jobs:
       (
         github.event_name == 'push'
         || github.event_name == 'pull_request'
+        || github.event_name == 'workflow_dispatch'
       )
     runs-on: ${{ matrix.cfg.os }}
     timeout-minutes: 25
