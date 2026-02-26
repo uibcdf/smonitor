@@ -1,6 +1,5 @@
 # SMonitor
 
-**Precision diagnostics for scientific Python ecosystems.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/137937243.svg)](https://zenodo.org/badge/latestdoi/137937243)
@@ -10,6 +9,7 @@
 [![codecov](https://codecov.io/github/uibcdf/smonitor/graph/badge.svg?token=9ZMA4YZLOR)](https://codecov.io/github/uibcdf/smonitor)
 [![Install with conda](https://img.shields.io/badge/Install%20with-conda-brightgreen.svg)](https://conda.anaconda.org/uibcdf/smonitor)
 
+*Precision diagnostics for scientific Python ecosystems.*
 
 ## Overview
 
