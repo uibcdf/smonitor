@@ -1,6 +1,7 @@
 # Library Integrators
 
 This route is for developers integrating SMonitor into their own host library.
+It is designed for fast, low-risk adoption in real codebases.
 
 ## Outcome
 
@@ -18,6 +19,16 @@ By the end of this route you should have:
 - lightweight profiling and timeline export,
 - local diagnostic bundles for reproducible support,
 - strict validation modes for QA (`strict_signals`, `strict_schema`).
+
+## Adoption strategy
+
+Start small:
+- integrate one warning family,
+- add one instrumented API boundary,
+- validate with strict QA profile,
+- expand by subsystem.
+
+This keeps migration risk low while delivering immediate user-facing improvements.
 
 ## Important path convention
 

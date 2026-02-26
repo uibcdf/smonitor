@@ -7,6 +7,8 @@ You do not need to learn SMonitor internals to benefit from it.
 If you just want to keep working with your host library, that is fine: you can use
 it normally and treat SMonitor messages as helpful guidance when they appear.
 
+This route is intentionally practical and short: read, fix, retry, and continue.
+
 ## What this route helps with
 
 - understanding warnings and errors shown by the host library,

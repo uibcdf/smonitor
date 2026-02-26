@@ -7,6 +7,9 @@ SMonitor has two user profiles with different goals:
 
 Use the route that matches your role.
 
+If you are evaluating adoption, start with the integrator route and then review
+the end-user route to ensure your diagnostics experience is clear from both sides.
+
 ## Route A: Library Integrators
 
 Go to [Library Integrators](library-integrators/index.md).
@@ -24,6 +27,9 @@ In this route you will learn how to:
 - interpret messages shown by libraries using SMonitor,
 - improve your local diagnostics experience (profiles, verbosity),
 - report reproducible issues efficiently.
+
+Both routes converge on the same goal: better diagnostics quality with lower
+support cost and better QA reproducibility.
 
 ```{toctree}
 :maxdepth: 1

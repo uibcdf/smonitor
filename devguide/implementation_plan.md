@@ -172,6 +172,37 @@ Status: **Done**
 - CI stable across supported matrix for a sustained period.
 - Ecosystem smoke validations completed.
 
+## 1.0.0 Adoption & Discovery Plan
+
+1. Ecosystem visibility
+- Add a visible “Diagnostics powered by SMonitor” section in sibling libraries:
+  MolSysMT, MolSysViewer, ArgDigest, DepDigest, and PyUnitWizard.
+
+2. Proof by examples
+- Publish short “before vs after” examples showing clearer user guidance and
+  improved developer diagnostics.
+
+3. Fast onboarding
+- Keep a “5-minute integration” path as the main entry point in docs.
+
+4. Packaging discoverability
+- Improve project metadata (PyPI/conda/readme keywords and summary) focused on
+  diagnostics, warnings, telemetry, and scientific Python.
+
+5. Communication
+- Announce releases and integration outcomes in project channels
+  (GitHub discussions + lab communication channels).
+
+6. Default adoption in new projects
+- Require `_smonitor.py` + catalog wiring in all new ecosystem packages.
+
+7. Trust through stability
+- Keep CI status, coverage trend, and release notes visible and updated.
+
+8. Reusable integration kit
+- Maintain and promote `standards/SMONITOR_GUIDE.md` and standards templates as
+  the official copy/adapt toolkit for third-party adopters.
+
 ## Future: Project Metadata (Post‑0.10)
 - Load `doc_url`, `issues_url`, `api_url` from `pyproject.toml` under `[tool.smonitor]`.
 - Inject metadata into emitted events for consistent user hints.

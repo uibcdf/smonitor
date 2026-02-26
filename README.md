@@ -1,7 +1,36 @@
 # SMonitor
 
-**SMonitor** (Signal Monitor) is a centralized diagnostic and telemetry system for the scientific Python stack.  
-It unifies logs, warnings, errors, and execution context across an ecosystem of libraries.
+**SMonitor** (Signal Monitor) is a centralized diagnostics and telemetry layer for scientific Python libraries.
+
+**Tagline:** **SMonitor: Precision diagnostics for scientific Python ecosystems.**
+
+It unifies warnings, logging-derived events, exceptions, and execution context into one consistent operational model.
+
+## Why teams adopt SMonitor
+
+- Clear user-facing diagnostics with actionable hints.
+- Stable diagnostic contracts (`code`, `signal`) for QA and automation.
+- Cross-library traceability with breadcrumb context.
+- Local-first reproducibility with bundle export.
+- One configuration model across an entire library ecosystem.
+
+## Who it is for
+
+- **Host-library maintainers** integrating diagnostics in package `mylib`.
+- **End users** of host libraries who need clearer warnings/errors and rescue guidance.
+- **QA and automation teams** validating contracts and machine-readable outputs.
+
+## For AI agents
+
+SMonitor helps agents produce higher-quality diagnosis with lower ambiguity:
+- stable machine keys (`code`, `signal`) for deterministic triage,
+- profile-specific machine-oriented output (`profile="agent"`),
+- local reproducibility artifacts (bundles) for replay and verification.
+
+For safe autonomous workflows:
+- keep contracts stable,
+- avoid hardcoded diagnostic strings outside catalogs,
+- require human review before merging agent-suggested fixes.
 
 ## Why SMonitor
 
@@ -11,21 +40,59 @@ It unifies logs, warnings, errors, and execution context across an ecosystem of 
 - **Structured events** for telemetry and tooling.
 - **Policy engine** for routing/filtering/transforms.
 
-## Quick Start
+## Install
+
+```bash
+conda install -c uibcdf smonitor
+```
+
+## 60-second quick start
 
 ```python
 import smonitor
 
 smonitor.configure(profile="user", theme="plain")
 
-@smonitor.signal
+@smonitor.signal(name="mylib.compute")
 def do_work(x):
     if x < 0:
-        raise ValueError("x must be >= 0")
+        smonitor.emit(
+            "ERROR",
+            "Input is invalid.",
+            code="MYLIB-E001",
+            source="mylib.compute",
+            extra={"hint": "Use a non-negative value."},
+        )
+        return None
     return x * 2
 
-do_work(3)
+do_work(-1)
 ```
+
+## Before vs after diagnostics quality
+
+- Less actionable:
+  - `ValueError: invalid argument`
+- With SMonitor:
+  - `ERROR [MYLIB-E001]: Input is invalid. Hint: Use a non-negative value.`
+
+## Core capabilities
+
+- Config precedence: runtime `configure()` > env vars > `_smonitor.py`.
+- Catalog-driven diagnostics (`CODES`/`SIGNALS`) for stable contracts.
+- Policy engine (`ROUTES`/`FILTERS`) with rate limiting/sampling/transforms.
+- Multi-profile output for users, developers, QA, agents, and debug sessions.
+- Handlers: console (plain/rich), file, JSON, memory buffer.
+- Integration API (`DiagnosticBundle`, `CatalogException`, `CatalogWarning`).
+- Event schema checks and strict signal contracts in `dev`/`qa`.
+- CLI for validation, checks, report, and bundle export.
+- Local bundle export (`bundle.json`, optional `events.jsonl`) for support workflows.
+- Profiling features:
+  - decorator timing,
+  - manual spans,
+  - timeline buffering,
+  - sampling (`profiling_sample_rate`),
+  - timeline export (`json`/`csv`).
 
 ## Configuration
 
@@ -69,11 +136,7 @@ source of truth and sync it to sibling repos with:
 python devtools/sync_smonitor_guide.py
 ```
 
-## Profiling
-
-Enable lightweight profiling with `profiling=True`. It records durations per
-`@signal` and aggregates stats in `report()`. You can also use spans and export
-timelines:
+## Profiling example
 
 ```python
 from smonitor.profiling import span, export_timeline
@@ -85,6 +148,8 @@ with span("io.load", path="data.h5"):
 
 export_timeline("timeline.json", format="json")
 ```
+
+SMonitor profiling is lightweight observability for library workflows (not a full replacement for dedicated low-level profilers).
 
 ## Bundles
 
@@ -120,6 +185,24 @@ smonitor --check --check-event level:WARNING
 smonitor export --out smonitor_bundle --max-events 500
 ```
 
+## Ecosystem adoption
+
+SMonitor integration is complete across:
+- MolSysMT
+- MolSysViewer
+- ArgDigest
+- DepDigest
+- PyUnitWizard
+
+This makes cross-library diagnostics consistent across the current UIBCDF scientific stack.
+
+## Documentation
+
+- Website: https://www.uibcdf.org/smonitor
+- User guide (integrators + end users): `docs/content/user/`
+- Developer guide: `devguide/`
+- Canonical standards: `standards/`
+
 ## Development
 
 ```bash
@@ -135,12 +218,7 @@ make -C docs html
 ## Status
 
 Current release: **0.11.0** (pre-1.0 stabilization).  
-Ecosystem integration is **complete** (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).
-
-Next milestone: **1.0.0** (stable):
-- production hardening from real-world usage feedback,
-- final API/contract freeze confirmation,
-- release quality gate validation across ecosystem CI.
+Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)
 

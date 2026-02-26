@@ -6,7 +6,7 @@
 :width: 45%
 :align: center
 
-Signal Monitor for the scientific Python stack.
+Precision diagnostics for scientific Python ecosystems.
 
 ```{image} https://img.shields.io/badge/release-0.11.0-white.svg
 :target: https://github.com/uibcdf/smonitor/releases
@@ -21,6 +21,12 @@ Signal Monitor for the scientific Python stack.
 :target: https://www.python.org/downloads/
 ```
 :::
+
+## Why adopt now
+
+- Make warnings and errors clearer and more actionable for end users.
+- Reduce support time with stable diagnostic contracts (`code`, `signal`).
+- Improve QA and automation workflows with structured events and bundles.
 
 ## Install it
 
@@ -52,6 +58,32 @@ What happens here:
 - End users get a clear warning plus an actionable hint.
 - Library maintainers keep stable contracts (`code`, `signal`) for support and QA.
 - Teams can route the same events to bundles and machine-readable workflows.
+
+Before:
+- `ValueError: invalid argument`
+
+With SMonitor:
+- `ERROR [MYLIB-E001]: Input is invalid. Hint: Use a non-negative value.`
+
+## Profiling and observability
+
+SMonitor includes lightweight profiling for library workflows:
+- decorator timing,
+- manual spans,
+- timeline buffering and export.
+
+Use this for QA/debug observability without introducing heavy profiler dependencies.
+
+## Ecosystem proof
+
+Integrated across the current UIBCDF scientific stack:
+- [MolSysMT](https://github.com/uibcdf/molsysmt)
+- [MolSysViewer](https://github.com/uibcdf/molsysviewer)
+- [ArgDigest](https://github.com/uibcdf/argdigest)
+- [DepDigest](https://github.com/uibcdf/depdigest)
+- [PyUnitWizard](https://github.com/uibcdf/pyunitwizard)
+
+Start with the [User Guide](content/user/index.md) and follow the route matching your role.
 
 
 ```{eval-rst}

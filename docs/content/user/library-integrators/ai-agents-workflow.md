@@ -40,6 +40,16 @@ Add these checks in CI:
 
 This ensures agents always receive a stable data contract.
 
+## Copy-paste checklist for onboarding a new agent
+
+Use this checklist in any new host-library repo:
+- read `standards/SMONITOR_GUIDE.md` first;
+- verify `_smonitor.py` + `mylib/_private/smonitor/catalog.py` are present;
+- avoid adding hardcoded warning/error strings outside catalog;
+- validate representative events under `profile="agent"`;
+- confirm bundle export works in CI smoke path;
+- include test evidence before proposing fixes.
+
 ## Guardrails for autonomous tooling
 
 - Never auto-merge fixes produced from agent triage.

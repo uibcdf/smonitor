@@ -59,3 +59,8 @@ historical context live in `SPEC_SMONITOR.md`.
 - Raise focused coverage on critical low-coverage modules (`cli`, rich console handler, profiling, integration adapters).
 - Final consistency sweep across `README`, `SPEC`, `devguide`, and Sphinx docs.
 - Post-1.0 roadmap preparation: opt-in telemetry client and Sentinel integration.
+
+## Version 1.0 Emphasis
+- Operational stability and compatibility are release blockers.
+- Adoption/discovery execution is tracked in `implementation_plan.md` under:
+  `1.0.0 Adoption & Discovery Plan`.
