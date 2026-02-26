@@ -16,21 +16,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Test on ${{ matrix.cfg.os }}, Python ${{ matrix.cfg.python-version }}
+  quick-test:
+    name: Quick test on ${{ matrix.cfg.os }}, Python ${{ matrix.cfg.python-version }}
+    if: >
+      !(
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
+        ||
+        (github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[skip ci]'))
+        ||
+        (github.event_name == 'pull_request' && contains(github.event.pull_request.head.ref, 'skip-ci'))
+      )
+      &&
+      (
+        github.event_name == 'push'
+        || github.event_name == 'pull_request'
+      )
     runs-on: ${{ matrix.cfg.os }}
+    timeout-minutes: 25
+    concurrency:
+      group: ci-quick-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false  # do not cancel all in-progress jobs if any job variation fails
       matrix:
         cfg:
-          - { os: ubuntu-latest, python-version: "3.10"}
-          - { os: ubuntu-latest, python-version: "3.11"}
-          - { os: ubuntu-latest, python-version: "3.12"}
           - { os: ubuntu-latest, python-version: "3.13"}
-          - { os: macos-latest,  python-version: "3.10"}
-          - { os: macos-latest,  python-version: "3.11"}
-          - { os: macos-latest,  python-version: "3.12"}
-          - { os: macos-latest,  python-version: "3.13"}
 
     steps:
     - uses: actions/checkout@v6
@@ -43,7 +53,7 @@ jobs:
         uname -a
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.cfg.python-version }}
 
@@ -95,6 +105,100 @@ jobs:
       # conda setup requires this special shell
       shell: bash -l {0}
 
+      run: |
+        pytest -n logical -v --cov-config=.coveragerc --cov=smonitor --cov-report=xml --junitxml=junit.xml --color=yes
+
+  full-test:
+    name: Full test on ${{ matrix.cfg.os }}, Python ${{ matrix.cfg.python-version }}
+    if: >
+      !(
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
+        ||
+        (github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[skip ci]'))
+        ||
+        (github.event_name == 'pull_request' && contains(github.event.pull_request.head.ref, 'skip-ci'))
+      )
+      &&
+      (
+        github.event_name == 'schedule'
+        || github.event_name == 'workflow_dispatch'
+      )
+    runs-on: ${{ matrix.cfg.os }}
+    timeout-minutes: 90
+    concurrency:
+      group: ci-full-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        cfg:
+          - { os: ubuntu-latest, python-version: "3.10"}
+          - { os: ubuntu-latest, python-version: "3.11"}
+          - { os: ubuntu-latest, python-version: "3.12"}
+          - { os: ubuntu-latest, python-version: "3.13"}
+          - { os: macos-latest,  python-version: "3.10"}
+          - { os: macos-latest,  python-version: "3.11"}
+          - { os: macos-latest,  python-version: "3.12"}
+          - { os: macos-latest,  python-version: "3.13"}
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - name: Additional info about the build
+      shell: bash
+      run: |
+        uname -a
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.cfg.python-version }}
+
+    - name: Setup conda env
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-file: devtools/conda-envs/test_env.yaml
+        environment-name: test
+        condarc: |
+          channels:
+            - uibcdf
+            - conda-forge
+          channel_priority: strict
+
+        create-args: >-
+          python=${{ matrix.cfg.python-version }}
+        cache-downloads: true
+
+    - name: Info conda
+      shell: bash -l {0}
+      run: |
+        micromamba activate test
+        micromamba info
+        micromamba list
+
+    - name: Install package
+      shell: bash -l {0}
+      run: |
+        python -m pip install . --no-deps
+
+    - name: Test import module
+      shell: bash -l {0}
+      run: |
+        echo "::group::Importing module from home directory"
+        cd
+        pwd
+        echo 'import smonitor; print("Version of the package: {}".format(smonitor.__version__))' | python
+        echo "::endgroup::"
+
+    - name: Run linter
+      shell: bash -l {0}
+      run: |
+        ruff check .
+
+    - name: Run tests
+      shell: bash -l {0}
       run: |
         pytest -n logical -v --cov-config=.coveragerc --cov=smonitor --cov-report=xml --junitxml=junit.xml --color=yes
 
