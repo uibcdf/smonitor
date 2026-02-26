@@ -14,8 +14,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  full-test:
-    name: Full test on ubuntu-latest, Python 3.13
+  test:
+    name: Test on ubuntu-latest, Python 3.13
     if: >
       !(
         (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
@@ -78,7 +78,7 @@ jobs:
       # conda setup requires this special shell
       shell: bash -l {0}
       run: |
-        python -m pip install -e . --no-deps
+        python -m pip install . --no-deps
 
     - name: Test import module
       shell: bash -l {0}
@@ -100,55 +100,18 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        pytest -n logical -v --cov-config=.coveragerc --cov --cov-report=xml --junitxml=junit.xml --color=yes
+        #pytest -n logical -v --cov-config=.coveragerc --cov --cov-report=xml --junitxml=junit.xml --color=yes
+        pytest -v --cov-config=.coveragerc --cov=smonitor --cov-report=xml --color=yes
 
     - name: Check coverage
       shell: bash -l {0}
       run: |
-        cat ./coverage.xml
-
-    - name: Report test error rate
-      shell: bash -l {0}
-      run: |
-        python - <<'PY'
-        import xml.etree.ElementTree as ET
-
-        root = ET.parse("junit.xml").getroot()
-        suites = []
-        if root.tag == "testsuite":
-            suites = [root]
-        elif root.tag == "testsuites":
-            suites = root.findall("testsuite")
-
-        total = sum(int(s.attrib.get("tests", 0)) for s in suites)
-        failures = sum(int(s.attrib.get("failures", 0)) for s in suites)
-        errors = sum(int(s.attrib.get("errors", 0)) for s in suites)
-        broken = failures + errors
-
-        if total > 0:
-            error_rate = (broken / total) * 100.0
-        else:
-            error_rate = 0.0
-
-        print(f"Test summary: total={total}, failures={failures}, errors={errors}")
-        print(f"Test error rate: {error_rate:.2f}%")
-        PY
+        head ./coverage.xml
+        tail ./coverage.xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       with:
         verbose: true
-        codecov_yml_path: .codecov.yml
-        files: ./coverage.xml
-        flags: unittests
-        name: codecov-ubuntu-latest-py3.13
-        token: ${{ secrets.CODECOV_TOKEN }}
-
-    - name: Upload test results to Codecov
-      if: ${{ !cancelled() }}
-      uses: codecov/codecov-action@v5
-      with:
-        report_type: test_results
-        codecov_yml_path: .codecov.yml
-        files: ./junit.xml
-        token: ${{ secrets.CODECOV_TOKEN }}
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
