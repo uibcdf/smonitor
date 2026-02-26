@@ -6,15 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 ### Added
-- 0.11 pre-1.0 stabilization plan in `devguide/implementation_plan.md`.
+- Placeholder for post-`0.11.0` changes.
+
+## [0.11.0] - 2026-02-26
+### Added
+- Pre-1.0 stabilization plan in `devguide/implementation_plan.md`.
 - API contract tests for public exports and core API behavior.
 - Integrations API contract tests (`smonitor.integrations` public exports + behavior).
 - Agent-profile contract tests for machine-oriented output and payload stability.
 
 ### Changed
+- Documentation terminology standardized from placeholder library naming to host-library wording.
 - Documentation path consistency for canonical guide references.
-- Project status/docs updated for `0.11` pre-1.0 milestone planning.
+- CI matrix extended to Python `3.13` (including docs/QA/conda workflows updates).
+- GitHub Actions references updated (`checkout@v6`, `setup-python@v6`, `setup-micromamba@v2`).
 - QA CI now builds `sdist`/`wheel` and runs wheel install + CLI smoke checks.
+- Conda recipe metadata updated with lab homepage plus `dev_url`/`doc_url`.
 
 ## [0.10.0] - 2026-02-06
 ### Documentation

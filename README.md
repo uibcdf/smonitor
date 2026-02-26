@@ -134,13 +134,13 @@ make -C docs html
 
 ## Status
 
-Current release: **0.10.0** (feature complete, hardening phase).  
+Current release: **0.11.0** (pre-1.0 stabilization).  
 Ecosystem integration is **complete** (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).
 
-Next milestone: **0.11.0** (pre-1.0 stabilization):
-- finalize docs and examples,
-- confirm test environments and release gates,
-- stabilize public API surface.
+Next milestone: **1.0.0** (stable):
+- production hardening from real-world usage feedback,
+- final API/contract freeze confirmation,
+- release quality gate validation across ecosystem CI.
 
 ## AI Support (Future)
 

@@ -8,7 +8,7 @@
 
 Signal Monitor for the scientific Python stack.
 
-```{image} https://img.shields.io/badge/release-0.10.0-white.svg
+```{image} https://img.shields.io/badge/release-0.11.0-white.svg
 :target: https://github.com/uibcdf/smonitor/releases
 ```
 ```{image} https://img.shields.io/badge/license-MIT-white.svg

@@ -12,12 +12,14 @@ requirements:
   host:
     - python
     - pip
-    - setuptools
-    - versioningit
+    - setuptools >=61.0
+    - versioningit >=3.0
   run:
     - python
 
 about:
-  home: "https://github.com/uibcdf/smonitor"
+  home: "https://www.uibcdf.org"
   license: "MIT"
   summary: "Centralized diagnostic & telemetry system for the scientific Python stack"
+  dev_url: https://www.github.com/uibcdf/smonitor
+  doc_url: https://www.uibcdf.org/smonitor

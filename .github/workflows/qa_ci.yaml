@@ -10,17 +10,17 @@ jobs:
   qa:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.13
 
       - name: Setup conda env
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@v2
         with:
           environment-file: devtools/conda-envs/qa_env.yaml
           environment-name: qa
@@ -28,10 +28,9 @@ jobs:
             channels:
               - uibcdf
               - conda-forge
-              - defaults
             channel_priority: strict
           create-args: >-
-            python=3.12
+            python=3.13
           cache-downloads: true
 
       - name: Install package

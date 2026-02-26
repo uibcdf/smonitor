@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+echo "Building"
 set -ex
 
-$PYTHON -m pip install . --no-deps --ignore-installed -vv
+$PYTHON -m pip install . --no-deps -v
+echo "Done"
