@@ -78,7 +78,7 @@ jobs:
       # conda setup requires this special shell
       shell: bash -l {0}
       run: |
-        python -m pip install . --no-deps
+        python -m pip install -e . --no-deps
 
     - name: Test import module
       shell: bash -l {0}
@@ -100,8 +100,7 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        #pytest -n logical -v --cov-config=.coveragerc --cov --cov-report=xml --junitxml=junit.xml --color=yes
-        pytest -v --cov-config=.coveragerc --cov=smonitor --cov-report=xml --color=yes
+        pytest -n logical -v --cov-config=.coveragerc --cov --cov-report=xml --junitxml=junit.xml --color=yes
 
     - name: Check coverage
       shell: bash -l {0}
@@ -113,5 +112,15 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         verbose: true
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-ubuntu-latest-py3.13
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/codecov-action@v5
+      with:
+        report_type: test_results
+        files: ./junit.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
