@@ -30,6 +30,25 @@ def test_handler_degradation_threshold_flagged():
     assert any("flaky" in msg for msg in report["runtime_warnings"])
 
 
+def test_handler_degradation_warning_announced_once():
+    class BadHandler:
+        name = "once"
+
+        def handle(self, event, profile="user"):
+            raise RuntimeError("boom")
+
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[BadHandler()],
+        handler_error_threshold=1,
+    )
+    smonitor.emit("WARNING", "x")
+    smonitor.emit("WARNING", "y")
+    report = manager.report()
+    msgs = [m for m in report["runtime_warnings"] if "once" in m]
+    assert len(msgs) == 1
+
+
 def test_disabled_noop():
     smonitor.configure(enabled=False)
 
