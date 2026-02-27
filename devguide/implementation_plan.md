@@ -392,6 +392,176 @@ MVP command-line target:
 - same data source for local and CI workflows.
 - keep implementation lightweight (simple template + minimal JavaScript, no heavy frontend stack).
 
+## Futurist Backlog (Agent-First + Scientific Libraries)
+
+The following 25 ideas are recorded for strategic planning beyond current
+stabilization work.
+
+### A. Advanced diagnostics and ecosystem foresight (10)
+
+1. `Contract Drift Radar`
+- detect behavior drift by diagnostics patterns across versions/environments.
+
+2. `Repro Packs Deterministic`
+- export minimal, reproducible run packs (env + seed + synthetic inputs).
+
+3. `Diagnostics Policy-as-Code`
+- versioned, testable, auditable policy profiles per context (CI/user/HPC).
+
+4. `Semantic Incident Fingerprints`
+- robust grouping resilient to message/stack textual variability.
+
+5. `Auto-Playbooks by Code`
+- standardized remediation flows per diagnostic code.
+
+6. `Dependency Early-Warning`
+- correlate incident spikes with dependency/version changes.
+
+7. `Experiment Observability Bridge`
+- diagnostics tied to scientific workflow units (notebooks/pipelines/runs).
+
+8. `Human+Agent Co-Debug Protocol`
+- explicit collaboration trace for agent proposals and human decisions.
+
+9. `Privacy Grades`
+- formal export classes (`internal`, `external`, `public`) with verifiable redaction.
+
+10. `Dynamic Quality Gates`
+- release gates adapting to incident risk signals and recurrence trends.
+
+### B. Agent-native automation and autonomy roadmap (15)
+
+11. `Agent Intent Channel`
+- runtime intent declaration (`explore`, `optimize`, `repair`) to tune diagnostics.
+
+12. `Machine-Action Hints`
+- structured action directives (`try_command`, `rerun_test`, `open_doc`, `edit_file`).
+
+13. `Fix Verification Contracts`
+- mandatory evidence checks before accepting automated patches.
+
+14. `Agent Memory Bridge`
+- privacy-aware short/medium-term memory of incidents, fixes, and outcomes.
+
+15. `Counterfactual Diagnostics`
+- expected-outcome modeling for candidate fixes ("if X, then Y should clear").
+
+16. `Cost-Aware Triage`
+- optimization by CI/runtime cost, regression risk, and user impact.
+
+17. `Multi-Agent Coordination Protocol`
+- role-separated triage/patch/review handoff with explicit contracts.
+
+18. `Confidence Scoring`
+- confidence + evidence scoring for each diagnosis and suggested action.
+
+19. `Synthetic Failure Injection`
+- contract-driven failure generation to train and validate repair agents.
+
+20. `Autonomous Canary Mode`
+- pre-release autonomous scenario runs with regression thresholds.
+
+21. `Doc Sync Guardian`
+- automatic doc-contract drift detection and update enforcement.
+
+22. `Runtime Negotiation API`
+- capability negotiation between library and agent (strictness/privacy/profiling).
+
+23. `Trust Ledger`
+- historical quality ledger of agent proposals and human acceptance outcomes.
+
+24. `Incident Graph`
+- causal graph linking codes/signals/dependencies for root-cause prioritization.
+
+25. `Policy Sandbox for Agents`
+- safe simulation environment for agent diagnostic strategies before real execution.
+
+## Execution Plan (Proposed)
+
+Objective:
+- move from ideas to validated impact with a focused subset of high-leverage initiatives.
+
+Selected bets (first wave):
+1. `Machine-Action Hints`
+2. `Fix Verification Contracts`
+3. `Semantic Incident Fingerprints`
+4. `Doc Sync Guardian`
+5. `Autonomous Canary Mode` (scoped MVP)
+
+### Phase A — Foundation (post-1.0.0, short term)
+
+Scope:
+- define machine-action hint schema and contract versioning;
+- define verification contract schema for automated fixes;
+- define incident fingerprint v1 algorithm and stability constraints.
+
+Deliverables:
+- schema docs + examples;
+- initial API/contracts in SMonitor;
+- baseline tests for payload compatibility.
+
+Success criteria:
+- contracts are stable and test-covered;
+- no regression in current user/developer diagnostics UX.
+
+### Phase B — CI and Workflow Integration
+
+Scope:
+- integrate hints + verification contracts into pytest/CI diagnostics flow;
+- add doc drift checks tied to diagnostics contract changes;
+- expose fingerprint grouping in CLI/report outputs.
+
+Deliverables:
+- CI-ready triage summaries using stable fingerprints;
+- PR/release checks for documentation drift;
+- actionable hint output in machine-readable form.
+
+Success criteria:
+- reduced triage time for repeated incidents;
+- reduced false-positive grouping noise across runs;
+- documentation drift caught before merge.
+
+### Phase C — Controlled Autonomy
+
+Scope:
+- introduce Autonomous Canary Mode for pre-release scenarios only;
+- enforce verification contracts before any patch recommendation is considered valid;
+- require explicit human approval for merge/release decisions.
+
+Deliverables:
+- canary scenario runner with thresholds;
+- evidence-driven pass/fail gates;
+- audit trace for agent suggestion -> verification -> human decision.
+
+Success criteria:
+- earlier detection of release regressions;
+- measurable reduction of failed release candidates;
+- zero unverified autonomous changes merged.
+
+### Phase D — Adoption and Hardening (towards 2.0)
+
+Scope:
+- roll out selected capabilities across integrated ecosystem libraries;
+- collect quality metrics and tune policies by context (CI, local dev, support);
+- finalize 2.0 readiness based on operational evidence.
+
+Deliverables:
+- integration playbooks per library;
+- dashboard/summary metrics for triage and verification quality;
+- hardening pass on privacy/redaction defaults.
+
+Success criteria:
+- repeated-incident handling becomes deterministic and faster;
+- agent suggestions show stable acceptance quality;
+- maintainers report lower support/triage burden.
+
+## Operating Rules for This Plan
+
+1. Keep local-first behavior as default; remote/centralized features remain opt-in.
+2. Preserve human ownership of merge/release decisions.
+3. Version every machine-facing contract and test compatibility continuously.
+4. Ship thin vertical slices; avoid large speculative implementations.
+
 ## Milestones
 - M1: Core MVP and a single console handler.
 - M2: Warnings + logging emitters.

@@ -12,6 +12,7 @@ This folder collects developer documentation for `smonitor`.
 6) `../standards/SMONITOR_GUIDE.md` — Canonical guide to sync into ecosystem repos.
 7) `../SUPPORT.md` — Project support and incident-handling policy.
 8) `../docs/content/user/library-integrators/ai-agents-workflow.md` — Integrator contract for AI/LLM-enabled workflows.
+9) `discovery_and_adoption_strategy.md` — Strategy to maximize third-party discovery and adoption (humans + agents).
 
 ## Scope
 These documents track implementation details. Product-level decisions and
