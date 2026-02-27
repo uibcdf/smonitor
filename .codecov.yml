@@ -1,8 +1,5 @@
 # Codecov configuration to make it a bit less noisy
 
-codecov:
-  require_ci_to_pass: true
-
 coverage:
   status:
     patch: false

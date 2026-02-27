@@ -2,9 +2,7 @@
 
 [run]
 branch = True
-relative_files = True
-include =
-    smonitor/*
+source = smonitor
 
 [report]
 show_missing = True
