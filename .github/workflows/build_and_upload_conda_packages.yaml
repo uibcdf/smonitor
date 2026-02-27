@@ -3,10 +3,6 @@ name: Build and upload conda packages
 on:
   release:
     types: ['released', 'prereleased']
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
-
   workflow_dispatch:
 
 jobs:
@@ -65,4 +61,4 @@ jobs:
           platform_osx-arm64: true
           platform_win-64: true
           token: ${{ secrets.ANACONDA_UIBCDF_TOKEN }}
-          github_release: true
+          github_release: false
