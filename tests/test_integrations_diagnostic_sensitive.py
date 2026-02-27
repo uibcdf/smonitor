@@ -39,8 +39,17 @@ def test_diagnostic_warn_fallback_when_smonitor_emit_fails(monkeypatch):
     def _boom_emit_from_catalog(*args, **kwargs):
         raise RuntimeError("boom")
 
-    monkeypatch.setattr("smonitor.integrations.diagnostic.emit_from_catalog", _boom_emit_from_catalog)
-    monkeypatch.setattr("smonitor.integrations.diagnostic.smonitor.emit", lambda *a, **k: (_ for _ in ()).throw(RuntimeError()))
+    def _boom_emit(*args, **kwargs):
+        raise RuntimeError()
+
+    monkeypatch.setattr(
+        "smonitor.integrations.diagnostic.emit_from_catalog",
+        _boom_emit_from_catalog,
+    )
+    monkeypatch.setattr(
+        "smonitor.integrations.diagnostic.smonitor.emit",
+        _boom_emit,
+    )
     seen = []
     monkeypatch.setattr("warnings.warn", lambda *a, **k: seen.append((a, k)))
 
