@@ -31,12 +31,14 @@ historical context live in `SPEC_SMONITOR.md`.
 - CODES templating and SIGNALS soft enforcement.
 - Profiling expanded (timeline, sampling, spans, export).
 - Local bundle export (CLI + event buffer).
+- Test suite expanded with sensitive-path coverage for manager/policy/handlers/CLI.
 - Ecosystem integration completed (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).
 - Documentation architecture migrated to MyST with role-based routes:
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.11.0` released as pre-1.0 stabilization checkpoint.
+- Version `0.11.4` released as pre-1.0 stabilization checkpoint.
+- Current quality snapshot (2026-02-27): remote CI green, full pytest suite green, coverage at ~92%.
 
 ## Operational Stabilization Plan (Toward 1.0.0)
 1. Stabilization window (2-4 weeks): only bugfixes, hardening, and docs/test corrections.
@@ -57,7 +59,7 @@ historical context live in `SPEC_SMONITOR.md`.
    - ecosystem smoke checks validated.
 
 ## Remaining Focus (Pre-1.0)
-- Raise focused coverage on critical low-coverage modules (`cli`, rich console handler, profiling, integration adapters).
+- Keep coverage >=90% while prioritizing correctness/contract stability over percentage gains.
 - Final consistency sweep across `README`, `SPEC`, `devguide`, and Sphinx docs.
 - Post-1.0 roadmap preparation: opt-in telemetry client and Sentinel integration.
 
