@@ -219,6 +219,179 @@ Status: **Done**
 - Triage + dedup pipelines based on `code` and `trace_hash`.
 - Suggested fixes with human approval.
 
+## Post-1.0 Roadmap (towards 2.0)
+
+### Project A — Pytest/CI Diagnostic Integration
+
+Goal:
+- enrich test-failure triage in local runs and CI without replacing native pytest output.
+
+Scope:
+- pytest plugin/hooks to emit SMonitor events on failed tests;
+- stable triage keys (`code` + context signature);
+- terminal summary section for grouped failures and actionable hints;
+- optional JUnit enrichment (`user_properties`) for CI tooling;
+- bundle export on failed CI jobs for reproducible support/triage.
+
+Constraints:
+- low-noise defaults (emit on failures, not on passing tests);
+- explicit redaction policy for exported diagnostics artifacts;
+- maintain compatibility with current pytest workflows.
+
+Target window:
+- start after 1.0.0 stabilization;
+- mature before 2.0.0 as the default CI triage path.
+
+Implementation design (agreed baseline):
+
+Objective:
+- keep pytest as the primary failure source;
+- add an SMonitor layer for reproducible CI triage with stable keys.
+
+How it should work:
+1. pytest runs normally and keeps its native report.
+2. a pytest plugin/hook emits SMonitor events only for failures.
+3. at end of run, export a bundle (`bundle.json` + `events.jsonl`).
+4. CI uploads that bundle as an artifact.
+5. automated/human triage groups incidents by `code` + context signature.
+
+Per-failure event payload:
+- `level`: `ERROR`
+- `code`: for example `TEST-FAIL-ASSERT`, `TEST-FAIL-EXC`, `TEST-FAIL-TIMEOUT`
+- `source`: `tests.path::test_name`
+- `message`: short normalized failure summary
+- `extra`:
+  - `nodeid`
+  - `exception_type`
+  - `assert_excerpt` (truncated)
+  - `phase` (`setup`/`call`/`teardown`)
+  - `duration`
+- `context`:
+  - `python_version`
+  - `platform`
+  - `git_sha`
+  - `workflow`/`job` (in CI)
+
+Deterministic grouping key:
+- compute hash from:
+  - `code`
+  - normalized `source`
+  - `exception_type`
+  - normalized first failure line
+- result stored as stable `triage_key` across runs.
+
+Pytest technical integration:
+- primary hook: `pytest_runtest_makereport`
+  - when `report.failed` in relevant phase, emit event.
+- end hook: `pytest_sessionfinish`
+  - emit aggregate summary (`passed`/`failed`/`skipped`, top codes).
+- optional bootstrap fixture/session setup for `smonitor.configure(profile="qa")`.
+
+Recommended configuration:
+- activate only in CI or behind flag:
+  - `SMONITOR_TEST_REPORT=1`
+- profile policy:
+  - `qa` in CI
+  - optional `dev` locally
+- event buffer baseline:
+  - `event_buffer_size` around `1000`.
+
+CI pipeline expectations:
+1. run pytest with plugin enabled.
+2. always export bundle at end (even when pytest fails).
+3. apply default redaction policy:
+  - `--redact extra.local_path`
+  - `--redact extra.env`
+  - `--drop-context` for sensitive environments.
+4. upload diagnostics artifact.
+
+Phasing:
+- Phase 1 (MVP):
+  - capture failed tests (`call.failed`) only
+  - 2-3 failure codes
+  - bundle export + CI artifact
+  - no complex traceback parsing.
+- Phase 2:
+  - better failure classifier (`assert`, `import`, `dependency`, `timeout`)
+  - stronger `triage_key`
+  - automatic markdown summary for PR/checks.
+- Phase 3:
+  - cross-run diff (new vs recurrent incidents)
+  - prioritization rules by severity/frequency.
+
+Useful pytest output channels:
+1. `pytest_runtest_logreport` + `terminalreporter`
+  - print short per-failure SMonitor line (`code`, `hint`, `triage_key`, bundle path).
+2. `pytest_terminal_summary`
+  - append `SMonitor Triage Summary` with top codes, groups by `triage_key`, frequent hints.
+3. test report metadata (`user_properties`)
+  - store `smonitor_code`, `triage_key`, etc. for JUnit/CI consumers.
+
+Output design recommendation:
+- per-test output minimal (single extra line on failure);
+- final summary rich in `terminal_summary`;
+- verbosity controlled by `--smonitor-report=off|minimal|full` and profile policy.
+
+### Project B — HTML Diagnostics Support
+
+Goal:
+- provide a user-facing, readable diagnostics report (local and CI artifacts).
+
+Scope:
+- static HTML report generated from bundles/events;
+- sections for summary, grouped incidents, warnings/errors timeline, and actionable hints;
+- links between stable codes/signals and contract-aware guidance;
+- run-to-run comparison view (incremental phase).
+
+Extension path:
+- optional remote web service (sentinel-style) for team-level aggregation and support workflows, opt-in and privacy-first.
+
+Constraints:
+- local-first operation must remain fully functional offline;
+- remote mode must enforce redaction, access control, and retention policy.
+
+Target window:
+- static report MVP after 1.0.0;
+- optional hosted aggregation considered on the path to 2.0.0.
+
+Implementation design (agreed baseline):
+
+Phase 1 — Immediate static local HTML (no server):
+- generate `smonitor_report.html` at end of test/diagnostics execution.
+- minimum report content:
+  - global summary (`failed`/`warn`/`error`);
+  - incidents table (`code`, `source`, `hint`, `triage_key`);
+  - recurrence grouping;
+  - links to traceback/context sections.
+- usage model:
+  - local: open file directly;
+  - CI: upload as artifact.
+
+Phase 2 — Navigable report with short history:
+- keep per-run snapshots under `reports/<timestamp>/`.
+- provide an index HTML with comparison:
+  - current run vs previous run.
+- use for regression/recurrence visibility between runs.
+
+Phase 3 — Optional remote web service (sentinel-style):
+- backend ingests bundles (opt-in only).
+- team UI provides filters by `code`, version, and environment.
+- include guided diagnostics interpretation and remediation playbooks.
+- enforce privacy requirements:
+  - redaction,
+  - retention rules,
+  - access control.
+
+Architecture decision:
+- local-first by default (always exportable and useful offline).
+- remote server remains an optional layer for teams needing centralization.
+
+MVP command-line target:
+- add command in the spirit of:
+  - `smonitor report --from smonitor_bundle --html out/report.html`
+- same data source for local and CI workflows.
+- keep implementation lightweight (simple template + minimal JavaScript, no heavy frontend stack).
+
 ## Milestones
 - M1: Core MVP and a single console handler.
 - M2: Warnings + logging emitters.
