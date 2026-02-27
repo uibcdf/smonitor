@@ -17,16 +17,10 @@ Precision diagnostics for scientific Python ecosystems.
 ```{image} https://img.shields.io/badge/install%20with-conda-white.svg
 :target: https://anaconda.org/uibcdf/smonitor
 ```
-```{image} https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-white.svg
+```{image} https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-white.svg
 :target: https://www.python.org/downloads/
 ```
 :::
-
-## Why adopt now
-
-- Make warnings and errors clearer and more actionable for end users.
-- Reduce support time with stable diagnostic contracts (`code`, `signal`).
-- Improve QA and automation workflows with structured events and bundles.
 
 ## Install it
 
@@ -73,6 +67,12 @@ SMonitor includes lightweight profiling for library workflows:
 - timeline buffering and export.
 
 Use this for QA/debug observability without introducing heavy profiler dependencies.
+
+## Why adopt now
+
+- Make warnings and errors clearer and more actionable for end users.
+- Reduce support time with stable diagnostic contracts (`code`, `signal`).
+- Improve QA and automation workflows with structured events and bundles.
 
 ## Ecosystem proof
 
