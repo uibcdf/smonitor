@@ -2,6 +2,18 @@
 
 This page summarizes the practical release flow used in this repository.
 
+## Pre-1.0 Stabilization Window
+
+Stabilization window started on **2026-02-27**.
+
+During this period:
+- only bugfix/hardening/docs/test changes are accepted by default;
+- each PR must pass the stabilization gates:
+  - `pytest`
+  - docs build (`make -C docs html`)
+  - QA smoke (build/install/CLI)
+- diagnostics contract changes (`code`, `signal`, payload fields) must be explicitly documented.
+
 ## 1. Prepare release content
 
 Before tagging:

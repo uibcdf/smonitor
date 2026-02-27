@@ -19,7 +19,8 @@ If your goal is integrating SMonitor into your own package, start in the [User G
 11. [Testing and Coverage](testing-and-coverage.md)
 12. [Editorial Guide](editorial-guide.md)
 13. [Release and Versioning](release-and-versioning.md)
-14. [Contributor Checklist](contributor-checklist.md)
+14. [Agent-Ready Checklist](agent-ready-checklist.md)
+15. [Contributor Checklist](contributor-checklist.md)
 
 ## Canonical references
 
@@ -43,5 +44,6 @@ operability-minimum.md
 testing-and-coverage.md
 editorial-guide.md
 release-and-versioning.md
+agent-ready-checklist.md
 contributor-checklist.md
 ```

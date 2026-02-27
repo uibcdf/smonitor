@@ -32,3 +32,26 @@ def test_bundle_redaction(tmp_path: Path):
     )
     text = out.read_text()
     assert "secret" not in text
+
+
+def test_bundle_redaction_nested_extra_path(tmp_path: Path):
+    cfg = tmp_path / "_smonitor.py"
+    cfg.write_text("SMONITOR = {}\n")
+    smonitor.configure(profile="user", level="INFO", handlers=[], event_buffer_size=1, enabled=True)
+    smonitor.emit(
+        "WARNING",
+        "a",
+        source="x",
+        code="X1",
+        extra={"session": {"user": "alice"}, "library": "demo"},
+    )
+    out = export_bundle(
+        tmp_path / "bundle.json",
+        config_base=tmp_path,
+        force=True,
+        redact_fields=["extra.session.user"],
+    )
+    data = json.loads(out.read_text())
+    event = data["events"][-1]
+    assert event["extra"]["session"]["user"] == "***"
+    assert event["extra"]["library"] == "demo"

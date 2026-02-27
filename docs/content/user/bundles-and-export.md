@@ -22,6 +22,30 @@ Use `--out bundle.json` for a single-file export.
 - `--drop-context`
 - `--redact`
 
+## Redaction policy examples
+
+Minimal redaction (keep context, hide credentials):
+
+```bash
+smonitor export --out smonitor_bundle --redact extra.password --redact extra.token
+```
+
+Support-share export (hide local paths and usernames):
+
+```bash
+smonitor export \
+  --out smonitor_bundle \
+  --redact context.cwd \
+  --redact context.user \
+  --redact extra.local_path
+```
+
+Strict export for external sharing:
+
+```bash
+smonitor export --out smonitor_bundle --drop-extra --drop-context
+```
+
 ## Buffer requirement
 
 Event exports require buffering:

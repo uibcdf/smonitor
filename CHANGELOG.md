@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 ### Added
 - Placeholder for post-`0.11.0` changes.
+- Pre-`1.0.0` stabilization window started on 2026-02-27.
+
+### Changed
+- Repository PR process now includes explicit stabilization release gates (`pytest`, docs build, QA smoke).
 
 ## [0.11.0] - 2026-02-26
 ### Added

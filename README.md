@@ -5,7 +5,7 @@
 [![DOI](https://zenodo.org/badge/137937243.svg)](https://zenodo.org/badge/latestdoi/137937243)
 [![](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/downloads/)
 [![CI](https://github.com/uibcdf/smonitor/actions/workflows/CI.yaml/badge.svg)](https://github.com/uibcdf/smonitor/actions/workflows/CI.yaml)
-[![codecov](https://codecov.io/github/uibcdf/smonitor/graph/badge.svg?token=9ZMA4YZLOR)](https://codecov.io/github/uibcdf/smonitor)
+[![codecov](https://codecov.io/github/uibcdf/smonitor/graph/badge.svg?token=tfPUOXP0tW)](https://codecov.io/github/uibcdf/smonitor)
 [![Install with conda](https://img.shields.io/badge/Install%20with-conda-brightgreen.svg)](https://conda.anaconda.org/uibcdf/smonitor)
 
 *Precision diagnostics for scientific Python ecosystems.*

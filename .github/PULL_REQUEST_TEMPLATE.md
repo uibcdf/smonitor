@@ -1,12 +1,23 @@
-## Description
-Provide a brief description of the PR's purpose here.
+## Summary
+Describe scope and intent in 3-6 lines.
 
-## Todos
-Notable points that this PR has either accomplished or will accomplish.
-  - [ ] TODO 1
+## Change Type
+- [ ] Bugfix / hardening
+- [ ] Docs / editorial
+- [ ] Test-only
+- [ ] Other (justify below)
 
-## Questions
-- [ ] Question1
+## Stabilization Gates (Required)
+- [ ] `pytest` passes
+- [ ] docs build passes (`make -C docs html`)
+- [ ] QA smoke passes (build/install/CLI)
 
-## Status
-- [ ] Ready to go
+## Contract Impact
+- [ ] No diagnostics contract impact (`code`, `signal`, payload fields)
+- [ ] Contract impact exists and is documented in docs/changelog
+
+## Validation Notes
+List the exact commands/jobs used for validation.
+
+## Ready for Review
+- [ ] Ready

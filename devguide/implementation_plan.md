@@ -123,9 +123,9 @@ Done:
 - Standards include integration contract and end-user support artifacts.
 
 Pending hardening before 1.0:
-- Add deterministic triage examples keyed by stable contracts (`code` + context signature).
-- Add redaction policy examples for bundle sharing in automated pipelines.
-- Add a compact "agent-ready checklist" to release gates.
+- Add deterministic triage examples keyed by stable contracts (`code` + context signature). **Done**
+- Add redaction policy examples for bundle sharing in automated pipelines. **Done**
+- Add a compact "agent-ready checklist" to release gates. **Done**
 
 ## Profiling (Developer Utility)
 - Timeline buffer and sampling.
@@ -150,6 +150,7 @@ Status: **Done**
 1. Stabilization window
 - Duration: 2-4 weeks on top of `0.11.x`.
 - Scope: bugfixes, hardening, tests/docs consistency only.
+- Status: **Active** (started 2026-02-27).
 
 2. Weekly control loop
 - Check CI health for SMonitor and integrated ecosystem libraries.
