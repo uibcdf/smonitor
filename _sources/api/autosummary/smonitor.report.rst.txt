@@ -1,0 +1,6 @@
+﻿smonitor.report
+===============
+
+.. currentmodule:: smonitor
+
+.. autofunction:: report

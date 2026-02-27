@@ -1,0 +1,1108 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="_static/favicon-16x16.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="_static/favicon-124x124.png" sizes="124x124" rel="icon" type="image/png">
+    <link href="_static/favicon-128x128.png" sizes="128x128" rel="icon" type="image/png">
+    <link href="_static/favicon-192x192.png" sizes="192x192" rel="icon" type="image/png">
+    <link href="_static/icon.svg" rel="icon" type="image/svg+xml">
+  
+    <title>smonitor package – SMonitor 0.11.4</title>
+  
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d5ef24d1" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d5ef24d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=0fc275bd"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'smonitor';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.11.4" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="SMonitor 0.11.4 documentation - Home"/>
+    <img src="_static/logo.svg" class="logo__image only-dark pst-js-only" alt="SMonitor 0.11.4 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/developer/index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/developer/index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="smonitor.config.html">smonitor.config package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.core.html">smonitor.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.emitters.html">smonitor.emitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.handlers.html">smonitor.handlers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.integrations.html">smonitor.integrations package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.policy.html">smonitor.policy package</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">smonitor package</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="smonitor-package">
+<h1>smonitor package<a class="headerlink" href="#smonitor-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.config.html">smonitor.config package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.config.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.config.html#module-smonitor.config.discovery">smonitor.config.discovery module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.discovery.discover_config"><code class="docutils literal notranslate"><span class="pre">discover_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.discovery.load_config_from_path"><code class="docutils literal notranslate"><span class="pre">load_config_from_path()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.config.html#module-smonitor.config">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.build_effective_config"><code class="docutils literal notranslate"><span class="pre">build_effective_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.extract_codes"><code class="docutils literal notranslate"><span class="pre">extract_codes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.extract_policy"><code class="docutils literal notranslate"><span class="pre">extract_policy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.extract_signals"><code class="docutils literal notranslate"><span class="pre">extract_signals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.load_env_config"><code class="docutils literal notranslate"><span class="pre">load_env_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.load_project_config"><code class="docutils literal notranslate"><span class="pre">load_project_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.validate_codes_signals"><code class="docutils literal notranslate"><span class="pre">validate_codes_signals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.validate_config"><code class="docutils literal notranslate"><span class="pre">validate_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.config.html#smonitor.config.validate_project_config"><code class="docutils literal notranslate"><span class="pre">validate_project_config()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.core.html">smonitor.core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.core.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.core.html#module-smonitor.core.context">smonitor.core.context module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame"><code class="docutils literal notranslate"><span class="pre">Frame</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame.args"><code class="docutils literal notranslate"><span class="pre">Frame.args</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame.duration_ms"><code class="docutils literal notranslate"><span class="pre">Frame.duration_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame.function"><code class="docutils literal notranslate"><span class="pre">Frame.function</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame.module"><code class="docutils literal notranslate"><span class="pre">Frame.module</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame.tags"><code class="docutils literal notranslate"><span class="pre">Frame.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.Frame.time"><code class="docutils literal notranslate"><span class="pre">Frame.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.get_context"><code class="docutils literal notranslate"><span class="pre">get_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.pop_frame"><code class="docutils literal notranslate"><span class="pre">pop_frame()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.context.push_frame"><code class="docutils literal notranslate"><span class="pre">push_frame()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.core.html#module-smonitor.core.decorator">smonitor.core.decorator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.decorator.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.decorator.signal"><code class="docutils literal notranslate"><span class="pre">signal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.core.html#module-smonitor.core.manager">smonitor.core.manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager"><code class="docutils literal notranslate"><span class="pre">Manager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.add_handler"><code class="docutils literal notranslate"><span class="pre">Manager.add_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.config"><code class="docutils literal notranslate"><span class="pre">Manager.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.configure"><code class="docutils literal notranslate"><span class="pre">Manager.configure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.emit"><code class="docutils literal notranslate"><span class="pre">Manager.emit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.get_codes"><code class="docutils literal notranslate"><span class="pre">Manager.get_codes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.get_signals"><code class="docutils literal notranslate"><span class="pre">Manager.get_signals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.recent_events"><code class="docutils literal notranslate"><span class="pre">Manager.recent_events()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.record_call"><code class="docutils literal notranslate"><span class="pre">Manager.record_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.record_timing"><code class="docutils literal notranslate"><span class="pre">Manager.record_timing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.remove_handler"><code class="docutils literal notranslate"><span class="pre">Manager.remove_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.report"><code class="docutils literal notranslate"><span class="pre">Manager.report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager.resolve"><code class="docutils literal notranslate"><span class="pre">Manager.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig"><code class="docutils literal notranslate"><span class="pre">ManagerConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.args_summary"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.args_summary</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.capture_exceptions"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.capture_exceptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.capture_logging"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.capture_logging</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.capture_warnings"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.capture_warnings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.enabled"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.enabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.event_buffer_size"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.event_buffer_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.handler_error_threshold"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.handler_error_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.level"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.profile"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.profiling"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.profiling_buffer_size"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling_buffer_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.profiling_hooks"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling_hooks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.profiling_sample_rate"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling_sample_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.show_traceback"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.show_traceback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.silence"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.silence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.strict_schema"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.strict_schema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.strict_signals"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.strict_signals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.theme"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.theme</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.ManagerConfig.trace_depth"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.trace_depth</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.get_manager"><code class="docutils literal notranslate"><span class="pre">get_manager()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.core.html#module-smonitor.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.emitters.html">smonitor.emitters package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.emitters.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.emitters.html#module-smonitor.emitters.exceptions">smonitor.emitters.exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.exceptions.disable_exceptions"><code class="docutils literal notranslate"><span class="pre">disable_exceptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.exceptions.enable_exceptions"><code class="docutils literal notranslate"><span class="pre">enable_exceptions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.emitters.html#module-smonitor.emitters.logging">smonitor.emitters.logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.logging.SmonitorLoggingHandler"><code class="docutils literal notranslate"><span class="pre">SmonitorLoggingHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.logging.SmonitorLoggingHandler.emit"><code class="docutils literal notranslate"><span class="pre">SmonitorLoggingHandler.emit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.logging.disable_logging"><code class="docutils literal notranslate"><span class="pre">disable_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.logging.enable_logging"><code class="docutils literal notranslate"><span class="pre">enable_logging()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.emitters.html#module-smonitor.emitters.warnings">smonitor.emitters.warnings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.warnings.disable_warnings"><code class="docutils literal notranslate"><span class="pre">disable_warnings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.emitters.html#smonitor.emitters.warnings.enable_warnings"><code class="docutils literal notranslate"><span class="pre">enable_warnings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.emitters.html#module-smonitor.emitters">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.handlers.html">smonitor.handlers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.handlers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.handlers.html#module-smonitor.handlers.console">smonitor.handlers.console module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.console.ConsoleHandler"><code class="docutils literal notranslate"><span class="pre">ConsoleHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.console.ConsoleHandler.handle"><code class="docutils literal notranslate"><span class="pre">ConsoleHandler.handle()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.console.RichConsoleHandler"><code class="docutils literal notranslate"><span class="pre">RichConsoleHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.console.RichConsoleHandler.handle"><code class="docutils literal notranslate"><span class="pre">RichConsoleHandler.handle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.handlers.html#module-smonitor.handlers.file">smonitor.handlers.file module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.file.FileHandler"><code class="docutils literal notranslate"><span class="pre">FileHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.file.FileHandler.handle"><code class="docutils literal notranslate"><span class="pre">FileHandler.handle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.handlers.html#module-smonitor.handlers.json">smonitor.handlers.json module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.json.JsonHandler"><code class="docutils literal notranslate"><span class="pre">JsonHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.json.JsonHandler.handle"><code class="docutils literal notranslate"><span class="pre">JsonHandler.handle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.handlers.html#module-smonitor.handlers.memory">smonitor.handlers.memory module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.memory.MemoryHandler"><code class="docutils literal notranslate"><span class="pre">MemoryHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.memory.MemoryHandler.handle"><code class="docutils literal notranslate"><span class="pre">MemoryHandler.handle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.handlers.html#module-smonitor.handlers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.ConsoleHandler"><code class="docutils literal notranslate"><span class="pre">ConsoleHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.ConsoleHandler.handle"><code class="docutils literal notranslate"><span class="pre">ConsoleHandler.handle()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.FileHandler"><code class="docutils literal notranslate"><span class="pre">FileHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.FileHandler.handle"><code class="docutils literal notranslate"><span class="pre">FileHandler.handle()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.JsonHandler"><code class="docutils literal notranslate"><span class="pre">JsonHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.JsonHandler.handle"><code class="docutils literal notranslate"><span class="pre">JsonHandler.handle()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.MemoryHandler"><code class="docutils literal notranslate"><span class="pre">MemoryHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.MemoryHandler.handle"><code class="docutils literal notranslate"><span class="pre">MemoryHandler.handle()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.RichConsoleHandler"><code class="docutils literal notranslate"><span class="pre">RichConsoleHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.handlers.html#smonitor.handlers.RichConsoleHandler.handle"><code class="docutils literal notranslate"><span class="pre">RichConsoleHandler.handle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.integrations.html">smonitor.integrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#module-smonitor.integrations.argdigest">smonitor.integrations.argdigest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.argdigest.configure_argdigest"><code class="docutils literal notranslate"><span class="pre">configure_argdigest()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#module-smonitor.integrations.core">smonitor.integrations.core module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.core.emit_from_catalog"><code class="docutils literal notranslate"><span class="pre">emit_from_catalog()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.core.ensure_configured"><code class="docutils literal notranslate"><span class="pre">ensure_configured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.core.merge_extra"><code class="docutils literal notranslate"><span class="pre">merge_extra()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.core.reset_configured_packages"><code class="docutils literal notranslate"><span class="pre">reset_configured_packages()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#module-smonitor.integrations.depdigest">smonitor.integrations.depdigest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.depdigest.configure_depdigest"><code class="docutils literal notranslate"><span class="pre">configure_depdigest()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#module-smonitor.integrations.diagnostic">smonitor.integrations.diagnostic module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.CatalogException"><code class="docutils literal notranslate"><span class="pre">CatalogException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.CatalogException.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogException.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.CatalogWarning"><code class="docutils literal notranslate"><span class="pre">CatalogWarning</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.CatalogWarning.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogWarning.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.DiagnosticBundle"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.DiagnosticBundle.resolve"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.resolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.DiagnosticBundle.warn"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.diagnostic.DiagnosticBundle.warn_once"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn_once()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#module-smonitor.integrations.molsysmt">smonitor.integrations.molsysmt module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.molsysmt.configure_molsysmt"><code class="docutils literal notranslate"><span class="pre">configure_molsysmt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.integrations.html#module-smonitor.integrations">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.CatalogException"><code class="docutils literal notranslate"><span class="pre">CatalogException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.CatalogException.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogException.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.CatalogWarning"><code class="docutils literal notranslate"><span class="pre">CatalogWarning</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.CatalogWarning.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogWarning.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.DiagnosticBundle"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.DiagnosticBundle.resolve"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.resolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.DiagnosticBundle.warn"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.DiagnosticBundle.warn_once"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.emit_from_catalog"><code class="docutils literal notranslate"><span class="pre">emit_from_catalog()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.ensure_configured"><code class="docutils literal notranslate"><span class="pre">ensure_configured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.merge_extra"><code class="docutils literal notranslate"><span class="pre">merge_extra()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.integrations.html#smonitor.integrations.reset_configured_packages"><code class="docutils literal notranslate"><span class="pre">reset_configured_packages()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.policy.html">smonitor.policy package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.policy.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.policy.html#module-smonitor.policy.engine">smonitor.policy.engine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyEngine"><code class="docutils literal notranslate"><span class="pre">PolicyEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyEngine.apply"><code class="docutils literal notranslate"><span class="pre">PolicyEngine.apply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyEngine.get_filters"><code class="docutils literal notranslate"><span class="pre">PolicyEngine.get_filters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyEngine.get_routes"><code class="docutils literal notranslate"><span class="pre">PolicyEngine.get_routes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyEngine.set_filters"><code class="docutils literal notranslate"><span class="pre">PolicyEngine.set_filters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyEngine.set_routes"><code class="docutils literal notranslate"><span class="pre">PolicyEngine.set_routes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyState"><code class="docutils literal notranslate"><span class="pre">PolicyState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyState.counters"><code class="docutils literal notranslate"><span class="pre">PolicyState.counters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.PolicyState.last_seen"><code class="docutils literal notranslate"><span class="pre">PolicyState.last_seen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smonitor.policy.html#smonitor.policy.engine.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smonitor.policy.html#module-smonitor.policy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-smonitor.bundle">
+<span id="smonitor-bundle-module"></span><h2>smonitor.bundle module<a class="headerlink" href="#module-smonitor.bundle" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.bundle.collect_bundle">
+<span class="sig-prename descclassname"><span class="pre">smonitor.bundle.</span></span><span class="sig-name descname"><span class="pre">collect_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redact_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/bundle.html#collect_bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.bundle.collect_bundle" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>include_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>max_events</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>since</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>drop_extra</strong> (<em>bool</em>)</p></li>
+<li><p><strong>drop_context</strong> (<em>bool</em>)</p></li>
+<li><p><strong>redact_fields</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.bundle.export_bundle">
+<span class="sig-prename descclassname"><span class="pre">smonitor.bundle.</span></span><span class="sig-name descname"><span class="pre">export_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redact_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/bundle.html#export_bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.bundle.export_bundle" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>Path</em>)</p></li>
+<li><p><strong>include_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>max_events</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>since</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>drop_extra</strong> (<em>bool</em>)</p></li>
+<li><p><strong>drop_context</strong> (<em>bool</em>)</p></li>
+<li><p><strong>redact_fields</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>force</strong> (<em>bool</em>)</p></li>
+<li><p><strong>append_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>config_base</strong> (<em>Path</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Path</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.bundle.write_bundle">
+<span class="sig-prename descclassname"><span class="pre">smonitor.bundle.</span></span><span class="sig-name descname"><span class="pre">write_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redact_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/bundle.html#write_bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.bundle.write_bundle" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em>)</p></li>
+<li><p><strong>project_config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>include_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>max_events</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>since</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>drop_extra</strong> (<em>bool</em>)</p></li>
+<li><p><strong>drop_context</strong> (<em>bool</em>)</p></li>
+<li><p><strong>redact_fields</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>force</strong> (<em>bool</em>)</p></li>
+<li><p><strong>append_events</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Path</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.catalog">
+<span id="smonitor-catalog-module"></span><h2>smonitor.catalog module<a class="headerlink" href="#module-smonitor.catalog" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.catalog.generate_catalog">
+<span class="sig-prename descclassname"><span class="pre">smonitor.catalog.</span></span><span class="sig-name descname"><span class="pre">generate_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/catalog.html#generate_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.catalog.generate_catalog" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>root</strong> (<em>Path</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.catalog.write_catalog">
+<span class="sig-prename descclassname"><span class="pre">smonitor.catalog.</span></span><span class="sig-name descname"><span class="pre">write_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/catalog.html#write_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.catalog.write_catalog" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>Path</em>)</p></li>
+<li><p><strong>out_dir</strong> (<em>Path</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.cli">
+<span id="smonitor-cli-module"></span><h2>smonitor.cli module<a class="headerlink" href="#module-smonitor.cli" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.cli.main">
+<span class="sig-prename descclassname"><span class="pre">smonitor.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.cli.main" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.docs_utils">
+<span id="smonitor-docs-utils-module"></span><h2>smonitor.docs_utils module<a class="headerlink" href="#module-smonitor.docs_utils" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.docs_utils.render_codes_table">
+<span class="sig-prename descclassname"><span class="pre">smonitor.docs_utils.</span></span><span class="sig-name descname"><span class="pre">render_codes_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">codes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/docs_utils.html#render_codes_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.docs_utils.render_codes_table" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>codes</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>dict</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.docs_utils.render_signals_table">
+<span class="sig-prename descclassname"><span class="pre">smonitor.docs_utils.</span></span><span class="sig-name descname"><span class="pre">render_signals_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/docs_utils.html#render_signals_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.docs_utils.render_signals_table" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>signals</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>dict</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.profiling">
+<span id="smonitor-profiling-module"></span><h2>smonitor.profiling module<a class="headerlink" href="#module-smonitor.profiling" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.profiling.export_timeline">
+<span class="sig-prename descclassname"><span class="pre">smonitor.profiling.</span></span><span class="sig-name descname"><span class="pre">export_timeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/profiling.html#export_timeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.profiling.export_timeline" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>)</p></li>
+<li><p><strong>format</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.profiling.span">
+<span class="sig-prename descclassname"><span class="pre">smonitor.profiling.</span></span><span class="sig-name descname"><span class="pre">span</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">meta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/profiling.html#span"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.profiling.span" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.validation">
+<span id="smonitor-validation-module"></span><h2>smonitor.validation module<a class="headerlink" href="#module-smonitor.validation" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.validation.enforce_schema">
+<span class="sig-prename descclassname"><span class="pre">smonitor.validation.</span></span><span class="sig-name descname"><span class="pre">enforce_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/validation.html#enforce_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.validation.enforce_schema" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>strict</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.validation.validate_event">
+<span class="sig-prename descclassname"><span class="pre">smonitor.validation.</span></span><span class="sig-name descname"><span class="pre">validate_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/validation.html#validate_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.validation.validate_event" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-smonitor" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.collect_bundle">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">collect_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redact_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/bundle.html#collect_bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.collect_bundle" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>include_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>max_events</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>since</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>drop_extra</strong> (<em>bool</em>)</p></li>
+<li><p><strong>drop_context</strong> (<em>bool</em>)</p></li>
+<li><p><strong>redact_fields</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.configure">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor.html#configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.configure" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.emit">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">emit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor.html#emit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.emit" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.export_bundle">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">export_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redact_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/bundle.html#export_bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.export_bundle" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>Path</em>)</p></li>
+<li><p><strong>include_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>max_events</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>since</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>drop_extra</strong> (<em>bool</em>)</p></li>
+<li><p><strong>drop_context</strong> (<em>bool</em>)</p></li>
+<li><p><strong>redact_fields</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>force</strong> (<em>bool</em>)</p></li>
+<li><p><strong>append_events</strong> (<em>bool</em>)</p></li>
+<li><p><strong>config_base</strong> (<em>Path</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Path</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.get_manager">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">get_manager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#get_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.get_manager" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="smonitor.core.html#smonitor.core.manager.Manager" title="smonitor.core.manager.Manager"><em>Manager</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.report">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor.html#report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.report" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.resolve">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor.html#resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.resolve" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.signal">
+<span class="sig-prename descclassname"><span class="pre">smonitor.</span></span><span class="sig-name descname"><span class="pre">signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERROR'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/decorator.html#signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.signal" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>Callable</em><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>exception_level</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.bundle">smonitor.bundle module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.bundle.collect_bundle"><code class="docutils literal notranslate"><span class="pre">collect_bundle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.bundle.export_bundle"><code class="docutils literal notranslate"><span class="pre">export_bundle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.bundle.write_bundle"><code class="docutils literal notranslate"><span class="pre">write_bundle()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.catalog">smonitor.catalog module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.catalog.generate_catalog"><code class="docutils literal notranslate"><span class="pre">generate_catalog()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.catalog.write_catalog"><code class="docutils literal notranslate"><span class="pre">write_catalog()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.cli">smonitor.cli module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.docs_utils">smonitor.docs_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.docs_utils.render_codes_table"><code class="docutils literal notranslate"><span class="pre">render_codes_table()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.docs_utils.render_signals_table"><code class="docutils literal notranslate"><span class="pre">render_signals_table()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.profiling">smonitor.profiling module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.profiling.export_timeline"><code class="docutils literal notranslate"><span class="pre">export_timeline()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.profiling.span"><code class="docutils literal notranslate"><span class="pre">span()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.validation">smonitor.validation module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.validation.enforce_schema"><code class="docutils literal notranslate"><span class="pre">enforce_schema()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.validation.validate_event"><code class="docutils literal notranslate"><span class="pre">validate_event()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.collect_bundle"><code class="docutils literal notranslate"><span class="pre">collect_bundle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.emit"><code class="docutils literal notranslate"><span class="pre">emit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.export_bundle"><code class="docutils literal notranslate"><span class="pre">export_bundle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.get_manager"><code class="docutils literal notranslate"><span class="pre">get_manager()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.signal"><code class="docutils literal notranslate"><span class="pre">signal()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><div>
+	&copy; 2026, <a href=contents/about/who.html>Liliana M. Moreno Vargas, Diego Prada Gracia
+		and contributors</a> | <a href="https://www.uibcdf.org/">UIBCDF Lab</a> 
+	at the <a href="http://himfg.com.mx">Federico Gómez Children’s Hospital of Mexico</a><br />
+	<a href="https://github.com/uibcdf/depdigest">SMonitor is an open source project</a> shared
+	under <a href="https://github.com/uibcdf/depdigest/blob/main/LICENSE">an MIT license</a>
+</div></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0
+     | 
+    Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1
+    <br/>
+  </p>
+
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><a href= "mailto:uibcdf@gmail.com">Contact us</a><br /></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

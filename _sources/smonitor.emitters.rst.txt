@@ -1,0 +1,37 @@
+smonitor.emitters package
+=========================
+
+Submodules
+----------
+
+smonitor.emitters.exceptions module
+-----------------------------------
+
+.. automodule:: smonitor.emitters.exceptions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.emitters.logging module
+--------------------------------
+
+.. automodule:: smonitor.emitters.logging
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.emitters.warnings module
+---------------------------------
+
+.. automodule:: smonitor.emitters.warnings
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor.emitters
+   :members:
+   :show-inheritance:
+   :undoc-members:

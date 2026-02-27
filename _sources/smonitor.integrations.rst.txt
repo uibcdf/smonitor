@@ -1,0 +1,53 @@
+smonitor.integrations package
+=============================
+
+Submodules
+----------
+
+smonitor.integrations.argdigest module
+--------------------------------------
+
+.. automodule:: smonitor.integrations.argdigest
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.integrations.core module
+---------------------------------
+
+.. automodule:: smonitor.integrations.core
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.integrations.depdigest module
+--------------------------------------
+
+.. automodule:: smonitor.integrations.depdigest
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.integrations.diagnostic module
+---------------------------------------
+
+.. automodule:: smonitor.integrations.diagnostic
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.integrations.molsysmt module
+-------------------------------------
+
+.. automodule:: smonitor.integrations.molsysmt
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor.integrations
+   :members:
+   :show-inheritance:
+   :undoc-members:

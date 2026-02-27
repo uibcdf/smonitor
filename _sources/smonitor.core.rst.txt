@@ -1,0 +1,37 @@
+smonitor.core package
+=====================
+
+Submodules
+----------
+
+smonitor.core.context module
+----------------------------
+
+.. automodule:: smonitor.core.context
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.decorator module
+------------------------------
+
+.. automodule:: smonitor.core.decorator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.manager module
+----------------------------
+
+.. automodule:: smonitor.core.manager
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor.core
+   :members:
+   :show-inheritance:
+   :undoc-members:
