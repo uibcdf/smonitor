@@ -79,7 +79,7 @@ Status note (YYYY-MM-DD):
 - smonitor: in progress (`devguide/implementation_plan.md` 1.0 stabilization section)
 - depdigest: pending
 - argdigest: in progress (consumer side profile parity pending collective evidence)
-- pyunitwizard: done locally (`pyunitwizard/devguide/collective_evidence_pack.md`)
+- pyunitwizard: done locally (`pyunitwizard@48be457`, devguide checkpoint/policy aligned)
 - collective validation: pending
 
 ## 6. Pending collective closures (from SMonitor perspective)
