@@ -114,6 +114,7 @@ Progress checkpoint:
 - end-user rescue flow and adoption templates published.
 - QA CI now includes package artifact build (`sdist`/`wheel`) and wheel install + CLI smoke checks.
 - Agent-profile contract tests added for template resolution and machine-oriented handler payloads.
+- shared collective E2E module added in `tests/e2e/test_collective_error_path.py` and validated locally.
 
 ## AI-Agent Readiness Plan (Integrator-Facing)
 

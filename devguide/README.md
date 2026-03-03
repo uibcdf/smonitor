@@ -34,6 +34,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - Local bundle export (CLI + event buffer).
 - Test suite expanded with sensitive-path coverage for manager/policy/handlers/CLI.
 - Ecosystem integration completed (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).
+- Shared collective E2E module added: `tests/e2e/test_collective_error_path.py` (cross-repo error-path baseline).
 - Documentation architecture migrated to MyST with role-based routes:
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
