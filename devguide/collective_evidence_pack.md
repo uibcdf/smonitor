@@ -32,7 +32,7 @@ This document is the cross-repo handoff artifact for collective validation with:
 
 Date: `2026-03-03`
 SMonitor baseline: `0.11.4` (pre-1.0 stabilization)
-SMonitor head reference for this pack: `update-with-commit`
+SMonitor head reference for this pack: `cabb2d0`
 
 ## 1. Local quality baseline (SMonitor)
 
