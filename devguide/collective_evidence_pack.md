@@ -43,6 +43,7 @@ SMonitor head reference for this pack: `cabb2d0`
 ## 2. Contract evidence index (SMonitor)
 
 Use this section to keep concrete, local references for:
+- shared collective error-path E2E module: `tests/e2e/test_collective_error_path.py`,
 - event schema stability,
 - profile behavior (`user`, `dev`, `qa`, `agent`),
 - traceability tags and category semantics,
