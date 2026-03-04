@@ -40,7 +40,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
 - Version `0.11.4` released as pre-1.0 stabilization checkpoint.
-- Current quality snapshot (2026-02-27): remote CI green, full pytest suite green, coverage at ~92%.
+- Current quality snapshot (2026-03-04): remote CI green, full pytest suite green, line coverage ~97% and branch-rate ~92%.
 
 ## Operational Stabilization Plan (Toward 1.0.0)
 1. Stabilization window (2-4 weeks): only bugfixes, hardening, and docs/test corrections.
@@ -62,6 +62,7 @@ historical context live in `SPEC_SMONITOR.md`.
 
 ## Remaining Focus (Pre-1.0)
 - Keep coverage >=90% while prioritizing correctness/contract stability over percentage gains.
+- Keep branch-rate >=92% in CI as stabilization floor.
 - Final consistency sweep across `README`, `SPEC`, `devguide`, and Sphinx docs.
 - Post-1.0 roadmap preparation: opt-in telemetry client and Sentinel integration.
 

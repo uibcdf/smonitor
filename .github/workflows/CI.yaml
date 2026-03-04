@@ -107,6 +107,22 @@ jobs:
       run: |
         cat ./coverage.xml
 
+    - name: Enforce branch coverage floor
+      shell: bash -l {0}
+      run: |
+        python - <<'PY'
+        import sys
+        import xml.etree.ElementTree as ET
+
+        threshold = 0.92
+        root = ET.parse("coverage.xml").getroot()
+        branch_rate = float(root.attrib.get("branch-rate", "0"))
+        print(f"branch-rate={branch_rate:.4f} (threshold={threshold:.2f})")
+        if branch_rate < threshold:
+            print("Branch coverage floor not met.", file=sys.stderr)
+            sys.exit(1)
+        PY
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
       with:
