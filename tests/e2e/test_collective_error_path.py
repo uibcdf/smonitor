@@ -7,7 +7,6 @@ from pathlib import Path
 
 import pytest
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SIBLING_PYW = REPO_ROOT.parent / "pyunitwizard"
 SIBLING_ARG = REPO_ROOT.parent / "argdigest"
@@ -16,7 +15,9 @@ SIBLING_SMON = REPO_ROOT.parent / "smonitor"
 
 
 def _siblings_available() -> bool:
-    return all(path.exists() for path in [SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON])
+    return all(
+        path.exists() for path in [SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON]
+    )
 
 
 @contextmanager
@@ -49,11 +50,14 @@ def _force_fresh_imports(packages: list[str]):
         sys.modules.update(removed)
 
 
-@pytest.mark.skipif(not _siblings_available(), reason="Sibling repos are not available in this environment")
+@pytest.mark.skipif(
+    not _siblings_available(),
+    reason="Sibling repos are not available in this environment",
+)
 def test_collective_error_path_emits_contract_signal_and_dependency_hints():
-    with _prepend_paths([SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON]), _force_fresh_imports(
-        ["pyunitwizard", "argdigest", "depdigest", "smonitor"]
-    ):
+    paths = [SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON]
+    packages = ["pyunitwizard", "argdigest", "depdigest", "smonitor"]
+    with _prepend_paths(paths), _force_fresh_imports(packages):
         puw = importlib.import_module("pyunitwizard")
         argdigest = importlib.import_module("argdigest")
         depdigest = importlib.import_module("depdigest")
