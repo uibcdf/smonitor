@@ -135,3 +135,19 @@ def test_rich_console_handler_fallback_path(monkeypatch):
         profile="agent",
     )
     assert handler._console.calls
+
+
+def test_rich_console_handler_invalid_timestamp_is_tolerated(monkeypatch):
+    _install_fake_rich(monkeypatch)
+    handler = RichConsoleHandler()
+    handler.handle(
+        {
+            "level": "WARNING",
+            "message": "user-msg",
+            "timestamp": "not-iso",
+            "extra": {},
+            "context": {},
+        },
+        profile="user",
+    )
+    assert handler._console.calls

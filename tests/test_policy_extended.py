@@ -70,3 +70,47 @@ def test_policy_when_prefix_operator():
     engine.set_filters([{"when": {"source_prefix": "pkg."}, "drop": True}])
     _, hs = engine.apply({"source": "pkg.mod"}, handlers)
     assert hs == []
+
+
+def test_policy_sample_fraction_keeps_when_random_low(monkeypatch):
+    engine = PolicyEngine()
+    handlers = [DummyHandler("console")]
+    engine.set_filters([{"when": {"code": "X"}, "sample": 0.5}])
+    monkeypatch.setattr("smonitor.policy.engine.random", lambda: 0.1)
+    _, hs = engine.apply({"code": "X"}, handlers)
+    assert hs
+
+
+def test_policy_set_extra_with_non_dict_extra_creates_dict():
+    engine = PolicyEngine()
+    handlers = [DummyHandler("console")]
+    engine.set_routes([{"when": {"code": "X"}, "set_extra": {"k": "v"}}])
+    event, _ = engine.apply({"code": "X", "extra": "bad"}, handlers)
+    assert event["extra"] == {"k": "v"}
+
+
+def test_policy_match_false_paths_cover_ops_and_lists():
+    engine = PolicyEngine()
+    assert engine._match({"source": "pkg.mod"}, {"source_prefix": "other."}) is False
+    assert engine._match({"level": "INFO"}, {"level": {"eq": "ERROR"}}) is False
+    assert engine._match({"tags": ["a", "b"]}, {"tags": "z"}) is False
+    assert engine._op_prefix(None, "x") is False
+
+
+def test_policy_rename_missing_field_and_non_list_tags_are_tolerated():
+    engine = PolicyEngine()
+    engine.set_routes(
+        [
+            {
+                "when": {"level": "WARNING"},
+                "rename": {"missing": "renamed"},
+                "add_tags": ["extra"],
+            }
+        ]
+    )
+    event, _ = engine.apply(
+        {"level": "WARNING", "source": "s", "tags": "not-a-list"},
+        [DummyHandler("console")],
+    )
+    assert "renamed" not in event
+    assert event["tags"] == "not-a-list"
