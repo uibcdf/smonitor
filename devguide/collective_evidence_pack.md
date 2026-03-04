@@ -30,7 +30,7 @@ This document is the cross-repo handoff artifact for collective validation with:
 3. Keep only reproducible, in-repo references.
 4. Do not mark collective closure from local-only evidence.
 
-Date: `2026-03-03`
+Date: `2026-03-04`
 SMonitor baseline: `0.11.4` (pre-1.0 stabilization)
 SMonitor head reference for this pack: `cabb2d0`
 
@@ -74,13 +74,13 @@ Status note (YYYY-MM-DD):
 - collective validation: <pending|in progress|done> (<evidence>)
 ```
 
-## 5. Status note (2026-03-03)
+## 5. Status note (2026-03-04)
 
 - smonitor: in progress (`devguide/implementation_plan.md` 1.0 stabilization section)
 - depdigest: pending
 - argdigest: in progress (consumer side profile parity pending collective evidence)
-- pyunitwizard: done locally (`pyunitwizard@48be457`, devguide checkpoint/policy aligned)
-- collective validation: pending
+- pyunitwizard: done locally (`pyunitwizard@0.21.0` tag at `49494d5`, RC-close checklist complete)
+- collective validation: in progress (PyUnitWizard RC closure synced; collective finality still pending)
 
 ## 6. Pending collective closures (from SMonitor perspective)
 
