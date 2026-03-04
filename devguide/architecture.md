@@ -21,9 +21,9 @@ smonitor/
     decorator.py    # @signal decorator
     context.py      # Context stack + breadcrumb metadata
   emitters/
-    log.py          # Logging bridge
-    warn.py         # warnings bridge
-    error.py        # exception bridge
+    logging.py      # Logging bridge
+    warnings.py     # warnings bridge
+    exceptions.py   # exception bridge
   handlers/
     console.py      # Rich terminal output
     file.py         # Text file output

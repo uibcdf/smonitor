@@ -191,7 +191,7 @@ FILTERS = [
 ```bash
 smonitor --validate-config
 smonitor --check
-smonitor --check --check-event level:WARNING
+smonitor --check --check-event '{"level":"WARNING","message":"check event"}'
 smonitor export --out smonitor_bundle --max-events 500
 ```
 
@@ -227,7 +227,7 @@ make -C docs html
 
 ## Status
 
-Current release: **0.11.0** (pre-1.0 stabilization).  
+Current release: **0.11.4** (pre-1.0 stabilization).  
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)
