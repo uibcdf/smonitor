@@ -40,7 +40,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
 - Version `0.11.4` released as pre-1.0 stabilization checkpoint.
-- Current quality snapshot (2026-03-04): remote CI green, full pytest suite green, line coverage ~97% and branch-rate ~92%.
+- Current quality snapshot (2026-03-04): remote CI green, full pytest suite green, line coverage ~98% and branch-rate ~95%.
 
 ## Operational Stabilization Plan (Toward 1.0.0)
 1. Stabilization window (2-4 weeks): only bugfixes, hardening, and docs/test corrections.

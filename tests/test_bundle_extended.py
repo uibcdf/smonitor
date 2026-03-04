@@ -25,6 +25,30 @@ def test_collect_bundle_since_filters_and_skips_bad_timestamp(tmp_path: Path):
     assert data["events"] == []
 
 
+def test_collect_bundle_since_keeps_recent_and_drop_extra_and_redact_non_dict_path(tmp_path: Path):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
+    manager = get_manager()
+    smonitor.configure(profile="user", handlers=[], event_buffer_size=10, enabled=True)
+    smonitor.emit("WARNING", "a", source="x", code="X1", extra={"secret": "v"})
+    # Inject event with non-dict extra so redact path traverses a non-dict segment.
+    manager._event_buffer.append(
+        {
+            "timestamp": "2099-01-01T00:00:00+00:00",
+            "level": "WARNING",
+            "message": "b",
+            "source": "x",
+            "extra": ["not-dict"],
+        }
+    )
+    data = collect_bundle(
+        since="2000-01-01T00:00:00+00:00",
+        drop_extra=True,
+        redact_fields=["extra.secret"],
+    )
+    assert data["events"]
+    assert all("extra" not in event for event in data["events"])
+
+
 def test_write_bundle_directory_and_append_events(tmp_path: Path):
     (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
     smonitor.configure(profile="user", handlers=[], event_buffer_size=10, enabled=True)
@@ -39,6 +63,26 @@ def test_write_bundle_directory_and_append_events(tmp_path: Path):
     write_bundle(out_dir, append_events=True, force=True)
     later_lines = events_path.read_text(encoding="utf-8").strip().splitlines()
     assert len(later_lines) >= len(initial_lines)
+
+
+def test_write_bundle_existing_json_and_dir_require_force(tmp_path: Path):
+    out_json = tmp_path / "bundle.json"
+    out_json.write_text("{}", encoding="utf-8")
+    try:
+        write_bundle(out_json, force=False)
+    except FileExistsError:
+        pass
+    else:
+        raise AssertionError("Expected FileExistsError for existing json file")
+
+    out_dir = tmp_path / "outdir"
+    out_dir.mkdir()
+    try:
+        write_bundle(out_dir, force=False)
+    except FileExistsError:
+        pass
+    else:
+        raise AssertionError("Expected FileExistsError for existing directory")
 
 
 def test_export_bundle_with_drop_flags_and_redaction(tmp_path: Path):

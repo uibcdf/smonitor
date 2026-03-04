@@ -157,7 +157,7 @@ Status: **Done**
 - Check CI health for SMonitor and integrated ecosystem libraries.
 - Review repeated warning/error codes and incident trends.
 - Review support bundles for reproducibility quality.
-- Latest snapshot (2026-03-04): CI green, pytest green, line coverage ~97%, branch-rate ~92%.
+- Latest snapshot (2026-03-04): CI green, pytest green, line coverage ~98%, branch-rate ~95%.
 - CI stabilization gate: enforce branch-rate floor at 0.92 on the main CI workflow.
 
 3. PR acceptance rules

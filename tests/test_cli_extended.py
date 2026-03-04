@@ -181,6 +181,19 @@ def test_cli_check_without_event_uses_defaults(tmp_path: Path, monkeypatch, caps
     assert emitted["kwargs"]["code"] == "C-1"
 
 
+def test_cli_check_invalid_config_returns_2(tmp_path: Path, monkeypatch, capsys):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {'trace_depth': 'bad'}\n")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["smonitor", "--check", "--config-path", str(tmp_path)],
+    )
+    rc = cli.main()
+    out = capsys.readouterr().out
+    assert rc == 2
+    assert "Invalid _smonitor.py" in out
+
+
 def test_cli_report_branch(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["smonitor", "--report"])
     monkeypatch.setattr(cli.smonitor, "configure", lambda **_: None)
@@ -189,6 +202,13 @@ def test_cli_report_branch(monkeypatch, capsys):
     out = capsys.readouterr().out
     assert rc == 0
     assert "calls_total" in out
+
+
+def test_cli_main_without_report_returns_zero(monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["smonitor"])
+    monkeypatch.setattr(cli.smonitor, "configure", lambda **_: None)
+    rc = cli.main()
+    assert rc == 0
 
 
 def test_cli_check_event_invalid_json_raises(tmp_path: Path, monkeypatch):
