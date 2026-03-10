@@ -77,6 +77,30 @@ historical context live in `SPEC_SMONITOR.md`.
 - Adoption/discovery execution is tracked in `implementation_plan.md` under:
   `1.0.0 Adoption & Discovery Plan`.
 
+## Stabilization closure checklist
+
+Pre-`1.0.0` stabilization should only be considered closed when all of the following are true:
+
+1. `main` is clean and internally consistent.
+   - no relevant pending core changes;
+   - `README`, `docs`, `devguide`, and `standards` are synchronized.
+2. Full local validation remains green.
+   - `ruff check .`
+   - `PYTHONPATH=. pytest -q`
+   - `PYTHONPATH=. pytest -q --cov-config=.coveragerc --cov=smonitor --cov-report=term --cov-report=xml`
+3. Remote CI is green in a sustained way.
+   - several consecutive successful runs on the main workflows;
+   - no new flaky failures in primary gates.
+4. No open high-severity bugs remain in SMonitor.
+   - nothing breaking public contracts, bundles, profiles, CLI, or support/triage flows.
+5. Operability is confirmed in at least one real workflow.
+   - a real CI/support flow demonstrates value from fingerprints, runtime identifiers, triage summaries, bundle comparison, and dual human/agent output.
+6. No further API changes are clearly required.
+   - no missing canonical fields;
+   - no public signatures that need redesign before freeze.
+7. A short observation period passes without structural friction.
+   - real usage does not reveal new design-level issues.
+
 ## Next-session checkpoint
 - The current pre-1.0 profiling/diagnostics checkpoint includes: structured `extra_factory` signal context, `timings_by_tag`, opt-in slow-signal events, and profile-aware truncation in human-readable handlers.
 - Integration helpers now include a canonical `context_extra(...)` builder for common structured diagnostic fields.

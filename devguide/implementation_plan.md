@@ -849,3 +849,24 @@ Reasoning:
 3. slices 1-6 are implemented and covered by tests;
 4. at least an initial bundle comparison workflow exists;
 5. at least one cross-library diagnostic workflow validates the new operability model end to end.
+
+Operational closure checklist for the stabilization window:
+
+1. `main` remains clean and internally consistent.
+   - no relevant pending core changes;
+   - `README`, `docs`, `devguide`, and `standards` stay synchronized.
+2. full local validation remains green.
+   - `ruff check .`
+   - `PYTHONPATH=. pytest -q`
+   - `PYTHONPATH=. pytest -q --cov-config=.coveragerc --cov=smonitor --cov-report=term --cov-report=xml`
+3. remote CI remains green in a sustained way.
+   - multiple consecutive successful runs on primary workflows;
+   - no new flakiness in the main gates.
+4. no open high-severity SMonitor bugs remain.
+   - nothing breaking public contracts, bundles, profiles, CLI, or support/triage flows.
+5. operability is confirmed in at least one real CI/support workflow.
+   - fingerprints, runtime identifiers, triage summaries, bundle comparison, and dual human/agent output are all exercised.
+6. no further pre-`1.0.0` API changes are clearly required.
+   - no missing canonical fields;
+   - no public signatures needing redesign before freeze.
+7. a short observation period passes without structural friction.
