@@ -80,3 +80,5 @@ historical context live in `SPEC_SMONITOR.md`.
 - Event coalescing for repeated transient warnings remains a high-value follow-up once the helper/context layer is stable.
 
 - Integration helpers now include a canonical `context_extra(...)` builder for common structured diagnostic fields.
+
+- `report()` and bundle exports now expose triage-oriented summaries for event codes, categories, and recent slow-signal activity.

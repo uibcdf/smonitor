@@ -166,3 +166,6 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - Human-readable handlers (`console`, `file`) may truncate large structured payload fragments for `qa`, `dev`, and `debug` profiles. This does not alter the routed event payload or JSON handler output.
 
 - `smonitor.integrations.context_extra(...)` builds stable structured payloads for common diagnostic fields without repeating the same key assembly in each library.
+
+- `report()` now includes `events_by_code`, `events_by_category`, and `slow_signals_recent` to support QA triage without scanning raw event streams.
+- Bundle exports mirror this information under `triage`.

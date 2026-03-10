@@ -106,3 +106,25 @@ def test_export_bundle_with_drop_flags_and_redaction(tmp_path: Path):
     event = data["events"][-1]
     assert "context" not in event
     assert event["extra"]["secret"] == "***"
+
+
+def test_collect_bundle_exposes_triage_summary_for_slow_signals(tmp_path: Path):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
+    manager = get_manager()
+    smonitor.configure(profile="dev", handlers=[], event_buffer_size=10, enabled=True)
+    manager.emit(
+        "WARNING",
+        "Slow signal call detected for pkg.mod.fn.",
+        source="pkg.mod.fn",
+        code="SMONITOR-SIGNAL-SLOW",
+        category="profiling",
+        tags=["api", "slow"],
+        extra={"duration_ms": 50.0, "threshold_ms": 10.0, "signal_tags": ["api", "slow"]},
+    )
+    data = collect_bundle()
+    assert data["triage"]["events_by_code"]["SMONITOR-SIGNAL-SLOW"] >= 1
+    assert data["triage"]["events_by_category"]["profiling"] >= 1
+    recent = data["triage"]["slow_signals_recent"][-1]
+    assert recent["source"] == "pkg.mod.fn"
+    assert recent["duration_ms"] == 50.0
+    assert recent["threshold_ms"] == 10.0

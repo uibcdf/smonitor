@@ -513,6 +513,29 @@ class Manager:
                 "max_ms": max(values_sorted),
             }
 
+        events_by_code: Dict[str, int] = {}
+        events_by_category: Dict[str, int] = {}
+        slow_signals_recent: List[Dict[str, Any]] = []
+        for event in self._event_buffer:
+            code = event.get("code")
+            if code:
+                events_by_code[str(code)] = events_by_code.get(str(code), 0) + 1
+            category = event.get("category")
+            if category:
+                events_by_category[str(category)] = events_by_category.get(str(category), 0) + 1
+            if code == "SMONITOR-SIGNAL-SLOW":
+                extra = event.get("extra") or {}
+                slow_signals_recent.append(
+                    {
+                        "timestamp": event.get("timestamp"),
+                        "source": event.get("source"),
+                        "duration_ms": extra.get("duration_ms"),
+                        "threshold_ms": extra.get("threshold_ms"),
+                        "signal_tags": extra.get("signal_tags") or event.get("tags"),
+                    }
+                )
+        slow_signals_recent = slow_signals_recent[-10:]
+
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
         for hook in hooks:
@@ -537,6 +560,9 @@ class Manager:
             "peak_memory": None,
             "events_buffered": len(self._event_buffer),
             "runtime_warnings": list(self._runtime_warnings),
+            "events_by_code": events_by_code,
+            "events_by_category": events_by_category,
+            "slow_signals_recent": slow_signals_recent,
         }
 
     def get_codes(self) -> Dict[str, Dict[str, Any]]:

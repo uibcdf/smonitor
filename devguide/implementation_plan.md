@@ -598,20 +598,13 @@ Human-readable handlers now apply profile-aware truncation to large structured p
 
 The current recommended execution order for the next sessions is:
 
-1. Add helper APIs for common structured context keys (`caller`, `form`, `requested_attribute`, `resource`, `provider`, `operation`).
-   - Goal: reduce repetitive local wiring across MolSysSuite libraries.
-   - Expected output: small helper surface, docs, and focused contract tests.
-
-2. Enrich `report()`/bundle outputs with the new structured profiling and warning context.
-   - Goal: make QA triage possible from summarized artifacts, not only from raw event streams.
-   - Expected output: stable report fields or bundle sections plus backward-compatible tests.
-
-3. Add optional coalescing for repeated transient warnings.
+1. Add optional coalescing for repeated transient warnings.
    - Goal: reduce retry noise while preserving total attempt count and final failure reason.
    - Expected output: opt-in policy/config support and regression tests.
 
-4. Reassess machine-oriented output normalization after the three items above are in place.
+2. Reassess machine-oriented output normalization after the coalescing slice lands.
    - Goal: decide whether explicit normalized fields are needed for cross-library QA automation.
+   - Expected output: either a minimal normalized machine payload contract or an explicit decision to keep current JSON/event structure unchanged.
 
 This order is the active checkpoint for the next development sessions unless a higher-priority regression appears.
 
@@ -622,3 +615,12 @@ SMonitor now exposes `integrations.context_extra(...)` for common structured dia
 
 - The helper is intended to reduce repeated local payload assembly across MolSysSuite libraries.
 - Additional helper expansion should remain conservative and keyword-only to preserve payload stability.
+
+
+## 1.0.x Bundle/report triage summary checkpoint
+
+SMonitor now exposes triage-oriented summaries in `report()` and bundle exports.
+
+- `report()` includes counts by event code and category.
+- `report()` includes a compact `slow_signals_recent` list for the most recent slow-signal events.
+- `collect_bundle()` mirrors those fields under `triage` so QA can inspect summarized artifacts without reading raw event streams first.

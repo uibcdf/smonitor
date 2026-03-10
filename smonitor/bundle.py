@@ -108,6 +108,11 @@ def collect_bundle(
         "codes": manager.get_codes(),
         "signals": manager.get_signals(),
         "report": report,
+        "triage": {
+            "events_by_code": report.get("events_by_code", {}),
+            "events_by_category": report.get("events_by_category", {}),
+            "slow_signals_recent": report.get("slow_signals_recent", []),
+        },
         "events": events,
         "redactions": {
             "drop_extra": drop_extra,
