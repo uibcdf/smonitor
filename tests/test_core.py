@@ -23,6 +23,29 @@ def test_emit_increments_counts():
     assert manager.report()["warnings_total"] == start + 1
 
 
+def test_event_fingerprint_is_stable_for_same_incident_shape():
+    manager = smonitor.configure(profile="user", handlers=[], event_buffer_size=10)
+    event_a = smonitor.emit(
+        "WARNING",
+        "retry first text",
+        source="pkg.mod",
+        code="W1",
+        exception_type="TimeoutError",
+        extra={"resource": "181l", "caller": "pkg.mod.fn"},
+    )
+    event_b = smonitor.emit(
+        "WARNING",
+        "retry second text",
+        source="pkg.mod",
+        code="W1",
+        exception_type="TimeoutError",
+        extra={"resource": "181l", "caller": "pkg.mod.fn"},
+    )
+    assert event_a["fingerprint"] == event_b["fingerprint"]
+    report = manager.report()
+    assert report["events_by_fingerprint"][event_a["fingerprint"]] >= 2
+
+
 def test_signal_records_call_and_context():
     manager = get_manager()
     smonitor.configure(profile="user", strict_signals=False)

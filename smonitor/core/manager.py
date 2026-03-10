@@ -10,6 +10,7 @@ from typing import Any, Dict, Iterable, List, Optional
 from ..policy.engine import PolicyEngine
 from ..validation import validate_event
 from .context import get_context
+from .fingerprint import build_event_fingerprint
 
 _LEVEL_ORDER = {
     "DEBUG": 10,
@@ -491,6 +492,12 @@ class Manager:
                 "code": code,
                 "tags": tags,
                 "exception_type": exception_type,
+                "fingerprint": build_event_fingerprint(
+                    code=code,
+                    source=source,
+                    exception_type=exception_type,
+                    extra=extra or {},
+                ),
             }
 
         # Filter out silenced sources
@@ -513,6 +520,12 @@ class Manager:
             "code": code,
             "tags": tags,
             "exception_type": exception_type,
+            "fingerprint": build_event_fingerprint(
+                code=code,
+                source=source,
+                exception_type=exception_type,
+                extra=extra_data,
+            ),
         }
         # mark as smonitor-emitted
         event["extra"].setdefault("smonitor", True)
@@ -660,6 +673,7 @@ class Manager:
 
         events_by_code: Dict[str, int] = {}
         events_by_category: Dict[str, int] = {}
+        events_by_fingerprint: Dict[str, int] = {}
         slow_signals_recent: List[Dict[str, Any]] = []
         coalesced_warnings: List[Dict[str, Any]] = list(self._coalesced_warning_summaries)
         for event in self._event_buffer:
@@ -669,6 +683,10 @@ class Manager:
             category = event.get("category")
             if category:
                 events_by_category[str(category)] = events_by_category.get(str(category), 0) + 1
+            fingerprint = event.get("fingerprint")
+            if fingerprint:
+                key = str(fingerprint)
+                events_by_fingerprint[key] = events_by_fingerprint.get(key, 0) + 1
             if code == "SMONITOR-SIGNAL-SLOW":
                 extra = event.get("extra") or {}
                 slow_signals_recent.append(
@@ -712,6 +730,7 @@ class Manager:
             "runtime_warnings": list(self._runtime_warnings),
             "events_by_code": events_by_code,
             "events_by_category": events_by_category,
+            "events_by_fingerprint": events_by_fingerprint,
             "slow_signals_recent": slow_signals_recent,
             "coalesced_warnings": coalesced_warnings,
         }

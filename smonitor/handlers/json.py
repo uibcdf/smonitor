@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
+from ..core.fingerprint import build_event_fingerprint
+
 _NORMALIZED_EXTRA_KEYS = [
     "hint",
     "caller",
@@ -34,6 +36,13 @@ def _normalized_payload(event: Dict[str, Any]) -> Dict[str, Any]:
         "category": event.get("category"),
         "exception_type": event.get("exception_type"),
         "tags": list(event.get("tags") or []),
+        "fingerprint": event.get("fingerprint")
+        or build_event_fingerprint(
+            code=event.get("code"),
+            source=event.get("source"),
+            exception_type=event.get("exception_type"),
+            extra=extra,
+        ),
     }
     for key in _NORMALIZED_EXTRA_KEYS:
         if key in extra:
@@ -50,6 +59,12 @@ class JsonHandler:
     def handle(self, event: Dict[str, Any], *, profile: str = "user") -> None:
         payload = dict(event)
         payload["profile"] = profile
+        payload["fingerprint"] = payload.get("fingerprint") or build_event_fingerprint(
+            code=event.get("code"),
+            source=event.get("source"),
+            exception_type=event.get("exception_type"),
+            extra=event.get("extra") or {},
+        )
         # Provide a stable subset for external ingestion
         payload.setdefault("level", event.get("level"))
         payload.setdefault("message", event.get("message"))

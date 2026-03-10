@@ -43,6 +43,7 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
     assert normalized["source"] == "pkg.mod"
     assert normalized["code"] == "W1"
     assert normalized["tags"] == ["api"]
+    assert normalized["fingerprint"] == payload["fingerprint"]
     assert normalized["caller"] == "pkg.mod.fn"
     assert normalized["resource"] == "181l"
     assert normalized["provider"] == "RCSB"

@@ -124,6 +124,7 @@ def test_collect_bundle_exposes_triage_summary_for_slow_signals(tmp_path: Path):
     data = collect_bundle()
     assert data["triage"]["events_by_code"]["SMONITOR-SIGNAL-SLOW"] >= 1
     assert data["triage"]["events_by_category"]["profiling"] >= 1
+    assert data["triage"]["events_by_fingerprint"]
     recent = data["triage"]["slow_signals_recent"][-1]
     assert recent["source"] == "pkg.mod.fn"
     assert recent["duration_ms"] == 50.0
@@ -194,4 +195,4 @@ def test_collect_bundle_flushes_pending_coalesced_warning_summary_event(tmp_path
 
     assert data["triage"]["coalesced_warnings"][-1]["retry_attempt"] == 3
     assert data["triage"]["coalesced_warnings"][-1]["retry_max"] == 5
-    assert any(event["code"] == "SMONITOR-WARNING-COALESCED" for event in data["events"])
+    assert any(event.get("code") == "SMONITOR-WARNING-COALESCED" for event in data["events"])

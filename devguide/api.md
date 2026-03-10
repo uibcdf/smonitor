@@ -169,6 +169,7 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - `context_extra(...)` also reserves canonical retry/causal fields for cross-library QA payloads: `retry_attempt`, `retry_max`, `retry_exhausted`, `retry_delay_s`, `failure_class`, `last_failure_reason`, `cause_exception_type`, `cause_code`, and `causal_chain`.
 
 - `report()` now includes `events_by_code`, `events_by_category`, and `slow_signals_recent` to support QA triage without scanning raw event streams.
+- Events now also carry a stable `fingerprint` derived from `code`, `source`, `exception_type`, and selected structured-context keys; `report()` and bundle triage expose `events_by_fingerprint`.
 - Bundle exports mirror this information under `triage`.
 
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`; suppressed duplicates are summarized in `report()` and bundle triage output.
