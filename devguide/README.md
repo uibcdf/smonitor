@@ -75,14 +75,9 @@ historical context live in `SPEC_SMONITOR.md`.
 
 ## Next-session checkpoint
 - The current pre-1.0 profiling/diagnostics checkpoint includes: structured `extra_factory` signal context, `timings_by_tag`, opt-in slow-signal events, and profile-aware truncation in human-readable handlers.
-- The next implementation slice should focus on helper APIs for common structured context fields so integrated libraries stop repeating the same payload-wiring patterns.
-- After that, the next priority is bundle/report enrichment so structured profiling and warning context is easier to consume without reading raw event streams.
-- Event coalescing for repeated transient warnings remains a high-value follow-up once the helper/context layer is stable.
-
 - Integration helpers now include a canonical `context_extra(...)` builder for common structured diagnostic fields.
-
 - `report()` and bundle exports now expose triage-oriented summaries for event codes, categories, and recent slow-signal activity.
-
 - Optional coalescing for repeated transient warnings is now available via `warning_coalesce_window_s`.
-
 - Machine-oriented JSON output now includes a normalized payload section for stable cross-library QA ingestion.
+- The current stabilization focus is to monitor these additions in real cross-library QA usage and extend them only if a concrete gap appears.
+- The next candidate refinements, if needed during stabilization, are limited to conservative payload/helper adjustments rather than new feature slices.
