@@ -6,13 +6,17 @@ Use this checklist before release candidates and during stabilization.
 
 - [ ] `agent` profile messages are machine-oriented and deterministic.
 - [ ] Stable fields are present in payloads (`code`, `level`, `source`, `category` when available).
+- [ ] Stable triage/correlation fields are present where expected (`fingerprint`, `run_id`, `session_id`, optional `correlation_id`).
+- [ ] `normalized` payload is present and stable.
+- [ ] `human_summary` is present for human-facing handoff.
 - [ ] Contract tests for agent payloads pass.
 
 ## 2. Deterministic triage
 
-- [ ] Triage groups incidents by stable keys (`code` + context signature), not free text.
+- [ ] Triage groups incidents by stable keys (`code` + `fingerprint`), not free text.
 - [ ] Grouping rules are documented in the QA triage workflow.
 - [ ] Repeated incidents from different runs map to the same group key.
+- [ ] Bundle comparison is available for “what changed?” workflows.
 
 ## 3. Redaction and sharing policy
 

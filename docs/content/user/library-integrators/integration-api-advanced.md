@@ -56,6 +56,37 @@ ensure_configured(PACKAGE_ROOT)
 
 This loads `_smonitor.py` defaults and avoids repeated ad-hoc configure calls.
 
+## `context_extra`
+
+Use `context_extra(...)` when a host library repeatedly assembles structured
+diagnostic payloads and wants a stable cross-library contract.
+
+```python
+from smonitor.integrations import context_extra
+
+extra = context_extra(
+    caller="mylib.io.download_structure",
+    resource="181l.pdb",
+    provider="RCSB",
+    operation="download",
+    retry_attempt=2,
+    retry_max=5,
+    failure_class="network",
+    incident_kind="network",
+    recommended_action="retry",
+    next_step="check-network",
+    evidence={"expected": "download ok", "observed": "timeout"},
+)
+```
+
+Use it for:
+- shared context keys (`caller`, `resource`, `provider`, `operation`);
+- retry/causal metadata;
+- decision metadata;
+- compact structured `evidence`.
+
+This keeps downstream `normalized` payloads predictable for QA, support, and agents.
+
 ## `reset_configured_packages` (test-only)
 
 Use this helper in tests to reset integration state between scenarios.

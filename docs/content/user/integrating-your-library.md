@@ -45,7 +45,9 @@ Checkpoint:
 
 1. Enable `strict_signals=True` in `qa` profile tests.
 2. Run bundle export in a smoke test.
-3. Verify fallback behavior if a handler fails.
+3. Validate representative events under `profile="agent"`.
+4. Verify fallback behavior if a handler fails.
+5. Compare representative bundles when asking what changed between two runs.
 
 Checkpoint:
 - diagnostics are robust and reproducible.
@@ -86,4 +88,5 @@ Read [Edge Cases](edge-cases.md) before broad rollout.
 
 - diagnostics are emitted from catalog-driven helpers across migrated modules,
 - key API boundaries are instrumented with `@signal`,
-- QA tests validate strict signal contracts and bundle export.
+- QA tests validate strict signal contracts and bundle export,
+- agent-oriented payloads and bundle comparison are usable in practice.

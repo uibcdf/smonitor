@@ -21,7 +21,7 @@ SMonitor-integrated libraries.
 
 1. Reproduce from message + minimal script.
 2. If needed, reproduce from diagnostics bundle.
-3. Triage by `code` and `trace_hash`.
+3. Triage by `code` and `fingerprint`.
 4. Patch with tests.
 5. Publish changelog entry referencing affected codes.
 
@@ -35,6 +35,8 @@ SMonitor-integrated libraries.
 ## AI-assisted loop (optional)
 
 - use `agent` profile and structured bundles for triage;
+- use `normalized` plus `human_summary` rather than reconstructing one from the other;
+- compare bundles when asking what changed between two runs;
 - keep human review mandatory for all proposed fixes;
 - store triage decisions for recurring patterns.
 

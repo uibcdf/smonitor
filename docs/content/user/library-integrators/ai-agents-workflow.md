@@ -7,6 +7,7 @@ signals from your host library without breaking human workflows.
 
 If your team uses agents for triage, QA, or patch proposals, the agent needs:
 - stable machine-readable identifiers (`code`, `signal`),
+- stable grouping/correlation identifiers (`fingerprint`, `run_id`, `session_id`, optional `correlation_id`),
 - deterministic structure in events,
 - reproducible artifacts (bundles),
 - explicit safety limits.
@@ -23,6 +24,9 @@ Without this, agent output is noisy and difficult to trust.
 6. Keep strict validation enabled in CI:
    - `strict_signals=True`
    - `strict_schema=True`
+7. Preserve both explicit machine and handoff views:
+   - `normalized`
+   - `human_summary`
 
 ## Recommended profile usage
 
@@ -47,23 +51,27 @@ Use this checklist in any new host-library repo:
 - verify `_smonitor.py` + `mylib/_private/smonitor/catalog.py` are present;
 - avoid adding hardcoded warning/error strings outside catalog;
 - validate representative events under `profile="agent"`;
+- validate representative events include `fingerprint`, `normalized`, and `human_summary`;
 - confirm bundle export works in CI smoke path;
+- confirm `smonitor compare ...` gives meaningful diffs for representative runs;
 - include test evidence before proposing fixes.
 
 ## Guardrails for autonomous tooling
 
 - Never auto-merge fixes produced from agent triage.
 - Require human review for any patch suggested from SMonitor output.
-- Prefer deterministic triage keys (`code`, `trace_hash`) before free-text matching.
+- Prefer deterministic triage keys (`code`, `fingerprint`) before free-text matching.
 - Redact sensitive fields before sharing bundles externally.
 
 ## Practical flow
 
 1. User or CI run emits SMonitor events.
 2. Bundle is exported locally.
-3. Agent consumes bundle/event stream and proposes diagnosis.
-4. Human reviews diagnosis and proposed patch.
-5. Fix is validated with tests and strict checks.
+3. Agent inspects `triage`, `normalized`, and `human_summary`.
+4. If needed, agent compares against a previous bundle.
+5. Agent proposes diagnosis.
+6. Human reviews diagnosis and proposed patch.
+7. Fix is validated with tests and strict checks.
 
 ## Related references
 
