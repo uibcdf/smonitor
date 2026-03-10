@@ -8,6 +8,8 @@ SMONITOR = {
     "capture_warnings": True,
     "capture_logging": True,
     "theme": "plain",
+    "slow_signal_ms": 0.0,
+    "slow_signal_level": "INFO",
 }
 
 PROFILES = {

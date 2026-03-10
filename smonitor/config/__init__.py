@@ -54,8 +54,13 @@ def load_env_config() -> Dict[str, Any]:
         if val is None:
             return None
         try:
-            out = float(val)
+            return float(val)
         except ValueError:
+            return None
+
+    def _get_unit_float(key: str) -> Optional[float]:
+        out = _get_float(key)
+        if out is None:
             return None
         # Keep sample rates within [0.0, 1.0]. Invalid values are ignored.
         if out < 0.0 or out > 1.0:
@@ -77,9 +82,11 @@ def load_env_config() -> Dict[str, Any]:
         "strict_config": _get_bool("SMONITOR_STRICT_CONFIG"),
         "enabled": _get_bool("SMONITOR_ENABLED"),
         "profiling_buffer_size": _get_int("SMONITOR_PROFILING_BUFFER"),
-        "profiling_sample_rate": _get_float("SMONITOR_PROFILING_SAMPLE"),
+        "profiling_sample_rate": _get_unit_float("SMONITOR_PROFILING_SAMPLE"),
         "event_buffer_size": _get_int("SMONITOR_EVENT_BUFFER"),
         "handler_error_threshold": _get_int("SMONITOR_HANDLER_ERROR_THRESHOLD"),
+        "slow_signal_ms": _get_float("SMONITOR_SLOW_SIGNAL_MS"),
+        "slow_signal_level": os.getenv("SMONITOR_SLOW_SIGNAL_LEVEL"),
     }
 
 
@@ -130,6 +137,8 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         "enabled",
         "event_buffer_size",
         "handler_error_threshold",
+        "slow_signal_ms",
+        "slow_signal_level",
     }
     for key in project_cfg.keys():
         if key not in allowed_top:
@@ -170,8 +179,8 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
             "event_buffer_size",
             "handler_error_threshold",
         }
-        float_keys = {"profiling_sample_rate"}
-        str_keys = {"level", "theme", "profile"}
+        float_keys = {"profiling_sample_rate", "slow_signal_ms"}
+        str_keys = {"level", "theme", "profile", "slow_signal_level"}
         for key in bool_keys:
             if key in cfg and not isinstance(cfg[key], bool):
                 errors.append(f"{prefix}.{key} must be a bool")

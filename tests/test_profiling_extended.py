@@ -4,6 +4,7 @@ import pytest
 
 import smonitor
 import smonitor.profiling as profiling
+from smonitor.core import decorator as decorator_module
 from smonitor.core.manager import get_manager
 
 
@@ -91,3 +92,39 @@ def test_report_exposes_timings_by_tag():
     report = smonitor.report()
     assert report["timings_by_tag"]["api"]["count"] >= 1
     assert report["timings_by_tag"]["structure"]["count"] >= 1
+
+
+
+def test_slow_signal_event_is_emitted_when_threshold_is_crossed():
+    manager = smonitor.configure(
+        profile="dev",
+        profiling=False,
+        event_buffer_size=10,
+        slow_signal_ms=0.0,
+        slow_signal_level="WARNING",
+        handlers=[],
+    )
+    manager._event_buffer.clear()
+
+    @smonitor.signal(tags=["api", "slow"], extra_factory=lambda args, kwargs: {"selection": kwargs.get("selection")})
+    def sample(*, selection=None):
+        return selection
+
+    original_perf_counter = decorator_module.perf_counter
+    values = iter([0.0, 0.050])
+    decorator_module.perf_counter = lambda: next(values)
+    try:
+        manager.configure(slow_signal_ms=10.0, slow_signal_level="WARNING")
+        sample(selection="all")
+    finally:
+        decorator_module.perf_counter = original_perf_counter
+        manager.configure(slow_signal_ms=0.0)
+
+    event = manager.recent_events(limit=1)[0]
+    assert event["code"] == "SMONITOR-SIGNAL-SLOW"
+    assert event["level"] == "WARNING"
+    assert event["source"] == f"{sample.__module__}.{sample.__name__}"
+    assert event["extra"]["duration_ms"] == 50.0
+    assert event["extra"]["threshold_ms"] == 10.0
+    assert event["extra"]["selection"] == "all"
+    assert event["tags"] == ["api", "slow"]

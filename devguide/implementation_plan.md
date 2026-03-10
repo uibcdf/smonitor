@@ -572,6 +572,16 @@ Success criteria:
 - M4: Documentation and polished UX.
 
 ## 1.0.x Diagnostic Operability Addendum
-- Add structured `extra_factory` support to `@signal` for low-friction QA/developer context on profiled calls. **In Progress**
-- Surface `tags` in timeline exports and add `timings_by_tag` to `report()`. **In Progress**
-- Evaluate slow-call threshold events as an opt-in pre-1.0/1.0.x feature. **Planned**
+- Add structured `extra_factory` support to `@signal` for low-friction QA/developer context on profiled calls. **Implemented**
+- Surface `tags` in timeline exports and add `timings_by_tag` to `report()`. **Implemented**
+- Evaluate slow-call threshold events as an opt-in pre-1.0/1.0.x feature. **Implemented (opt-in core support added)**
+
+
+## 1.0.x Slow-signal event checkpoint
+
+The profiling layer now supports opt-in slow-signal events via `slow_signal_ms` and `slow_signal_level`.
+
+- Slow-signal events are disabled by default.
+- When enabled, `@signal` measures call duration even if sampling-based profiling is disabled.
+- Calls crossing the threshold emit `SMONITOR-SIGNAL-SLOW` with structured payload including duration, threshold, tags, and user-supplied `extra_factory` context.
+- This is intended for developer and QA workflows rather than default user-facing output.

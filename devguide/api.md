@@ -154,3 +154,12 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - If `smonitor` is not configured, `@signal` should be a near-no-op.
 - All bridges (warnings/logging/exceptions) must be reversible.
 - Avoid imports of heavy optional dependencies at module top-level.
+
+
+## Profiling-oriented signal options
+
+`@signal` now supports optional profiling-oriented context:
+
+- `tags=[...]` to classify calls in timeline/report outputs,
+- `extra_factory=...` to attach structured per-call context to timeline entries and derived events,
+- opt-in slow-signal events when `slow_signal_ms` is configured.

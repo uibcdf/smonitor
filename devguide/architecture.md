@@ -160,3 +160,9 @@ smonitor.configure(
 - [x] Add docs and usage examples
 - [x] Add API and integrations contract tests
 - [x] Add package smoke checks in QA CI
+
+
+## Slow-signal events
+
+SMonitor can emit opt-in slow-signal events from the `@signal` decorator when a call exceeds a configured threshold.
+These events complement sampled profiling: they are intended for developer and QA triage and carry the same structured context used by signal timeline entries.

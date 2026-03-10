@@ -34,7 +34,9 @@ def signal(
             if not manager.config.enabled:
                 return fn(*args, **kwargs)
             manager.record_call()
-            if manager.config.profiling and random() <= manager.config.profiling_sample_rate:
+            should_profile = manager.config.profiling and random() <= manager.config.profiling_sample_rate
+            should_measure_slow = manager.config.slow_signal_ms > 0
+            if should_profile or should_measure_slow:
                 start = perf_counter()
             else:
                 start = None
@@ -79,7 +81,29 @@ def signal(
                 if start is not None:
                     frame.duration_ms = (perf_counter() - start) * 1000.0
                     key = f"{fn.__module__}.{fn.__name__}"
-                    manager.record_timing(key, frame.duration_ms, tags=frame.tags, meta=frame.extra)
+                    if should_profile:
+                        manager.record_timing(key, frame.duration_ms, tags=frame.tags, meta=frame.extra)
+                    if should_measure_slow and frame.duration_ms >= manager.config.slow_signal_ms:
+                        extra = {
+                            "module": fn.__module__,
+                            "function": fn.__name__,
+                            "duration_ms": frame.duration_ms,
+                            "threshold_ms": manager.config.slow_signal_ms,
+                            "cache_state": "n/a",
+                        }
+                        if frame.tags:
+                            extra["signal_tags"] = list(frame.tags)
+                        if frame.extra:
+                            extra.update(frame.extra)
+                        manager.emit(
+                            manager.config.slow_signal_level,
+                            f"Slow signal call detected for {key}.",
+                            source=key,
+                            category="profiling",
+                            code="SMONITOR-SIGNAL-SLOW",
+                            tags=frame.tags,
+                            extra=extra,
+                        )
                 pop_frame()
         return wrapper
 

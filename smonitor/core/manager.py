@@ -44,6 +44,8 @@ class ManagerConfig:
     event_buffer_size: int = 0
     silence: list[str] = field(default_factory=list)
     handler_error_threshold: int = 0
+    slow_signal_ms: float = 0.0
+    slow_signal_level: str = "INFO"
 
 
 class Manager:
@@ -84,6 +86,8 @@ class Manager:
             event_buffer_size=config_block.get("event_buffer_size"),
             silence=config_block.get("silence"),
             handler_error_threshold=config_block.get("handler_error_threshold"),
+            slow_signal_ms=config_block.get("slow_signal_ms"),
+            slow_signal_level=config_block.get("slow_signal_level"),
         )
         if profile := data.get("PROFILE"):
             self.configure(profile=profile)
@@ -128,6 +132,8 @@ class Manager:
         config_path: Optional[str | Path] = None,
         silence: Optional[List[str]] = None,
         handler_error_threshold: Optional[int] = None,
+        slow_signal_ms: Optional[float] = None,
+        slow_signal_level: Optional[str] = None,
     ) -> None:
         if config_path is not None:
             from ..config.discovery import discover_config, load_config_from_path
@@ -179,6 +185,10 @@ class Manager:
             self._config.silence = silence
         if handler_error_threshold is not None:
             self._config.handler_error_threshold = handler_error_threshold
+        if slow_signal_ms is not None:
+            self._config.slow_signal_ms = slow_signal_ms
+        if slow_signal_level is not None:
+            self._config.slow_signal_level = slow_signal_level
         
         if handlers is not None:
             self._handlers = list(handlers)
