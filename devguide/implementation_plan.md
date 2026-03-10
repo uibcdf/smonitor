@@ -624,3 +624,12 @@ SMonitor now exposes triage-oriented summaries in `report()` and bundle exports.
 - `report()` includes counts by event code and category.
 - `report()` includes a compact `slow_signals_recent` list for the most recent slow-signal events.
 - `collect_bundle()` mirrors those fields under `triage` so QA can inspect summarized artifacts without reading raw event streams first.
+
+
+## 1.0.x Warning coalescing checkpoint
+
+SMonitor now supports opt-in coalescing of repeated transient warnings via `warning_coalesce_window_s`.
+
+- The first warning in a coalescing window is emitted normally.
+- Repeated matching warnings inside the window are suppressed from handlers and event buffering.
+- Suppressed duplicates are tracked in `report()["coalesced_warnings"]` and mirrored in bundle triage output.

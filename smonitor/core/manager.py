@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from time import time
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -46,6 +47,7 @@ class ManagerConfig:
     handler_error_threshold: int = 0
     slow_signal_ms: float = 0.0
     slow_signal_level: str = "INFO"
+    warning_coalesce_window_s: float = 0.0
 
 
 class Manager:
@@ -66,6 +68,7 @@ class Manager:
         self._event_buffer: List[Dict[str, Any]] = []
         self._runtime_warnings: List[str] = []
         self._degraded_handlers_announced: set[str] = set()
+        self._warning_coalesce_state: Dict[str, Dict[str, Any]] = {}
 
     def _apply_config_dict(self, data: Dict[str, Any]) -> None:
         """Applies a configuration dictionary (e.g. from _smonitor.py) to the manager."""
@@ -88,6 +91,7 @@ class Manager:
             handler_error_threshold=config_block.get("handler_error_threshold"),
             slow_signal_ms=config_block.get("slow_signal_ms"),
             slow_signal_level=config_block.get("slow_signal_level"),
+            warning_coalesce_window_s=config_block.get("warning_coalesce_window_s"),
         )
         if profile := data.get("PROFILE"):
             self.configure(profile=profile)
@@ -134,6 +138,7 @@ class Manager:
         handler_error_threshold: Optional[int] = None,
         slow_signal_ms: Optional[float] = None,
         slow_signal_level: Optional[str] = None,
+        warning_coalesce_window_s: Optional[float] = None,
     ) -> None:
         if config_path is not None:
             from ..config.discovery import discover_config, load_config_from_path
@@ -189,6 +194,8 @@ class Manager:
             self._config.slow_signal_ms = slow_signal_ms
         if slow_signal_level is not None:
             self._config.slow_signal_level = slow_signal_level
+        if warning_coalesce_window_s is not None:
+            self._config.warning_coalesce_window_s = warning_coalesce_window_s
         
         if handlers is not None:
             self._handlers = list(handlers)
@@ -325,6 +332,44 @@ class Manager:
 
         return message, hint, code_meta
 
+    def _coalesce_warning_key(self, event: Dict[str, Any]) -> Optional[str]:
+        if event.get("level") != "WARNING":
+            return None
+        if self._config.warning_coalesce_window_s <= 0:
+            return None
+        extra = event.get("extra") or {}
+        parts = [
+            str(event.get("code") or ""),
+            str(event.get("source") or ""),
+            str(extra.get("resource") or ""),
+            str(extra.get("caller") or ""),
+            str(event.get("message") or ""),
+        ]
+        return "|".join(parts)
+
+    def _maybe_coalesce_warning(self, event: Dict[str, Any]) -> bool:
+        key = self._coalesce_warning_key(event)
+        if key is None:
+            return False
+        now = time()
+        state = self._warning_coalesce_state.get(key)
+        if state is None or now - state["last_timestamp"] > self._config.warning_coalesce_window_s:
+            self._warning_coalesce_state[key] = {
+                "count": 0,
+                "last_timestamp": now,
+                "message": event.get("message"),
+                "source": event.get("source"),
+                "code": event.get("code"),
+                "resource": (event.get("extra") or {}).get("resource"),
+                "caller": (event.get("extra") or {}).get("caller"),
+            }
+            return False
+        state["count"] += 1
+        state["last_timestamp"] = now
+        state["message"] = event.get("message")
+        self._warning_coalesce_state[key] = state
+        return True
+
     def emit(
         self,
         level: str,
@@ -383,6 +428,9 @@ class Manager:
 
         # Honor configured threshold before routing/printing.
         if _level_value(event["level"]) < _level_value(self._config.level):
+            return event
+
+        if self._maybe_coalesce_warning(event):
             return event
 
         # Soft enforcement for signals/contracts in dev/qa profiles
@@ -516,6 +564,7 @@ class Manager:
         events_by_code: Dict[str, int] = {}
         events_by_category: Dict[str, int] = {}
         slow_signals_recent: List[Dict[str, Any]] = []
+        coalesced_warnings: List[Dict[str, Any]] = []
         for event in self._event_buffer:
             code = event.get("code")
             if code:
@@ -535,6 +584,17 @@ class Manager:
                     }
                 )
         slow_signals_recent = slow_signals_recent[-10:]
+        for state in self._warning_coalesce_state.values():
+            if state.get("count", 0) > 0:
+                coalesced_warnings.append({
+                    "code": state.get("code"),
+                    "source": state.get("source"),
+                    "resource": state.get("resource"),
+                    "caller": state.get("caller"),
+                    "suppressed_count": state.get("count"),
+                    "message": state.get("message"),
+                })
+        coalesced_warnings = coalesced_warnings[-20:]
 
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
@@ -563,6 +623,7 @@ class Manager:
             "events_by_code": events_by_code,
             "events_by_category": events_by_category,
             "slow_signals_recent": slow_signals_recent,
+            "coalesced_warnings": coalesced_warnings,
         }
 
     def get_codes(self) -> Dict[str, Dict[str, Any]]:

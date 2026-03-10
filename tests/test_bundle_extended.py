@@ -128,3 +128,18 @@ def test_collect_bundle_exposes_triage_summary_for_slow_signals(tmp_path: Path):
     assert recent["source"] == "pkg.mod.fn"
     assert recent["duration_ms"] == 50.0
     assert recent["threshold_ms"] == 10.0
+
+
+def test_collect_bundle_exposes_coalesced_warning_summary(tmp_path: Path):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
+    manager = get_manager()
+    smonitor.configure(profile="user", handlers=[], event_buffer_size=10, enabled=True, warning_coalesce_window_s=60.0)
+    manager._warning_coalesce_state.clear()
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l", "caller": "pkg.mod.fn"})
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l", "caller": "pkg.mod.fn"})
+    data = collect_bundle()
+    summary = data["triage"]["coalesced_warnings"][-1]
+    assert summary["code"] == "W1"
+    assert summary["resource"] == "181l"
+    assert summary["caller"] == "pkg.mod.fn"
+    assert summary["suppressed_count"] == 1

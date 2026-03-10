@@ -101,3 +101,14 @@ def test_signal_exception_source_keeps_module_contract_compatibility():
     event = events[-1]
     assert event["source"].startswith(__name__ + ".")
     assert event["extra"]["source_module"] == __name__
+
+
+def test_warning_coalescing_suppresses_repeated_events():
+    memory = MemoryHandler(max_events=10)
+    manager = smonitor.configure(profile="user", handlers=[memory], event_buffer_size=10, warning_coalesce_window_s=60.0)
+    manager._warning_coalesce_state.clear()
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l", "caller": "pkg.mod.fn"})
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l", "caller": "pkg.mod.fn"})
+    assert len(memory.events) == 1
+    report = manager.report()
+    assert report["coalesced_warnings"][-1]["suppressed_count"] == 1

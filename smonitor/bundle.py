@@ -112,6 +112,7 @@ def collect_bundle(
             "events_by_code": report.get("events_by_code", {}),
             "events_by_category": report.get("events_by_category", {}),
             "slow_signals_recent": report.get("slow_signals_recent", []),
+            "coalesced_warnings": report.get("coalesced_warnings", []),
         },
         "events": events,
         "redactions": {

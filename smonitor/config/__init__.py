@@ -87,6 +87,7 @@ def load_env_config() -> Dict[str, Any]:
         "handler_error_threshold": _get_int("SMONITOR_HANDLER_ERROR_THRESHOLD"),
         "slow_signal_ms": _get_float("SMONITOR_SLOW_SIGNAL_MS"),
         "slow_signal_level": os.getenv("SMONITOR_SLOW_SIGNAL_LEVEL"),
+        "warning_coalesce_window_s": _get_float("SMONITOR_WARNING_COALESCE_WINDOW_S"),
     }
 
 
@@ -139,6 +140,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         "handler_error_threshold",
         "slow_signal_ms",
         "slow_signal_level",
+        "warning_coalesce_window_s",
     }
     for key in project_cfg.keys():
         if key not in allowed_top:
@@ -179,7 +181,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
             "event_buffer_size",
             "handler_error_threshold",
         }
-        float_keys = {"profiling_sample_rate", "slow_signal_ms"}
+        float_keys = {"profiling_sample_rate", "slow_signal_ms", "warning_coalesce_window_s"}
         str_keys = {"level", "theme", "profile", "slow_signal_level"}
         for key in bool_keys:
             if key in cfg and not isinstance(cfg[key], bool):

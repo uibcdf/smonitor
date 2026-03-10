@@ -40,6 +40,7 @@ def test_load_env_config(monkeypatch):
     monkeypatch.setenv("SMONITOR_HANDLER_ERROR_THRESHOLD", "3")
     monkeypatch.setenv("SMONITOR_SLOW_SIGNAL_MS", "12.5")
     monkeypatch.setenv("SMONITOR_SLOW_SIGNAL_LEVEL", "WARNING")
+    monkeypatch.setenv("SMONITOR_WARNING_COALESCE_WINDOW_S", "5.0")
     cfg = load_env_config()
     assert cfg["profile"] == "dev"
     assert cfg["level"] == "INFO"
@@ -48,6 +49,7 @@ def test_load_env_config(monkeypatch):
     assert cfg["handler_error_threshold"] == 3
     assert cfg["slow_signal_ms"] == 12.5
     assert cfg["slow_signal_level"] == "WARNING"
+    assert cfg["warning_coalesce_window_s"] == 5.0
 
 
 def test_load_env_config_invalid_profiling_sample(monkeypatch):

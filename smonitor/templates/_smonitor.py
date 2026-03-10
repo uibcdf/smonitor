@@ -10,6 +10,7 @@ SMONITOR = {
     "theme": "plain",
     "slow_signal_ms": 0.0,
     "slow_signal_level": "INFO",
+    "warning_coalesce_window_s": 0.0,
 }
 
 PROFILES = {

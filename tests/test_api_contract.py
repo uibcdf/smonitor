@@ -34,3 +34,4 @@ def test_configure_emit_resolve_report_contract():
     assert "events_by_code" in report
     assert "events_by_category" in report
     assert "slow_signals_recent" in report
+    assert "coalesced_warnings" in report
