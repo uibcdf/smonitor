@@ -5,8 +5,8 @@ Source of truth for integrating and using **SMonitor** in this library.
 Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
-- Source version: `smonitor@0.10.0`
-- Last synced: 2026-02-06
+- Source version: `smonitor@0.11.4`
+- Last synced: 2026-03-10
 
 ## What is SMonitor
 
@@ -152,6 +152,69 @@ SIGNALS = {
 ```
 
 Missing fields will trigger warnings or errors in `dev` and `qa` profiles, ensuring diagnostic quality.
+
+## 5.1 Structured Signal Context and Profiling
+
+Recent pre-1.0 stabilization work added several profiling and machine-diagnostics capabilities that integrators should use deliberately:
+
+- `@signal(..., extra_factory=...)` can attach structured per-call context without emitting a separate warning or error event.
+- `report()` now exposes `timings_by_tag` in addition to timings by function and module.
+- `slow_signal_ms` and `slow_signal_level` enable opt-in slow-call events (`SMONITOR-SIGNAL-SLOW`) for developer and QA workflows.
+
+Recommended usage:
+
+```python
+from smonitor import signal
+
+@signal(
+    tags=["api", "selection"],
+    extra_factory=lambda args, kwargs: {"selection": kwargs.get("selection")},
+)
+def get_atoms(molecular_system, selection="all"):
+    ...
+```
+
+These features are intended for observability and QA; they should remain opt-in and must not flood end-user output by default.
+
+## 5.2 Canonical Structured Context Helper
+
+For library-generated diagnostics, prefer `smonitor.integrations.context_extra(...)` when building repeated `extra` payloads.
+
+```python
+from smonitor.integrations import context_extra, emit_from_catalog
+
+emit_from_catalog(
+    CATALOG["warnings"]["DownloadWarning"],
+    extra=context_extra(
+        caller="mylib.form.file_pdb.download",
+        resource="181l.pdb",
+        provider="RCSB",
+        operation="download",
+        extra={"attempt": 2, "retries": 5},
+    ),
+)
+```
+
+Use this helper for stable shared keys such as `caller`, `form`, `requested_attribute`, `resource`, `provider`, and `operation`.
+
+## 5.3 Report, Bundle, and Machine-Oriented Output
+
+SMonitor now exposes QA-oriented summaries beyond raw event streams:
+
+- `report()` includes `events_by_code`, `events_by_category`, `slow_signals_recent`, and `coalesced_warnings`.
+- bundle exports mirror those summaries under `triage`.
+- `JsonHandler` includes a `normalized` payload section with stable machine-oriented fields for cross-library ingestion.
+
+These additions should be treated as the preferred source for automated QA summaries before scanning raw event buffers.
+
+## 5.4 Human-Readable Output and Coalescing
+
+Two usability rules now apply:
+
+- Human-readable handlers may truncate very large structured payload fragments for `qa`, `dev`, and `debug` profiles. The underlying event payload is not altered.
+- Repeated transient warnings can be coalesced with `warning_coalesce_window_s`. The first warning is emitted normally; suppressed duplicates are summarized in `coalesced_warnings`.
+
+Use coalescing only for clearly repeated transient diagnostics such as download retries, not for semantically distinct warnings.
 
 ## 6. Noise Control
 
