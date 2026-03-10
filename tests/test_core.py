@@ -105,10 +105,98 @@ def test_signal_exception_source_keeps_module_contract_compatibility():
 
 def test_warning_coalescing_suppresses_repeated_events():
     memory = MemoryHandler(max_events=10)
-    manager = smonitor.configure(profile="user", handlers=[memory], event_buffer_size=10, warning_coalesce_window_s=60.0)
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[memory],
+        event_buffer_size=10,
+        warning_coalesce_window_s=60.0,
+    )
     manager._warning_coalesce_state.clear()
-    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l", "caller": "pkg.mod.fn"})
-    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l", "caller": "pkg.mod.fn"})
+    smonitor.emit(
+        "WARNING",
+        "retry",
+        source="pkg.mod",
+        code="W1",
+        extra={"resource": "181l", "caller": "pkg.mod.fn"},
+    )
+    smonitor.emit(
+        "WARNING",
+        "retry",
+        source="pkg.mod",
+        code="W1",
+        extra={"resource": "181l", "caller": "pkg.mod.fn"},
+    )
     assert len(memory.events) == 1
     report = manager.report()
     assert report["coalesced_warnings"][-1]["suppressed_count"] == 1
+
+
+def test_warning_coalescing_finalizes_with_summary_event():
+    memory = MemoryHandler(max_events=10)
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[memory],
+        event_buffer_size=10,
+        warning_coalesce_window_s=60.0,
+    )
+    manager._warning_coalesce_state.clear()
+    manager._coalesced_warning_summaries.clear()
+    smonitor.emit(
+        "WARNING",
+        "retry",
+        source="pkg.mod",
+        code="W1",
+        extra={
+            "resource": "181l",
+            "caller": "pkg.mod.fn",
+            "retry_attempt": 2,
+            "retry_max": 5,
+            "last_failure_reason": "timeout",
+        },
+    )
+    smonitor.emit(
+        "WARNING",
+        "retry",
+        source="pkg.mod",
+        code="W1",
+        extra={
+            "resource": "181l",
+            "caller": "pkg.mod.fn",
+            "retry_attempt": 3,
+            "retry_max": 5,
+            "last_failure_reason": "timeout",
+        },
+    )
+
+    summaries = manager.flush_coalesced_warnings()
+
+    assert summaries[-1]["suppressed_count"] == 1
+    assert summaries[-1]["total_occurrences"] == 2
+    assert summaries[-1]["retry_attempt"] == 3
+    assert summaries[-1]["retry_max"] == 5
+    assert summaries[-1]["last_failure_reason"] == "timeout"
+    assert any(event["code"] == "SMONITOR-WARNING-COALESCED" for event in memory.events)
+
+
+def test_warning_coalescing_expired_window_emits_summary_before_reset(monkeypatch):
+    memory = MemoryHandler(max_events=10)
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[memory],
+        event_buffer_size=10,
+        warning_coalesce_window_s=5.0,
+    )
+    manager._warning_coalesce_state.clear()
+    manager._coalesced_warning_summaries.clear()
+    moments = iter([10.0, 11.0, 20.5])
+    monkeypatch.setattr("smonitor.core.manager.time", lambda: next(moments))
+
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l"})
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l"})
+    smonitor.emit("WARNING", "retry", source="pkg.mod", code="W1", extra={"resource": "181l"})
+
+    summary_events = [
+        event for event in memory.events if event["code"] == "SMONITOR-WARNING-COALESCED"
+    ]
+    assert summary_events
+    assert summary_events[-1]["extra"]["suppressed_count"] == 1

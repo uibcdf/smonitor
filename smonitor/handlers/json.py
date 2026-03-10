@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
-
 _NORMALIZED_EXTRA_KEYS = [
     "hint",
     "caller",
@@ -13,6 +12,15 @@ _NORMALIZED_EXTRA_KEYS = [
     "resource",
     "provider",
     "operation",
+    "retry_attempt",
+    "retry_max",
+    "retry_exhausted",
+    "retry_delay_s",
+    "failure_class",
+    "last_failure_reason",
+    "cause_exception_type",
+    "cause_code",
+    "causal_chain",
 ]
 
 

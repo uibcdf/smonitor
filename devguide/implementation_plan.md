@@ -633,6 +633,7 @@ SMonitor now supports opt-in coalescing of repeated transient warnings via `warn
 - The first warning in a coalescing window is emitted normally.
 - Repeated matching warnings inside the window are suppressed from handlers and event buffering.
 - Suppressed duplicates are tracked in `report()["coalesced_warnings"]` and mirrored in bundle triage output.
+- Finalized coalescing windows also emit `SMONITOR-WARNING-COALESCED` summary events so CI/event streams keep the aggregate retry outcome.
 
 
 ## 1.0.x Machine-output normalization checkpoint
@@ -640,5 +641,197 @@ SMonitor now supports opt-in coalescing of repeated transient warnings via `warn
 SMonitor now exposes a normalized machine-oriented payload in JSON handler output.
 
 - The `normalized` section contains stable core fields and selected structured-context keys.
+- Canonical retry/causal keys are now reserved in `context_extra(...)` and promoted into `normalized` output for cross-library QA ingestion.
 - This is intended to simplify cross-library QA ingestion without changing the underlying event schema.
 - Further normalization should remain incremental and backward compatible.
+
+
+## Pre-1.0 Diagnostic Operability Completion Plan
+
+Goal:
+- turn SMonitor into a clearly superior diagnostic/triage layer before `1.0.0`;
+- make repeated incidents easier to group, compare, prioritize, and hand off;
+- reduce log noise without losing decision-grade information;
+- keep all additions backward compatible and local-first by default.
+
+Constraint:
+- no public contract breakage in existing event fields;
+- additions should be additive, opt-in where appropriate, and covered by API/contract tests.
+
+### Slice 1 — Stable incident fingerprints
+
+Scope:
+- add a deterministic `fingerprint` field for emitted events and normalized payloads;
+- base it on stable contracts only:
+  - `code`
+  - `source`
+  - `exception_type`
+  - selected normalized extra fields
+- expose fingerprint counts in `report()` and bundle triage.
+
+Deliverables:
+- fingerprint helper in core;
+- `fingerprint` in routed event / JSON normalized payload;
+- `events_by_fingerprint` in `report()` and bundle `triage`;
+- tests for determinism and grouping behavior.
+
+Success criteria:
+- repeated incidents can be grouped without custom downstream logic;
+- fingerprint stays stable across runs for semantically identical incidents.
+
+### Slice 2 — Run/session/correlation identifiers
+
+Scope:
+- add canonical identifiers for reproducibility:
+  - `run_id`
+  - `session_id`
+  - `correlation_id`
+- allow explicit injection and safe defaults;
+- preserve local-first behavior.
+
+Deliverables:
+- manager/session-level identifiers;
+- event propagation for correlation metadata;
+- bundle metadata including run/session identifiers;
+- tests covering explicit IDs and default generation.
+
+Success criteria:
+- QA can reconstruct which events belong to the same run/session/operation;
+- bundles become easier to compare and hand off.
+
+### Slice 3 — Incident classification and decision metadata
+
+Scope:
+- add additive machine-oriented fields for decision support:
+  - `incident_kind`
+  - `severity`
+  - `priority`
+  - `diagnostic_confidence`
+  - `recommended_action`
+  - `next_step`
+  - `retryable`
+  - `support_needed`
+- keep existing `level` semantics unchanged.
+
+Deliverables:
+- canonical helper support (`context_extra(...)` or equivalent additive path);
+- normalized JSON promotion of those fields;
+- contract tests for stable serialization.
+
+Success criteria:
+- users and agents can distinguish “what happened” from “what to do next”;
+- triage can prioritize incidents without parsing prose hints.
+
+### Slice 4 — Evidence-first payload structure
+
+Scope:
+- add canonical `evidence` support for compact observed/expected/resource facts;
+- define a conservative shape suitable for support and CI triage.
+
+Deliverables:
+- event payload convention for `evidence`;
+- normalized JSON inclusion;
+- docs/tests/examples showing minimal and rich evidence payloads.
+
+Success criteria:
+- support bundles capture decision-grade evidence without ad hoc key sprawl;
+- handlers can present short evidence summaries without losing raw structure.
+
+### Slice 5 — Stronger noise-reduction policies
+
+Scope:
+- generalize beyond current warning coalescing toward policy-driven duplicate handling;
+- support additive policies such as:
+  - `emit_first`
+  - `emit_last`
+  - `emit_summary`
+  - `emit_every_n`
+- keep the current warning coalescing behavior backward compatible.
+
+Deliverables:
+- policy/config design for duplicate handling;
+- summary-event strategy compatible with bundles and reports;
+- regression tests for high-noise retry loops.
+
+Success criteria:
+- noisy workflows remain readable;
+- aggregate information remains preserved and machine-usable.
+
+### Slice 6 — Operational report improvements
+
+Scope:
+- make `report()` immediately useful as an action surface;
+- add:
+  - top codes
+  - top sources
+  - top fingerprints
+  - most noisy resources
+  - most expensive tags/sources
+  - blocking/actionable/recurrent summaries
+
+Deliverables:
+- additive `report()` sections;
+- mirrored bundle triage sections;
+- tests for ranking and summary determinism.
+
+Success criteria:
+- a maintainer can decide what to inspect first without scanning raw events;
+- agents can consume ranked incident summaries directly.
+
+### Slice 7 — Bundle comparison workflow
+
+Scope:
+- add a first local diff workflow for support and CI:
+  - compare two bundles
+  - show new/disappeared/recurrent fingerprints
+  - show count deltas and slow-signal deltas
+
+Deliverables:
+- initial local comparison API/CLI surface;
+- Markdown/text summary suitable for issue/PR comments;
+- tests for stable diff semantics.
+
+Success criteria:
+- repeated regressions become visible immediately;
+- support handoff can answer “what changed?” reproducibly.
+
+### Slice 8 — Human/agent dual-output hardening
+
+Scope:
+- keep profile-based behavior, but harden the explicit separation between:
+  - human-facing concise summaries
+  - agent-facing machine payloads
+- evaluate whether to expose a stable `human_summary` block without changing core event semantics.
+
+Deliverables:
+- docs + tests for dual-output expectations;
+- optional additive summary field if needed.
+
+Success criteria:
+- handlers stay readable for humans while JSON/bundles stay deterministic for agents.
+
+## Recommended execution order before 1.0.0
+
+1. Stable incident fingerprints
+2. Run/session/correlation identifiers
+3. Incident classification and decision metadata
+4. Evidence-first payload structure
+5. Operational report improvements
+6. Stronger noise-reduction policies
+7. Bundle comparison workflow
+8. Human/agent dual-output hardening
+
+Reasoning:
+- slices 1-4 define the machine contract;
+- slices 5-7 define the operator workflow;
+- slice 8 consolidates UX without destabilizing the contract layer early.
+
+## Revised 1.0.0 exit criteria
+
+`1.0.0` should not be cut until all conditions below are true:
+
+1. core/test/CI stability criteria remain satisfied;
+2. existing public contracts remain backward compatible;
+3. slices 1-6 are implemented and covered by tests;
+4. at least an initial bundle comparison workflow exists;
+5. at least one cross-library diagnostic workflow validates the new operability model end to end.

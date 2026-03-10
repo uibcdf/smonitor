@@ -45,7 +45,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - Current quality snapshot (2026-03-04): remote CI green, full pytest suite green, line coverage ~98% and branch-rate ~95%.
 
 ## Operational Stabilization Plan (Toward 1.0.0)
-1. Stabilization window (2-4 weeks): only bugfixes, hardening, and docs/test corrections.
+1. Extended stabilization window (until diagnostic operability closure): only bugfixes, hardening, docs/test corrections, and pre-1.0 diagnostic operability work explicitly tracked in `implementation_plan.md`.
 2. Weekly operation loop:
    - review CI failures in SMonitor and integrated libraries,
    - review recurring incident codes/signals,
@@ -60,12 +60,20 @@ historical context live in `SPEC_SMONITOR.md`.
 5. Exit criteria for `1.0.0`:
    - no open high-severity bugs in SMonitor,
    - sustained CI stability across defined matrix,
-   - ecosystem smoke checks validated.
+   - ecosystem smoke checks validated,
+   - diagnostic operability plan below implemented and validated in at least one real cross-library workflow.
 
 ## Remaining Focus (Pre-1.0)
 - Keep coverage >=90% while prioritizing correctness/contract stability over percentage gains.
 - Keep branch-rate >=92% in CI as stabilization floor.
 - Final consistency sweep across `README`, `SPEC`, `devguide`, and Sphinx docs.
+- Complete the pre-1.0 diagnostic operability plan:
+  - stable incident fingerprints,
+  - run/session/correlation identifiers,
+  - incident classification and decision metadata,
+  - richer report/bundle triage summaries,
+  - reproducible bundle comparison workflow,
+  - stronger noise-reduction policies without information loss.
 - Post-1.0 roadmap preparation: opt-in telemetry client and Sentinel integration.
 
 ## Version 1.0 Emphasis
@@ -79,5 +87,5 @@ historical context live in `SPEC_SMONITOR.md`.
 - `report()` and bundle exports now expose triage-oriented summaries for event codes, categories, and recent slow-signal activity.
 - Optional coalescing for repeated transient warnings is now available via `warning_coalesce_window_s`.
 - Machine-oriented JSON output now includes a normalized payload section for stable cross-library QA ingestion.
-- The current stabilization focus is to monitor these additions in real cross-library QA usage and extend them only if a concrete gap appears.
-- The next candidate refinements, if needed during stabilization, are limited to conservative payload/helper adjustments rather than new feature slices.
+- Retry and causal metadata now have canonical fields in `context_extra(...)`, normalized JSON output, and coalesced warning summary events.
+- The current pre-1.0 focus is no longer only observation: it is to complete the diagnostic operability plan before `1.0.0` so SMonitor feels decisively useful for developers, QAs, users, and automation agents.

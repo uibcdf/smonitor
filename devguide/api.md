@@ -166,10 +166,13 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - Human-readable handlers (`console`, `file`) may truncate large structured payload fragments for `qa`, `dev`, and `debug` profiles. This does not alter the routed event payload or JSON handler output.
 
 - `smonitor.integrations.context_extra(...)` builds stable structured payloads for common diagnostic fields without repeating the same key assembly in each library.
+- `context_extra(...)` also reserves canonical retry/causal fields for cross-library QA payloads: `retry_attempt`, `retry_max`, `retry_exhausted`, `retry_delay_s`, `failure_class`, `last_failure_reason`, `cause_exception_type`, `cause_code`, and `causal_chain`.
 
 - `report()` now includes `events_by_code`, `events_by_category`, and `slow_signals_recent` to support QA triage without scanning raw event streams.
 - Bundle exports mirror this information under `triage`.
 
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`; suppressed duplicates are summarized in `report()` and bundle triage output.
+- Coalesced warning windows also emit a final summary event (`SMONITOR-WARNING-COALESCED`) when the window is finalized so CI/event streams can retain the aggregate retry outcome.
 
 - `JsonHandler` now emits a `normalized` payload section with stable machine-oriented fields (`level`, `message`, `source`, `code`, `category`, `exception_type`, `tags`, plus selected structured-context keys).
+- The normalized payload now promotes canonical retry/causal keys as first-class machine-readable fields.

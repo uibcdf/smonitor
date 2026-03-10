@@ -5,10 +5,10 @@ from random import random
 from time import perf_counter
 from typing import Any, Callable, Optional
 
-ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
-
 from .context import Frame, pop_frame, push_frame
 from .manager import get_manager
+
+ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
 
 
 def _summarize_args(args: tuple[Any, ...], kwargs: dict[str, Any]) -> dict[str, Any]:
@@ -34,7 +34,10 @@ def signal(
             if not manager.config.enabled:
                 return fn(*args, **kwargs)
             manager.record_call()
-            should_profile = manager.config.profiling and random() <= manager.config.profiling_sample_rate
+            should_profile = (
+                manager.config.profiling
+                and random() <= manager.config.profiling_sample_rate
+            )
             should_measure_slow = manager.config.slow_signal_ms > 0
             if should_profile or should_measure_slow:
                 start = perf_counter()
@@ -82,7 +85,12 @@ def signal(
                     frame.duration_ms = (perf_counter() - start) * 1000.0
                     key = f"{fn.__module__}.{fn.__name__}"
                     if should_profile:
-                        manager.record_timing(key, frame.duration_ms, tags=frame.tags, meta=frame.extra)
+                        manager.record_timing(
+                            key,
+                            frame.duration_ms,
+                            tags=frame.tags,
+                            meta=frame.extra,
+                        )
                     if should_measure_slow and frame.duration_ms >= manager.config.slow_signal_ms:
                         extra = {
                             "module": fn.__module__,

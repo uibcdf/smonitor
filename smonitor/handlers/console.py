@@ -120,7 +120,7 @@ class RichConsoleHandler(ConsoleHandler):
         if profile == "user":
             self._handle_user(event, level, style, ts)
         elif profile in {"dev", "debug", "qa"}:
-            self._handle_technical(event, level, style, ts)
+            self._handle_technical(event, level, style, ts, profile=profile)
         else:
             # Fallback for agent or others
             msg = self._format(event, profile)
@@ -169,7 +169,14 @@ class RichConsoleHandler(ConsoleHandler):
             )
         )
 
-    def _handle_technical(self, event: Dict[str, Any], level: str, style: str, ts: str) -> None:
+    def _handle_technical(
+        self,
+        event: Dict[str, Any],
+        level: str,
+        style: str,
+        ts: str,
+        profile: str = "dev",
+    ) -> None:
         from rich.rule import Rule
         from rich.table import Table
         from rich.text import Text

@@ -25,6 +25,15 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
             "resource": "181l",
             "provider": "RCSB",
             "operation": "download",
+            "retry_attempt": 2,
+            "retry_max": 5,
+            "retry_exhausted": False,
+            "retry_delay_s": 1.5,
+            "failure_class": "network",
+            "last_failure_reason": "timeout",
+            "cause_exception_type": "TimeoutError",
+            "cause_code": "NET-TIMEOUT",
+            "causal_chain": [{"code": "NET-TIMEOUT"}],
         },
     }
     handler.handle(event, profile="agent")
@@ -38,3 +47,12 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
     assert normalized["resource"] == "181l"
     assert normalized["provider"] == "RCSB"
     assert normalized["operation"] == "download"
+    assert normalized["retry_attempt"] == 2
+    assert normalized["retry_max"] == 5
+    assert normalized["retry_exhausted"] is False
+    assert normalized["retry_delay_s"] == 1.5
+    assert normalized["failure_class"] == "network"
+    assert normalized["last_failure_reason"] == "timeout"
+    assert normalized["cause_exception_type"] == "TimeoutError"
+    assert normalized["cause_code"] == "NET-TIMEOUT"
+    assert normalized["causal_chain"] == [{"code": "NET-TIMEOUT"}]

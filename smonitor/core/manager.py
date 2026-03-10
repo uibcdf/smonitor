@@ -3,8 +3,8 @@ from __future__ import annotations
 import warnings
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from time import time
 from pathlib import Path
+from time import time
 from typing import Any, Dict, Iterable, List, Optional
 
 from ..policy.engine import PolicyEngine
@@ -69,6 +69,7 @@ class Manager:
         self._runtime_warnings: List[str] = []
         self._degraded_handlers_announced: set[str] = set()
         self._warning_coalesce_state: Dict[str, Dict[str, Any]] = {}
+        self._coalesced_warning_summaries: List[Dict[str, Any]] = []
 
     def _apply_config_dict(self, data: Dict[str, Any]) -> None:
         """Applies a configuration dictionary (e.g. from _smonitor.py) to the manager."""
@@ -335,6 +336,8 @@ class Manager:
     def _coalesce_warning_key(self, event: Dict[str, Any]) -> Optional[str]:
         if event.get("level") != "WARNING":
             return None
+        if event.get("code") == "SMONITOR-WARNING-COALESCED":
+            return None
         if self._config.warning_coalesce_window_s <= 0:
             return None
         extra = event.get("extra") or {}
@@ -347,13 +350,63 @@ class Manager:
         ]
         return "|".join(parts)
 
+    def _build_coalesced_warning_summary(self, state: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "code": state.get("code"),
+            "source": state.get("source"),
+            "resource": state.get("resource"),
+            "caller": state.get("caller"),
+            "suppressed_count": state.get("count", 0),
+            "total_occurrences": state.get("count", 0) + 1,
+            "message": state.get("message"),
+            "last_message": state.get("message"),
+            "retry_attempt": state.get("retry_attempt"),
+            "retry_max": state.get("retry_max"),
+            "retry_exhausted": state.get("retry_exhausted"),
+            "retry_delay_s": state.get("retry_delay_s"),
+            "failure_class": state.get("failure_class"),
+            "last_failure_reason": state.get("last_failure_reason"),
+            "cause_exception_type": state.get("cause_exception_type"),
+            "cause_code": state.get("cause_code"),
+            "causal_chain": state.get("causal_chain"),
+        }
+
+    def _finalize_coalesced_warning(self, key: str) -> Optional[Dict[str, Any]]:
+        state = self._warning_coalesce_state.get(key)
+        if not state or state.get("count", 0) <= 0:
+            return None
+        summary = self._build_coalesced_warning_summary(state)
+        self._coalesced_warning_summaries.append(summary)
+        self._coalesced_warning_summaries = self._coalesced_warning_summaries[-20:]
+        self._warning_coalesce_state[key] = {
+            **state,
+            "count": 0,
+        }
+        self.emit(
+            "INFO",
+            "Coalesced repeated warning events.",
+            source=state.get("source"),
+            category="diagnostics",
+            code="SMONITOR-WARNING-COALESCED",
+            extra=summary,
+        )
+        return summary
+
+    def flush_coalesced_warnings(self) -> List[Dict[str, Any]]:
+        summaries: List[Dict[str, Any]] = []
+        for key in list(self._warning_coalesce_state):
+            summary = self._finalize_coalesced_warning(key)
+            if summary is not None:
+                summaries.append(summary)
+        return summaries
+
     def _maybe_coalesce_warning(self, event: Dict[str, Any]) -> bool:
         key = self._coalesce_warning_key(event)
         if key is None:
             return False
         now = time()
         state = self._warning_coalesce_state.get(key)
-        if state is None or now - state["last_timestamp"] > self._config.warning_coalesce_window_s:
+        if state is None:
             self._warning_coalesce_state[key] = {
                 "count": 0,
                 "last_timestamp": now,
@@ -362,11 +415,55 @@ class Manager:
                 "code": event.get("code"),
                 "resource": (event.get("extra") or {}).get("resource"),
                 "caller": (event.get("extra") or {}).get("caller"),
+                "retry_attempt": (event.get("extra") or {}).get("retry_attempt"),
+                "retry_max": (event.get("extra") or {}).get("retry_max"),
+                "retry_exhausted": (event.get("extra") or {}).get("retry_exhausted"),
+                "retry_delay_s": (event.get("extra") or {}).get("retry_delay_s"),
+                "failure_class": (event.get("extra") or {}).get("failure_class"),
+                "last_failure_reason": (event.get("extra") or {}).get("last_failure_reason"),
+                "cause_exception_type": (event.get("extra") or {}).get("cause_exception_type"),
+                "cause_code": (event.get("extra") or {}).get("cause_code"),
+                "causal_chain": (event.get("extra") or {}).get("causal_chain"),
+            }
+            return False
+        if now - state["last_timestamp"] > self._config.warning_coalesce_window_s:
+            self._finalize_coalesced_warning(key)
+            self._warning_coalesce_state[key] = {
+                "count": 0,
+                "last_timestamp": now,
+                "message": event.get("message"),
+                "source": event.get("source"),
+                "code": event.get("code"),
+                "resource": (event.get("extra") or {}).get("resource"),
+                "caller": (event.get("extra") or {}).get("caller"),
+                "retry_attempt": (event.get("extra") or {}).get("retry_attempt"),
+                "retry_max": (event.get("extra") or {}).get("retry_max"),
+                "retry_exhausted": (event.get("extra") or {}).get("retry_exhausted"),
+                "retry_delay_s": (event.get("extra") or {}).get("retry_delay_s"),
+                "failure_class": (event.get("extra") or {}).get("failure_class"),
+                "last_failure_reason": (event.get("extra") or {}).get("last_failure_reason"),
+                "cause_exception_type": (event.get("extra") or {}).get("cause_exception_type"),
+                "cause_code": (event.get("extra") or {}).get("cause_code"),
+                "causal_chain": (event.get("extra") or {}).get("causal_chain"),
             }
             return False
         state["count"] += 1
         state["last_timestamp"] = now
         state["message"] = event.get("message")
+        extra = event.get("extra") or {}
+        for extra_key in (
+            "retry_attempt",
+            "retry_max",
+            "retry_exhausted",
+            "retry_delay_s",
+            "failure_class",
+            "last_failure_reason",
+            "cause_exception_type",
+            "cause_code",
+            "causal_chain",
+        ):
+            if extra_key in extra:
+                state[extra_key] = extra.get(extra_key)
         self._warning_coalesce_state[key] = state
         return True
 
@@ -564,7 +661,7 @@ class Manager:
         events_by_code: Dict[str, int] = {}
         events_by_category: Dict[str, int] = {}
         slow_signals_recent: List[Dict[str, Any]] = []
-        coalesced_warnings: List[Dict[str, Any]] = []
+        coalesced_warnings: List[Dict[str, Any]] = list(self._coalesced_warning_summaries)
         for event in self._event_buffer:
             code = event.get("code")
             if code:
@@ -586,14 +683,7 @@ class Manager:
         slow_signals_recent = slow_signals_recent[-10:]
         for state in self._warning_coalesce_state.values():
             if state.get("count", 0) > 0:
-                coalesced_warnings.append({
-                    "code": state.get("code"),
-                    "source": state.get("source"),
-                    "resource": state.get("resource"),
-                    "caller": state.get("caller"),
-                    "suppressed_count": state.get("count"),
-                    "message": state.get("message"),
-                })
+                coalesced_warnings.append(self._build_coalesced_warning_summary(state))
         coalesced_warnings = coalesced_warnings[-20:]
 
         profiling_meta = {}

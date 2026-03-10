@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from .core import context_extra, emit_from_catalog, ensure_configured, merge_extra, reset_configured_packages
+from .core import (
+    context_extra,
+    emit_from_catalog,
+    ensure_configured,
+    merge_extra,
+    reset_configured_packages,
+)
 from .diagnostic import CatalogException, CatalogWarning, DiagnosticBundle
 
 __all__ = [

@@ -61,6 +61,7 @@ def collect_bundle(
     redact_fields: Optional[Iterable[str]] = None,
 ) -> Dict[str, Any]:
     manager = get_manager()
+    manager.flush_coalesced_warnings()
     cfg = asdict(manager.config)
     report = manager.report()
     since_dt = _parse_since(since)

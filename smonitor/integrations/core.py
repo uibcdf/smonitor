@@ -34,6 +34,15 @@ def context_extra(
     resource: Optional[str] = None,
     provider: Optional[str] = None,
     operation: Optional[str] = None,
+    retry_attempt: Optional[int] = None,
+    retry_max: Optional[int] = None,
+    retry_exhausted: Optional[bool] = None,
+    retry_delay_s: Optional[float] = None,
+    failure_class: Optional[str] = None,
+    last_failure_reason: Optional[str] = None,
+    cause_exception_type: Optional[str] = None,
+    cause_code: Optional[str] = None,
+    causal_chain: Optional[Any] = None,
     extra: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     payload: Dict[str, Any] = {}
@@ -49,6 +58,24 @@ def context_extra(
         payload["provider"] = provider
     if operation is not None:
         payload["operation"] = operation
+    if retry_attempt is not None:
+        payload["retry_attempt"] = retry_attempt
+    if retry_max is not None:
+        payload["retry_max"] = retry_max
+    if retry_exhausted is not None:
+        payload["retry_exhausted"] = retry_exhausted
+    if retry_delay_s is not None:
+        payload["retry_delay_s"] = retry_delay_s
+    if failure_class is not None:
+        payload["failure_class"] = failure_class
+    if last_failure_reason is not None:
+        payload["last_failure_reason"] = last_failure_reason
+    if cause_exception_type is not None:
+        payload["cause_exception_type"] = cause_exception_type
+    if cause_code is not None:
+        payload["cause_code"] = cause_code
+    if causal_chain is not None:
+        payload["causal_chain"] = causal_chain
     if extra:
         payload.update(extra)
     return payload
