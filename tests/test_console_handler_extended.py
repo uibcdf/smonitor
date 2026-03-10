@@ -77,3 +77,20 @@ def test_console_agent_without_code_is_still_machine_readable():
     )
     text = stream.getvalue().strip()
     assert text == "code=None level=INFO source=pkg.mod message=ok"
+
+
+def test_console_dev_truncates_large_structured_extra():
+    stream = _Buffer()
+    handler = ConsoleHandler(stream=stream)
+    handler.handle(
+        {
+            "level": "WARNING",
+            "message": "problem",
+            "source": "pkg.mod",
+            "extra": {"pairs": [(i, i + 1) for i in range(50)]},
+        },
+        profile="dev",
+    )
+    text = stream.getvalue()
+    assert "pairs" in text
+    assert "[truncated]" in text

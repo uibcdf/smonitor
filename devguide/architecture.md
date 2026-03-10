@@ -166,3 +166,8 @@ smonitor.configure(
 
 SMonitor can emit opt-in slow-signal events from the `@signal` decorator when a call exceeds a configured threshold.
 These events complement sampled profiling: they are intended for developer and QA triage and carry the same structured context used by signal timeline entries.
+
+## Human-readable handler truncation
+
+Console and file handlers now apply profile-aware truncation to large structured payload fragments so QA and developer output remains actionable without flooding the terminal or log line.
+Machine-oriented outputs keep the original event payload.

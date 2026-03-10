@@ -4,6 +4,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
 
+from .console import _format_extra_value
+
 
 class FileHandler:
     def __init__(self, path: str, mode: str = "a") -> None:
@@ -33,9 +35,16 @@ class FileHandler:
             return f"{ts} {prefix}{level} {source} | {message}"
         if profile in {"dev", "debug"}:
             chain = " -> ".join(context.get("chain", []))
-            hint = (event.get("extra") or {}).get("hint")
+            extra = event.get("extra") or {}
+            hint = extra.get("hint")
             hint_part = f" | Hint: {hint}" if hint else ""
-            return f"{ts} {prefix}{level} {source} | {message} | {chain}{hint_part}"
+            extras = []
+            for key, value in extra.items():
+                if key in {"hint", "smonitor", "title", "contract_warning", "schema_warning"}:
+                    continue
+                extras.append(f"{key}={_format_extra_value(value, profile=profile)}")
+            extra_part = f" | {'; '.join(extras)}" if extras else ""
+            return f"{ts} {prefix}{level} {source} | {message} | {chain}{hint_part}{extra_part}"
         if profile == "agent":
             return f"{ts} code={code} level={level} source={source} message={message}"
         return f"{ts} {prefix}{level} {source} | {message}"

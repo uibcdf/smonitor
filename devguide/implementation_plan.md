@@ -585,3 +585,11 @@ The profiling layer now supports opt-in slow-signal events via `slow_signal_ms` 
 - When enabled, `@signal` measures call duration even if sampling-based profiling is disabled.
 - Calls crossing the threshold emit `SMONITOR-SIGNAL-SLOW` with structured payload including duration, threshold, tags, and user-supplied `extra_factory` context.
 - This is intended for developer and QA workflows rather than default user-facing output.
+
+## 1.0.x Human-readable payload truncation checkpoint
+
+Human-readable handlers now apply profile-aware truncation to large structured payload fragments.
+
+- `console` and `file` handlers truncate oversized structured values for `qa`, `dev`, and `debug` profiles.
+- Machine-oriented payloads remain unchanged in the routed event and JSON handler output.
+- The goal is to keep QA and developer output actionable without flooding terminals or log lines.

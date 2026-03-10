@@ -3,6 +3,19 @@ from __future__ import annotations
 from typing import Any, Dict
 
 
+def _truncate_text(text: str, limit: int) -> str:
+    if len(text) <= limit:
+        return text
+    return f"{text[: max(0, limit - 16)]}... [truncated]"
+
+
+def _format_extra_value(value: Any, *, profile: str) -> str:
+    limit = 200 if profile in {"dev", "debug"} else 120
+    if isinstance(value, (dict, list, tuple, set)):
+        return _truncate_text(repr(value), limit)
+    return _truncate_text(str(value), limit)
+
+
 class ConsoleHandler:
     def __init__(self, stream=None) -> None:
         import sys
@@ -28,8 +41,14 @@ class ConsoleHandler:
             extra = event.get("extra") or {}
             hint = extra.get("hint")
             hint_part = f" | Hint: {hint}" if hint else ""
+            extras = []
+            for key, value in extra.items():
+                if key in {"hint", "smonitor", "title", "contract_warning", "schema_warning"}:
+                    continue
+                extras.append(f"{key}={_format_extra_value(value, profile=profile)}")
+            extra_part = f" | {'; '.join(extras)}" if extras else ""
             
-            output = f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}"
+            output = f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{extra_part}"
             
             # Show arguments for ERRORs if captured in frames
             if level == "ERROR" and "frames" in context:
@@ -40,7 +59,7 @@ class ConsoleHandler:
                         args_str = str(frame["args"])
                         args_details.append(f"  \u2514\u2500 {func_name}({args_str})")
                 if args_details:
-                    output += "\n" + "\n".join(args_details)
+                    output += "\n" + "\n".join(_truncate_text(item, 240) for item in args_details)
             
             return output
         if profile == "qa":
@@ -187,7 +206,7 @@ class RichConsoleHandler(ConsoleHandler):
         for k, v in extra.items():
             if k in {"hint", "smonitor", "title", "contract_warning", "schema_warning"}:
                 continue
-            details.add_row(k, str(v))
+            details.add_row(k, _format_extra_value(v, profile=profile))
 
         # Specialized warnings
         if cw := extra.get("contract_warning"):

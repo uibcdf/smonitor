@@ -32,6 +32,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - CODES templating and SIGNALS soft enforcement.
 - Profiling expanded (timeline, sampling, spans, export).
 - Signal profiling now carries optional structured frame context and tag-aware timing summaries in reports/timeline, plus opt-in slow-signal events for QA/developer workflows.
+- Human-readable handlers now apply profile-aware truncation to large structured payload fragments.
 - Local bundle export (CLI + event buffer).
 - Test suite expanded with sensitive-path coverage for manager/policy/handlers/CLI.
 - Ecosystem integration completed (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).
