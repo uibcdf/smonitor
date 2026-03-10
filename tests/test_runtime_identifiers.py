@@ -14,8 +14,8 @@ def test_new_identifier_returns_non_empty_unique_strings():
     assert first != second
 
 
-def test_manager_exposes_runtime_identifiers_and_honors_overrides():
-    manager_module._manager_singleton = None
+def test_manager_exposes_runtime_identifiers_and_honors_overrides(monkeypatch):
+    monkeypatch.setattr(manager_module, "_manager_singleton", None)
     manager = get_manager()
     runtime_ids = manager.get_runtime_identifiers()
 
