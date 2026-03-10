@@ -78,3 +78,5 @@ historical context live in `SPEC_SMONITOR.md`.
 - The next implementation slice should focus on helper APIs for common structured context fields so integrated libraries stop repeating the same payload-wiring patterns.
 - After that, the next priority is bundle/report enrichment so structured profiling and warning context is easier to consume without reading raw event streams.
 - Event coalescing for repeated transient warnings remains a high-value follow-up once the helper/context layer is stable.
+
+- Integration helpers now include a canonical `context_extra(...)` builder for common structured diagnostic fields.

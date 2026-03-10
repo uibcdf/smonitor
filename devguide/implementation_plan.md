@@ -614,3 +614,11 @@ The current recommended execution order for the next sessions is:
    - Goal: decide whether explicit normalized fields are needed for cross-library QA automation.
 
 This order is the active checkpoint for the next development sessions unless a higher-priority regression appears.
+
+
+## 1.0.x Structured context helper checkpoint
+
+SMonitor now exposes `integrations.context_extra(...)` for common structured diagnostic fields (`caller`, `form`, `requested_attribute`, `resource`, `provider`, `operation`).
+
+- The helper is intended to reduce repeated local payload assembly across MolSysSuite libraries.
+- Additional helper expansion should remain conservative and keyword-only to preserve payload stability.

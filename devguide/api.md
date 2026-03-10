@@ -164,3 +164,5 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - `extra_factory=...` to attach structured per-call context to timeline entries and derived events,
 - opt-in slow-signal events when `slow_signal_ms` is configured.
 - Human-readable handlers (`console`, `file`) may truncate large structured payload fragments for `qa`, `dev`, and `debug` profiles. This does not alter the routed event payload or JSON handler output.
+
+- `smonitor.integrations.context_extra(...)` builds stable structured payloads for common diagnostic fields without repeating the same key assembly in each library.

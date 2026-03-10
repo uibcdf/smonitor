@@ -9,6 +9,7 @@ def test_integrations_public_exports_contract():
         "ensure_configured",
         "reset_configured_packages",
         "merge_extra",
+        "context_extra",
         "emit_from_catalog",
         "CatalogException",
         "CatalogWarning",
@@ -45,3 +46,24 @@ def test_ensure_configured_is_idempotent(monkeypatch, tmp_path):
     integrations.ensure_configured(tmp_path)
     integrations.ensure_configured(tmp_path)
     assert len(calls) == 1
+
+
+def test_context_extra_contract():
+    payload = integrations.context_extra(
+        caller="pkg.mod.fn",
+        form="file:pdb",
+        requested_attribute="atom_name",
+        resource="181l",
+        provider="RCSB",
+        operation="download",
+        extra={"attempt": 2},
+    )
+    assert payload == {
+        "caller": "pkg.mod.fn",
+        "form": "file:pdb",
+        "requested_attribute": "atom_name",
+        "resource": "181l",
+        "provider": "RCSB",
+        "operation": "download",
+        "attempt": 2,
+    }

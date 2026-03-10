@@ -24,6 +24,36 @@ def reset_configured_packages() -> None:
     _configured_packages.clear()
 
 
+
+
+def context_extra(
+    *,
+    caller: Optional[str] = None,
+    form: Optional[str] = None,
+    requested_attribute: Optional[str] = None,
+    resource: Optional[str] = None,
+    provider: Optional[str] = None,
+    operation: Optional[str] = None,
+    extra: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    payload: Dict[str, Any] = {}
+    if caller is not None:
+        payload["caller"] = caller
+    if form is not None:
+        payload["form"] = form
+    if requested_attribute is not None:
+        payload["requested_attribute"] = requested_attribute
+    if resource is not None:
+        payload["resource"] = resource
+    if provider is not None:
+        payload["provider"] = provider
+    if operation is not None:
+        payload["operation"] = operation
+    if extra:
+        payload.update(extra)
+    return payload
+
+
 def merge_extra(meta: Optional[Dict[str, Any]], extra: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     merged: Dict[str, Any] = {}
     if meta:

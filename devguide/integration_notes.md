@@ -74,3 +74,9 @@ For integrations with `molsysmt`, `pyunitwizard`, `argdigest`, and `depdigest`:
 - Manager reports now include `handler_errors_total`, `degraded_handlers`, and
   `runtime_warnings`; optional threshold warning via
   `handler_error_threshold`.
+
+
+### Common structured context helper
+
+Use `smonitor.integrations.context_extra(...)` when a library needs to attach stable fields such as `caller`, `form`, `requested_attribute`, `resource`, `provider`, or `operation`.
+This reduces payload drift across integrations and keeps QA output more uniform.
