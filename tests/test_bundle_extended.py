@@ -131,6 +131,23 @@ def test_collect_bundle_exposes_triage_summary_for_slow_signals(tmp_path: Path):
     assert recent["threshold_ms"] == 10.0
 
 
+def test_collect_bundle_includes_runtime_identifiers(tmp_path: Path):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
+    smonitor.configure(
+        profile="user",
+        handlers=[],
+        event_buffer_size=10,
+        enabled=True,
+        run_id="run-1",
+        session_id="session-1",
+        correlation_id="corr-default",
+    )
+    data = collect_bundle()
+    assert data["runtime"]["run_id"] == "run-1"
+    assert data["runtime"]["session_id"] == "session-1"
+    assert data["runtime"]["correlation_id"] == "corr-default"
+
+
 def test_collect_bundle_exposes_coalesced_warning_summary(tmp_path: Path):
     (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
     manager = get_manager()

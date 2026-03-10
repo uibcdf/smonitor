@@ -11,6 +11,7 @@ from ..policy.engine import PolicyEngine
 from ..validation import validate_event
 from .context import get_context
 from .fingerprint import build_event_fingerprint
+from .identifiers import new_identifier
 
 _LEVEL_ORDER = {
     "DEBUG": 10,
@@ -71,6 +72,9 @@ class Manager:
         self._degraded_handlers_announced: set[str] = set()
         self._warning_coalesce_state: Dict[str, Dict[str, Any]] = {}
         self._coalesced_warning_summaries: List[Dict[str, Any]] = []
+        self._session_id = new_identifier()
+        self._run_id = new_identifier()
+        self._default_correlation_id: Optional[str] = None
 
     def _apply_config_dict(self, data: Dict[str, Any]) -> None:
         """Applies a configuration dictionary (e.g. from _smonitor.py) to the manager."""
@@ -141,6 +145,9 @@ class Manager:
         slow_signal_ms: Optional[float] = None,
         slow_signal_level: Optional[str] = None,
         warning_coalesce_window_s: Optional[float] = None,
+        run_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        correlation_id: Optional[str] = None,
     ) -> None:
         if config_path is not None:
             from ..config.discovery import discover_config, load_config_from_path
@@ -198,6 +205,12 @@ class Manager:
             self._config.slow_signal_level = slow_signal_level
         if warning_coalesce_window_s is not None:
             self._config.warning_coalesce_window_s = warning_coalesce_window_s
+        if run_id is not None:
+            self._run_id = run_id
+        if session_id is not None:
+            self._session_id = session_id
+        if correlation_id is not None:
+            self._default_correlation_id = correlation_id
         
         if handlers is not None:
             self._handlers = list(handlers)
@@ -479,7 +492,14 @@ class Manager:
         code: Optional[str] = None,
         tags: Optional[List[str]] = None,
         exception_type: Optional[str] = None,
+        correlation_id: Optional[str] = None,
     ) -> Dict[str, Any]:
+        extra_data = extra or {}
+        resolved_correlation_id = (
+            correlation_id
+            or extra_data.get("correlation_id")
+            or self._default_correlation_id
+        )
         if not self._config.enabled:
             return {
                 "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -487,16 +507,19 @@ class Manager:
                 "source": source,
                 "message": message,
                 "context": None,
-                "extra": extra or {},
+                "extra": extra_data,
                 "category": category,
                 "code": code,
                 "tags": tags,
                 "exception_type": exception_type,
+                "run_id": self._run_id,
+                "session_id": self._session_id,
+                "correlation_id": resolved_correlation_id,
                 "fingerprint": build_event_fingerprint(
                     code=code,
                     source=source,
                     exception_type=exception_type,
-                    extra=extra or {},
+                    extra=extra_data,
                 ),
             }
 
@@ -506,7 +529,6 @@ class Manager:
                 if source == s or source.startswith(s + "."):
                     return {}
 
-        extra_data = extra or {}
         message, hint, code_meta = self._resolve_message_and_hint(message, code, extra_data)
 
         event = {
@@ -520,6 +542,9 @@ class Manager:
             "code": code,
             "tags": tags,
             "exception_type": exception_type,
+            "run_id": self._run_id,
+            "session_id": self._session_id,
+            "correlation_id": resolved_correlation_id,
             "fingerprint": build_event_fingerprint(
                 code=code,
                 source=source,
@@ -715,6 +740,8 @@ class Manager:
                 continue
         return {
             **self._counts,
+            "run_id": self._run_id,
+            "session_id": self._session_id,
             "handler_errors": dict(self._handler_errors),
             "handler_errors_total": sum(self._handler_errors.values()),
             "degraded_handlers": [
@@ -740,6 +767,13 @@ class Manager:
 
     def get_signals(self) -> Dict[str, Dict[str, Any]]:
         return dict(self._signals)
+
+    def get_runtime_identifiers(self) -> Dict[str, Optional[str]]:
+        return {
+            "run_id": self._run_id,
+            "session_id": self._session_id,
+            "correlation_id": self._default_correlation_id,
+        }
 
 
 _manager_singleton: Optional[Manager] = None

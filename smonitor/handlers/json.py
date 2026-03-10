@@ -36,6 +36,9 @@ def _normalized_payload(event: Dict[str, Any]) -> Dict[str, Any]:
         "category": event.get("category"),
         "exception_type": event.get("exception_type"),
         "tags": list(event.get("tags") or []),
+        "run_id": event.get("run_id"),
+        "session_id": event.get("session_id"),
+        "correlation_id": event.get("correlation_id"),
         "fingerprint": event.get("fingerprint")
         or build_event_fingerprint(
             code=event.get("code"),
@@ -71,6 +74,9 @@ class JsonHandler:
         payload.setdefault("source", event.get("source"))
         payload.setdefault("code", event.get("code"))
         payload.setdefault("category", event.get("category"))
+        payload.setdefault("run_id", event.get("run_id"))
+        payload.setdefault("session_id", event.get("session_id"))
+        payload.setdefault("correlation_id", event.get("correlation_id"))
         payload["normalized"] = _normalized_payload(event)
         path = Path(self.path)
         path.parent.mkdir(parents=True, exist_ok=True)

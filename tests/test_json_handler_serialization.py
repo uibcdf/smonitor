@@ -20,6 +20,9 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
         "code": "W1",
         "category": "diagnostics",
         "tags": ["api"],
+        "run_id": "run-1",
+        "session_id": "session-1",
+        "correlation_id": "corr-1",
         "extra": {
             "caller": "pkg.mod.fn",
             "resource": "181l",
@@ -43,6 +46,9 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
     assert normalized["source"] == "pkg.mod"
     assert normalized["code"] == "W1"
     assert normalized["tags"] == ["api"]
+    assert normalized["run_id"] == "run-1"
+    assert normalized["session_id"] == "session-1"
+    assert normalized["correlation_id"] == "corr-1"
     assert normalized["fingerprint"] == payload["fingerprint"]
     assert normalized["caller"] == "pkg.mod.fn"
     assert normalized["resource"] == "181l"

@@ -101,6 +101,7 @@ def collect_bundle(
             "machine": platform.machine(),
         },
         "argv": list(sys.argv),
+        "runtime": manager.get_runtime_identifiers(),
         "config": cfg,
         "policy": {
             "routes": manager._policy.get_routes(),

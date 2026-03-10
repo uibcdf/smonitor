@@ -58,7 +58,7 @@ Behavior
 - If no handlers are provided, a default console handler is created.
 - `configure(profile=...)` must override any `_smonitor.py` defaults.
 
-### emit(level, message, *, source=None, extra=None, category=None, code=None, tags=None)
+### emit(level, message, *, source=None, extra=None, category=None, code=None, tags=None, correlation_id=None)
 Emit a raw diagnostic event.
 
 ```python
@@ -170,6 +170,7 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 
 - `report()` now includes `events_by_code`, `events_by_category`, and `slow_signals_recent` to support QA triage without scanning raw event streams.
 - Events now also carry a stable `fingerprint` derived from `code`, `source`, `exception_type`, and selected structured-context keys; `report()` and bundle triage expose `events_by_fingerprint`.
+- Events also carry additive runtime identifiers: `run_id`, `session_id`, and optional `correlation_id`.
 - Bundle exports mirror this information under `triage`.
 
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`; suppressed duplicates are summarized in `report()` and bundle triage output.

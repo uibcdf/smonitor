@@ -46,6 +46,43 @@ def test_event_fingerprint_is_stable_for_same_incident_shape():
     assert report["events_by_fingerprint"][event_a["fingerprint"]] >= 2
 
 
+def test_runtime_identifiers_are_propagated_to_events_and_report():
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[],
+        event_buffer_size=10,
+        run_id="run-1",
+        session_id="session-1",
+        correlation_id="corr-default",
+    )
+    event = smonitor.emit("WARNING", "warn test", source="pkg.mod", code="W1")
+    assert event["run_id"] == "run-1"
+    assert event["session_id"] == "session-1"
+    assert event["correlation_id"] == "corr-default"
+    report = manager.report()
+    assert report["run_id"] == "run-1"
+    assert report["session_id"] == "session-1"
+
+
+def test_emit_correlation_id_override_wins_over_default():
+    smonitor.configure(
+        profile="user",
+        handlers=[],
+        event_buffer_size=10,
+        run_id="run-2",
+        session_id="session-2",
+        correlation_id="corr-default",
+    )
+    event = smonitor.emit(
+        "WARNING",
+        "warn test",
+        source="pkg.mod",
+        code="W1",
+        correlation_id="corr-explicit",
+    )
+    assert event["correlation_id"] == "corr-explicit"
+
+
 def test_signal_records_call_and_context():
     manager = get_manager()
     smonitor.configure(profile="user", strict_signals=False)
