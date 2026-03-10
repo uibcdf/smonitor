@@ -69,7 +69,10 @@ def test_export_timeline_invalid_format_raises(tmp_path: Path):
 def test_signal_extra_factory_attaches_context_to_timeline():
     smonitor.configure(profile="user", profiling=True, profiling_buffer_size=10)
 
-    @smonitor.signal(tags=["api", "demo"], extra_factory=lambda args, kwargs: {"selection": kwargs.get("selection")})
+    def _selection_extra(args, kwargs):
+        return {"selection": kwargs.get("selection")}
+
+    @smonitor.signal(tags=["api", "demo"], extra_factory=_selection_extra)
     def sample(*, selection=None):
         return selection
 
@@ -106,7 +109,10 @@ def test_slow_signal_event_is_emitted_when_threshold_is_crossed():
     )
     manager._event_buffer.clear()
 
-    @smonitor.signal(tags=["api", "slow"], extra_factory=lambda args, kwargs: {"selection": kwargs.get("selection")})
+    def _selection_extra(args, kwargs):
+        return {"selection": kwargs.get("selection")}
+
+    @smonitor.signal(tags=["api", "slow"], extra_factory=_selection_extra)
     def sample(*, selection=None):
         return selection
 
