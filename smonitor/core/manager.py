@@ -50,6 +50,8 @@ class ManagerConfig:
     slow_signal_ms: float = 0.0
     slow_signal_level: str = "INFO"
     warning_coalesce_window_s: float = 0.0
+    duplicate_policy: str = "off"
+    duplicate_every_n: int = 0
 
 
 class Manager:
@@ -72,6 +74,8 @@ class Manager:
         self._degraded_handlers_announced: set[str] = set()
         self._warning_coalesce_state: Dict[str, Dict[str, Any]] = {}
         self._coalesced_warning_summaries: List[Dict[str, Any]] = []
+        self._duplicate_state: Dict[str, Dict[str, Any]] = {}
+        self._duplicate_summaries: List[Dict[str, Any]] = []
         self._session_id = new_identifier()
         self._run_id = new_identifier()
         self._default_correlation_id: Optional[str] = None
@@ -98,6 +102,8 @@ class Manager:
             slow_signal_ms=config_block.get("slow_signal_ms"),
             slow_signal_level=config_block.get("slow_signal_level"),
             warning_coalesce_window_s=config_block.get("warning_coalesce_window_s"),
+            duplicate_policy=config_block.get("duplicate_policy"),
+            duplicate_every_n=config_block.get("duplicate_every_n"),
         )
         if profile := data.get("PROFILE"):
             self.configure(profile=profile)
@@ -145,6 +151,8 @@ class Manager:
         slow_signal_ms: Optional[float] = None,
         slow_signal_level: Optional[str] = None,
         warning_coalesce_window_s: Optional[float] = None,
+        duplicate_policy: Optional[str] = None,
+        duplicate_every_n: Optional[int] = None,
         run_id: Optional[str] = None,
         session_id: Optional[str] = None,
         correlation_id: Optional[str] = None,
@@ -205,6 +213,10 @@ class Manager:
             self._config.slow_signal_level = slow_signal_level
         if warning_coalesce_window_s is not None:
             self._config.warning_coalesce_window_s = warning_coalesce_window_s
+        if duplicate_policy is not None:
+            self._config.duplicate_policy = duplicate_policy
+        if duplicate_every_n is not None:
+            self._config.duplicate_every_n = duplicate_every_n
         if run_id is not None:
             self._run_id = run_id
         if session_id is not None:
@@ -384,6 +396,91 @@ class Manager:
             "cause_code": state.get("cause_code"),
             "causal_chain": state.get("causal_chain"),
         }
+
+    def _duplicate_policy_key(self, event: Dict[str, Any]) -> Optional[str]:
+        policy = self._config.duplicate_policy
+        if policy not in {"emit_summary", "emit_every_n"}:
+            return None
+        if event.get("code") in {"SMONITOR-WARNING-COALESCED", "SMONITOR-EVENT-DUPLICATE-SUMMARY"}:
+            return None
+        return event.get("fingerprint")
+
+    def _build_duplicate_summary(self, state: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "fingerprint": state.get("fingerprint"),
+            "policy": state.get("policy"),
+            "code": state.get("code"),
+            "source": state.get("source"),
+            "level": state.get("level"),
+            "total_occurrences": state.get("count", 0),
+            "suppressed_count": state.get("suppressed_count", 0),
+            "last_message": state.get("last_message"),
+        }
+
+    def _finalize_duplicate_summary(self, key: str) -> Optional[Dict[str, Any]]:
+        state = self._duplicate_state.get(key)
+        if not state or state.get("suppressed_count", 0) <= 0:
+            return None
+        summary = self._build_duplicate_summary(state)
+        self._duplicate_summaries.append(summary)
+        self._duplicate_summaries = self._duplicate_summaries[-20:]
+        self._duplicate_state[key] = {
+            **state,
+            "suppressed_count": 0,
+        }
+        self.emit(
+            state.get("level") or "INFO",
+            "Duplicate events were summarized.",
+            source=state.get("source"),
+            category="diagnostics",
+            code="SMONITOR-EVENT-DUPLICATE-SUMMARY",
+            extra=summary,
+        )
+        return summary
+
+    def flush_duplicate_summaries(self) -> List[Dict[str, Any]]:
+        summaries: List[Dict[str, Any]] = []
+        for key in list(self._duplicate_state):
+            summary = self._finalize_duplicate_summary(key)
+            if summary is not None:
+                summaries.append(summary)
+        return summaries
+
+    def _maybe_apply_duplicate_policy(self, event: Dict[str, Any]) -> bool:
+        key = self._duplicate_policy_key(event)
+        if key is None:
+            return False
+        state = self._duplicate_state.get(key)
+        if state is None:
+            self._duplicate_state[key] = {
+                "fingerprint": key,
+                "policy": self._config.duplicate_policy,
+                "count": 1,
+                "suppressed_count": 0,
+                "code": event.get("code"),
+                "source": event.get("source"),
+                "level": event.get("level"),
+                "last_message": event.get("message"),
+            }
+            return False
+        state["count"] += 1
+        state["last_message"] = event.get("message")
+        state["code"] = event.get("code")
+        state["source"] = event.get("source")
+        state["level"] = event.get("level")
+        self._duplicate_state[key] = state
+        if self._config.duplicate_policy == "emit_summary":
+            state["suppressed_count"] += 1
+            self._duplicate_state[key] = state
+            return True
+        every_n = self._config.duplicate_every_n
+        if every_n <= 1:
+            return False
+        if state["count"] % every_n == 0:
+            return False
+        state["suppressed_count"] += 1
+        self._duplicate_state[key] = state
+        return True
 
     def _finalize_coalesced_warning(self, key: str) -> Optional[Dict[str, Any]]:
         state = self._warning_coalesce_state.get(key)
@@ -568,6 +665,9 @@ class Manager:
         if self._maybe_coalesce_warning(event):
             return event
 
+        if self._maybe_apply_duplicate_policy(event):
+            return event
+
         # Soft enforcement for signals/contracts in dev/qa profiles
         if self._config.profile in {"dev", "qa"} and source:
             contract = self._signals.get(source)
@@ -701,6 +801,7 @@ class Manager:
         events_by_fingerprint: Dict[str, int] = {}
         slow_signals_recent: List[Dict[str, Any]] = []
         coalesced_warnings: List[Dict[str, Any]] = list(self._coalesced_warning_summaries)
+        duplicate_summaries: List[Dict[str, Any]] = list(self._duplicate_summaries)
         for event in self._event_buffer:
             code = event.get("code")
             if code:
@@ -728,6 +829,10 @@ class Manager:
             if state.get("count", 0) > 0:
                 coalesced_warnings.append(self._build_coalesced_warning_summary(state))
         coalesced_warnings = coalesced_warnings[-20:]
+        for state in self._duplicate_state.values():
+            if state.get("suppressed_count", 0) > 0:
+                duplicate_summaries.append(self._build_duplicate_summary(state))
+        duplicate_summaries = duplicate_summaries[-20:]
 
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
@@ -760,6 +865,7 @@ class Manager:
             "events_by_fingerprint": events_by_fingerprint,
             "slow_signals_recent": slow_signals_recent,
             "coalesced_warnings": coalesced_warnings,
+            "duplicate_summaries": duplicate_summaries,
         }
 
     def get_codes(self) -> Dict[str, Dict[str, Any]]:

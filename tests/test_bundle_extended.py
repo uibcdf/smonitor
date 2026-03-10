@@ -213,3 +213,25 @@ def test_collect_bundle_flushes_pending_coalesced_warning_summary_event(tmp_path
     assert data["triage"]["coalesced_warnings"][-1]["retry_attempt"] == 3
     assert data["triage"]["coalesced_warnings"][-1]["retry_max"] == 5
     assert any(event.get("code") == "SMONITOR-WARNING-COALESCED" for event in data["events"])
+
+
+def test_collect_bundle_exposes_duplicate_summary_artifacts(tmp_path: Path):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
+    manager = get_manager()
+    smonitor.configure(
+        profile="user",
+        handlers=[],
+        event_buffer_size=10,
+        enabled=True,
+        duplicate_policy="emit_summary",
+    )
+    manager._duplicate_state.clear()
+    manager._duplicate_summaries.clear()
+    smonitor.emit("WARNING", "first", source="pkg.mod", code="W1")
+    smonitor.emit("WARNING", "second", source="pkg.mod", code="W1")
+
+    data = collect_bundle()
+
+    assert data["triage"]["duplicate_summaries"][-1]["code"] == "W1"
+    assert data["triage"]["duplicate_summaries"][-1]["suppressed_count"] == 1
+    assert any(event.get("code") == "SMONITOR-EVENT-DUPLICATE-SUMMARY" for event in data["events"])

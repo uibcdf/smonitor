@@ -83,6 +83,45 @@ def test_emit_correlation_id_override_wins_over_default():
     assert event["correlation_id"] == "corr-explicit"
 
 
+def test_duplicate_policy_emit_summary_suppresses_repeated_fingerprints():
+    memory = MemoryHandler(max_events=10)
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[memory],
+        event_buffer_size=10,
+        duplicate_policy="emit_summary",
+    )
+    manager._duplicate_state.clear()
+    manager._duplicate_summaries.clear()
+    smonitor.emit("WARNING", "first text", source="pkg.mod", code="W1")
+    smonitor.emit("WARNING", "second text", source="pkg.mod", code="W1")
+    assert len(memory.events) == 1
+    summaries = manager.flush_duplicate_summaries()
+    assert summaries[-1]["suppressed_count"] == 1
+    assert summaries[-1]["total_occurrences"] == 2
+    assert any(event["code"] == "SMONITOR-EVENT-DUPLICATE-SUMMARY" for event in memory.events)
+
+
+def test_duplicate_policy_emit_every_n_emits_periodically():
+    memory = MemoryHandler(max_events=10)
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[memory],
+        event_buffer_size=10,
+        duplicate_policy="emit_every_n",
+        duplicate_every_n=3,
+    )
+    manager._duplicate_state.clear()
+    manager._duplicate_summaries.clear()
+    smonitor.emit("WARNING", "m1", source="pkg.mod", code="W1")
+    smonitor.emit("WARNING", "m2", source="pkg.mod", code="W1")
+    smonitor.emit("WARNING", "m3", source="pkg.mod", code="W1")
+    smonitor.emit("WARNING", "m4", source="pkg.mod", code="W1")
+    assert len([event for event in memory.events if event.get("code") == "W1"]) == 2
+    report = manager.report()
+    assert report["duplicate_summaries"][-1]["suppressed_count"] == 2
+
+
 def test_signal_records_call_and_context():
     manager = get_manager()
     smonitor.configure(profile="user", strict_signals=False)

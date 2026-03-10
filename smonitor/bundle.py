@@ -62,6 +62,7 @@ def collect_bundle(
 ) -> Dict[str, Any]:
     manager = get_manager()
     manager.flush_coalesced_warnings()
+    manager.flush_duplicate_summaries()
     cfg = asdict(manager.config)
     report = manager.report()
     since_dt = _parse_since(since)
@@ -116,6 +117,7 @@ def collect_bundle(
             "events_by_fingerprint": report.get("events_by_fingerprint", {}),
             "slow_signals_recent": report.get("slow_signals_recent", []),
             "coalesced_warnings": report.get("coalesced_warnings", []),
+            "duplicate_summaries": report.get("duplicate_summaries", []),
         },
         "events": events,
         "redactions": {

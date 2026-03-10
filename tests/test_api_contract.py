@@ -39,6 +39,7 @@ def test_configure_emit_resolve_report_contract():
     assert "events_by_fingerprint" in report
     assert "slow_signals_recent" in report
     assert "coalesced_warnings" in report
+    assert "duplicate_summaries" in report
 
 
 def test_json_machine_contract_is_documented_via_handler_output(tmp_path):
