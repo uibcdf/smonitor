@@ -89,3 +89,4 @@ historical context live in `SPEC_SMONITOR.md`.
 - Machine-oriented JSON output now includes a normalized payload section for stable cross-library QA ingestion.
 - Retry and causal metadata now have canonical fields in `context_extra(...)`, normalized JSON output, and coalesced warning summary events.
 - The current pre-1.0 focus is no longer only observation: it is to complete the diagnostic operability plan before `1.0.0` so SMonitor feels decisively useful for developers, QAs, users, and automation agents.
+- Runtime identifiers are now explicit and tested: managers generate stable opaque `run_id` and `session_id` values by default, allow explicit overrides, and expose them for bundle/report correlation workflows.

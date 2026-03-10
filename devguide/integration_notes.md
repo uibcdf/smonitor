@@ -74,6 +74,7 @@ For integrations with `molsysmt`, `pyunitwizard`, `argdigest`, and `depdigest`:
 - Manager reports now include `handler_errors_total`, `degraded_handlers`, and
   `runtime_warnings`; optional threshold warning via
   `handler_error_threshold`.
+- Manager runtime identifiers are now explicit and test-covered: default opaque `run_id`/`session_id` values are generated automatically, and explicit overrides remain available for CI/support correlation.
 
 
 ### Common structured context helper
