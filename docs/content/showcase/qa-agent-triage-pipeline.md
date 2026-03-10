@@ -10,7 +10,7 @@ human review as the final decision point.
 ## Pattern
 
 Run strict diagnostics in CI, export structured bundles, and triage by stable
-keys (`code`, `signal`, `trace_hash`).
+keys (`code`, `signal`, `fingerprint`).
 
 ```python
 import smonitor
@@ -19,7 +19,7 @@ smonitor.configure(
     profile="qa",
     strict_signals=True,
     strict_schema=True,
-    buffer_events=True,
+    event_buffer_size=500,
 )
 ```
 
@@ -30,36 +30,16 @@ smonitor export --out smonitor_bundle --max-events 500
 
 Automation pipeline:
 1. CI stores the bundle as an artifact.
-2. Agent parses event stream in `agent` profile.
-3. Triage groups incidents by `code` + `trace_hash`.
-4. Agent proposes diagnosis and patch draft.
-5. Maintainer reviews and merges only after tests pass.
+2. Agent inspects `triage`, `normalized`, and `human_summary`.
+3. Triage groups incidents by `code` + `fingerprint`.
+4. If needed, compare against a previous bundle.
+5. Agent proposes diagnosis and patch draft.
+6. Maintainer reviews and merges only after tests pass.
 
 ## Deterministic triage key
 
-For repeated incidents across runs, derive a stable key from:
-- `code`
-- `source`
-- selected context fields (for example `library`, `version`)
-
-```python
-import hashlib
-import json
-
-
-def triage_key(event):
-    context = event.get("context") or {}
-    signature = {
-        "code": event.get("code"),
-        "source": event.get("source"),
-        "library": context.get("library"),
-        "version": context.get("version"),
-    }
-    digest = hashlib.sha256(
-        json.dumps(signature, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    ).hexdigest()[:16]
-    return f"{signature['code']}:{digest}"
-```
+For repeated incidents across runs, use the stable `fingerprint` already emitted
+by SMonitor rather than rebuilding your own grouping key downstream.
 
 This avoids brittle grouping by free text while keeping incidents comparable.
 
