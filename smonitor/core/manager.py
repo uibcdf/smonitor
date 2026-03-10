@@ -26,6 +26,11 @@ def _level_value(level: str) -> int:
     return _LEVEL_ORDER.get(str(level).upper(), _LEVEL_ORDER["INFO"])
 
 
+def _top_items(mapping: Dict[str, int], limit: int = 5) -> List[Dict[str, Any]]:
+    ordered = sorted(mapping.items(), key=lambda item: (-item[1], item[0]))
+    return [{"key": key, "count": count} for key, count in ordered[:limit]]
+
+
 @dataclass
 class ManagerConfig:
     level: str = "WARNING"
@@ -494,7 +499,7 @@ class Manager:
             "count": 0,
         }
         self.emit(
-            "INFO",
+            "WARNING",
             "Coalesced repeated warning events.",
             source=state.get("source"),
             category="diagnostics",
@@ -799,6 +804,8 @@ class Manager:
         events_by_code: Dict[str, int] = {}
         events_by_category: Dict[str, int] = {}
         events_by_fingerprint: Dict[str, int] = {}
+        events_by_source: Dict[str, int] = {}
+        events_by_resource: Dict[str, int] = {}
         slow_signals_recent: List[Dict[str, Any]] = []
         coalesced_warnings: List[Dict[str, Any]] = list(self._coalesced_warning_summaries)
         duplicate_summaries: List[Dict[str, Any]] = list(self._duplicate_summaries)
@@ -813,6 +820,15 @@ class Manager:
             if fingerprint:
                 key = str(fingerprint)
                 events_by_fingerprint[key] = events_by_fingerprint.get(key, 0) + 1
+            source = event.get("source")
+            if source:
+                key = str(source)
+                events_by_source[key] = events_by_source.get(key, 0) + 1
+            extra = event.get("extra") or {}
+            resource = extra.get("resource") if isinstance(extra, dict) else None
+            if resource:
+                key = str(resource)
+                events_by_resource[key] = events_by_resource.get(key, 0) + 1
             if code == "SMONITOR-SIGNAL-SLOW":
                 extra = event.get("extra") or {}
                 slow_signals_recent.append(
@@ -833,6 +849,36 @@ class Manager:
             if state.get("suppressed_count", 0) > 0:
                 duplicate_summaries.append(self._build_duplicate_summary(state))
         duplicate_summaries = duplicate_summaries[-20:]
+        top_codes = _top_items(events_by_code)
+        top_sources = _top_items(events_by_source)
+        top_fingerprints = _top_items(events_by_fingerprint)
+        most_noisy_resources = _top_items(events_by_resource)
+        expensive_entries = sorted(
+            (
+                {"key": key, **summary}
+                for key, summary in timings_summary.items()
+            ),
+            key=lambda item: (-item["p95_ms"], item["key"]),
+        )[:5]
+        expensive_tags = sorted(
+            (
+                {"key": key, **summary}
+                for key, summary in timings_by_tag.items()
+            ),
+            key=lambda item: (-item["p95_ms"], item["key"]),
+        )[:5]
+        blocking_incidents = [
+            event
+            for event in self._event_buffer
+            if _level_value(str(event.get("level"))) >= _level_value("ERROR")
+        ][-10:]
+        actionable_incidents = [
+            event
+            for event in self._event_buffer
+            if isinstance((event.get("extra") or {}), dict)
+            and (event.get("extra") or {}).get("recommended_action")
+        ][-10:]
+        recurrent_incidents = [item for item in top_fingerprints if item["count"] > 1]
 
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
@@ -863,9 +909,20 @@ class Manager:
             "events_by_code": events_by_code,
             "events_by_category": events_by_category,
             "events_by_fingerprint": events_by_fingerprint,
+            "events_by_source": events_by_source,
+            "events_by_resource": events_by_resource,
             "slow_signals_recent": slow_signals_recent,
             "coalesced_warnings": coalesced_warnings,
             "duplicate_summaries": duplicate_summaries,
+            "top_codes": top_codes,
+            "top_sources": top_sources,
+            "top_fingerprints": top_fingerprints,
+            "most_noisy_resources": most_noisy_resources,
+            "most_expensive_entries": expensive_entries,
+            "most_expensive_tags": expensive_tags,
+            "blocking_incidents": blocking_incidents,
+            "actionable_incidents": actionable_incidents,
+            "recurrent_incidents": recurrent_incidents,
         }
 
     def get_codes(self) -> Dict[str, Dict[str, Any]]:

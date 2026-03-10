@@ -184,6 +184,7 @@ def test_collect_bundle_exposes_coalesced_warning_summary(tmp_path: Path):
 def test_collect_bundle_flushes_pending_coalesced_warning_summary_event(tmp_path: Path):
     (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
     manager = get_manager()
+    manager._event_buffer.clear()
     smonitor.configure(
         profile="user",
         handlers=[],
@@ -235,3 +236,42 @@ def test_collect_bundle_exposes_duplicate_summary_artifacts(tmp_path: Path):
     assert data["triage"]["duplicate_summaries"][-1]["code"] == "W1"
     assert data["triage"]["duplicate_summaries"][-1]["suppressed_count"] == 1
     assert any(event.get("code") == "SMONITOR-EVENT-DUPLICATE-SUMMARY" for event in data["events"])
+
+
+def test_collect_bundle_exposes_operational_triage_rankings(tmp_path: Path):
+    (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
+    manager = get_manager()
+    manager._event_buffer.clear()
+    manager._timings.clear()
+    manager._timeline.clear()
+    smonitor.configure(
+        profile="user",
+        handlers=[],
+        event_buffer_size=20,
+        enabled=True,
+        profiling=True,
+        duplicate_policy="off",
+    )
+    smonitor.emit(
+        "ERROR",
+        "boom",
+        source="pkg.alpha",
+        code="E1",
+        extra={"resource": "r1", "recommended_action": "inspect"},
+    )
+    smonitor.emit("WARNING", "warn", source="pkg.alpha", code="W1", extra={"resource": "r1"})
+    smonitor.emit("WARNING", "warn2", source="pkg.alpha", code="W1", extra={"resource": "r1"})
+
+    manager.record_timing("pkg.alpha.fn", 40.0, tags=["api"])
+    manager.record_timing("pkg.beta.fn", 20.0, tags=["io"])
+
+    data = collect_bundle()
+    triage = data["triage"]
+    assert triage["top_codes"][0]["key"] == "W1"
+    assert triage["top_sources"][0]["key"] == "pkg.alpha"
+    assert triage["most_noisy_resources"][0]["key"] == "r1"
+    assert triage["most_expensive_entries"][0]["key"] == "pkg.alpha.fn"
+    assert triage["most_expensive_tags"][0]["key"] == "api"
+    assert triage["blocking_incidents"][-1]["code"] == "E1"
+    assert triage["actionable_incidents"][-1]["code"] == "E1"
+    assert triage["recurrent_incidents"]

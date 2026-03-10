@@ -178,6 +178,7 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`; suppressed duplicates are summarized in `report()` and bundle triage output.
 - Coalesced warning windows also emit a final summary event (`SMONITOR-WARNING-COALESCED`) when the window is finalized so CI/event streams can retain the aggregate retry outcome.
 - More general duplicate handling is now available via `duplicate_policy` keyed by incident fingerprint. The initial supported policies are `emit_summary` and `emit_every_n`, with summarized duplicates exposed in `report()["duplicate_summaries"]` and bundle triage output.
+- `report()` and bundle triage now also expose compact operational summaries: `top_codes`, `top_sources`, `top_fingerprints`, `most_noisy_resources`, `most_expensive_entries`, `most_expensive_tags`, `blocking_incidents`, `actionable_incidents`, and `recurrent_incidents`.
 
 - `JsonHandler` now emits a `normalized` payload section with stable machine-oriented fields (`level`, `message`, `source`, `code`, `category`, `exception_type`, `tags`, plus selected structured-context keys).
 - The normalized payload now promotes canonical retry/causal keys as first-class machine-readable fields.

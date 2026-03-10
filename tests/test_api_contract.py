@@ -40,6 +40,15 @@ def test_configure_emit_resolve_report_contract():
     assert "slow_signals_recent" in report
     assert "coalesced_warnings" in report
     assert "duplicate_summaries" in report
+    assert "top_codes" in report
+    assert "top_sources" in report
+    assert "top_fingerprints" in report
+    assert "most_noisy_resources" in report
+    assert "most_expensive_entries" in report
+    assert "most_expensive_tags" in report
+    assert "blocking_incidents" in report
+    assert "actionable_incidents" in report
+    assert "recurrent_incidents" in report
 
 
 def test_json_machine_contract_is_documented_via_handler_output(tmp_path):
