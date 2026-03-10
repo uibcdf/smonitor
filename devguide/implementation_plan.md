@@ -633,3 +633,12 @@ SMonitor now supports opt-in coalescing of repeated transient warnings via `warn
 - The first warning in a coalescing window is emitted normally.
 - Repeated matching warnings inside the window are suppressed from handlers and event buffering.
 - Suppressed duplicates are tracked in `report()["coalesced_warnings"]` and mirrored in bundle triage output.
+
+
+## 1.0.x Machine-output normalization checkpoint
+
+SMonitor now exposes a normalized machine-oriented payload in JSON handler output.
+
+- The `normalized` section contains stable core fields and selected structured-context keys.
+- This is intended to simplify cross-library QA ingestion without changing the underlying event schema.
+- Further normalization should remain incremental and backward compatible.

@@ -171,3 +171,5 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - Bundle exports mirror this information under `triage`.
 
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`; suppressed duplicates are summarized in `report()` and bundle triage output.
+
+- `JsonHandler` now emits a `normalized` payload section with stable machine-oriented fields (`level`, `message`, `source`, `code`, `category`, `exception_type`, `tags`, plus selected structured-context keys).

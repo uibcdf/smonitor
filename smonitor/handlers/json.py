@@ -5,6 +5,34 @@ from pathlib import Path
 from typing import Any, Dict
 
 
+_NORMALIZED_EXTRA_KEYS = [
+    "hint",
+    "caller",
+    "form",
+    "requested_attribute",
+    "resource",
+    "provider",
+    "operation",
+]
+
+
+def _normalized_payload(event: Dict[str, Any]) -> Dict[str, Any]:
+    extra = event.get("extra") or {}
+    normalized = {
+        "level": event.get("level"),
+        "message": event.get("message"),
+        "source": event.get("source"),
+        "code": event.get("code"),
+        "category": event.get("category"),
+        "exception_type": event.get("exception_type"),
+        "tags": list(event.get("tags") or []),
+    }
+    for key in _NORMALIZED_EXTRA_KEYS:
+        if key in extra:
+            normalized[key] = extra.get(key)
+    return normalized
+
+
 class JsonHandler:
     def __init__(self, path: str, mode: str = "a") -> None:
         self.path = path
@@ -20,6 +48,7 @@ class JsonHandler:
         payload.setdefault("source", event.get("source"))
         payload.setdefault("code", event.get("code"))
         payload.setdefault("category", event.get("category"))
+        payload["normalized"] = _normalized_payload(event)
         path = Path(self.path)
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open(self.mode, encoding="utf-8") as fh:

@@ -84,3 +84,5 @@ historical context live in `SPEC_SMONITOR.md`.
 - `report()` and bundle exports now expose triage-oriented summaries for event codes, categories, and recent slow-signal activity.
 
 - Optional coalescing for repeated transient warnings is now available via `warning_coalesce_window_s`.
+
+- Machine-oriented JSON output now includes a normalized payload section for stable cross-library QA ingestion.
