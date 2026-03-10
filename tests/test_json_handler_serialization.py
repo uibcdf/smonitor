@@ -37,6 +37,19 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
             "cause_exception_type": "TimeoutError",
             "cause_code": "NET-TIMEOUT",
             "causal_chain": [{"code": "NET-TIMEOUT"}],
+            "incident_kind": "network",
+            "severity": "medium",
+            "priority": "high",
+            "diagnostic_confidence": "high",
+            "recommended_action": "retry",
+            "next_step": "check-network",
+            "retryable": True,
+            "support_needed": False,
+            "evidence": {
+                "expected": "download ok",
+                "observed": "timeout",
+                "resource": "181l",
+            },
         },
     }
     handler.handle(event, profile="agent")
@@ -63,3 +76,16 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
     assert normalized["cause_exception_type"] == "TimeoutError"
     assert normalized["cause_code"] == "NET-TIMEOUT"
     assert normalized["causal_chain"] == [{"code": "NET-TIMEOUT"}]
+    assert normalized["incident_kind"] == "network"
+    assert normalized["severity"] == "medium"
+    assert normalized["priority"] == "high"
+    assert normalized["diagnostic_confidence"] == "high"
+    assert normalized["recommended_action"] == "retry"
+    assert normalized["next_step"] == "check-network"
+    assert normalized["retryable"] is True
+    assert normalized["support_needed"] is False
+    assert normalized["evidence"] == {
+        "expected": "download ok",
+        "observed": "timeout",
+        "resource": "181l",
+    }

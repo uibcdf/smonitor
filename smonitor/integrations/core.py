@@ -43,6 +43,15 @@ def context_extra(
     cause_exception_type: Optional[str] = None,
     cause_code: Optional[str] = None,
     causal_chain: Optional[Any] = None,
+    incident_kind: Optional[str] = None,
+    severity: Optional[str] = None,
+    priority: Optional[str] = None,
+    diagnostic_confidence: Optional[str] = None,
+    recommended_action: Optional[str] = None,
+    next_step: Optional[str] = None,
+    retryable: Optional[bool] = None,
+    support_needed: Optional[bool] = None,
+    evidence: Optional[Dict[str, Any]] = None,
     extra: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     payload: Dict[str, Any] = {}
@@ -76,6 +85,24 @@ def context_extra(
         payload["cause_code"] = cause_code
     if causal_chain is not None:
         payload["causal_chain"] = causal_chain
+    if incident_kind is not None:
+        payload["incident_kind"] = incident_kind
+    if severity is not None:
+        payload["severity"] = severity
+    if priority is not None:
+        payload["priority"] = priority
+    if diagnostic_confidence is not None:
+        payload["diagnostic_confidence"] = diagnostic_confidence
+    if recommended_action is not None:
+        payload["recommended_action"] = recommended_action
+    if next_step is not None:
+        payload["next_step"] = next_step
+    if retryable is not None:
+        payload["retryable"] = retryable
+    if support_needed is not None:
+        payload["support_needed"] = support_needed
+    if evidence is not None:
+        payload["evidence"] = evidence
     if extra:
         payload.update(extra)
     return payload

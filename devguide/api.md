@@ -167,6 +167,8 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 
 - `smonitor.integrations.context_extra(...)` builds stable structured payloads for common diagnostic fields without repeating the same key assembly in each library.
 - `context_extra(...)` also reserves canonical retry/causal fields for cross-library QA payloads: `retry_attempt`, `retry_max`, `retry_exhausted`, `retry_delay_s`, `failure_class`, `last_failure_reason`, `cause_exception_type`, `cause_code`, and `causal_chain`.
+- `context_extra(...)` also reserves additive classification/decision fields: `incident_kind`, `severity`, `priority`, `diagnostic_confidence`, `recommended_action`, `next_step`, `retryable`, and `support_needed`.
+- `context_extra(...)` also supports canonical `evidence`, intended for compact structured facts such as `expected`, `observed`, `resource`, `operation`, or other decision-grade support data.
 
 - `report()` now includes `events_by_code`, `events_by_category`, and `slow_signals_recent` to support QA triage without scanning raw event streams.
 - Events now also carry a stable `fingerprint` derived from `code`, `source`, `exception_type`, and selected structured-context keys; `report()` and bundle triage expose `events_by_fingerprint`.
@@ -178,3 +180,5 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 
 - `JsonHandler` now emits a `normalized` payload section with stable machine-oriented fields (`level`, `message`, `source`, `code`, `category`, `exception_type`, `tags`, plus selected structured-context keys).
 - The normalized payload now promotes canonical retry/causal keys as first-class machine-readable fields.
+- The normalized payload also promotes the canonical classification/decision keys so agents and QA tooling do not need to parse hints/prose.
+- The normalized payload also promotes canonical `evidence` directly, so support bundles and QA tooling can consume structured facts without ad hoc parsing.

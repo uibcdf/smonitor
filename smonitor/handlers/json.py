@@ -23,6 +23,15 @@ _NORMALIZED_EXTRA_KEYS = [
     "cause_exception_type",
     "cause_code",
     "causal_chain",
+    "incident_kind",
+    "severity",
+    "priority",
+    "diagnostic_confidence",
+    "recommended_action",
+    "next_step",
+    "retryable",
+    "support_needed",
+    "evidence",
 ]
 
 
