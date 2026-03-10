@@ -72,3 +72,9 @@ historical context live in `SPEC_SMONITOR.md`.
 - Operational stability and compatibility are release blockers.
 - Adoption/discovery execution is tracked in `implementation_plan.md` under:
   `1.0.0 Adoption & Discovery Plan`.
+
+## Next-session checkpoint
+- The current pre-1.0 profiling/diagnostics checkpoint includes: structured `extra_factory` signal context, `timings_by_tag`, opt-in slow-signal events, and profile-aware truncation in human-readable handlers.
+- The next implementation slice should focus on helper APIs for common structured context fields so integrated libraries stop repeating the same payload-wiring patterns.
+- After that, the next priority is bundle/report enrichment so structured profiling and warning context is easier to consume without reading raw event streams.
+- Event coalescing for repeated transient warnings remains a high-value follow-up once the helper/context layer is stable.

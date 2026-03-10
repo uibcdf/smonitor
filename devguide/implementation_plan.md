@@ -593,3 +593,24 @@ Human-readable handlers now apply profile-aware truncation to large structured p
 - `console` and `file` handlers truncate oversized structured values for `qa`, `dev`, and `debug` profiles.
 - Machine-oriented payloads remain unchanged in the routed event and JSON handler output.
 - The goal is to keep QA and developer output actionable without flooding terminals or log lines.
+
+## Immediate next implementation slices (checkpoint)
+
+The current recommended execution order for the next sessions is:
+
+1. Add helper APIs for common structured context keys (`caller`, `form`, `requested_attribute`, `resource`, `provider`, `operation`).
+   - Goal: reduce repetitive local wiring across MolSysSuite libraries.
+   - Expected output: small helper surface, docs, and focused contract tests.
+
+2. Enrich `report()`/bundle outputs with the new structured profiling and warning context.
+   - Goal: make QA triage possible from summarized artifacts, not only from raw event streams.
+   - Expected output: stable report fields or bundle sections plus backward-compatible tests.
+
+3. Add optional coalescing for repeated transient warnings.
+   - Goal: reduce retry noise while preserving total attempt count and final failure reason.
+   - Expected output: opt-in policy/config support and regression tests.
+
+4. Reassess machine-oriented output normalization after the three items above are in place.
+   - Goal: decide whether explicit normalized fields are needed for cross-library QA automation.
+
+This order is the active checkpoint for the next development sessions unless a higher-priority regression appears.
