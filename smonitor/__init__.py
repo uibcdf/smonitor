@@ -15,7 +15,12 @@ from pathlib import Path
 from typing import Optional
 
 from . import integrations
-from .bundle import collect_bundle, export_bundle
+from .bundle import (
+    collect_bundle,
+    compare_bundles,
+    export_bundle,
+    format_bundle_comparison_markdown,
+)
 from .config import (
     build_effective_config,
     extract_codes,
@@ -38,6 +43,8 @@ __all__ = [
     "get_manager",
     "export_bundle",
     "collect_bundle",
+    "compare_bundles",
+    "format_bundle_comparison_markdown",
     "integrations",
 ]
 

@@ -51,8 +51,16 @@ Template:
 code=MYLIB-E101 level=ERROR source=mylib.core.analysis.run action=fix_input extra.argument=format
 ```
 
+## Shared event structure
+
+- exported events and JSON payloads now preserve both:
+  - `human_summary`: concise human-facing handoff fields,
+  - `normalized`: machine-oriented stable fields for QA/agents.
+- this avoids forcing support tooling to reconstruct the human view from raw machine payloads.
+
 ## You are done when
 
 - each profile has explicit message/hint behavior in your catalog,
 - user profile avoids unnecessary internal jargon,
-- dev/qa/agent profiles preserve structured diagnostic detail.
+- dev/qa/agent profiles preserve structured diagnostic detail,
+- exported artifacts keep human and machine views explicit.

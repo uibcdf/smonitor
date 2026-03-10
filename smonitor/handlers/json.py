@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from ..core.fingerprint import build_event_fingerprint
+from ..core.human_summary import build_human_summary
 
 _NORMALIZED_EXTRA_KEYS = [
     "hint",
@@ -56,6 +57,14 @@ def _normalized_payload(event: Dict[str, Any]) -> Dict[str, Any]:
             extra=extra,
         ),
     }
+    normalized["human_summary"] = event.get("human_summary") or build_human_summary(
+        level=event.get("level"),
+        message=event.get("message"),
+        code=event.get("code"),
+        source=event.get("source"),
+        hint=extra.get("hint"),
+        extra=extra,
+    )
     for key in _NORMALIZED_EXTRA_KEYS:
         if key in extra:
             normalized[key] = extra.get(key)
@@ -86,6 +95,18 @@ class JsonHandler:
         payload.setdefault("run_id", event.get("run_id"))
         payload.setdefault("session_id", event.get("session_id"))
         payload.setdefault("correlation_id", event.get("correlation_id"))
+        payload.setdefault(
+            "human_summary",
+            event.get("human_summary")
+            or build_human_summary(
+                level=event.get("level"),
+                message=event.get("message"),
+                code=event.get("code"),
+                source=event.get("source"),
+                hint=(event.get("extra") or {}).get("hint"),
+                extra=event.get("extra") or {},
+            ),
+        )
         payload["normalized"] = _normalized_payload(event)
         path = Path(self.path)
         path.parent.mkdir(parents=True, exist_ok=True)

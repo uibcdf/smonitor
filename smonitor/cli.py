@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import smonitor
-from smonitor.bundle import export_bundle
+from smonitor.bundle import compare_bundles, export_bundle, format_bundle_comparison_markdown
 from smonitor.config import load_project_config, validate_project_config
 
 
@@ -34,6 +34,10 @@ def _parse_args() -> argparse.Namespace:
     export_parser.add_argument("--config-path", default=None)
     export_parser.add_argument("--profile", default=None)
     export_parser.add_argument("--level", default=None)
+    compare_parser = subparsers.add_parser("compare", help="Compare two smonitor bundles")
+    compare_parser.add_argument("current")
+    compare_parser.add_argument("previous")
+    compare_parser.add_argument("--format", choices=["json", "markdown"], default="json")
     parser.add_argument("--profile", default=None)
     parser.add_argument("--level", default=None)
     parser.add_argument("--report", action="store_true")
@@ -72,6 +76,14 @@ def main() -> int:
             config_base=base,
         )
         print(str(out_path))
+        return 0
+
+    if args.command == "compare":
+        diff = compare_bundles(args.current, args.previous)
+        if args.format == "markdown":
+            print(format_bundle_comparison_markdown(diff))
+        else:
+            print(json.dumps(diff, indent=2))
         return 0
 
     base = Path(args.config_path) if args.config_path else Path.cwd()

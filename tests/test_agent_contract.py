@@ -73,6 +73,16 @@ def test_agent_json_payload_contains_stable_fields(tmp_path):
     assert payload["source"] == "mylib.select"
     assert payload["code"] == "AG-W1"
     assert payload["category"] == "diagnostics"
+    assert payload["human_summary"] == {
+        "level": "WARNING",
+        "code": "AG-W1",
+        "message": "warn",
+        "source": "mylib.select",
+        "hint": "use filter",
+        "recommended_action": None,
+        "next_step": None,
+    }
     assert payload["normalized"]["level"] == "WARNING"
     assert payload["normalized"]["code"] == "AG-W1"
     assert payload["normalized"]["hint"] == "use filter"
+    assert payload["normalized"]["human_summary"] == payload["human_summary"]

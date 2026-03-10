@@ -658,7 +658,7 @@ Constraint:
 - no public contract breakage in existing event fields;
 - additions should be additive, opt-in where appropriate, and covered by API/contract tests.
 
-### Slice 1 — Stable incident fingerprints
+### Slice 1 — Stable incident fingerprints [implemented]
 
 Scope:
 - add a deterministic `fingerprint` field for emitted events and normalized payloads;
@@ -679,7 +679,7 @@ Success criteria:
 - repeated incidents can be grouped without custom downstream logic;
 - fingerprint stays stable across runs for semantically identical incidents.
 
-### Slice 2 — Run/session/correlation identifiers
+### Slice 2 — Run/session/correlation identifiers [implemented]
 
 Scope:
 - add canonical identifiers for reproducibility:
@@ -699,7 +699,7 @@ Success criteria:
 - QA can reconstruct which events belong to the same run/session/operation;
 - bundles become easier to compare and hand off.
 
-### Slice 3 — Incident classification and decision metadata
+### Slice 3 — Incident classification and decision metadata [implemented]
 
 Scope:
 - add additive machine-oriented fields for decision support:
@@ -722,7 +722,7 @@ Success criteria:
 - users and agents can distinguish “what happened” from “what to do next”;
 - triage can prioritize incidents without parsing prose hints.
 
-### Slice 4 — Evidence-first payload structure
+### Slice 4 — Evidence-first payload structure [implemented]
 
 Scope:
 - add canonical `evidence` support for compact observed/expected/resource facts;
@@ -737,7 +737,7 @@ Success criteria:
 - support bundles capture decision-grade evidence without ad hoc key sprawl;
 - handlers can present short evidence summaries without losing raw structure.
 
-### Slice 5 — Stronger noise-reduction policies
+### Slice 5 — Stronger noise-reduction policies [implemented]
 
 Scope:
 - generalize beyond current warning coalescing toward policy-driven duplicate handling;
@@ -757,7 +757,7 @@ Success criteria:
 - noisy workflows remain readable;
 - aggregate information remains preserved and machine-usable.
 
-### Slice 6 — Operational report improvements
+### Slice 6 — Operational report improvements [implemented]
 
 Scope:
 - make `report()` immediately useful as an action surface;
@@ -778,7 +778,7 @@ Success criteria:
 - a maintainer can decide what to inspect first without scanning raw events;
 - agents can consume ranked incident summaries directly.
 
-### Slice 7 — Bundle comparison workflow
+### Slice 7 — Bundle comparison workflow [implemented]
 
 Scope:
 - add a first local diff workflow for support and CI:
@@ -795,7 +795,7 @@ Success criteria:
 - repeated regressions become visible immediately;
 - support handoff can answer “what changed?” reproducibly.
 
-### Slice 8 — Human/agent dual-output hardening
+### Slice 8 — Human/agent dual-output hardening [implemented]
 
 Scope:
 - keep profile-based behavior, but harden the explicit separation between:
@@ -818,6 +818,13 @@ Success criteria:
 4. Evidence-first payload structure
 5. Operational report improvements
 6. Stronger noise-reduction policies
+7. Bundle comparison workflow
+8. Human/agent dual-output hardening
+
+Status on 2026-03-10:
+- slices 1-8 are implemented and covered by targeted tests;
+- docs, standards, and Sphinx user docs have been refreshed for the new dual human/agent contract;
+- remaining pre-`1.0.0` work is validation in real CI/support workflows, not new operability scope.
 7. Bundle comparison workflow
 8. Human/agent dual-output hardening
 

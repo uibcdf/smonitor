@@ -28,6 +28,12 @@ Export local bundle:
 smonitor export --out smonitor_bundle --max-events 500
 ```
 
+Compare two bundle snapshots:
+
+```bash
+smonitor compare current_bundle.json previous_bundle.json --format markdown
+```
+
 ## When to use CLI in your workflow
 
 Use CLI checks in:
@@ -48,4 +54,5 @@ smonitor export --out /tmp/smonitor_bundle --no-events --force
 
 - `--check` is useful for fast sanity checks.
 - `export` is local-first; users decide if they share bundles.
+- `compare` is useful in CI/support handoff to answer what changed between two runs.
 - for sensitive environments, use redact options during export.

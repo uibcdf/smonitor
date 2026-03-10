@@ -68,12 +68,8 @@ historical context live in `SPEC_SMONITOR.md`.
 - Keep branch-rate >=92% in CI as stabilization floor.
 - Final consistency sweep across `README`, `SPEC`, `devguide`, and Sphinx docs.
 - Complete the pre-1.0 diagnostic operability plan:
-  - stable incident fingerprints,
-  - run/session/correlation identifiers,
-  - incident classification and decision metadata,
-  - richer report/bundle triage summaries,
-  - reproducible bundle comparison workflow,
-  - stronger noise-reduction policies without information loss.
+  - validate the now-complete operability stack together in at least one real support/CI workflow,
+  - keep docs/standards/user guides synchronized while the feature set stabilizes.
 - Post-1.0 roadmap preparation: opt-in telemetry client and Sentinel integration.
 
 ## Version 1.0 Emphasis
@@ -90,3 +86,8 @@ historical context live in `SPEC_SMONITOR.md`.
 - Retry and causal metadata now have canonical fields in `context_extra(...)`, normalized JSON output, and coalesced warning summary events.
 - The current pre-1.0 focus is no longer only observation: it is to complete the diagnostic operability plan before `1.0.0` so SMonitor feels decisively useful for developers, QAs, users, and automation agents.
 - Runtime identifiers are now explicit and tested: managers generate stable opaque `run_id` and `session_id` values by default, allow explicit overrides, and expose them for bundle/report correlation workflows.
+- Incident classification and decision metadata are now canonical in `context_extra(...)` and promoted through normalized JSON payloads.
+- Structured `evidence` is now first-class in canonical payloads for support and CI triage.
+- Duplicate-policy noise reduction is now available by incident fingerprint via `duplicate_policy`.
+- Local bundle comparison is now available through `compare_bundles(...)` and `smonitor compare ...`, including new/disappeared/recurrent fingerprint summaries and count deltas.
+- Events and JSON exports now carry an explicit `human_summary` block alongside the normalized machine payload so support handoff stays readable without weakening agent determinism.

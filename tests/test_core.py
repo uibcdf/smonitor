@@ -64,6 +64,30 @@ def test_runtime_identifiers_are_propagated_to_events_and_report():
     assert report["session_id"] == "session-1"
 
 
+def test_events_include_stable_human_summary_block():
+    smonitor.configure(profile="user", handlers=[], event_buffer_size=10)
+    event = smonitor.emit(
+        "WARNING",
+        "download timed out",
+        source="pkg.net",
+        code="W1",
+        extra={
+            "hint": "Retry later.",
+            "recommended_action": "retry",
+            "next_step": "check-network",
+        },
+    )
+    assert event["human_summary"] == {
+        "level": "WARNING",
+        "code": "W1",
+        "message": "download timed out",
+        "source": "pkg.net",
+        "hint": "Retry later.",
+        "recommended_action": "retry",
+        "next_step": "check-network",
+    }
+
+
 def test_emit_correlation_id_override_wins_over_default():
     smonitor.configure(
         profile="user",

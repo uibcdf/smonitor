@@ -79,6 +79,9 @@ Return a session report.
 summary = smonitor.report()
 ```
 
+### compare_bundles(current_path, previous_path)
+Compare two exported bundles and return a reproducible delta focused on fingerprints, codes, and slow-signal activity.
+
 Expected keys
 - `calls_total`
 - `warnings_total`
@@ -173,6 +176,7 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - `report()` now includes `events_by_code`, `events_by_category`, and `slow_signals_recent` to support QA triage without scanning raw event streams.
 - Events now also carry a stable `fingerprint` derived from `code`, `source`, `exception_type`, and selected structured-context keys; `report()` and bundle triage expose `events_by_fingerprint`.
 - Events also carry additive runtime identifiers: `run_id`, `session_id`, and optional `correlation_id`.
+- Events now also carry an additive `human_summary` block with concise, stable human-facing fields: `level`, `code`, `message`, `source`, `hint`, `recommended_action`, and `next_step`.
 - Bundle exports mirror this information under `triage`.
 
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`; suppressed duplicates are summarized in `report()` and bundle triage output.
@@ -184,3 +188,4 @@ MOLSYSMT | WARNING | selection.py:42 | Selection string is ambiguous | [molsysmt
 - The normalized payload now promotes canonical retry/causal keys as first-class machine-readable fields.
 - The normalized payload also promotes the canonical classification/decision keys so agents and QA tooling do not need to parse hints/prose.
 - The normalized payload also promotes canonical `evidence` directly, so support bundles and QA tooling can consume structured facts without ad hoc parsing.
+- The normalized payload also mirrors `human_summary`, keeping the concise human-facing summary explicit without forcing downstream tools to reconstruct it.

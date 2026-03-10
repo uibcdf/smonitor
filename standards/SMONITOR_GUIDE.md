@@ -197,13 +197,23 @@ emit_from_catalog(
 
 Use this helper for stable shared keys such as `caller`, `form`, `requested_attribute`, `resource`, `provider`, and `operation`.
 
+Current canonical additive fields also include:
+- retry metadata: `retry_attempt`, `retry_max`, `retry_exhausted`, `retry_delay_s`;
+- causal metadata: `failure_class`, `last_failure_reason`, `cause_exception_type`, `cause_code`, `causal_chain`;
+- decision metadata: `incident_kind`, `severity`, `priority`, `diagnostic_confidence`, `recommended_action`, `next_step`, `retryable`, `support_needed`;
+- structured `evidence` for compact `expected`/`observed`/`resource`/`operation` facts.
+
 ## 5.3 Report, Bundle, and Machine-Oriented Output
 
 SMonitor now exposes QA-oriented summaries beyond raw event streams:
 
-- `report()` includes `events_by_code`, `events_by_category`, `slow_signals_recent`, and `coalesced_warnings`.
+- events carry stable `fingerprint`, `run_id`, `session_id`, and optional `correlation_id`.
+- events also carry a stable additive `human_summary` block for concise human-facing handoff.
+- `report()` includes `events_by_code`, `events_by_category`, `events_by_fingerprint`, `slow_signals_recent`, and `coalesced_warnings`.
+- `report()` also exposes operational triage sections such as `top_codes`, `top_sources`, `top_fingerprints`, `most_noisy_resources`, `most_expensive_entries`, `blocking_incidents`, `actionable_incidents`, and `recurrent_incidents`.
 - bundle exports mirror those summaries under `triage`.
-- `JsonHandler` includes a `normalized` payload section with stable machine-oriented fields for cross-library ingestion.
+- bundle exports also carry a `runtime` block and can be compared locally with `smonitor compare`.
+- `JsonHandler` includes a `normalized` payload section with stable machine-oriented fields for cross-library ingestion, including retry/causal metadata, decision metadata, structured `evidence`, and mirrored `human_summary`.
 
 These additions should be treated as the preferred source for automated QA summaries before scanning raw event buffers.
 
@@ -215,6 +225,13 @@ Two usability rules now apply:
 - Repeated transient warnings can be coalesced with `warning_coalesce_window_s`. The first warning is emitted normally; suppressed duplicates are summarized in `coalesced_warnings`.
 
 Use coalescing only for clearly repeated transient diagnostics such as download retries, not for semantically distinct warnings.
+
+More general duplicate handling is also available through `duplicate_policy`, keyed by incident fingerprint. The current pre-1.0 supported policies are:
+- `off`
+- `emit_summary`
+- `emit_every_n`
+
+Use duplicate policies for genuinely repeated incidents where aggregate counts are more useful than verbatim repetition.
 
 ## 6. Noise Control
 

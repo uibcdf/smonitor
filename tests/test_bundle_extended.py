@@ -2,7 +2,13 @@ import json
 from pathlib import Path
 
 import smonitor
-from smonitor.bundle import collect_bundle, export_bundle, write_bundle
+from smonitor.bundle import (
+    collect_bundle,
+    compare_bundles,
+    export_bundle,
+    format_bundle_comparison_markdown,
+    write_bundle,
+)
 from smonitor.core.manager import get_manager
 
 
@@ -273,5 +279,57 @@ def test_collect_bundle_exposes_operational_triage_rankings(tmp_path: Path):
     assert triage["most_expensive_entries"][0]["key"] == "pkg.alpha.fn"
     assert triage["most_expensive_tags"][0]["key"] == "api"
     assert triage["blocking_incidents"][-1]["code"] == "E1"
+    assert triage["blocking_incidents"][-1]["human_summary"]["recommended_action"] == "inspect"
     assert triage["actionable_incidents"][-1]["code"] == "E1"
     assert triage["recurrent_incidents"]
+
+
+def test_compare_bundles_exposes_fingerprint_and_code_deltas(tmp_path: Path):
+    previous = {
+        "triage": {
+            "events_by_fingerprint": {"fp-a": 1, "fp-b": 2},
+            "events_by_code": {"W1": 2},
+            "slow_signals_recent": [{"source": "a"}],
+        }
+    }
+    current = {
+        "triage": {
+            "events_by_fingerprint": {"fp-b": 3, "fp-c": 1},
+            "events_by_code": {"W1": 1, "E1": 1},
+            "slow_signals_recent": [{"source": "a"}, {"source": "b"}],
+        }
+    }
+    previous_path = tmp_path / "previous.json"
+    current_path = tmp_path / "current.json"
+    previous_path.write_text(json.dumps(previous), encoding="utf-8")
+    current_path.write_text(json.dumps(current), encoding="utf-8")
+
+    diff = compare_bundles(current_path, previous_path)
+
+    assert diff["new_fingerprints"] == ["fp-c"]
+    assert diff["disappeared_fingerprints"] == ["fp-a"]
+    assert diff["recurrent_fingerprints"] == ["fp-b"]
+    assert diff["code_delta"]["E1"]["delta"] == 1
+    assert diff["code_delta"]["W1"]["delta"] == -1
+    assert diff["slow_signal_delta"]["delta"] == 1
+
+
+def test_format_bundle_comparison_markdown_renders_summary(tmp_path: Path):
+    diff = {
+        "current_bundle": str(tmp_path / "current.json"),
+        "previous_bundle": str(tmp_path / "previous.json"),
+        "new_fingerprints": ["fp-c"],
+        "disappeared_fingerprints": ["fp-a"],
+        "recurrent_fingerprints": ["fp-b"],
+        "code_delta": {
+            "W1": {"before": 2, "after": 1, "delta": -1},
+            "E1": {"before": 0, "after": 1, "delta": 1},
+        },
+        "slow_signal_delta": {"before": 1, "after": 2, "delta": 1},
+    }
+
+    text = format_bundle_comparison_markdown(diff)
+
+    assert "# SMonitor Bundle Comparison" in text
+    assert "`W1`: 2 -> 1 (-1)" in text
+    assert "`E1`: 0 -> 1 (+1)" in text

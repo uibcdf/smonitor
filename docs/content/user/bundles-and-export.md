@@ -8,6 +8,7 @@ Local bundles are privacy-first exports that capture current SMonitor state and 
 smonitor export --out smonitor_bundle --max-events 500
 smonitor export --out smonitor_bundle --since 2026-02-06T00:00:00
 smonitor export --out smonitor_bundle --drop-extra --redact extra.password
+smonitor compare current_bundle.json previous_bundle.json --format markdown
 ```
 
 Generated artifacts:
@@ -15,6 +16,11 @@ Generated artifacts:
 - `events.jsonl` (optional recent events)
 
 Use `--out bundle.json` for a single-file export.
+
+Bundle comparisons focus on triage changes between runs:
+- new/disappeared/recurrent incident fingerprints,
+- code-count deltas,
+- slow-signal deltas.
 
 ## Privacy controls
 
@@ -57,5 +63,6 @@ SMONITOR = {"event_buffer_size": 500}
 ## You are done when
 
 - `smonitor export` generates the expected files,
+- `smonitor compare` shows meaningful diffs across representative runs,
 - sensitive fields are removed/redacted according to policy,
 - your support workflow can reproduce issues from the exported bundle.

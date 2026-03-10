@@ -101,6 +101,41 @@ def test_cli_export_forwards_options(monkeypatch, capsys, tmp_path: Path):
     assert calls["kwargs"]["force"] is True
 
 
+def test_cli_compare_subcommand_json(monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["smonitor", "compare", "current.json", "previous.json"],
+    )
+    monkeypatch.setattr(
+        cli,
+        "compare_bundles",
+        lambda current, previous: {"current_bundle": current, "previous_bundle": previous},
+    )
+
+    rc = cli.main()
+    out = capsys.readouterr().out
+
+    assert rc == 0
+    assert '"current_bundle": "current.json"' in out
+
+
+def test_cli_compare_subcommand_markdown(monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["smonitor", "compare", "current.json", "previous.json", "--format", "markdown"],
+    )
+    monkeypatch.setattr(cli, "compare_bundles", lambda current, previous: {"ok": True})
+    monkeypatch.setattr(cli, "format_bundle_comparison_markdown", lambda diff: "# cmp")
+
+    rc = cli.main()
+    out = capsys.readouterr().out
+
+    assert rc == 0
+    assert "# cmp" in out
+
+
 def test_cli_check_event_with_json_payload(tmp_path: Path, monkeypatch, capsys):
     (tmp_path / "_smonitor.py").write_text("SMONITOR = {}\n")
     emitted = {}

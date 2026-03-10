@@ -11,6 +11,7 @@ from ..policy.engine import PolicyEngine
 from ..validation import validate_event
 from .context import get_context
 from .fingerprint import build_event_fingerprint
+from .human_summary import build_human_summary
 from .identifiers import new_identifier
 
 _LEVEL_ORDER = {
@@ -603,6 +604,7 @@ class Manager:
             or self._default_correlation_id
         )
         if not self._config.enabled:
+            hint = None
             return {
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "level": level,
@@ -621,6 +623,14 @@ class Manager:
                     code=code,
                     source=source,
                     exception_type=exception_type,
+                    extra=extra_data,
+                ),
+                "human_summary": build_human_summary(
+                    level=str(level).upper(),
+                    message=message,
+                    code=code,
+                    source=source,
+                    hint=hint,
                     extra=extra_data,
                 ),
             }
@@ -662,6 +672,14 @@ class Manager:
         
         if hint:
             event["extra"].setdefault("hint", hint)
+        event["human_summary"] = build_human_summary(
+            level=event["level"],
+            message=event["message"],
+            code=event.get("code"),
+            source=event.get("source"),
+            hint=event["extra"].get("hint"),
+            extra=event["extra"],
+        )
 
         # Honor configured threshold before routing/printing.
         if _level_value(event["level"]) < _level_value(self._config.level):

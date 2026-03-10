@@ -56,6 +56,15 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
     import json
     payload = json.loads(path.read_text(encoding="utf-8").strip())
     normalized = payload["normalized"]
+    assert payload["human_summary"] == {
+        "level": "WARNING",
+        "code": "W1",
+        "message": "m",
+        "source": "pkg.mod",
+        "hint": None,
+        "recommended_action": "retry",
+        "next_step": "check-network",
+    }
     assert normalized["source"] == "pkg.mod"
     assert normalized["code"] == "W1"
     assert normalized["tags"] == ["api"]
@@ -89,3 +98,4 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
         "observed": "timeout",
         "resource": "181l",
     }
+    assert normalized["human_summary"] == payload["human_summary"]

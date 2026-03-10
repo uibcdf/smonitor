@@ -95,8 +95,11 @@ do_work(-1)
 - Handlers: console (plain/rich), file, JSON, memory buffer.
 - Integration API (`DiagnosticBundle`, `CatalogException`, `CatalogWarning`).
 - Event schema checks and strict signal contracts in `dev`/`qa`.
-- CLI for validation, checks, report, and bundle export.
+- Stable incident fingerprints and run/session/correlation identifiers for reproducible triage.
+- Explicit `human_summary` plus normalized machine payloads for dual human/agent workflows.
+- CLI for validation, checks, report, bundle export, and bundle comparison.
 - Local bundle export (`bundle.json`, optional `events.jsonl`) for support workflows.
+- Operational triage summaries in reports/bundles (`top_codes`, `top_sources`, `top_fingerprints`, recurrent/actionable/blocking summaries).
 - Profiling features:
   - decorator timing,
   - manual spans,
@@ -167,9 +170,10 @@ Generate a local diagnostics bundle for reproducible troubleshooting:
 
 ```bash
 smonitor export --out smonitor_bundle --max-events 500
+smonitor compare current_bundle.json previous_bundle.json --format markdown
 ```
 
-This creates `bundle.json` and `events.jsonl` (if buffering is enabled).
+This creates `bundle.json` and `events.jsonl` (if buffering is enabled). Bundle comparison highlights new/disappeared/recurrent fingerprints and count deltas between runs.
 
 ## Policy Engine
 
@@ -193,6 +197,7 @@ smonitor --validate-config
 smonitor --check
 smonitor --check --check-event '{"level":"WARNING","message":"check event"}'
 smonitor export --out smonitor_bundle --max-events 500
+smonitor compare current_bundle.json previous_bundle.json --format markdown
 ```
 
 ## Ecosystem adoption

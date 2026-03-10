@@ -50,6 +50,89 @@ def _sanitize_event(
     return sanitized
 
 
+def _load_bundle(path: str | Path) -> Dict[str, Any]:
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def _counter_delta(current: Dict[str, int], previous: Dict[str, int]) -> Dict[str, Dict[str, int]]:
+    keys = sorted(set(current) | set(previous))
+    delta: Dict[str, Dict[str, int]] = {}
+    for key in keys:
+        before = int(previous.get(key, 0))
+        after = int(current.get(key, 0))
+        delta[key] = {"before": before, "after": after, "delta": after - before}
+    return delta
+
+
+def compare_bundles(current_path: str | Path, previous_path: str | Path) -> Dict[str, Any]:
+    current = _load_bundle(current_path)
+    previous = _load_bundle(previous_path)
+
+    current_triage = current.get("triage", {}) or {}
+    previous_triage = previous.get("triage", {}) or {}
+
+    current_fp = current_triage.get("events_by_fingerprint", {}) or {}
+    previous_fp = previous_triage.get("events_by_fingerprint", {}) or {}
+    current_codes = current_triage.get("events_by_code", {}) or {}
+    previous_codes = previous_triage.get("events_by_code", {}) or {}
+
+    current_fp_keys = set(current_fp)
+    previous_fp_keys = set(previous_fp)
+
+    return {
+        "current_bundle": str(current_path),
+        "previous_bundle": str(previous_path),
+        "new_fingerprints": sorted(current_fp_keys - previous_fp_keys),
+        "disappeared_fingerprints": sorted(previous_fp_keys - current_fp_keys),
+        "recurrent_fingerprints": sorted(current_fp_keys & previous_fp_keys),
+        "fingerprint_delta": _counter_delta(current_fp, previous_fp),
+        "code_delta": _counter_delta(current_codes, previous_codes),
+        "slow_signal_delta": {
+            "before": len(previous_triage.get("slow_signals_recent", []) or []),
+            "after": len(current_triage.get("slow_signals_recent", []) or []),
+            "delta": len(current_triage.get("slow_signals_recent", []) or [])
+            - len(previous_triage.get("slow_signals_recent", []) or []),
+        },
+    }
+
+
+def format_bundle_comparison_markdown(diff: Dict[str, Any]) -> str:
+    lines = [
+        "# SMonitor Bundle Comparison",
+        "",
+        f"- current: `{diff['current_bundle']}`",
+        f"- previous: `{diff['previous_bundle']}`",
+        "",
+        "## Fingerprints",
+        f"- new: {len(diff['new_fingerprints'])}",
+        f"- disappeared: {len(diff['disappeared_fingerprints'])}",
+        f"- recurrent: {len(diff['recurrent_fingerprints'])}",
+        "",
+        "## Code delta",
+    ]
+    changed = False
+    for key, payload in diff.get("code_delta", {}).items():
+        if payload["delta"] == 0:
+            continue
+        changed = True
+        lines.append(
+            f"- `{key}`: {payload['before']} -> {payload['after']} ({payload['delta']:+d})"
+        )
+    if not changed:
+        lines.append("- no code-count changes")
+    lines.extend(
+        [
+            "",
+            "## Slow-signal delta",
+            (
+                f"- {diff['slow_signal_delta']['before']} -> {diff['slow_signal_delta']['after']} "
+                f"({diff['slow_signal_delta']['delta']:+d})"
+            ),
+        ]
+    )
+    return "\n".join(lines)
+
+
 def collect_bundle(
     *,
     project_config: Optional[Dict[str, Any]] = None,
