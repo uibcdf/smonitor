@@ -825,8 +825,15 @@ Status on 2026-03-10:
 - slices 1-8 are implemented and covered by targeted tests;
 - docs, standards, and Sphinx user docs have been refreshed for the new dual human/agent contract;
 - remaining pre-`1.0.0` work is validation in real CI/support workflows, not new operability scope.
-7. Bundle comparison workflow
-8. Human/agent dual-output hardening
+- full local operational validation was rerun after the slice-8 landing and is green:
+  - `ruff check .`
+  - `PYTHONPATH=. pytest -q`
+  - `PYTHONPATH=. pytest -q --cov-config=.coveragerc --cov=smonitor --cov-report=term --cov-report=xml`
+
+Future design note:
+- `smonitor/integrations/core.py` currently acts as a contract kernel for canonical structured payloads.
+- its branch count is acceptable as long as those branches keep encoding explicit contract rules rather than ad hoc behavior.
+- after `1.0.0`, revisit internal decomposition only if real maintenance pain appears; until then, prefer small changes, contract tests, and synchronized docs for every semantic change.
 
 Reasoning:
 - slices 1-4 define the machine contract;

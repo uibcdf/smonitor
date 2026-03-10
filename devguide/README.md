@@ -91,3 +91,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - Duplicate-policy noise reduction is now available by incident fingerprint via `duplicate_policy`.
 - Local bundle comparison is now available through `compare_bundles(...)` and `smonitor compare ...`, including new/disappeared/recurrent fingerprint summaries and count deltas.
 - Events and JSON exports now carry an explicit `human_summary` block alongside the normalized machine payload so support handoff stays readable without weakening agent determinism.
+- Full local operational validation has been rerun after these additions and is green:
+  - `ruff check .`
+  - `PYTHONPATH=. pytest -q`
+  - `PYTHONPATH=. pytest -q --cov-config=.coveragerc --cov=smonitor --cov-report=term --cov-report=xml`
