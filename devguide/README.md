@@ -31,6 +31,7 @@ historical context live in `SPEC_SMONITOR.md`.
 - Event schema validation (dev/qa) and strict SIGNALS enforcement.
 - CODES templating and SIGNALS soft enforcement.
 - Profiling expanded (timeline, sampling, spans, export).
+- Signal profiling now carries optional structured frame context and tag-aware timing summaries in reports/timeline.
 - Local bundle export (CLI + event buffer).
 - Test suite expanded with sensitive-path coverage for manager/policy/handlers/CLI.
 - Ecosystem integration completed (MolSysMT, MolSysViewer, ArgDigest, DepDigest, PyUnitWizard).

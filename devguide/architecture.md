@@ -56,7 +56,7 @@ Singleton responsible for:
 
 ### 2) core.context
 - Uses `contextvars` to store a per-task call-chain
-- Each frame contains: function name, module, args summary (optional), timestamp
+- Each frame contains: function name, module, args summary (optional), timestamp, tags, and optional structured extra context
 - Push/pop occurs via `@signal`
 
 ### 3) core.decorator (@signal)
@@ -122,6 +122,7 @@ smonitor.configure(
 ### report()
 - Returns a diagnostic summary of the session
 - Counts calls, warnings, errors, and optional performance metrics
+- Includes timing summaries by function, by module, and by signal tag when profiling is enabled
 
 ## Integration Strategy
 

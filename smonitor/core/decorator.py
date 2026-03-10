@@ -5,6 +5,8 @@ from random import random
 from time import perf_counter
 from typing import Any, Callable, Optional
 
+ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
+
 from .context import Frame, pop_frame, push_frame
 from .manager import get_manager
 
@@ -23,6 +25,7 @@ def signal(
     *,
     tags: Optional[list[str]] = None,
     exception_level: str = "ERROR",
+    extra_factory: Optional[ExtraFactory] = None,
 ):
     def decorator(fn: Callable[..., Any]):
         @wraps(fn)
@@ -36,11 +39,15 @@ def signal(
             else:
                 start = None
             args_summary = _summarize_args(args, kwargs) if manager.config.args_summary else None
+            frame_extra = None
+            if extra_factory is not None:
+                frame_extra = extra_factory(args, kwargs)
             frame = Frame(
                 function=fn.__name__,
                 module=fn.__module__,
                 args=args_summary,
                 tags=tags,
+                extra=frame_extra,
             )
             push_frame(frame)
             try:
@@ -53,12 +60,15 @@ def signal(
                 # Prevent "Error Echo": only emit if this exception hasn't been handled by smonitor
                 if not getattr(exc, "__smonitor_emitted__", False):
                     source = f"{fn.__module__}.{fn.__name__}"
+                    extra = {"source_module": fn.__module__}
+                    if frame.extra:
+                        extra.update(frame.extra)
                     manager.emit(
                         exception_level,
                         str(exc),
                         source=source,
                         exception_type=exc.__class__.__name__,
-                        extra={"source_module": fn.__module__},
+                        extra=extra,
                     )
                     try:
                         setattr(exc, "__smonitor_emitted__", True)
@@ -69,7 +79,7 @@ def signal(
                 if start is not None:
                     frame.duration_ms = (perf_counter() - start) * 1000.0
                     key = f"{fn.__module__}.{fn.__name__}"
-                    manager.record_timing(key, frame.duration_ms)
+                    manager.record_timing(key, frame.duration_ms, tags=frame.tags, meta=frame.extra)
                 pop_frame()
         return wrapper
 

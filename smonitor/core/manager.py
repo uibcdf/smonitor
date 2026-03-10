@@ -242,6 +242,7 @@ class Manager:
         *,
         span: bool = False,
         meta: Optional[Dict[str, Any]] = None,
+        tags: Optional[List[str]] = None,
     ) -> None:
         self._timings.setdefault(key, []).append(duration_ms)
         # timeline buffer
@@ -255,6 +256,8 @@ class Manager:
                 entry["span"] = True
             if meta:
                 entry["meta"] = meta
+            if tags:
+                entry["tags"] = list(tags)
             self._timeline.append(entry)
             if len(self._timeline) > self._config.profiling_buffer_size:
                 self._timeline.pop(0)
@@ -482,6 +485,24 @@ class Manager:
             mod["p95_ms"] = max(mod["p95_ms"], summary["p95_ms"])
             mod["max_ms"] = max(mod["max_ms"], summary["max_ms"])
 
+        timings_by_tag: Dict[str, Dict[str, float]] = {}
+        durations_by_tag: Dict[str, List[float]] = {}
+        for entry in self._timeline:
+            if "duration_ms" not in entry:
+                continue
+            for tag in entry.get("tags", []) or []:
+                durations_by_tag.setdefault(tag, []).append(entry["duration_ms"])
+
+        for tag, values in durations_by_tag.items():
+            values_sorted = sorted(values)
+            n = len(values_sorted)
+            timings_by_tag[tag] = {
+                "count": n,
+                "p50_ms": values_sorted[int(0.5 * (n - 1))],
+                "p95_ms": values_sorted[int(0.95 * (n - 1))],
+                "max_ms": max(values_sorted),
+            }
+
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
         for hook in hooks:
@@ -500,6 +521,7 @@ class Manager:
             ],
             "timings": timings_summary,
             "timings_by_module": timings_by_module,
+            "timings_by_tag": timings_by_tag,
             "timeline": list(self._timeline),
             "profiling_meta": profiling_meta,
             "peak_memory": None,

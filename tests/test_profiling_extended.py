@@ -63,3 +63,31 @@ def test_export_timeline_invalid_format_raises(tmp_path: Path):
     smonitor.configure(profile="user", profiling=True, profiling_buffer_size=10)
     with pytest.raises(ValueError, match="Unsupported format"):
         profiling.export_timeline(str(tmp_path / "x.out"), format="yaml")
+
+
+def test_signal_extra_factory_attaches_context_to_timeline():
+    smonitor.configure(profile="user", profiling=True, profiling_buffer_size=10)
+
+    @smonitor.signal(tags=["api", "demo"], extra_factory=lambda args, kwargs: {"selection": kwargs.get("selection")})
+    def sample(*, selection=None):
+        return selection
+
+    sample(selection="name CA")
+    timeline = smonitor.report()["timeline"]
+    entry = timeline[-1]
+    assert entry["tags"] == ["api", "demo"]
+    assert entry["meta"]["selection"] == "name CA"
+
+
+
+def test_report_exposes_timings_by_tag():
+    smonitor.configure(profile="user", profiling=True, profiling_buffer_size=10)
+
+    @smonitor.signal(tags=["api", "structure"])
+    def tagged():
+        return 1
+
+    tagged()
+    report = smonitor.report()
+    assert report["timings_by_tag"]["api"]["count"] >= 1
+    assert report["timings_by_tag"]["structure"]["count"] >= 1

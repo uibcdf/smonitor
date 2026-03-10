@@ -570,3 +570,8 @@ Success criteria:
 - M2: Warnings + logging emitters.
 - M3: JSON/file handlers + integration hooks.
 - M4: Documentation and polished UX.
+
+## 1.0.x Diagnostic Operability Addendum
+- Add structured `extra_factory` support to `@signal` for low-friction QA/developer context on profiled calls. **In Progress**
+- Surface `tags` in timeline exports and add `timings_by_tag` to `report()`. **In Progress**
+- Evaluate slow-call threshold events as an opt-in pre-1.0/1.0.x feature. **Planned**
