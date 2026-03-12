@@ -118,6 +118,7 @@ class DiagnosticBundle:
         category: Optional[Type[Warning]] = None,
         *,
         stacklevel: int = 2,
+        caller: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
     ) -> None:
         if isinstance(message_or_warning, Warning):
@@ -135,7 +136,7 @@ class DiagnosticBundle:
                 emit_from_catalog(
                     entry,
                     package_root=self.package_root,
-                    extra=merge_extra(self.meta, {**(extra or {}), "message": msg}),
+                    extra=merge_extra(self.meta, {**(extra or {}), "message": msg, "caller": caller or (extra or {}).get("caller")}),
                     meta=self.meta,
                 )
                 return
@@ -171,6 +172,7 @@ class DiagnosticBundle:
         category: Optional[Type[Warning]] = None,
         *,
         stacklevel: int = 2,
+        caller: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
     ) -> None:
         if isinstance(message_or_warning, Warning):
@@ -182,7 +184,7 @@ class DiagnosticBundle:
         if key in self._warned_once_cache:
             return
         self._warned_once_cache.add(key)
-        self.warn(message_or_warning, category, stacklevel=stacklevel, extra=extra)
+        self.warn(message_or_warning, category, stacklevel=stacklevel, caller=caller, extra=extra)
 
     def resolve(
         self,
