@@ -82,6 +82,8 @@ class Manager:
         self._coalesced_warning_summaries: List[Dict[str, Any]] = []
         self._duplicate_state: Dict[str, Dict[str, Any]] = {}
         self._duplicate_summaries: List[Dict[str, Any]] = []
+        self._redundant_conversions_by_callsite: Dict[str, int] = {}
+        self._redundant_conversions_recent: List[Dict[str, Any]] = []
         self._session_id = new_identifier()
         self._run_id = new_identifier()
         self._default_correlation_id: Optional[str] = None
@@ -284,6 +286,31 @@ class Manager:
 
     def record_call(self) -> None:
         self._counts["calls_total"] += 1
+
+    def record_redundant_conversion(
+        self,
+        callsite: str,
+        *,
+        form_in: Optional[str] = None,
+        to_unit: Optional[str] = None,
+        to_form: Optional[str] = None,
+        to_type: Optional[str] = None,
+    ) -> None:
+        key = callsite or "unknown"
+        self._redundant_conversions_by_callsite[key] = (
+            self._redundant_conversions_by_callsite.get(key, 0) + 1
+        )
+        self._redundant_conversions_recent.append(
+            {
+                "callsite": key,
+                "form_in": form_in,
+                "to_unit": to_unit,
+                "to_form": to_form,
+                "to_type": to_type,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+        self._redundant_conversions_recent = self._redundant_conversions_recent[-20:]
 
     def record_timing(
         self,
@@ -871,6 +898,7 @@ class Manager:
         top_sources = _top_items(events_by_source)
         top_fingerprints = _top_items(events_by_fingerprint)
         most_noisy_resources = _top_items(events_by_resource)
+        top_redundant_conversions = _top_items(self._redundant_conversions_by_callsite)
         expensive_entries = sorted(
             (
                 {"key": key, **summary}
@@ -932,6 +960,10 @@ class Manager:
             "slow_signals_recent": slow_signals_recent,
             "coalesced_warnings": coalesced_warnings,
             "duplicate_summaries": duplicate_summaries,
+            "redundant_conversions_total": sum(self._redundant_conversions_by_callsite.values()),
+            "redundant_conversions_by_callsite": dict(self._redundant_conversions_by_callsite),
+            "redundant_conversions_recent": list(self._redundant_conversions_recent),
+            "top_redundant_conversions": top_redundant_conversions,
             "top_codes": top_codes,
             "top_sources": top_sources,
             "top_fingerprints": top_fingerprints,
