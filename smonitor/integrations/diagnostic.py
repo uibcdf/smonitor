@@ -98,7 +98,17 @@ class CatalogWarning(Warning):
         super().__init__(full_message)
 
 
+
+class FormatError(CatalogException):
+    """Exception raised when a data or file format standard is violated."""
+    catalog_key = "FormatError"
+
+class InconsistencyError(CatalogException):
+    """Exception raised when internal data structures are inconsistent."""
+    catalog_key = "InconsistencyError"
+
 class DiagnosticBundle:
+
     """A bundle of diagnostic tools for a library integration."""
 
     def __init__(
