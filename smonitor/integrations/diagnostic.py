@@ -186,6 +186,37 @@ class DiagnosticBundle:
         self._warned_once_cache.add(key)
         self.warn(message_or_warning, category, stacklevel=stacklevel, caller=caller, extra=extra)
 
+    def info(
+        self,
+        key: str,
+        *,
+        extra: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Emit an INFO signal from the catalog."""
+        entry = _catalog_entry(self.catalog, "info", key)
+        if entry:
+            emit_from_catalog(
+                entry,
+                package_root=self.package_root,
+                extra=merge_extra(self.meta, extra),
+                meta=self.meta,
+            )
+
+    def experimental(self, message: Optional[str] = None, *, key: str = "ExperimentalPath"):
+        """Decorator to mark a function or module as experimental."""
+        def decorator(fn):
+            from functools import wraps
+            @wraps(fn)
+            def wrapper(*args, **kwargs):
+                self.info(key, extra={
+                    "module": fn.__module__,
+                    "function": fn.__name__,
+                    "custom_message": message or ""
+                })
+                return fn(*args, **kwargs)
+            return wrapper
+        return decorator
+
     def resolve(
         self,
         message: Optional[str] = None,
