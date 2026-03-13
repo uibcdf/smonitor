@@ -870,3 +870,7 @@ Operational closure checklist for the stabilization window:
    - no missing canonical fields;
    - no public signatures needing redesign before freeze.
 7. a short observation period passes without structural friction.
+
+## Future Scope: Real-Time Performance Telemetry
+- **Aggregated Performance Metrics**: Support for high-frequency analytical engines (e.g., HeavyAnalysisEngine).
+- **Live Dashboard Protocol**: Event-driven real-time updates for throughput, memory pressure, and ETA.
