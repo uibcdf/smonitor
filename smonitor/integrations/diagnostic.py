@@ -107,6 +107,46 @@ class InconsistencyError(CatalogException):
     """Exception raised when internal data structures are inconsistent."""
     catalog_key = "InconsistencyError"
 
+class SupportTierRegistry:
+    """Registry mapping names (forms, objects, functions) to their support tier.
+
+    Obtain an instance from :py:meth:`DiagnosticBundle.tier_registry`.  The
+    registry is bound to a ``DiagnosticBundle`` and uses its emission
+    machinery, so all signals pass through the same catalog and meta context.
+
+    Tier semantics
+    --------------
+    - **Tier 1**: contractual, no signal emitted.
+    - **Tier 2**: best-effort, a WARNING is emitted once per name per session.
+    - **Tier 3**: experimental/niche, an INFO signal is emitted once per name
+      per session.
+    """
+
+    def __init__(self, bundle: "DiagnosticBundle") -> None:
+        self._bundle = bundle
+        self._tiers: Dict[str, int] = {}
+
+    def register(self, name: str, tier: int) -> None:
+        """Register *name* with its support *tier* (1, 2, or 3)."""
+        self._tiers[name] = tier
+
+    def register_many(self, mapping: Dict[str, int]) -> None:
+        """Register multiple names at once from a ``{name: tier}`` mapping."""
+        self._tiers.update(mapping)
+
+    def check(self, name: str) -> None:
+        """Emit the appropriate tier signal for *name*, at most once per session.
+
+        Tier 1 items (or unregistered names) produce no signal.
+        Tier 2 items emit a WARNING the first time they are checked.
+        Tier 3 items emit an INFO signal the first time they are checked.
+        """
+        tier = self._tiers.get(name)
+        if tier is None or tier == 1:
+            return
+        self._bundle._emit_tier_signal(tier=tier, name=name, kind="form")
+
+
 class DiagnosticBundle:
 
     """A bundle of diagnostic tools for a library integration."""
@@ -121,6 +161,7 @@ class DiagnosticBundle:
         self.meta = meta
         self.package_root = package_root
         self._warned_once_cache: set[tuple[Type[Warning], str]] = set()
+        self._tier_dedup_cache: set[str] = set()
 
     def warn(
         self,
@@ -213,19 +254,144 @@ class DiagnosticBundle:
             )
 
     def experimental(self, message: Optional[str] = None, *, key: str = "ExperimentalPath"):
-        """Decorator to mark a function or module as experimental."""
-        def decorator(fn):
+        """Decorator to mark a function or module as experimental.
+
+        .. deprecated::
+            Use :py:meth:`support_tier` with ``tier=3`` instead.
+            ``experimental()`` is now an alias for ``support_tier(3, key=key)``.
+            The key defaults to ``"ExperimentalPath"`` for backward compatibility.
+        """
+        return self.support_tier(3, message=message, key=key)
+
+    def _emit_tier_signal(
+        self,
+        *,
+        tier: int,
+        name: str,
+        kind: str = "item",
+        module: Optional[str] = None,
+        message: Optional[str] = None,
+        key: Optional[str] = None,
+    ) -> None:
+        """Emit the appropriate support-tier signal for *name*, at most once per session.
+
+        Uses an internal deduplication cache keyed on ``(tier, name)`` so each
+        name only triggers a signal once regardless of how many times it is used.
+        """
+        dedup_key = f"tier:{tier}:{name}"
+        if dedup_key in self._tier_dedup_cache:
+            return
+        self._tier_dedup_cache.add(dedup_key)
+
+        extra: Dict[str, Any] = {"name": name, "kind": kind, "tier": tier}
+        if module:
+            extra["module"] = module
+        if message:
+            extra["custom_message"] = message
+
+        if tier == 2:
+            catalog_key = key or "SupportTier2Warning"
+            entry = _catalog_entry(self.catalog, "warnings", catalog_key)
+            if entry:
+                emit_from_catalog(
+                    entry,
+                    package_root=self.package_root,
+                    extra=merge_extra(self.meta, extra),
+                    meta=self.meta,
+                )
+            else:
+                smonitor.emit(
+                    "WARNING",
+                    f"'{name}' is a best-effort supported {kind} (Tier 2). "
+                    "Results are supported but not contractually guaranteed for all workflows.",
+                    source="smonitor.integrations.support_tier",
+                    category="support_tier",
+                    extra=merge_extra(self.meta, extra),
+                )
+        elif tier >= 3:
+            catalog_key = key or "SupportTier3Info"
+            entry = _catalog_entry(self.catalog, "info", catalog_key)
+            if not entry:
+                entry = _catalog_entry(self.catalog, "info", "ExperimentalPath")
+            if entry:
+                emit_from_catalog(
+                    entry,
+                    package_root=self.package_root,
+                    extra=merge_extra(self.meta, extra),
+                    meta=self.meta,
+                )
+            else:
+                smonitor.emit(
+                    "INFO",
+                    f"'{name}' is an experimental {kind} (Tier 3). Use with caution.",
+                    source="smonitor.integrations.support_tier",
+                    category="support_tier",
+                    extra=merge_extra(self.meta, extra),
+                )
+
+    def support_tier(
+        self,
+        tier: int,
+        *,
+        message: Optional[str] = None,
+        key: Optional[str] = None,
+    ) -> Any:
+        """Decorator marking a function with its support tier.
+
+        - **Tier 1**: no-op; the original function is returned unchanged.
+        - **Tier 2**: emits a WARNING signal the first time the function is
+          called in a session (deduplicated per function per session).
+        - **Tier 3**: emits an INFO signal the first time the function is
+          called in a session (deduplicated per function per session).
+
+        Unlike :py:meth:`experimental`, this decorator deduplicates per
+        function per session and is intended for the systematic support-tier
+        protocol across the MolSysSuite ecosystem.
+
+        Parameters
+        ----------
+        tier:
+            Support tier (1, 2, or 3).
+        message:
+            Optional additional context appended to the emitted signal.
+        key:
+            Catalog key override.  Defaults to ``"SupportTier2Warning"`` for
+            tier 2 and ``"SupportTier3Info"`` for tier 3.
+        """
+        if tier == 1:
+            def passthrough(fn: Any) -> Any:
+                return fn
+            return passthrough
+
+        def decorator(fn: Any) -> Any:
             from functools import wraps
+
             @wraps(fn)
-            def wrapper(*args, **kwargs):
-                self.info(key, extra={
-                    "module": fn.__module__,
-                    "function": fn.__name__,
-                    "custom_message": message or ""
-                })
+            def wrapper(*args: Any, **kwargs: Any) -> Any:
+                self._emit_tier_signal(
+                    tier=tier,
+                    name=fn.__qualname__,
+                    kind="function",
+                    module=fn.__module__,
+                    message=message,
+                    key=key,
+                )
                 return fn(*args, **kwargs)
+
             return wrapper
+
         return decorator
+
+    def tier_registry(self) -> "SupportTierRegistry":
+        """Return the :class:`SupportTierRegistry` associated with this bundle.
+
+        The registry is created lazily on first access and persists for the
+        lifetime of the bundle, so tier signals are deduplicated across the
+        entire session.
+        """
+        if not hasattr(self, "_tier_registry"):
+            self._tier_registry = SupportTierRegistry(self)
+        return self._tier_registry
 
     def resolve(
         self,

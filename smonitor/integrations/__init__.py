@@ -7,7 +7,7 @@ from .core import (
     merge_extra,
     reset_configured_packages,
 )
-from .diagnostic import FormatError, InconsistencyError, _catalog_entry, CatalogException, CatalogWarning, DiagnosticBundle
+from .diagnostic import FormatError, InconsistencyError, _catalog_entry, CatalogException, CatalogWarning, DiagnosticBundle, SupportTierRegistry
 
 __all__ = [
     "ensure_configured",
@@ -18,4 +18,5 @@ __all__ = [
     "CatalogException",
     "CatalogWarning",
     "DiagnosticBundle",
+    "SupportTierRegistry",
 ]
