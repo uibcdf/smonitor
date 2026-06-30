@@ -21,6 +21,26 @@ def _summarize_args(args: tuple[Any, ...], kwargs: dict[str, Any]) -> dict[str, 
     return summary
 
 
+def _resolve_owner_module(fn: Callable[..., Any], args: tuple[Any, ...]) -> str:
+    """Resolve the logical owner module of a decorated callable.
+
+    For methods (whose ``__qualname__`` is ``Class.method``) the logical owner is
+    the *runtime* class of the bound instance, which may differ from the module
+    where the function was physically defined — e.g. classes assembled from
+    mixins living in separate modules. Resolving from ``type(self)`` reports the
+    class's real module without requiring module-level ``__name__`` spoofing in
+    the defining files. Free functions keep their defining module.
+    """
+    qualname = getattr(fn, "__qualname__", "") or ""
+    if args and "." in qualname and "<locals>" not in qualname:
+        owner = type(args[0])
+        if isinstance(owner, type) and hasattr(owner, fn.__name__):
+            module = getattr(owner, "__module__", None)
+            if isinstance(module, str) and module:
+                return module
+    return fn.__module__
+
+
 def signal(
     func: Callable[..., Any] | None = None,
     *,
@@ -93,9 +113,10 @@ def signal(
                         stacklevel=2,
                     )
 
+            module = _resolve_owner_module(fn, args)
             frame = Frame(
                 function=fn.__name__,
-                module=fn.__module__,
+                module=module,
                 args=args_summary,
                 tags=tags,
                 extra=frame_extra,
@@ -119,8 +140,8 @@ def signal(
                     if frame.args is None:
                         frame.args = _summarize_args(args, kwargs)
                     if not getattr(exc, "__smonitor_emitted__", False):
-                        source = f"{fn.__module__}.{fn.__name__}"
-                        extra = {"source_module": fn.__module__}
+                        source = f"{module}.{fn.__name__}"
+                        extra = {"source_module": module}
                         if frame.extra:
                             extra.update(frame.extra)
                         manager.emit(
@@ -145,7 +166,7 @@ def signal(
                 if start is not None:
                     try:
                         frame.duration_ms = (perf_counter() - start) * 1000.0
-                        key = f"{fn.__module__}.{fn.__name__}"
+                        key = f"{module}.{fn.__name__}"
                         if should_profile:
                             manager.record_timing(
                                 key,
@@ -155,7 +176,7 @@ def signal(
                             )
                         if should_measure_slow and frame.duration_ms >= config.slow_signal_ms:
                             extra = {
-                                "module": fn.__module__,
+                                "module": module,
                                 "function": fn.__name__,
                                 "duration_ms": frame.duration_ms,
                                 "threshold_ms": config.slow_signal_ms,
