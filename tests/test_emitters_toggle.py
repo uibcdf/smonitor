@@ -15,6 +15,23 @@ def test_warnings_enable_and_disable_roundtrip():
     assert warnings.showwarning == original
 
 
+
+def test_warnings_disable_does_not_clobber_foreign_hook():
+    original = warnings.showwarning
+
+    def foreign_showwarning(*_args, **_kwargs):
+        return None
+
+    warn_emit.disable_warnings()
+    warn_emit.enable_warnings()
+    warnings.showwarning = foreign_showwarning
+    warn_emit.disable_warnings()
+    try:
+        assert warnings.showwarning is foreign_showwarning
+    finally:
+        warnings.showwarning = original
+
+
 def test_logging_disable_when_enabled():
     log_emit.disable_logging()
     log_emit.enable_logging(capture_warnings=True)

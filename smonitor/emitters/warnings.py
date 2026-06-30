@@ -33,7 +33,8 @@ def enable_warnings() -> None:
 
 def disable_warnings() -> None:
     global _original_showwarning, _enabled
-    if _enabled and _original_showwarning is not None:
-        warnings.showwarning = _original_showwarning
+    if _enabled:
+        if warnings.showwarning is _smonitor_showwarning and _original_showwarning is not None:
+            warnings.showwarning = _original_showwarning
         _original_showwarning = None
         _enabled = False
