@@ -17,6 +17,20 @@ def test_catalog_warning_supports_flat_catalog():
     assert "Flat warning message" in str(warning)
 
 
+def test_catalog_warning_supplies_caller_for_catalog_templates():
+    smonitor.configure(
+        profile="dev",
+        codes={"X-CALLER": {"dev_message": "Failure in {caller}: {reason}"}},
+    )
+
+    warning = MyCatalogWarning(
+        catalog={"MyCatalogWarning": {"code": "X-CALLER"}},
+        extra={"reason": "GPU unavailable"},
+    )
+
+    assert str(warning) == "Failure in MyCatalogWarning: GPU unavailable"
+
+
 def test_diagnostic_bundle_warn_does_not_silently_swallow(monkeypatch):
     smonitor.configure(profile="user", level="DEBUG", event_buffer_size=10)
     bundle = DiagnosticBundle(

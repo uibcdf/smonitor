@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from dataclasses import FrozenInstanceError, replace
 import inspect
 
 import pytest
 
 import smonitor
 from smonitor.core import decorator as decorator_module
+from smonitor.core import manager as manager_module
 
 
 class Fluent:
@@ -135,3 +137,89 @@ def test_signal_fast_path_tracks_direct_manager_reconfiguration(monkeypatch):
     manager.configure(enabled=True)
     assert identity(2) == 2
     assert calls == 1
+
+
+def test_signal_fast_path_tracks_manager_enabled_assignment(monkeypatch):
+    manager = smonitor.get_manager()
+    manager.configure(enabled=False)
+    decorator_module.runtime.set_signals_enabled(False)
+
+    @smonitor.signal
+    def identity(value):
+        return value
+
+    calls = 0
+    original_get_manager = decorator_module.get_manager
+
+    def counting_get_manager():
+        nonlocal calls
+        calls += 1
+        return original_get_manager()
+
+    monkeypatch.setattr(decorator_module, "get_manager", counting_get_manager)
+
+    assert identity(1) == 1
+    assert calls == 0
+
+    manager.enabled = True
+    assert identity(2) == 2
+    assert calls == 1
+
+
+def test_copying_config_does_not_change_active_telemetry(monkeypatch):
+    manager = smonitor.get_manager()
+    manager.configure(enabled=True)
+
+    @smonitor.signal
+    def identity(value):
+        return value
+
+    calls = 0
+    original_get_manager = decorator_module.get_manager
+
+    def counting_get_manager():
+        nonlocal calls
+        calls += 1
+        return original_get_manager()
+
+    monkeypatch.setattr(decorator_module, "get_manager", counting_get_manager)
+
+    snapshot = replace(manager.config, enabled=False)
+
+    assert snapshot.enabled is False
+    assert manager.enabled is True
+    assert decorator_module.runtime.signals_enabled is True
+    assert identity(3) == 3
+    assert calls == 1
+
+
+def test_writing_config_enabled_fails_instead_of_being_ignored():
+    manager = smonitor.get_manager()
+    manager.configure(enabled=False)
+
+    with pytest.raises(FrozenInstanceError):
+        manager.config.enabled = True
+
+    assert manager.config.enabled is False
+    assert manager.enabled is False
+    assert decorator_module.runtime.signals_enabled is False
+
+
+def test_configure_replaces_config_once_and_syncs_enabled(monkeypatch):
+    manager = smonitor.get_manager()
+    replacements = 0
+    original_replace = manager_module.replace
+
+    def counting_replace(config, **changes):
+        nonlocal replacements
+        replacements += 1
+        return original_replace(config, **changes)
+
+    monkeypatch.setattr(manager_module, "replace", counting_replace)
+
+    manager.configure(level="INFO", enabled=True)
+
+    assert replacements == 1
+    assert manager.config.level == "INFO"
+    assert manager.enabled is True
+    assert decorator_module.runtime.signals_enabled is True

@@ -86,8 +86,10 @@ class CatalogWarning(Warning):
             if entry:
                 target_code = entry.get("code")
 
+        resolved_extra = merge_extra(meta, extra)
+        resolved_extra.setdefault("caller", self.catalog_key or type(self).__name__)
         resolved_msg, hint = smonitor.resolve(
-            message=message, code=target_code, extra=merge_extra(meta, extra)
+            message=message, code=target_code, extra=resolved_extra
         )
 
         full_message = resolved_msg

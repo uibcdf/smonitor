@@ -167,6 +167,31 @@ def test_manager_resolve_hint_template_format_error_is_tolerated():
     assert hint == "hint {missing}"
 
 
+def test_manager_resolve_interpolates_available_template_fields():
+    manager = get_manager()
+    manager.configure(
+        profile="dev",
+        handlers=[],
+        codes={"C3": {"dev_message": "Failure in {caller}: {reason}"}},
+    )
+
+    message, _ = manager.resolve("", code="C3", extra={"reason": "GPU unavailable"})
+
+    assert message == "Failure in {caller}: GPU unavailable"
+
+
+def test_manager_resolve_preserves_braces_in_rendered_data():
+    manager = get_manager()
+    manager.configure(profile="dev", handlers=[])
+
+    message, _ = manager.resolve(
+        "Expected dimensionality={'[L]': 1}; reason={reason}",
+        extra={"reason": "wrong unit"},
+    )
+
+    assert message == "Expected dimensionality={'[L]': 1}; reason=wrong unit"
+
+
 def test_manager_apply_config_dict_ignores_falsy_optional_blocks():
     manager = get_manager()
     manager.configure(profile="user", handlers=[])

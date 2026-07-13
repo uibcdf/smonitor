@@ -66,7 +66,7 @@ def signal(
                 )
                 return fn(*args, **kwargs)
 
-            if not config.enabled:
+            if not manager.enabled:
                 return fn(*args, **kwargs)
 
             try:

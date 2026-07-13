@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import re
 import warnings
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from time import time
@@ -24,6 +25,32 @@ _LEVEL_ORDER = {
 }
 
 
+_TEMPLATE_FIELD = re.compile(
+    r"\{(?P<name>[A-Za-z_][A-Za-z0-9_]*)(?:!(?P<conversion>[rsa]))?(?::(?P<spec>[^{}]+))?\}"
+)
+
+
+def _format_template(template: str, fields: Dict[str, Any]) -> str:
+    def replace(match: re.Match[str]) -> str:
+        name = match.group("name")
+        if name not in fields:
+            return match.group(0)
+        value = fields[name]
+        conversion = match.group("conversion")
+        if conversion == "r":
+            value = repr(value)
+        elif conversion == "s":
+            value = str(value)
+        elif conversion == "a":
+            value = ascii(value)
+        try:
+            return format(value, match.group("spec") or "")
+        except (TypeError, ValueError):
+            return match.group(0)
+
+    return _TEMPLATE_FIELD.sub(replace, template)
+
+
 def _level_value(level: str) -> int:
     return _LEVEL_ORDER.get(str(level).upper(), _LEVEL_ORDER["INFO"])
 
@@ -33,7 +60,7 @@ def _top_items(mapping: Dict[str, int], limit: int = 5) -> List[Dict[str, Any]]:
     return [{"key": key, "count": count} for key, count in ordered[:limit]]
 
 
-@dataclass
+@dataclass(frozen=True)
 class ManagerConfig:
     level: str = "WARNING"
     theme: str = "plain"
@@ -129,6 +156,15 @@ class Manager:
     def config(self) -> ManagerConfig:
         return self._config
 
+    @property
+    def enabled(self) -> bool:
+        return self._config.enabled
+
+    @enabled.setter
+    def enabled(self, value: bool) -> None:
+        self._config = replace(self._config, enabled=bool(value))
+        set_signals_enabled(self._config.enabled)
+
     def configure(
         self,
         *,
@@ -174,59 +210,44 @@ class Manager:
                 # Apply discovery data first, so manual args can override them below
                 self._apply_config_dict(data)
 
-        if level is not None:
-            self._config.level = level
-        if theme is not None:
-            self._config.theme = theme
-        if capture_warnings is not None:
-            self._config.capture_warnings = capture_warnings
-        if capture_logging is not None:
-            self._config.capture_logging = capture_logging
-        if capture_exceptions is not None:
-            self._config.capture_exceptions = capture_exceptions
-        if trace_depth is not None:
-            self._config.trace_depth = trace_depth
-        if show_traceback is not None:
-            self._config.show_traceback = show_traceback
-        if profile is not None:
-            self._config.profile = profile
-        if args_summary is not None:
-            self._config.args_summary = args_summary
-        if profiling is not None:
-            self._config.profiling = profiling
+        config_updates = {
+            name: value
+            for name, value in (
+                ("level", level),
+                ("theme", theme),
+                ("capture_warnings", capture_warnings),
+                ("capture_logging", capture_logging),
+                ("capture_exceptions", capture_exceptions),
+                ("trace_depth", trace_depth),
+                ("show_traceback", show_traceback),
+                ("profile", profile),
+                ("args_summary", args_summary),
+                ("profiling", profiling),
+                ("strict_signals", strict_signals),
+                ("strict_schema", strict_schema),
+                ("enabled", bool(enabled) if enabled is not None else None),
+                ("profiling_buffer_size", profiling_buffer_size),
+                ("profiling_hooks", profiling_hooks),
+                ("profiling_sample_rate", profiling_sample_rate),
+                ("event_buffer_size", event_buffer_size),
+                ("silence", silence),
+                ("handler_error_threshold", handler_error_threshold),
+                ("slow_signal_ms", slow_signal_ms),
+                ("slow_signal_level", slow_signal_level),
+                ("warning_coalesce_window_s", warning_coalesce_window_s),
+                ("duplicate_policy", duplicate_policy),
+                ("duplicate_every_n", duplicate_every_n),
+            )
+            if value is not None
+        }
+        if config_updates:
+            self._config = replace(self._config, **config_updates)
         if codes is not None:
             self._codes = codes
         if signals is not None:
             self._signals = signals
-        if strict_signals is not None:
-            self._config.strict_signals = strict_signals
-        if strict_schema is not None:
-            self._config.strict_schema = strict_schema
         if enabled is not None:
-            self._config.enabled = enabled
-            set_signals_enabled(enabled)
-        if profiling_buffer_size is not None:
-            self._config.profiling_buffer_size = profiling_buffer_size
-        if profiling_hooks is not None:
-            self._config.profiling_hooks = profiling_hooks
-        if profiling_sample_rate is not None:
-            self._config.profiling_sample_rate = profiling_sample_rate
-        if event_buffer_size is not None:
-            self._config.event_buffer_size = event_buffer_size
-        if silence is not None:
-            self._config.silence = silence
-        if handler_error_threshold is not None:
-            self._config.handler_error_threshold = handler_error_threshold
-        if slow_signal_ms is not None:
-            self._config.slow_signal_ms = slow_signal_ms
-        if slow_signal_level is not None:
-            self._config.slow_signal_level = slow_signal_level
-        if warning_coalesce_window_s is not None:
-            self._config.warning_coalesce_window_s = warning_coalesce_window_s
-        if duplicate_policy is not None:
-            self._config.duplicate_policy = duplicate_policy
-        if duplicate_every_n is not None:
-            self._config.duplicate_every_n = duplicate_every_n
+            set_signals_enabled(self._config.enabled)
         if run_id is not None:
             self._run_id = run_id
         if session_id is not None:
@@ -370,10 +391,7 @@ class Manager:
 
         # Interpolate message using extra fields if templated
         if message and "{" in message:
-            try:
-                message = message.format(**extra)
-            except Exception:
-                pass
+            message = _format_template(message, extra)
 
         hint = None
         if code_meta:
@@ -387,10 +405,7 @@ class Manager:
                 hint = code_meta.get("dev_hint")
 
         if hint and "{" in hint:
-            try:
-                hint = hint.format(**extra)
-            except Exception:
-                pass
+            hint = _format_template(hint, extra)
 
         return message, hint, code_meta
 
@@ -632,7 +647,7 @@ class Manager:
             or extra_data.get("correlation_id")
             or self._default_correlation_id
         )
-        if not self._config.enabled:
+        if not self.enabled:
             hint = None
             return {
                 "timestamp": datetime.now(timezone.utc).isoformat(),
