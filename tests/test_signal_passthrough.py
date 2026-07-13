@@ -93,3 +93,45 @@ def test_signal_disabled_is_direct_passthrough():
 
     assert isinstance(result, Fluent)
     assert result.color == "black"
+
+
+def test_signal_disabled_bypasses_manager_lookup(monkeypatch):
+    smonitor.configure(enabled=False)
+
+    @smonitor.signal
+    def identity(value):
+        return value
+
+    monkeypatch.setattr(
+        decorator_module,
+        "get_manager",
+        lambda: (_ for _ in ()).throw(AssertionError("manager lookup must be bypassed")),
+    )
+
+    assert identity(7) == 7
+
+
+def test_signal_fast_path_tracks_direct_manager_reconfiguration(monkeypatch):
+    manager = smonitor.get_manager()
+    manager.configure(enabled=False)
+
+    @smonitor.signal
+    def identity(value):
+        return value
+
+    calls = 0
+    original_get_manager = decorator_module.get_manager
+
+    def counting_get_manager():
+        nonlocal calls
+        calls += 1
+        return original_get_manager()
+
+    monkeypatch.setattr(decorator_module, "get_manager", counting_get_manager)
+
+    assert identity(1) == 1
+    assert calls == 0
+
+    manager.configure(enabled=True)
+    assert identity(2) == 2
+    assert calls == 1

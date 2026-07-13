@@ -13,6 +13,7 @@ from .context import get_context
 from .fingerprint import build_event_fingerprint
 from .human_summary import build_human_summary
 from .identifiers import new_identifier
+from .runtime import set_signals_enabled
 
 _LEVEL_ORDER = {
     "DEBUG": 10,
@@ -203,6 +204,7 @@ class Manager:
             self._config.strict_schema = strict_schema
         if enabled is not None:
             self._config.enabled = enabled
+            set_signals_enabled(enabled)
         if profiling_buffer_size is not None:
             self._config.profiling_buffer_size = profiling_buffer_size
         if profiling_hooks is not None:

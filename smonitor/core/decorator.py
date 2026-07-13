@@ -8,6 +8,7 @@ import warnings
 
 from .context import Frame, pop_frame, push_frame
 from .manager import get_manager
+from . import runtime
 
 ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
 
@@ -51,6 +52,9 @@ def signal(
     def decorator(fn: Callable[..., Any]):
         @wraps(fn)
         def wrapper(*args: Any, **kwargs: Any):
+            if not runtime.signals_enabled:
+                return fn(*args, **kwargs)
+
             try:
                 manager = get_manager()
                 config = manager.config
