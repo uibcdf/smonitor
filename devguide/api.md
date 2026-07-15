@@ -61,9 +61,10 @@ Behavior
 Runtime configuration is mutated only through `smonitor.configure(...)` or the
 active manager's `enabled` property. `get_manager().config` is a frozen
 `ManagerConfig` value object intended for inspection, `dataclasses.replace`,
-and `dataclasses.asdict`; assigning to one of its fields raises
-`FrozenInstanceError` instead of silently discarding or partially applying a
-change.
+and `dataclasses.asdict`. Assigning to one of its fields raises
+`FrozenInstanceError`, and container fields such as `silence` and
+`profiling_hooks` are immutable tuples. Public configuration continues to
+accept lists and copies them into the immutable value object.
 
 ### emit(level, message, *, source=None, extra=None, category=None, code=None, tags=None, correlation_id=None)
 Emit a raw diagnostic event.

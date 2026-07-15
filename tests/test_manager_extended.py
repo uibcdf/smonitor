@@ -1,7 +1,9 @@
 from pathlib import Path
+from dataclasses import replace
 
+import pytest
 import smonitor
-from smonitor.core.manager import get_manager
+from smonitor.core.manager import ManagerConfig, get_manager
 
 
 def test_manager_config_path_file_applies_discovered_blocks(tmp_path: Path):
@@ -37,3 +39,36 @@ def test_emit_respects_silence_prefix():
     smonitor.configure(profile="user", handlers=[], event_buffer_size=10, silence=["pkg"])
     out = smonitor.emit("WARNING", "x", source="pkg.mod", code="C1")
     assert out == {}
+
+
+def test_manager_config_containers_are_deeply_immutable_and_unaliased():
+    silence = ["pkg"]
+    hooks = [lambda: {"ok": True}]
+    config = ManagerConfig(silence=silence, profiling_hooks=hooks)
+
+    silence.append("other")
+    hooks.clear()
+    assert config.silence == ("pkg",)
+    assert len(config.profiling_hooks or ()) == 1
+    with pytest.raises(AttributeError):
+        config.silence.append("mutated")
+    with pytest.raises(AttributeError):
+        config.profiling_hooks.append(lambda: {})  # type: ignore[union-attr]
+
+    copied = replace(config, silence=["replacement"])
+    assert copied.silence == ("replacement",)
+
+
+def test_configure_accepts_list_containers_without_exposing_mutability():
+    hook = lambda: {"hook": "ran"}
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[],
+        silence=["pkg"],
+        profiling_hooks=[hook],
+    )
+
+    assert manager.config.silence == ("pkg",)
+    assert manager.config.profiling_hooks == (hook,)
+    assert manager.report()["profiling_meta"]["hook"] == "ran"
+    assert smonitor.emit("WARNING", "x", source="pkg.mod", code="C1") == {}

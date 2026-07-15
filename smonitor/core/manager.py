@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import warnings
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from time import time
@@ -76,16 +76,21 @@ class ManagerConfig:
     strict_schema: bool = False
     enabled: bool = True
     profiling_buffer_size: int = 1000
-    profiling_hooks: list | None = None
+    profiling_hooks: tuple[Any, ...] | None = None
     profiling_sample_rate: float = 1.0
     event_buffer_size: int = 0
-    silence: list[str] = field(default_factory=list)
+    silence: tuple[str, ...] = ()
     handler_error_threshold: int = 0
     slow_signal_ms: float = 0.0
     slow_signal_level: str = "INFO"
     warning_coalesce_window_s: float = 0.0
     duplicate_policy: str = "off"
     duplicate_every_n: int = 0
+
+    def __post_init__(self) -> None:
+        if self.profiling_hooks is not None:
+            object.__setattr__(self, "profiling_hooks", tuple(self.profiling_hooks))
+        object.__setattr__(self, "silence", tuple(self.silence))
 
 
 class Manager:

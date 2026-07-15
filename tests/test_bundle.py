@@ -19,6 +19,22 @@ def test_event_buffer_and_export(tmp_path: Path):
     assert len(data["events"]) == 2
 
 
+def test_bundle_serializes_immutable_config_containers_as_json_arrays(tmp_path: Path):
+    cfg = tmp_path / "_smonitor.py"
+    cfg.write_text("SMONITOR = {}\n")
+    smonitor.configure(
+        profile="user",
+        handlers=[],
+        silence=["pkg"],
+        profiling_hooks=[],
+    )
+
+    out = export_bundle(tmp_path / "bundle.json", config_base=tmp_path, force=True)
+    data = json.loads(out.read_text())
+    assert data["config"]["silence"] == ["pkg"]
+    assert data["config"]["profiling_hooks"] == []
+
+
 def test_bundle_redaction(tmp_path: Path):
     cfg = tmp_path / "_smonitor.py"
     cfg.write_text("SMONITOR = {}\n")
