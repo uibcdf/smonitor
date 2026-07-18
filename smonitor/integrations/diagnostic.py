@@ -55,14 +55,21 @@ class CatalogException(Exception):
             if entry:
                 target_code = entry.get("code")
 
+        resolved_extra = merge_extra(meta, extra)
         resolved_msg, hint = smonitor.resolve(
-            message=message, code=target_code, extra=merge_extra(meta, extra)
+            message=message, code=target_code, extra=resolved_extra
         )
 
         full_message = resolved_msg
         if hint:
             full_message = f"{full_message} {hint}" if full_message else hint
 
+        # Retain the structured state that produced this instance so callers can
+        # branch on `code`/`extra` instead of parsing the rendered message.
+        self.code = target_code
+        self.extra = resolved_extra
+        self.raw_message = message
+        self.message = full_message
         super().__init__(full_message)
 
 
@@ -96,6 +103,9 @@ class CatalogWarning(Warning):
         if hint:
             full_message = f"{full_message} {hint}" if full_message else hint
 
+        self.code = target_code
+        self.extra = resolved_extra
+        self.raw_message = message
         self.message = full_message
         super().__init__(full_message)
 
@@ -174,10 +184,19 @@ class DiagnosticBundle:
         caller: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
     ) -> None:
+        instance_extra: Dict[str, Any] = {}
         if isinstance(message_or_warning, Warning):
             cls_name = type(message_or_warning).__name__
             msg = str(message_or_warning)
             cat = type(message_or_warning)
+            if isinstance(message_or_warning, CatalogWarning):
+                # The instance already rendered itself from this same catalog.
+                # Re-injecting its rendered text as `message` would interpolate
+                # it into the template a second time (and append the hint
+                # twice), so carry the structured fields it was built from and
+                # fall back to the *raw* message it was given.
+                instance_extra = dict(getattr(message_or_warning, "extra", None) or {})
+                msg = getattr(message_or_warning, "raw_message", None) or ""
         else:
             cat = category or UserWarning
             cls_name = cat.__name__
@@ -186,10 +205,15 @@ class DiagnosticBundle:
         entry = _catalog_entry(self.catalog, "warnings", cls_name)
         if entry:
             try:
+                payload = {**instance_extra, **(extra or {})}
+                payload.setdefault("message", msg)
+                payload["caller"] = (
+                    caller or (extra or {}).get("caller") or payload.get("caller")
+                )
                 emit_from_catalog(
                     entry,
                     package_root=self.package_root,
-                    extra=merge_extra(self.meta, {**(extra or {}), "message": msg, "caller": caller or (extra or {}).get("caller")}),
+                    extra=merge_extra(self.meta, payload),
                     meta=self.meta,
                 )
                 return

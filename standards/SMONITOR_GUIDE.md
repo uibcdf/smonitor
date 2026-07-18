@@ -141,6 +141,30 @@ class MyLibWarning(CatalogWarning):
 
 **Note**: The raw `emit_from_catalog` function is still available but `DiagnosticBundle` is the preferred high-level interface.
 
+### 3.3.1 Pass structured data, not rendered sentences
+
+A catalog template may interpolate its own placeholders. Pass typed fields in
+`extra` and let SMonitor render them — do not pre-render the sentence and hand
+it over as a string:
+
+```python
+# Correct: the template owns the wording, the call site owns the data.
+# CODES["MYLIB-W010"]["user_message"] = "Atom name '{atom_name}' is not recognized."
+warn(UnknownAtomNameWarning(extra={"atom_name": atom_name}))
+
+# Avoid: the template can only say "{message}", and the structured field
+# never reaches report(), fingerprints, or resource counters.
+warn(UnknownAtomNameWarning(extra={"message": f"Atom name '{atom_name}' ..."}))
+```
+
+`warn(instance)` carries the instance's `extra` into the emitted event, so those
+fields reach `report()`, `events_by_fingerprint`, and `most_noisy_resources` as
+typed data. `{message}` remains available for string callers
+(`warn("some text", MyWarning)`).
+
+Catching code should read `exc.code` and `exc.extra` rather than parsing the
+rendered English message.
+
 ### 3.4 Emission Failures Must Not Be Silenced
 
 Do not swallow diagnostics emission errors with `except Exception: pass`.

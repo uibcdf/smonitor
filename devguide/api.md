@@ -137,8 +137,23 @@ Standard base classes and helpers for library developers (available in `smonitor
 ### CatalogException & CatalogWarning
 Base classes that automatically hydrate messages and hints from a catalog using a `catalog_key`.
 
+Instances retain the structured state they were built from:
+
+- `code` — the resolved catalog code.
+- `extra` — the merged structured fields used for interpolation.
+- `raw_message` — the `message=` argument as supplied, before resolution.
+- `message` — the fully rendered text (also `str(instance)`).
+
+Catch sites should branch on `code` and read `extra` rather than pattern-match
+the rendered English message.
+
 ### DiagnosticBundle
 A container initialized with a catalog, metadata, and package root. It provides `warn`, `warn_once`, and `resolve` helpers tailored for a specific library.
+
+`warn(instance)` re-emits through the catalog using the instance's own `extra`,
+so a template may interpolate its own placeholders. Explicit `extra=` passed to
+`warn()` takes precedence over the instance's fields. For string callers,
+`{message}` still receives the supplied string.
 
 ## 4) Configuration Discovery
 

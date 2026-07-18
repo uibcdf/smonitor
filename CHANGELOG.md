@@ -8,9 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Placeholder for post-`0.11.0` changes.
 - Pre-`1.0.0` stabilization window started on 2026-02-27.
+- `CatalogException` and `CatalogWarning` instances now retain `code`, `extra`, `raw_message`, and `message`, so catch sites can branch on structured state instead of parsing rendered text.
 
 ### Changed
 - Repository PR process now includes explicit stabilization release gates (`pytest`, docs build, QA smoke).
+- `DiagnosticBundle.warn(instance)` now re-emits using the instance's structured `extra`, so catalog templates may interpolate their own placeholders and the fields reach `report()` and event fingerprints. Explicit `extra=` still wins; `{message}` is unchanged for string callers.
+
+### Fixed
+- Catalog warnings whose template interpolates `{message}` were rendered twice, duplicating both the message prefix and the hint. `warn()` no longer re-injects an instance's already-rendered text as the `message` field.
 
 ## [0.11.0] - 2026-02-26
 ### Added
