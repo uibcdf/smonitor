@@ -1,185 +1,201 @@
-# Proposal: Static Profile Opt-In and Production Performance Optimization
+# Proposal: reduce `@signal` overhead on the enabled path
+
+**Status:** pending — rewritten 2026-07-18 against the current code.
+**Supersedes:** the original "Static Profile Opt-In and Production Performance
+Optimization" draft. Its measured evidence is preserved below; its design
+section is withdrawn, for the reasons in "What the original draft assumed".
 
 ## Abstract
 
-We propose standardizing SMonitor to run by default in an ultra-lightweight, static `production` profile, completely eliminating magic environment autodetection to prevent silent performance regressions. Under this profile, SMonitor acts as a central coordinator, communicating its active state to validation frameworks (like `argdigest`) so that both telemetry tracking and signature validation decorators statically short-circuit on hot paths, reducing total overhead in user environments to near-zero.
+The disabled-signal fast path proposed in the original draft is implemented and
+measured. The remaining cost is on the *enabled* path, and it is larger than
+the problem the draft set out to solve: a decorated call costs **~54× a bare
+call even when it emits nothing**, and over half of that is a UTC timestamp
+formatted on every call and discarded unless an event fires. This proposal is
+narrow: make that timestamp lazy, and stop paying per call for work only
+emission needs.
 
 ---
 
-## The Problem
+## Where things stand
 
-Performance benchmarks show that SMonitor introduces a non-trivial overhead when tracking high-frequency operations:
-* **Baseline (None)**: ~21.06 ms mean latency.
-* **SMonitor-only**: ~25.54 ms mean latency (+4.48 ms, **21.3% slowdown**).
+### Implemented
 
-This latency is driven by capturing signal events and particularly by dynamic stack-frame introspection (e.g. retrieving line numbers or local scopes).
+The fast path is in place. `smonitor/core/decorator.py` consults the module-level
+flag in `smonitor/core/runtime.py` before touching the manager, and
+`Manager.configure(enabled=...)` keeps that flag synchronized.
 
-Furthermore, if a normal scientific user session dynamically falls back to a slow "development" or "debug" profile due to a false positive in automatic environment detection, they will experience lag. Users should enjoy a correct, secure, and ultra-fast visual rendering experience without being forced to manage complex performance switches.
+Measured on this host (Python 3.13.12, x86_64, Linux 6.17), 1M calls via
+`python benchmarks/signal_disabled.py`:
+
+| call | ns |
+|---|---:|
+| bare function | 72.8 |
+| `@signal`, SMonitor disabled | 241.5 |
+| wrapper overhead | 168.7 |
+
+That matches the ~175 ns the original draft recorded. **This part is done and
+needs no further work.**
+
+### What the original draft assumed
+
+Two of its premises do not hold against the code:
+
+1. **"Eliminate magic environment autodetection."** There is no autodetection.
+   `PROFILE` resolves strictly through `configure()` > environment >
+   `_smonitor.py` (`smonitor/config/__init__.py`). There is no heuristic to
+   remove, so no silent regression of the kind described can occur.
+
+2. **A `production`/`development`/`disabled` profile triad.** SMonitor already
+   has five profiles with settled semantics — `user`, `dev`, `qa`, `agent`,
+   `debug` — that select catalog message variants, output format, and strict
+   validation. Adding a second, orthogonal profile axis would collide with all
+   of them, and renaming the existing set is a breaking change to a public
+   contract during the pre-1.0 freeze. "Disabled" is already expressed by
+   `enabled=False`, which now drives the fast path.
+
+The cross-library coordination idea (§3 of the draft — ArgDigest reading
+`smonitor.PROFILE`) is deferred: it couples sibling libraries to an attribute
+that does not exist, and the measurements below suggest it would not be where
+the time goes anyway.
 
 ---
 
-## Proposed Solution
+## The real remaining cost
 
-We propose a deterministic, unified profile architecture:
+Measured on the same host, 200k calls, handlers disabled, **no event emitted**:
 
-### 1. Default to a Deterministic Production Profile
-Auto-detection logic is deprecated. SMonitor will initialize strictly in the `"production"` profile:
-* **Production Profile (Default)**: All heavy tracing, stack-frame capture, and calling context inspections are entirely disabled. Signals emit lightweight structural events only.
-* **Development Profile (Explicit Opt-in)**: Active only when requested by:
-  * An environment variable: `SMONITOR_PROFILE=development`
-  * A programmatic call: `smonitor.set_profile("development")`
+| call | ns | vs bare |
+|---|---:|---:|
+| bare function | 79.2 | 1× |
+| `@signal`, `enabled=False` | 248.4 | 3.1× |
+| **`@signal`, `enabled=True`, default config** | **4 305.8** | **54×** |
+| `@signal`, `enabled=True` + `args_summary` | 4 941.4 | 62× |
+| `@signal`, `enabled=True` + `profiling` | 8 895.1 | 112× |
+
+The enabled path is where scientific users actually run. Breaking it down:
+
+| component | ns |
+|---|---:|
+| **`Frame(...)` construction** | **2 400.5** |
+| — of which `datetime.now(timezone.utc).isoformat()` | **1 746.8** |
+| `push_frame` + `pop_frame` | 715.1 |
+| `_resolve_owner_module` | 134.6 |
+| `get_manager()` | 54.1 |
+| `random()` (profiling sample check) | 47.8 |
+| `get_context(3)`, only on emission | 997.4 |
+
+### The dominant cost is a discarded timestamp
+
+`Frame.time` in `smonitor/core/context.py` is:
 
 ```python
-# smonitor/config.py
-import os
-
-DEFAULT_PROFILE = "production"
-PROFILE = os.getenv("SMONITOR_PROFILE", DEFAULT_PROFILE).lower()
-
-if PROFILE not in ["production", "development", "disabled"]:
-    PROFILE = "production"
+time: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 ```
 
-### 2. Micro-Optimized Static Decorator Bypass
-When SMonitor is in the `production` or `disabled` profile, decorators must short-circuit immediately. In particular, they must completely bypass calls to reflective functions (like `inspect` or `sys._getframe`) which are highly CPU-intensive:
+It is computed eagerly on **every decorated call**. It is read only when
+`get_context()` serializes frames into an emitted event — that is, only when a
+diagnostic actually fires. On a quiet hot path the string is formatted and
+thrown away, and it is the single largest line item in the wrapper.
+
+---
+
+## Proposed change
+
+### 1. Make the frame timestamp lazy (primary)
+
+Store a cheap epoch float at push time and format ISO only when a frame is
+serialized into an event:
 
 ```python
-# smonitor/tracker.py
-from .config import PROFILE
-
-def track_signal(signal_name):
-    def decorator(func):
-        if PROFILE == "disabled":
-            return func  # Total zero-cost import-time passthrough
-            
-        def wrapper(*args, **kwargs):
-            if PROFILE == "production":
-                # Production path: emit a lightweight, static event structure
-                # completely avoiding call stack analysis
-                emit_lightweight_event(signal_name)
-                return func(*args, **kwargs)
-                
-            # Development path: capture full call stack trace and parameter states
-            trace = capture_call_stack_trace()
-            emit_detailed_event(signal_name, trace)
-            return func(*args, **kwargs)
-        return wrapper
-    return decorator
-```
-
-### 3. Unified Cross-Framework Coordination
-During initialization, SMonitor will expose its profile state to sister libraries (such as `argdigest`). If `smonitor.PROFILE == "production"`, `argdigest` is automatically notified to activate its fast-path bypass on high-frequency validation decorators, achieving seamless, multi-library performance alignment:
-
-```python
-# smonitor/integration.py
-def get_active_profile():
-    return PROFILE
-```
-```python
-# argdigest/decorators.py (ArgDigest queries SMonitor profile)
-import smonitor
-
-def arg_digest(*rules, high_frequency=False):
-    # Read active profile directly from SMonitor
-    is_production = getattr(smonitor, "PROFILE", "production") == "production"
-    # Auto-bypass validation if in production and decorator is marked high-frequency
+@dataclass
+class Frame:
     ...
+    _time: float = field(default_factory=time.time)
+
+    @property
+    def time(self) -> str:
+        return datetime.fromtimestamp(self._time, timezone.utc).isoformat()
 ```
+
+Prototyped and measured:
+
+| | ns |
+|---|---:|
+| `Frame(...)` today (eager ISO) | 3 188.3 |
+| `Frame(...)` with epoch float | **708.5** |
+| materializing `.time` on demand | 1 859.9 |
+
+A **4.5× cheaper frame**, with the ISO cost moved to emission, where it is paid
+once per event instead of once per call. Wall-clock semantics are unchanged:
+the timestamp still records when the frame was pushed, not when the event fired.
+
+`Frame` is internal (`smonitor/core/context.py`); nothing outside SMonitor
+constructs one. The exposure to check is `get_context()`, which serializes via
+`frame.__dict__` — that would need to emit the rendered `time` rather than the
+raw `_time`, so the event schema stays byte-identical. This is the one place
+where the change is not purely mechanical, and it needs a test asserting the
+event `context.frames[*].time` field is unchanged in shape.
+
+### 2. Reduce per-call frame-stack copying (secondary)
+
+`push_frame`/`pop_frame` cost 715 ns combined because each copies the whole
+stack list (`list(_context_stack.get())`) to preserve `ContextVar` semantics.
+That is O(depth) allocation twice per call. Worth investigating whether a
+persistent immutable structure, or mutating a per-context list with explicit
+copy-on-fork, preserves the async/thread isolation the current design buys.
+Lower value than §1 and higher risk — treat as a separate slice, not part of
+this one.
+
+### 3. Not proposed
+
+Static profile triads, import-time decorator elimination, and cross-library
+profile coupling. Should §1 and §2 prove insufficient for the ecosystem targets
+below, revisit with fresh measurements rather than reinstating the original
+design.
 
 ---
 
-## Benefits
-
-* **Seamless User Experience**: Normal users run in a highly responsive visual environment with zero telemetry-induced lag and zero configuration requirements.
-* **Coordinated Performance**: A single config state (`smonitor.PROFILE`) automatically scales down both tracking and signature validations across the entire ecosystem.
-* **Safety In Testing**: Comprehensive validation and signal tracing remain fully operational for developers running in the explicit development profile.
-
----
-
-## Evidencia medida (2026-07-12) — esto no es una micro-optimización
-
-Añadido tras perfilar el ecosistema desde MolSysViewer. Ver
-`molsysviewer/devguide/pending_proposals/import_cost_and_lazy_loading.md` y
-`pyunitwizard/devguide/pending_proposals/python_overhead_before_rusterization.md`.
-
-**La propuesta de arriba estaba escrita sin números. Aquí están, y cambian su prioridad.**
-
-Medido sobre `puw.get_value(q, to_unit="nanometers")` — una conversión de unidades trivial, la
-operación más caliente del ecosistema:
-
-| | coste | % |
-|---|---|---|
-| el trabajo real (pint desnudo) | **17 µs** | 7 % |
-| **overhead del decorador con SMonitor DESACTIVADO** | **127 µs** | **49 %** |
-| telemetría activa | 118 µs | 45 % |
-| **total** | **262 µs** | **15× pint** |
-
-**El "modo apagado" cuesta 7,5 veces el trabajo real.** Ésa es la frase que justifica la propuesta.
-
-### La causa exacta: el check llega después
-
-`smonitor/core/decorator.py:52`:
-
-```python
-def wrapper(*args, **kwargs):
-    try:
-        manager = get_manager()      # ← se ejecuta SIEMPRE
-        config = manager.config      # ← SIEMPRE
-    except Exception as exc:
-        ...
-    if not config.enabled:           # ← el check llega DESPUÉS
-        return fn(*args, **kwargs)
-```
-
-Aunque la telemetría esté apagada, cada función decorada paga `get_manager()`, el acceso a
-`config` y un `try/except` **antes** de descubrir que no tenía nada que hacer.
-
-**Y se paga muchas veces por llamada.** Perfilando 300 llamadas a `puw.get_value`: **4.800
-invocaciones del wrapper de SMonitor** — 16 por llamada, porque PyUnitWizard decora también sus
-helpers internos.
-
-### El arreglo
-
-```python
-def wrapper(*args, **kwargs):
-    if not _ENABLED:                 # flag de módulo: ~20 ns
-        return fn(*args, **kwargs)
-    ...
-```
-
-Un `if` sobre un bool cacheado, antes de tocar el manager. No cambia la API.
-
-### Cómo verificar que ha funcionado
+## Verification
 
 ```bash
-python -c "
-import timeit
-from pyunitwizard import ...    # configurado con pint
-q = puw.quantity(1.5,'angstroms')
-t = timeit.timeit(lambda: puw.get_value(q, to_unit='nanometers'), number=3000)/3000
-print(f'{t*1e6:.1f} µs   (hoy: 262 µs con telemetría, 143 µs sin ella | pint desnudo: 17 µs)')"
+python benchmarks/signal_disabled.py   # disabled path must not regress
 ```
 
-**Objetivo con la telemetría apagada: acercarse a los 17 µs, no quedarse en 143.**
+The benchmark only covers the disabled path. This proposal needs a companion
+case for the enabled-but-quiet path, since that is what it targets. Acceptance:
 
-## Fast path implementado y medido (2026-07-12)
+- enabled/quiet decorated call drops from ~4 300 ns toward ~2 600 ns;
+- disabled path unchanged (~240 ns);
+- emitted events keep an identical `context.frames[*].time` field;
+- full suite green.
 
-La parte autocontenida de esta propuesta ya está implementada: el decorador consulta un estado
-runtime compartido antes de llamar a `get_manager()`, y `Manager.configure(enabled=...)` mantiene
-ese estado sincronizado tanto para `smonitor.configure(...)` como para la configuración directa
-del manager. Desactivar y volver a activar en ejecución conserva la semántica anterior.
+---
 
-Benchmark reproducible: `python benchmarks/signal_disabled.py`.
+## Ecosystem context (preserved from the original draft)
 
-| llamada | antes | después |
+Measured 2026-07-12 from MolSysViewer. See
+`molsysviewer/devguide/pending_proposals/import_cost_and_lazy_loading.md` and
+`pyunitwizard/devguide/pending_proposals/python_overhead_before_rusterization.md`.
+
+Measured on `puw.get_value(q, to_unit="nanometers")`, the hottest operation in
+the ecosystem:
+
+| | cost | % |
 |---|---:|---:|
-| función desnuda | 76 ns | 77 ns |
-| `@signal`, SMonitor desactivado | 339 ns | 253 ns |
-| overhead del wrapper | 263 ns | 175 ns |
+| real work (bare pint) | 17 µs | 7 % |
+| decorator overhead, SMonitor **disabled** | 127 µs | 49 % |
+| active telemetry | 118 µs | 45 % |
+| **total** | **262 µs** | **15× pint** |
 
-La medición integrada de `puw.get_value(..., to_unit="nanometers")`, con SMonitor desactivado,
-dio **137,9 µs** en este host. Por tanto, este cambio elimina el acceso innecesario al manager,
-pero no puede cumplir por sí solo el objetivo de 17 µs: siguen existiendo el coste intrínseco de
-los wrappers variádicos y el trabajo de DepDigest y PyUnitWizard descrito en sus propuestas. La
-optimización de perfiles estáticos y la coordinación entre librerías continúan pendientes; no son
-necesarias para conservar este fast path.
+Profiling 300 calls to `puw.get_value` showed **4 800 SMonitor wrapper
+invocations** — 16 per call, because PyUnitWizard also decorates its internal
+helpers.
+
+After the fast path landed, the integrated measurement with SMonitor disabled
+was **137.9 µs** on that host. So the fast path removed the unnecessary manager
+access but cannot on its own reach the 17 µs target: the intrinsic cost of
+variadic wrappers, plus the DepDigest and PyUnitWizard work described in their
+own proposals, remains. **The 16-wrappers-per-call figure suggests the largest
+ecosystem win is fewer decorated functions on hot paths, not a cheaper
+decorator** — that belongs in the sibling repos, not here.
