@@ -172,18 +172,67 @@ def test_args_summary_in_context():
     assert context and context["frames"][0]["args"] is not None
 
 
-def test_profiling_adds_duration():
+def test_frame_time_is_iso_utc_in_emitted_context():
+    """`context.frames[*].time` is a documented field; keep its shape stable.
+
+    It is stored as an epoch float and rendered only here, so this guards the
+    rendering rather than the storage.
+    """
+    from datetime import datetime, timezone
+
+    smonitor.configure(profile="user", level="INFO", handlers=[])
+
+    @smonitor.signal
+    def timed():
+        return smonitor.emit("INFO", "ctx", source="test")
+
+    before = datetime.now(timezone.utc)
+    frame = timed()["context"]["frames"][0]
+    after = datetime.now(timezone.utc)
+
+    assert isinstance(frame["time"], str)
+    parsed = datetime.fromisoformat(frame["time"])
+    assert parsed.tzinfo is not None
+    assert before <= parsed <= after
+    assert set(frame) == {"function", "module", "args", "time", "tags", "extra", "duration_ms"}
+
+
+def test_profiling_records_timings():
     smonitor.configure(profile="user", strict_signals=False, profiling=True)
 
     @smonitor.signal
     def baz():
         return smonitor.emit("INFO", "ctx", source="test")
 
-    event = baz()
-    context = event.get("context")
-    assert context and context["frames"][0]["duration_ms"] is not None
+    baz()
     report = smonitor.report()
-    assert "timings" in report
+    assert report["timings"]
+    assert any(key.endswith(".baz") for key in report["timings"])
+
+
+def test_emitted_context_is_a_snapshot():
+    """An emitted event must not keep mutating after handlers have run.
+
+    A frame's `duration_ms` is only known once the decorated call returns, which
+    is necessarily after any event emitted inside it. `context.frames` therefore
+    reports `None` there — consistently, for the caller, the handlers, and the
+    buffer alike. The duration is reported through `report()["timings"]`.
+    """
+    memory = MemoryHandler(max_events=5)
+    smonitor.configure(
+        profile="user", level="INFO", profiling=True, handlers=[memory], event_buffer_size=5
+    )
+
+    @smonitor.signal
+    def baz():
+        return smonitor.emit("INFO", "ctx", source="test")
+
+    event = baz()
+
+    returned = event["context"]["frames"][0]["duration_ms"]
+    handled = memory.events[0]["context"]["frames"][0]["duration_ms"]
+    buffered = smonitor.get_manager().recent_events()[0]["context"]["frames"][0]["duration_ms"]
+    assert returned == handled == buffered is None
 
 
 def test_level_threshold_filters_console_routing():

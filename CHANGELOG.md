@@ -14,8 +14,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Repository PR process now includes explicit stabilization release gates (`pytest`, docs build, QA smoke).
 - `DiagnosticBundle.warn(instance)` now re-emits using the instance's structured `extra`, so catalog templates may interpolate their own placeholders and the fields reach `report()` and event fingerprints. Explicit `extra=` still wins; `{message}` is unchanged for string callers.
 
+### Performance
+- A decorated call on the enabled path is roughly **2.2x cheaper** (53.5x a bare call down to 24.3x), and **2.6x cheaper per wrapper when nested** (4675 ns down to 1799 ns), which is what sibling libraries stacking many `@signal` calls per operation actually pay. The disabled fast path is unchanged. Reproduce with `benchmarks/signal_enabled.py`.
+  - `Frame` no longer formats an ISO-8601 timestamp on every decorated call; it stores an epoch float and renders only when an event is emitted. This alone was over half the wrapper cost.
+  - The breadcrumb stack is an immutable linked list, so `push_frame`/`pop_frame` are O(1) instead of copying the stack twice per call. Cost no longer grows with nesting depth.
+  - `@signal` decides at decoration time whether a callable can resolve its module from a bound instance, so free functions skip that lookup per call.
+
 ### Fixed
 - Catalog warnings whose template interpolates `{message}` were rendered twice, duplicating both the message prefix and the hint. `warn()` no longer re-injects an instance's already-rendered text as the `message` field.
+- An emitted event's `context.frames` is now a snapshot. It previously aliased the live frame objects, so `duration_ms` appeared in the dict returned by `emit()` after handlers had already received, formatted, and buffered the same event with `None` there.
 
 ## [0.11.0] - 2026-02-26
 ### Added

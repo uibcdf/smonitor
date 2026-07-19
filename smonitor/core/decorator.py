@@ -1,14 +1,14 @@
 from __future__ import annotations
 
+import warnings
 from functools import wraps
 from random import random
 from time import perf_counter
 from typing import Any, Callable, Optional
-import warnings
 
+from . import runtime
 from .context import Frame, pop_frame, push_frame
 from .manager import get_manager
-from . import runtime
 
 ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
 
@@ -50,6 +50,14 @@ def signal(
     extra_factory: Optional[ExtraFactory] = None,
 ):
     def decorator(fn: Callable[..., Any]):
+        # Decided once, at decoration time: only a callable whose qualname is
+        # `Class.method` can ever resolve its module from a bound instance, so
+        # free functions skip that lookup on every call.
+        fn_module = fn.__module__
+        _qualname = getattr(fn, "__qualname__", "") or ""
+        may_be_method = "." in _qualname and "<locals>" not in _qualname
+        signal_label = f"{fn_module}.{fn.__name__}"
+
         @wraps(fn)
         def wrapper(*args: Any, **kwargs: Any):
             if not runtime.signals_enabled:
@@ -60,7 +68,7 @@ def signal(
                 config = manager.config
             except Exception as exc:
                 warnings.warn(
-                    f"SMonitor signal setup failed for {fn.__module__}.{fn.__name__}: {exc}",
+                    f"SMonitor signal setup failed for {signal_label}: {exc}",
                     RuntimeWarning,
                     stacklevel=2,
                 )
@@ -73,7 +81,7 @@ def signal(
                 manager.record_call()
             except Exception as exc:
                 warnings.warn(
-                    f"SMonitor signal record_call failed for {fn.__module__}.{fn.__name__}: {exc}",
+                    f"SMonitor signal record_call failed for {signal_label}: {exc}",
                     RuntimeWarning,
                     stacklevel=2,
                 )
@@ -91,7 +99,7 @@ def signal(
                     start = perf_counter()
             except Exception as exc:
                 warnings.warn(
-                    f"SMonitor signal profiling setup failed for {fn.__module__}.{fn.__name__}: {exc}",
+                    f"SMonitor signal profiling setup failed for {signal_label}: {exc}",
                     RuntimeWarning,
                     stacklevel=2,
                 )
@@ -100,7 +108,7 @@ def signal(
                 args_summary = _summarize_args(args, kwargs) if config.args_summary else None
             except Exception as exc:
                 warnings.warn(
-                    f"SMonitor signal argument summary failed for {fn.__module__}.{fn.__name__}: {exc}",
+                    f"SMonitor signal argument summary failed for {signal_label}: {exc}",
                     RuntimeWarning,
                     stacklevel=2,
                 )
@@ -112,12 +120,12 @@ def signal(
                     frame_extra = extra_factory(args, kwargs)
                 except Exception as exc:
                     warnings.warn(
-                        f"SMonitor signal extra_factory failed for {fn.__module__}.{fn.__name__}: {exc}",
+                        f"SMonitor signal extra_factory failed for {signal_label}: {exc}",
                         RuntimeWarning,
                         stacklevel=2,
                     )
 
-            module = _resolve_owner_module(fn, args)
+            module = _resolve_owner_module(fn, args) if may_be_method and args else fn_module
             frame = Frame(
                 function=fn.__name__,
                 module=module,
@@ -132,7 +140,7 @@ def signal(
                 frame_pushed = True
             except Exception as exc:
                 warnings.warn(
-                    f"SMonitor signal push_frame failed for {fn.__module__}.{fn.__name__}: {exc}",
+                    f"SMonitor signal push_frame failed for {signal_label}: {exc}",
                     RuntimeWarning,
                     stacklevel=2,
                 )
@@ -161,7 +169,8 @@ def signal(
                             pass
                 except Exception as smonitor_exc:
                     warnings.warn(
-                        f"SMonitor signal exception emission failed for {fn.__module__}.{fn.__name__}: {smonitor_exc}",
+                        f"SMonitor signal exception emission failed for "
+                        f"{signal_label}: {smonitor_exc}",
                         RuntimeWarning,
                         stacklevel=2,
                     )
@@ -201,7 +210,7 @@ def signal(
                             )
                     except Exception as exc:
                         warnings.warn(
-                            f"SMonitor signal finalization failed for {fn.__module__}.{fn.__name__}: {exc}",
+                            f"SMonitor signal finalization failed for {signal_label}: {exc}",
                             RuntimeWarning,
                             stacklevel=2,
                         )
@@ -210,7 +219,7 @@ def signal(
                         pop_frame()
                     except Exception as exc:
                         warnings.warn(
-                            f"SMonitor signal pop_frame failed for {fn.__module__}.{fn.__name__}: {exc}",
+                            f"SMonitor signal pop_frame failed for {signal_label}: {exc}",
                             RuntimeWarning,
                             stacklevel=2,
                         )
