@@ -16,9 +16,7 @@ from smonitor.core.context import Frame, get_context, pop_frame, push_frame
 
 
 def _push(name: str, module: str = "pkg.mod") -> Frame:
-    frame = Frame(function=name, module=module)
-    push_frame(frame)
-    return frame
+    return push_frame(name, module)
 
 
 def test_empty_stack_has_no_context():

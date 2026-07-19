@@ -15,10 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `DiagnosticBundle.warn(instance)` now re-emits using the instance's structured `extra`, so catalog templates may interpolate their own placeholders and the fields reach `report()` and event fingerprints. Explicit `extra=` still wins; `{message}` is unchanged for string callers.
 
 ### Performance
-- A decorated call on the enabled path is roughly **2.2x cheaper** (53.5x a bare call down to 24.3x), and **2.6x cheaper per wrapper when nested** (4675 ns down to 1799 ns), which is what sibling libraries stacking many `@signal` calls per operation actually pay. The disabled fast path is unchanged. Reproduce with `benchmarks/signal_enabled.py`.
-  - `Frame` no longer formats an ISO-8601 timestamp on every decorated call; it stores an epoch float and renders only when an event is emitted. This alone was over half the wrapper cost.
-  - The breadcrumb stack is an immutable linked list, so `push_frame`/`pop_frame` are O(1) instead of copying the stack twice per call. Cost no longer grows with nesting depth.
+- A decorated call on the enabled path is **3.1x cheaper** overall (53.5x a bare call down to 17.0x), and a nested operation of the kind sibling libraries actually produce — 16 stacked `@signal` calls — went from **74.9 us to 19.9 us**. No capability was traded away: catalogs, profiles, policy, contracts and the per-step error guards all behave as before. The disabled fast path is unchanged. Reproduce with `benchmarks/signal_enabled.py`.
+  - Frames no longer format an ISO-8601 timestamp on every decorated call; the wall clock is stored raw and rendered only when an event is emitted. This alone was over half the wrapper cost.
+  - The breadcrumb stack is a linked list, so `push_frame`/`pop_frame` are O(1) instead of copying the stack twice per call. Cost no longer grows with nesting depth.
+  - A frame is a compact list rather than a dataclass instance, roughly a third of the allocation cost. It is the hottest allocation in the library: one per decorated call, built whether or not anything is ever emitted.
+  - `@signal` caches the configuration-derived decisions it makes per call, keyed on config object identity. `ManagerConfig` is frozen and replaced wholesale by `configure()`, so identity is an exact invalidation signal.
   - `@signal` decides at decoration time whether a callable can resolve its module from a bound instance, so free functions skip that lookup per call.
+- What remains is close to the floor for this design: roughly 1240 ns of overhead per enabled call, of which the two `ContextVar` writes that buy correct isolation across asyncio tasks and threads are inherent. Further gains would come from decorating fewer functions on hot paths, not from a cheaper decorator.
 
 ### Fixed
 - Catalog warnings whose template interpolates `{message}` were rendered twice, duplicating both the message prefix and the hint. `warn()` no longer re-injects an instance's already-rendered text as the `message` field.

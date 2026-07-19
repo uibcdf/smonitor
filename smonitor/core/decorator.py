@@ -7,7 +7,7 @@ from time import perf_counter
 from typing import Any, Callable, Optional
 
 from . import runtime
-from .context import Frame, pop_frame, push_frame
+from .context import frame_args, pop_frame, push_frame, set_frame_args, set_frame_duration
 from .manager import get_manager
 
 ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
@@ -57,6 +57,15 @@ def signal(
         _qualname = getattr(fn, "__qualname__", "") or ""
         may_be_method = "." in _qualname and "<locals>" not in _qualname
         signal_label = f"{fn_module}.{fn.__name__}"
+        fn_name = fn.__name__
+
+        # Per-call decisions derived from the configuration, cached because the
+        # config rarely changes but is consulted on every call. `ManagerConfig`
+        # is a frozen dataclass that `configure()` replaces wholesale, so object
+        # identity is an exact invalidation signal — there is no version counter
+        # anyone could forget to bump.
+        # Layout: [config, profiling, sample_rate, slow_ms, args_summary]
+        plan: list[Any] = [None, False, 1.0, 0.0, False]
 
         @wraps(fn)
         def wrapper(*args: Any, **kwargs: Any):
@@ -66,6 +75,12 @@ def signal(
             try:
                 manager = get_manager()
                 config = manager.config
+                if config is not plan[0]:
+                    plan[0] = config
+                    plan[1] = config.profiling
+                    plan[2] = config.profiling_sample_rate
+                    plan[3] = config.slow_signal_ms
+                    plan[4] = config.args_summary
             except Exception as exc:
                 warnings.warn(
                     f"SMonitor signal setup failed for {signal_label}: {exc}",
@@ -74,7 +89,7 @@ def signal(
                 )
                 return fn(*args, **kwargs)
 
-            if not manager.enabled:
+            if not config.enabled:
                 return fn(*args, **kwargs)
 
             try:
@@ -90,11 +105,8 @@ def signal(
             should_measure_slow = False
             start = None
             try:
-                should_profile = (
-                    config.profiling
-                    and random() <= config.profiling_sample_rate
-                )
-                should_measure_slow = config.slow_signal_ms > 0
+                should_profile = plan[1] and random() <= plan[2]
+                should_measure_slow = plan[3] > 0
                 if should_profile or should_measure_slow:
                     start = perf_counter()
             except Exception as exc:
@@ -105,7 +117,7 @@ def signal(
                 )
 
             try:
-                args_summary = _summarize_args(args, kwargs) if config.args_summary else None
+                args_summary = _summarize_args(args, kwargs) if plan[4] else None
             except Exception as exc:
                 warnings.warn(
                     f"SMonitor signal argument summary failed for {signal_label}: {exc}",
@@ -126,18 +138,12 @@ def signal(
                     )
 
             module = _resolve_owner_module(fn, args) if may_be_method and args else fn_module
-            frame = Frame(
-                function=fn.__name__,
-                module=module,
-                args=args_summary,
-                tags=tags,
-                extra=frame_extra,
-            )
 
-            frame_pushed = False
+            frame = None
             try:
-                push_frame(frame)
-                frame_pushed = True
+                frame = push_frame(
+                    fn_name, module, args=args_summary, tags=tags, extra=frame_extra
+                )
             except Exception as exc:
                 warnings.warn(
                     f"SMonitor signal push_frame failed for {signal_label}: {exc}",
@@ -149,13 +155,13 @@ def signal(
                 return fn(*args, **kwargs)
             except Exception as exc:
                 try:
-                    if frame.args is None:
-                        frame.args = _summarize_args(args, kwargs)
+                    if frame is not None and frame_args(frame) is None:
+                        set_frame_args(frame, _summarize_args(args, kwargs))
                     if not getattr(exc, "__smonitor_emitted__", False):
-                        source = f"{module}.{fn.__name__}"
+                        source = f"{module}.{fn_name}"
                         extra = {"source_module": module}
-                        if frame.extra:
-                            extra.update(frame.extra)
+                        if frame_extra:
+                            extra.update(frame_extra)
                         manager.emit(
                             exception_level,
                             str(exc),
@@ -178,34 +184,38 @@ def signal(
             finally:
                 if start is not None:
                     try:
-                        frame.duration_ms = (perf_counter() - start) * 1000.0
-                        key = f"{module}.{fn.__name__}"
+                        duration_ms = (perf_counter() - start) * 1000.0
+                        if frame is not None:
+                            # Set before the frame is popped, so a slow-signal
+                            # event emitted just below carries it in its context.
+                            set_frame_duration(frame, duration_ms)
+                        key = f"{module}.{fn_name}"
                         if should_profile:
                             manager.record_timing(
                                 key,
-                                frame.duration_ms,
-                                tags=frame.tags,
-                                meta=frame.extra,
+                                duration_ms,
+                                tags=tags,
+                                meta=frame_extra,
                             )
-                        if should_measure_slow and frame.duration_ms >= config.slow_signal_ms:
+                        if should_measure_slow and duration_ms >= plan[3]:
                             extra = {
                                 "module": module,
-                                "function": fn.__name__,
-                                "duration_ms": frame.duration_ms,
-                                "threshold_ms": config.slow_signal_ms,
+                                "function": fn_name,
+                                "duration_ms": duration_ms,
+                                "threshold_ms": plan[3],
                                 "cache_state": "n/a",
                             }
-                            if frame.tags:
-                                extra["signal_tags"] = list(frame.tags)
-                            if frame.extra:
-                                extra.update(frame.extra)
+                            if tags:
+                                extra["signal_tags"] = list(tags)
+                            if frame_extra:
+                                extra.update(frame_extra)
                             manager.emit(
                                 config.slow_signal_level,
                                 f"Slow signal call detected for {key}.",
                                 source=key,
                                 category="profiling",
                                 code="SMONITOR-SIGNAL-SLOW",
-                                tags=frame.tags,
+                                tags=tags,
                                 extra=extra,
                             )
                     except Exception as exc:
@@ -214,7 +224,7 @@ def signal(
                             RuntimeWarning,
                             stacklevel=2,
                         )
-                if frame_pushed:
+                if frame is not None:
                     try:
                         pop_frame()
                     except Exception as exc:
