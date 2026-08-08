@@ -1,0 +1,1508 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="_static/favicon-16x16.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="_static/favicon-124x124.png" sizes="124x124" rel="icon" type="image/png">
+    <link href="_static/favicon-128x128.png" sizes="128x128" rel="icon" type="image/png">
+    <link href="_static/favicon-192x192.png" sizes="192x192" rel="icon" type="image/png">
+    <link href="_static/icon.svg" rel="icon" type="image/svg+xml">
+  
+    <title>smonitor.integrations package – SMonitor 0.12.0</title>
+  
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d5ef24d1" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d5ef24d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=61ccb1f1"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'smonitor.integrations';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.12.0" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="SMonitor 0.12.0 documentation - Home"/>
+    <img src="_static/logo.svg" class="logo__image only-dark pst-js-only" alt="SMonitor 0.12.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/developer/index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/developer/index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="smonitor.config.html">smonitor.config package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.core.html">smonitor.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.emitters.html">smonitor.emitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.handlers.html">smonitor.handlers package</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">smonitor.integrations package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.policy.html">smonitor.policy package</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">smonitor.integrations package</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="smonitor-integrations-package">
+<h1>smonitor.integrations package<a class="headerlink" href="#smonitor-integrations-package" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-smonitor.integrations.argdigest">
+<span id="smonitor-integrations-argdigest-module"></span><h2>smonitor.integrations.argdigest module<a class="headerlink" href="#module-smonitor.integrations.argdigest" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.argdigest.configure_argdigest">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.argdigest.</span></span><span class="sig-name descname"><span class="pre">configure_argdigest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/argdigest.html#configure_argdigest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.argdigest.configure_argdigest" title="Link to this definition">#</a></dt>
+<dd><p>Entry point for ArgDigest integration.</p>
+<p>Intended usage: centralize ArgDigest diagnostics via smonitor.configure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>Any</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.integrations.core">
+<span id="smonitor-integrations-core-module"></span><h2>smonitor.integrations.core module<a class="headerlink" href="#module-smonitor.integrations.core" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.core.context_extra">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.core.</span></span><span class="sig-name descname"><span class="pre">context_extra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_exhausted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failure_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_failure_reason</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cause_exception_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cause_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">causal_chain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incident_kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">severity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diagnostic_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recommended_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retryable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">support_needed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#context_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.core.context_extra" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caller</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>form</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>requested_attribute</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>resource</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>provider</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>operation</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_attempt</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_max</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_exhausted</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_delay_s</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>failure_class</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>last_failure_reason</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cause_exception_type</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cause_code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>causal_chain</strong> (<em>Any</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>incident_kind</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>severity</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>priority</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>diagnostic_confidence</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>recommended_action</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>next_step</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retryable</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>support_needed</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>evidence</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.core.emit_from_catalog">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.core.</span></span><span class="sig-name descname"><span class="pre">emit_from_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#emit_from_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.core.emit_from_catalog" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entry</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>package_root</strong> (<em>Path</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.core.ensure_configured">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.core.</span></span><span class="sig-name descname"><span class="pre">ensure_configured</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#ensure_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.core.ensure_configured" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>package_root</strong> (<em>Path</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.core.merge_extra">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.core.</span></span><span class="sig-name descname"><span class="pre">merge_extra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#merge_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.core.merge_extra" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.core.reset_configured_packages">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.core.</span></span><span class="sig-name descname"><span class="pre">reset_configured_packages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#reset_configured_packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.core.reset_configured_packages" title="Link to this definition">#</a></dt>
+<dd><p>Clears the package configuration memoization cache.</p>
+<p>Useful for test suites and dynamic multi-config sessions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.integrations.depdigest">
+<span id="smonitor-integrations-depdigest-module"></span><h2>smonitor.integrations.depdigest module<a class="headerlink" href="#module-smonitor.integrations.depdigest" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.depdigest.configure_depdigest">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.depdigest.</span></span><span class="sig-name descname"><span class="pre">configure_depdigest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/depdigest.html#configure_depdigest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.depdigest.configure_depdigest" title="Link to this definition">#</a></dt>
+<dd><p>Entry point for DepDigest integration.</p>
+<p>Intended usage: centralize DepDigest diagnostics via smonitor.configure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>Any</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.integrations.diagnostic">
+<span id="smonitor-integrations-diagnostic-module"></span><h2>smonitor.integrations.diagnostic module<a class="headerlink" href="#module-smonitor.integrations.diagnostic" title="Link to this heading">#</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.CatalogException">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.diagnostic.</span></span><span class="sig-name descname"><span class="pre">CatalogException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#CatalogException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.CatalogException" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for exceptions backed by an SMonitor catalog.</p>
+<p>Subclasses should define <cite>catalog_key</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.CatalogException.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#smonitor.integrations.diagnostic.CatalogException.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.CatalogWarning">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.diagnostic.</span></span><span class="sig-name descname"><span class="pre">CatalogWarning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#CatalogWarning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.CatalogWarning" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Warning</span></code></p>
+<p>Base class for warnings backed by an SMonitor catalog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.CatalogWarning.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#smonitor.integrations.diagnostic.CatalogWarning.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.diagnostic.</span></span><span class="sig-name descname"><span class="pre">DiagnosticBundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catalog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A bundle of diagnostic tools for a library integration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>catalog</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>package_root</strong> (<em>Path</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.experimental">
+<span class="sig-name descname"><span class="pre">experimental</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ExperimentalPath'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.experimental"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.experimental" title="Link to this definition">#</a></dt>
+<dd><p>Decorator to mark a function or module as experimental.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version Use: </span><a class="reference internal" href="#smonitor.integrations.diagnostic.DiagnosticBundle.support_tier" title="smonitor.integrations.diagnostic.DiagnosticBundle.support_tier"><code class="xref py py-meth docutils literal notranslate"><span class="pre">support_tier()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">tier=3</span></code> instead.
+<code class="docutils literal notranslate"><span class="pre">experimental()</span></code> is now an alias for <code class="docutils literal notranslate"><span class="pre">support_tier(3,</span> <span class="pre">key=key)</span></code>.
+The key defaults to <code class="docutils literal notranslate"><span class="pre">&quot;ExperimentalPath&quot;</span></code> for backward compatibility.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>key</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.info" title="Link to this definition">#</a></dt>
+<dd><p>Emit an INFO signal from the catalog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.resolve" title="Link to this definition">#</a></dt>
+<dd><p>Resolves and combines message and hint into a single string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.support_tier">
+<span class="sig-name descname"><span class="pre">support_tier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tier</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.support_tier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.support_tier" title="Link to this definition">#</a></dt>
+<dd><p>Decorator marking a function with its support tier.</p>
+<ul class="simple">
+<li><p><strong>Tier 1</strong>: no-op; the original function is returned unchanged.</p></li>
+<li><p><strong>Tier 2</strong>: emits a WARNING signal the first time the function is
+called in a session (deduplicated per function per session).</p></li>
+<li><p><strong>Tier 3</strong>: emits an INFO signal the first time the function is
+called in a session (deduplicated per function per session).</p></li>
+</ul>
+<p>Unlike <a class="reference internal" href="#smonitor.integrations.diagnostic.DiagnosticBundle.experimental" title="smonitor.integrations.diagnostic.DiagnosticBundle.experimental"><code class="xref py py-meth docutils literal notranslate"><span class="pre">experimental()</span></code></a>, this decorator deduplicates per
+function per session and is intended for the systematic support-tier
+protocol across the MolSysSuite ecosystem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tier</strong> (<em>int</em>) – Support tier (1, 2, or 3).</p></li>
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>) – Optional additional context appended to the emitted signal.</p></li>
+<li><p><strong>key</strong> (<em>str</em><em> | </em><em>None</em>) – Catalog key override.  Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;SupportTier2Warning&quot;</span></code> for
+tier 2 and <code class="docutils literal notranslate"><span class="pre">&quot;SupportTier3Info&quot;</span></code> for tier 3.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Any</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.tier_registry">
+<span class="sig-name descname"><span class="pre">tier_registry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.tier_registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.tier_registry" title="Link to this definition">#</a></dt>
+<dd><p>Return the <a class="reference internal" href="#smonitor.integrations.diagnostic.SupportTierRegistry" title="smonitor.integrations.diagnostic.SupportTierRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportTierRegistry</span></code></a> associated with this bundle.</p>
+<p>The registry is created lazily on first access and persists for the
+lifetime of the bundle, so tier signals are deduplicated across the
+entire session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#smonitor.integrations.diagnostic.SupportTierRegistry" title="smonitor.integrations.diagnostic.SupportTierRegistry"><em>SupportTierRegistry</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_or_warning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.warn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.warn" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_or_warning</strong> (<em>str</em><em> | </em><em>Warning</em>)</p></li>
+<li><p><strong>category</strong> (<em>Type</em><em>[</em><em>Warning</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>)</p></li>
+<li><p><strong>caller</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.DiagnosticBundle.warn_once">
+<span class="sig-name descname"><span class="pre">warn_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_or_warning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.warn_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.DiagnosticBundle.warn_once" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_or_warning</strong> (<em>str</em><em> | </em><em>Warning</em>)</p></li>
+<li><p><strong>category</strong> (<em>Type</em><em>[</em><em>Warning</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>)</p></li>
+<li><p><strong>caller</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.FormatError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.diagnostic.</span></span><span class="sig-name descname"><span class="pre">FormatError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#FormatError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.FormatError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smonitor.integrations.diagnostic.CatalogException" title="smonitor.integrations.diagnostic.CatalogException"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatalogException</span></code></a></p>
+<p>Exception raised when a data or file format standard is violated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.FormatError.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FormatError'</span></span><a class="headerlink" href="#smonitor.integrations.diagnostic.FormatError.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.InconsistencyError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.diagnostic.</span></span><span class="sig-name descname"><span class="pre">InconsistencyError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#InconsistencyError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.InconsistencyError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smonitor.integrations.diagnostic.CatalogException" title="smonitor.integrations.diagnostic.CatalogException"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatalogException</span></code></a></p>
+<p>Exception raised when internal data structures are inconsistent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.InconsistencyError.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'InconsistencyError'</span></span><a class="headerlink" href="#smonitor.integrations.diagnostic.InconsistencyError.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.SupportTierRegistry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.diagnostic.</span></span><span class="sig-name descname"><span class="pre">SupportTierRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.SupportTierRegistry" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Registry mapping names (forms, objects, functions) to their support tier.</p>
+<p>Obtain an instance from <a class="reference internal" href="#smonitor.integrations.diagnostic.DiagnosticBundle.tier_registry" title="smonitor.integrations.diagnostic.DiagnosticBundle.tier_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DiagnosticBundle.tier_registry()</span></code></a>.  The
+registry is bound to a <code class="docutils literal notranslate"><span class="pre">DiagnosticBundle</span></code> and uses its emission
+machinery, so all signals pass through the same catalog and meta context.</p>
+<section id="tier-semantics">
+<h3>Tier semantics<a class="headerlink" href="#tier-semantics" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Tier 1</strong>: contractual, no signal emitted.</p></li>
+<li><p><strong>Tier 2</strong>: best-effort, a WARNING is emitted once per name per session.</p></li>
+<li><p><strong>Tier 3</strong>: experimental/niche, an INFO signal is emitted once per name
+per session.</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.SupportTierRegistry.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.SupportTierRegistry.check" title="Link to this definition">#</a></dt>
+<dd><p>Emit the appropriate tier signal for <em>name</em>, at most once per session.</p>
+<p>Tier 1 items (or unregistered names) produce no signal.
+Tier 2 items emit a WARNING the first time they are checked.
+Tier 3 items emit an INFO signal the first time they are checked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.SupportTierRegistry.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tier</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.SupportTierRegistry.register" title="Link to this definition">#</a></dt>
+<dd><p>Register <em>name</em> with its support <em>tier</em> (1, 2, or 3).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>tier</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.diagnostic.SupportTierRegistry.register_many">
+<span class="sig-name descname"><span class="pre">register_many</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry.register_many"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.diagnostic.SupportTierRegistry.register_many" title="Link to this definition">#</a></dt>
+<dd><p>Register multiple names at once from a <code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">tier}</span></code> mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mapping</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bundle</strong> (<a class="reference internal" href="#smonitor.integrations.diagnostic.DiagnosticBundle" title="smonitor.integrations.diagnostic.DiagnosticBundle"><em>DiagnosticBundle</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.integrations.molsysmt">
+<span id="smonitor-integrations-molsysmt-module"></span><h2>smonitor.integrations.molsysmt module<a class="headerlink" href="#module-smonitor.integrations.molsysmt" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.molsysmt.configure_molsysmt">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.molsysmt.</span></span><span class="sig-name descname"><span class="pre">configure_molsysmt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/molsysmt.html#configure_molsysmt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.molsysmt.configure_molsysmt" title="Link to this definition">#</a></dt>
+<dd><p>Entry point for MolSysMT integration.</p>
+<p>Intended usage: replace molsysmt.logging_setup with smonitor.configure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>Any</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.integrations">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-smonitor.integrations" title="Link to this heading">#</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.CatalogException">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">CatalogException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#CatalogException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.CatalogException" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for exceptions backed by an SMonitor catalog.</p>
+<p>Subclasses should define <cite>catalog_key</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.CatalogException.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#smonitor.integrations.CatalogException.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.CatalogWarning">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">CatalogWarning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#CatalogWarning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.CatalogWarning" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Warning</span></code></p>
+<p>Base class for warnings backed by an SMonitor catalog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.CatalogWarning.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#smonitor.integrations.CatalogWarning.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">DiagnosticBundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catalog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A bundle of diagnostic tools for a library integration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>catalog</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>package_root</strong> (<em>Path</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.experimental">
+<span class="sig-name descname"><span class="pre">experimental</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ExperimentalPath'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.experimental"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.experimental" title="Link to this definition">#</a></dt>
+<dd><p>Decorator to mark a function or module as experimental.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version Use: </span><a class="reference internal" href="#smonitor.integrations.DiagnosticBundle.support_tier" title="smonitor.integrations.DiagnosticBundle.support_tier"><code class="xref py py-meth docutils literal notranslate"><span class="pre">support_tier()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">tier=3</span></code> instead.
+<code class="docutils literal notranslate"><span class="pre">experimental()</span></code> is now an alias for <code class="docutils literal notranslate"><span class="pre">support_tier(3,</span> <span class="pre">key=key)</span></code>.
+The key defaults to <code class="docutils literal notranslate"><span class="pre">&quot;ExperimentalPath&quot;</span></code> for backward compatibility.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>key</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.info" title="Link to this definition">#</a></dt>
+<dd><p>Emit an INFO signal from the catalog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.resolve" title="Link to this definition">#</a></dt>
+<dd><p>Resolves and combines message and hint into a single string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.support_tier">
+<span class="sig-name descname"><span class="pre">support_tier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tier</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.support_tier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.support_tier" title="Link to this definition">#</a></dt>
+<dd><p>Decorator marking a function with its support tier.</p>
+<ul class="simple">
+<li><p><strong>Tier 1</strong>: no-op; the original function is returned unchanged.</p></li>
+<li><p><strong>Tier 2</strong>: emits a WARNING signal the first time the function is
+called in a session (deduplicated per function per session).</p></li>
+<li><p><strong>Tier 3</strong>: emits an INFO signal the first time the function is
+called in a session (deduplicated per function per session).</p></li>
+</ul>
+<p>Unlike <a class="reference internal" href="#smonitor.integrations.DiagnosticBundle.experimental" title="smonitor.integrations.DiagnosticBundle.experimental"><code class="xref py py-meth docutils literal notranslate"><span class="pre">experimental()</span></code></a>, this decorator deduplicates per
+function per session and is intended for the systematic support-tier
+protocol across the MolSysSuite ecosystem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tier</strong> (<em>int</em>) – Support tier (1, 2, or 3).</p></li>
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>) – Optional additional context appended to the emitted signal.</p></li>
+<li><p><strong>key</strong> (<em>str</em><em> | </em><em>None</em>) – Catalog key override.  Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;SupportTier2Warning&quot;</span></code> for
+tier 2 and <code class="docutils literal notranslate"><span class="pre">&quot;SupportTier3Info&quot;</span></code> for tier 3.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Any</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.tier_registry">
+<span class="sig-name descname"><span class="pre">tier_registry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.tier_registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.tier_registry" title="Link to this definition">#</a></dt>
+<dd><p>Return the <a class="reference internal" href="#smonitor.integrations.SupportTierRegistry" title="smonitor.integrations.SupportTierRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportTierRegistry</span></code></a> associated with this bundle.</p>
+<p>The registry is created lazily on first access and persists for the
+lifetime of the bundle, so tier signals are deduplicated across the
+entire session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#smonitor.integrations.diagnostic.SupportTierRegistry" title="smonitor.integrations.diagnostic.SupportTierRegistry"><em>SupportTierRegistry</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_or_warning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.warn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.warn" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_or_warning</strong> (<em>str</em><em> | </em><em>Warning</em>)</p></li>
+<li><p><strong>category</strong> (<em>Type</em><em>[</em><em>Warning</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>)</p></li>
+<li><p><strong>caller</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.DiagnosticBundle.warn_once">
+<span class="sig-name descname"><span class="pre">warn_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_or_warning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#DiagnosticBundle.warn_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.DiagnosticBundle.warn_once" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_or_warning</strong> (<em>str</em><em> | </em><em>Warning</em>)</p></li>
+<li><p><strong>category</strong> (<em>Type</em><em>[</em><em>Warning</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>)</p></li>
+<li><p><strong>caller</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.FormatError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">FormatError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#FormatError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.FormatError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smonitor.integrations.diagnostic.CatalogException" title="smonitor.integrations.diagnostic.CatalogException"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatalogException</span></code></a></p>
+<p>Exception raised when a data or file format standard is violated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.FormatError.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FormatError'</span></span><a class="headerlink" href="#smonitor.integrations.FormatError.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="smonitor.integrations.InconsistencyError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">InconsistencyError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#InconsistencyError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.InconsistencyError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smonitor.integrations.diagnostic.CatalogException" title="smonitor.integrations.diagnostic.CatalogException"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatalogException</span></code></a></p>
+<p>Exception raised when internal data structures are inconsistent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>code</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>catalog</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.integrations.InconsistencyError.catalog_key">
+<span class="sig-name descname"><span class="pre">catalog_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'InconsistencyError'</span></span><a class="headerlink" href="#smonitor.integrations.InconsistencyError.catalog_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smonitor.integrations.SupportTierRegistry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">SupportTierRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.SupportTierRegistry" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Registry mapping names (forms, objects, functions) to their support tier.</p>
+<p>Obtain an instance from <a class="reference internal" href="#smonitor.integrations.DiagnosticBundle.tier_registry" title="smonitor.integrations.DiagnosticBundle.tier_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DiagnosticBundle.tier_registry()</span></code></a>.  The
+registry is bound to a <code class="docutils literal notranslate"><span class="pre">DiagnosticBundle</span></code> and uses its emission
+machinery, so all signals pass through the same catalog and meta context.</p>
+<section id="id1">
+<h3>Tier semantics<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Tier 1</strong>: contractual, no signal emitted.</p></li>
+<li><p><strong>Tier 2</strong>: best-effort, a WARNING is emitted once per name per session.</p></li>
+<li><p><strong>Tier 3</strong>: experimental/niche, an INFO signal is emitted once per name
+per session.</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.SupportTierRegistry.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.SupportTierRegistry.check" title="Link to this definition">#</a></dt>
+<dd><p>Emit the appropriate tier signal for <em>name</em>, at most once per session.</p>
+<p>Tier 1 items (or unregistered names) produce no signal.
+Tier 2 items emit a WARNING the first time they are checked.
+Tier 3 items emit an INFO signal the first time they are checked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.SupportTierRegistry.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tier</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.SupportTierRegistry.register" title="Link to this definition">#</a></dt>
+<dd><p>Register <em>name</em> with its support <em>tier</em> (1, 2, or 3).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>tier</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.integrations.SupportTierRegistry.register_many">
+<span class="sig-name descname"><span class="pre">register_many</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/diagnostic.html#SupportTierRegistry.register_many"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.SupportTierRegistry.register_many" title="Link to this definition">#</a></dt>
+<dd><p>Register multiple names at once from a <code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">tier}</span></code> mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mapping</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bundle</strong> (<a class="reference internal" href="#smonitor.integrations.DiagnosticBundle" title="smonitor.integrations.DiagnosticBundle"><em>DiagnosticBundle</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.context_extra">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">context_extra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_exhausted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failure_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_failure_reason</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cause_exception_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cause_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">causal_chain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incident_kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">severity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diagnostic_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recommended_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retryable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">support_needed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#context_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.context_extra" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caller</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>form</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>requested_attribute</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>resource</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>provider</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>operation</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_attempt</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_max</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_exhausted</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retry_delay_s</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>failure_class</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>last_failure_reason</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cause_exception_type</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cause_code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>causal_chain</strong> (<em>Any</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>incident_kind</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>severity</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>priority</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>diagnostic_confidence</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>recommended_action</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>next_step</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>retryable</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>support_needed</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>evidence</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.emit_from_catalog">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">emit_from_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#emit_from_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.emit_from_catalog" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entry</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>package_root</strong> (<em>Path</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.ensure_configured">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">ensure_configured</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#ensure_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.ensure_configured" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>package_root</strong> (<em>Path</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.merge_extra">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">merge_extra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#merge_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.merge_extra" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.integrations.reset_configured_packages">
+<span class="sig-prename descclassname"><span class="pre">smonitor.integrations.</span></span><span class="sig-name descname"><span class="pre">reset_configured_packages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/integrations/core.html#reset_configured_packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.integrations.reset_configured_packages" title="Link to this definition">#</a></dt>
+<dd><p>Clears the package configuration memoization cache.</p>
+<p>Useful for test suites and dynamic multi-config sessions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.integrations.argdigest">smonitor.integrations.argdigest module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.argdigest.configure_argdigest"><code class="docutils literal notranslate"><span class="pre">configure_argdigest()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.integrations.core">smonitor.integrations.core module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.core.context_extra"><code class="docutils literal notranslate"><span class="pre">context_extra()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.core.emit_from_catalog"><code class="docutils literal notranslate"><span class="pre">emit_from_catalog()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.core.ensure_configured"><code class="docutils literal notranslate"><span class="pre">ensure_configured()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.core.merge_extra"><code class="docutils literal notranslate"><span class="pre">merge_extra()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.core.reset_configured_packages"><code class="docutils literal notranslate"><span class="pre">reset_configured_packages()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.integrations.depdigest">smonitor.integrations.depdigest module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.depdigest.configure_depdigest"><code class="docutils literal notranslate"><span class="pre">configure_depdigest()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.integrations.diagnostic">smonitor.integrations.diagnostic module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.CatalogException"><code class="docutils literal notranslate"><span class="pre">CatalogException</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.CatalogException.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogException.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.CatalogWarning"><code class="docutils literal notranslate"><span class="pre">CatalogWarning</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.CatalogWarning.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogWarning.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.experimental"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.experimental()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.info"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.info()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.resolve"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.resolve()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.support_tier"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.support_tier()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.tier_registry"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.tier_registry()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.warn"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.DiagnosticBundle.warn_once"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.FormatError"><code class="docutils literal notranslate"><span class="pre">FormatError</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.FormatError.catalog_key"><code class="docutils literal notranslate"><span class="pre">FormatError.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.InconsistencyError"><code class="docutils literal notranslate"><span class="pre">InconsistencyError</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.InconsistencyError.catalog_key"><code class="docutils literal notranslate"><span class="pre">InconsistencyError.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.SupportTierRegistry"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.SupportTierRegistry.check"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry.check()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.SupportTierRegistry.register"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry.register()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.diagnostic.SupportTierRegistry.register_many"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry.register_many()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.integrations.molsysmt">smonitor.integrations.molsysmt module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.molsysmt.configure_molsysmt"><code class="docutils literal notranslate"><span class="pre">configure_molsysmt()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.integrations">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.CatalogException"><code class="docutils literal notranslate"><span class="pre">CatalogException</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.CatalogException.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogException.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.CatalogWarning"><code class="docutils literal notranslate"><span class="pre">CatalogWarning</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.CatalogWarning.catalog_key"><code class="docutils literal notranslate"><span class="pre">CatalogWarning.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.experimental"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.experimental()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.info"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.info()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.resolve"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.resolve()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.support_tier"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.support_tier()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.tier_registry"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.tier_registry()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.warn"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.DiagnosticBundle.warn_once"><code class="docutils literal notranslate"><span class="pre">DiagnosticBundle.warn_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.FormatError"><code class="docutils literal notranslate"><span class="pre">FormatError</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.FormatError.catalog_key"><code class="docutils literal notranslate"><span class="pre">FormatError.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.InconsistencyError"><code class="docutils literal notranslate"><span class="pre">InconsistencyError</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.InconsistencyError.catalog_key"><code class="docutils literal notranslate"><span class="pre">InconsistencyError.catalog_key</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.SupportTierRegistry"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.SupportTierRegistry.check"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry.check()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.SupportTierRegistry.register"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry.register()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.SupportTierRegistry.register_many"><code class="docutils literal notranslate"><span class="pre">SupportTierRegistry.register_many()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.context_extra"><code class="docutils literal notranslate"><span class="pre">context_extra()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.emit_from_catalog"><code class="docutils literal notranslate"><span class="pre">emit_from_catalog()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.ensure_configured"><code class="docutils literal notranslate"><span class="pre">ensure_configured()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.merge_extra"><code class="docutils literal notranslate"><span class="pre">merge_extra()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.integrations.reset_configured_packages"><code class="docutils literal notranslate"><span class="pre">reset_configured_packages()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><div>
+	&copy; 2026, <a href=contents/about/who.html>Liliana M. Moreno Vargas, Diego Prada Gracia
+		and contributors</a> | <a href="https://www.uibcdf.org/">UIBCDF Lab</a> 
+	at the <a href="http://himfg.com.mx">Federico Gómez Children’s Hospital of Mexico</a><br />
+	<a href="https://github.com/uibcdf/depdigest">SMonitor is an open source project</a> shared
+	under <a href="https://github.com/uibcdf/depdigest/blob/main/LICENSE">an MIT license</a>
+</div></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0
+     | 
+    Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0
+    <br/>
+  </p>
+
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><a href= "mailto:uibcdf@gmail.com">Contact us</a><br /></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

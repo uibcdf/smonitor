@@ -1,0 +1,69 @@
+smonitor.core package
+=====================
+
+Submodules
+----------
+
+smonitor.core.context module
+----------------------------
+
+.. automodule:: smonitor.core.context
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.decorator module
+------------------------------
+
+.. automodule:: smonitor.core.decorator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.fingerprint module
+--------------------------------
+
+.. automodule:: smonitor.core.fingerprint
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.human\_summary module
+-----------------------------------
+
+.. automodule:: smonitor.core.human_summary
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.identifiers module
+--------------------------------
+
+.. automodule:: smonitor.core.identifiers
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.manager module
+----------------------------
+
+.. automodule:: smonitor.core.manager
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.core.runtime module
+----------------------------
+
+.. automodule:: smonitor.core.runtime
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor.core
+   :members:
+   :show-inheritance:
+   :undoc-members:

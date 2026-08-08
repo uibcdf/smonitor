@@ -1,0 +1,6 @@
+﻿smonitor.integrations.ensure\_configured
+========================================
+
+.. currentmodule:: smonitor.integrations
+
+.. autofunction:: ensure_configured

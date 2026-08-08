@@ -1,0 +1,7 @@
+smonitor
+========
+
+.. toctree::
+   :maxdepth: 4
+
+   smonitor

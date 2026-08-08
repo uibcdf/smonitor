@@ -1,0 +1,6 @@
+﻿smonitor.emit
+=============
+
+.. currentmodule:: smonitor
+
+.. autofunction:: emit

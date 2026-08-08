@@ -1,0 +1,21 @@
+smonitor.policy package
+=======================
+
+Submodules
+----------
+
+smonitor.policy.engine module
+-----------------------------
+
+.. automodule:: smonitor.policy.engine
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor.policy
+   :members:
+   :show-inheritance:
+   :undoc-members:

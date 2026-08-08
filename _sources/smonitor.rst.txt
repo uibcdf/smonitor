@@ -1,0 +1,74 @@
+smonitor package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   smonitor.config
+   smonitor.core
+   smonitor.emitters
+   smonitor.handlers
+   smonitor.integrations
+   smonitor.policy
+
+Submodules
+----------
+
+smonitor.bundle module
+----------------------
+
+.. automodule:: smonitor.bundle
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.catalog module
+-----------------------
+
+.. automodule:: smonitor.catalog
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.cli module
+-------------------
+
+.. automodule:: smonitor.cli
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.docs\_utils module
+---------------------------
+
+.. automodule:: smonitor.docs_utils
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.profiling module
+-------------------------
+
+.. automodule:: smonitor.profiling
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+smonitor.validation module
+--------------------------
+
+.. automodule:: smonitor.validation
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor
+   :members:
+   :show-inheritance:
+   :undoc-members:

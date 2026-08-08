@@ -1,0 +1,1285 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="_static/favicon-16x16.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="_static/favicon-124x124.png" sizes="124x124" rel="icon" type="image/png">
+    <link href="_static/favicon-128x128.png" sizes="128x128" rel="icon" type="image/png">
+    <link href="_static/favicon-192x192.png" sizes="192x192" rel="icon" type="image/png">
+    <link href="_static/icon.svg" rel="icon" type="image/svg+xml">
+  
+    <title>smonitor.core package – SMonitor 0.12.0</title>
+  
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d5ef24d1" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d5ef24d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=61ccb1f1"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'smonitor.core';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.12.0" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="SMonitor 0.12.0 documentation - Home"/>
+    <img src="_static/logo.svg" class="logo__image only-dark pst-js-only" alt="SMonitor 0.12.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/developer/index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="content/developer/index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="smonitor.config.html">smonitor.config package</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">smonitor.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.emitters.html">smonitor.emitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.handlers.html">smonitor.handlers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.integrations.html">smonitor.integrations package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smonitor.policy.html">smonitor.policy package</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">smonitor.core package</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="smonitor-core-package">
+<h1>smonitor.core package<a class="headerlink" href="#smonitor-core-package" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-smonitor.core.context">
+<span id="smonitor-core-context-module"></span><h2>smonitor.core.context module<a class="headerlink" href="#module-smonitor.core.context" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="smonitor.core.context.Frame">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">Frame</span></span><a class="headerlink" href="#smonitor.core.context.Frame" title="Link to this definition">#</a></dt>
+<dd><p>A breadcrumb frame. Always built by <cite>push_frame</cite>, never constructed directly.</p>
+<p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.frame_args">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">frame_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#frame_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.frame_args" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.frame_as_dict">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">frame_as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#frame_as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.frame_as_dict" title="Link to this definition">#</a></dt>
+<dd><p>Serialize for the event <cite>context.frames</cite> payload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.frame_time">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">frame_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#frame_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.frame_time" title="Link to this definition">#</a></dt>
+<dd><p>ISO-8601 UTC timestamp of when the frame was pushed.</p>
+<p>Rendered here rather than at push time: formatting it eagerly cost more
+than the rest of the wrapper combined, and it is read only on emission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.get_context">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">get_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#get_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.get_context" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>trace_depth</strong> (<em>int</em><em> | </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.pop_frame">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">pop_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#pop_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.pop_frame" title="Link to this definition">#</a></dt>
+<dd><p>Pop the innermost frame, or return <cite>None</cite> if the stack is empty.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>List</em>[<em>Any</em>] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.push_frame">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">push_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#push_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.push_frame" title="Link to this definition">#</a></dt>
+<dd><p>Push a breadcrumb frame and return it, for later <cite>set_frame_*</cite> calls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> (<em>str</em>)</p></li>
+<li><p><strong>module</strong> (<em>str</em>)</p></li>
+<li><p><strong>args</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[<em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.set_frame_args">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">set_frame_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#set_frame_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.set_frame_args" title="Link to this definition">#</a></dt>
+<dd><p>Attach an argument summary, so error events can report the call inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>args</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.context.set_frame_duration">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.context.</span></span><span class="sig-name descname"><span class="pre">set_frame_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_ms</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/context.html#set_frame_duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.context.set_frame_duration" title="Link to this definition">#</a></dt>
+<dd><p>Record how long the call took.</p>
+<p>Set before the frame is popped, so a slow-signal event emitted from the
+same <cite>finally</cite> block carries the duration in its context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>duration_ms</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core.decorator">
+<span id="smonitor-core-decorator-module"></span><h2>smonitor.core.decorator module<a class="headerlink" href="#module-smonitor.core.decorator" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.decorator.random">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.decorator.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">interval</span> <span class="pre">[0,</span> <span class="pre">1).</span></span></span><a class="headerlink" href="#smonitor.core.decorator.random" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.decorator.signal">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.decorator.</span></span><span class="sig-name descname"><span class="pre">signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERROR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/decorator.html#signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.decorator.signal" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>Callable</em><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>exception_level</strong> (<em>str</em>)</p></li>
+<li><p><strong>extra_factory</strong> (<em>Callable</em><em>[</em><em>[</em><em>tuple</em><em>[</em><em>Any</em><em>, </em><em>...</em><em>]</em><em>, </em><em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core.fingerprint">
+<span id="smonitor-core-fingerprint-module"></span><h2>smonitor.core.fingerprint module<a class="headerlink" href="#module-smonitor.core.fingerprint" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.fingerprint.build_event_fingerprint">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.fingerprint.</span></span><span class="sig-name descname"><span class="pre">build_event_fingerprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/fingerprint.html#build_event_fingerprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.fingerprint.build_event_fingerprint" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code</strong> (<em>Any</em>)</p></li>
+<li><p><strong>source</strong> (<em>Any</em>)</p></li>
+<li><p><strong>exception_type</strong> (<em>Any</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.fingerprint.fingerprint_extra_subset">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.fingerprint.</span></span><span class="sig-name descname"><span class="pre">fingerprint_extra_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/fingerprint.html#fingerprint_extra_subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.fingerprint.fingerprint_extra_subset" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core.human_summary">
+<span id="smonitor-core-human-summary-module"></span><h2>smonitor.core.human_summary module<a class="headerlink" href="#module-smonitor.core.human_summary" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.human_summary.build_human_summary">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.human_summary.</span></span><span class="sig-name descname"><span class="pre">build_human_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/human_summary.html#build_human_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.human_summary.build_human_summary" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>source</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>hint</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core.identifiers">
+<span id="smonitor-core-identifiers-module"></span><h2>smonitor.core.identifiers module<a class="headerlink" href="#module-smonitor.core.identifiers" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.identifiers.new_identifier">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.identifiers.</span></span><span class="sig-name descname"><span class="pre">new_identifier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/identifiers.html#new_identifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.identifiers.new_identifier" title="Link to this definition">#</a></dt>
+<dd><p>Returning a stable opaque runtime identifier string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core.manager">
+<span id="smonitor-core-manager-module"></span><h2>smonitor.core.manager module<a class="headerlink" href="#module-smonitor.core.manager" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.core.manager.</span></span><span class="sig-name descname"><span class="pre">Manager</span></span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.add_handler">
+<span class="sig-name descname"><span class="pre">add_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.add_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.add_handler" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handler</strong> (<em>Any</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.config">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#smonitor.core.manager.ManagerConfig" title="smonitor.core.manager.ManagerConfig"><span class="pre">ManagerConfig</span></a></span><a class="headerlink" href="#smonitor.core.manager.Manager.config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.configure">
+<span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_logging</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_exceptions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_traceback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handlers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">routes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args_summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_schema</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling_buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling_hooks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling_sample_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler_error_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slow_signal_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slow_signal_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning_coalesce_window_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate_every_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.configure" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>theme</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>capture_warnings</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>capture_logging</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>capture_exceptions</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>trace_depth</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>show_traceback</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>profile</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>handlers</strong> (<em>Iterable</em><em>[</em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>routes</strong> (<em>List</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>filters</strong> (<em>List</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>args_summary</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>profiling</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>codes</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>signals</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>strict_signals</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>strict_schema</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>enabled</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>profiling_buffer_size</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>profiling_hooks</strong> (<em>List</em><em>[</em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>profiling_sample_rate</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>event_buffer_size</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>config_path</strong> (<em>str</em><em> | </em><em>Path</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>silence</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>handler_error_threshold</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>slow_signal_ms</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>slow_signal_level</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>warning_coalesce_window_s</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>duplicate_policy</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>duplicate_every_n</strong> (<em>int</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>run_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>session_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>correlation_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.emit">
+<span class="sig-name descname"><span class="pre">emit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.emit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.emit" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>str</em>)</p></li>
+<li><p><strong>message</strong> (<em>str</em>)</p></li>
+<li><p><strong>source</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>category</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>exception_type</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>correlation_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.enabled">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#smonitor.core.manager.Manager.enabled" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.flush_coalesced_warnings">
+<span class="sig-name descname"><span class="pre">flush_coalesced_warnings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.flush_coalesced_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.flush_coalesced_warnings" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>List</em>[<em>Dict</em>[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.flush_duplicate_summaries">
+<span class="sig-name descname"><span class="pre">flush_duplicate_summaries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.flush_duplicate_summaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.flush_duplicate_summaries" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>List</em>[<em>Dict</em>[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.get_codes">
+<span class="sig-name descname"><span class="pre">get_codes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.get_codes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.get_codes" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Dict</em>[str, <em>Dict</em>[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.get_runtime_identifiers">
+<span class="sig-name descname"><span class="pre">get_runtime_identifiers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.get_runtime_identifiers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.get_runtime_identifiers" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Dict</em>[str, str | None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.get_signals">
+<span class="sig-name descname"><span class="pre">get_signals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.get_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.get_signals" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Dict</em>[str, <em>Dict</em>[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.recent_events">
+<span class="sig-name descname"><span class="pre">recent_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.recent_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.recent_events" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> (<em>int</em><em> | </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[<em>Dict</em>[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.record_call">
+<span class="sig-name descname"><span class="pre">record_call</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.record_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.record_call" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.record_redundant_conversion">
+<span class="sig-name descname"><span class="pre">record_redundant_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsite</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">form_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.record_redundant_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.record_redundant_conversion" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callsite</strong> (<em>str</em>)</p></li>
+<li><p><strong>form_in</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>to_unit</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>to_form</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>to_type</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.record_timing">
+<span class="sig-name descname"><span class="pre">record_timing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_ms</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">span</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.record_timing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.record_timing" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>)</p></li>
+<li><p><strong>duration_ms</strong> (<em>float</em>)</p></li>
+<li><p><strong>span</strong> (<em>bool</em>)</p></li>
+<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.remove_handler">
+<span class="sig-name descname"><span class="pre">remove_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.remove_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.remove_handler" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handler</strong> (<em>Any</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.report">
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.report" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Dict</em>[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smonitor.core.manager.Manager.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#Manager.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.Manager.resolve" title="Link to this definition">#</a></dt>
+<dd><p>Resolves a message and hint from code/template without emitting an event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>code</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>extra</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[str, str | None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">smonitor.core.manager.</span></span><span class="sig-name descname"><span class="pre">ManagerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'str'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'str'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'plain'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_warnings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_logging</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'int'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_traceback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'str'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'user'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_exceptions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_signals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'bool'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling_buffer_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'int'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling_hooks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'tuple[Any,</span> <span class="pre">...]</span> <span class="pre">|</span> <span class="pre">None'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiling_sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_buffer_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'int'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'tuple[str,</span> <span class="pre">...]'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler_error_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'int'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slow_signal_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slow_signal_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'str'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning_coalesce_window_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'str'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'off'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate_every_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'int'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#ManagerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.ManagerConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>str</em>)</p></li>
+<li><p><strong>theme</strong> (<em>str</em>)</p></li>
+<li><p><strong>capture_warnings</strong> (<em>bool</em>)</p></li>
+<li><p><strong>capture_logging</strong> (<em>bool</em>)</p></li>
+<li><p><strong>trace_depth</strong> (<em>int</em>)</p></li>
+<li><p><strong>show_traceback</strong> (<em>bool</em>)</p></li>
+<li><p><strong>profile</strong> (<em>str</em>)</p></li>
+<li><p><strong>capture_exceptions</strong> (<em>bool</em>)</p></li>
+<li><p><strong>args_summary</strong> (<em>bool</em>)</p></li>
+<li><p><strong>profiling</strong> (<em>bool</em>)</p></li>
+<li><p><strong>strict_signals</strong> (<em>bool</em>)</p></li>
+<li><p><strong>strict_schema</strong> (<em>bool</em>)</p></li>
+<li><p><strong>enabled</strong> (<em>bool</em>)</p></li>
+<li><p><strong>profiling_buffer_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>profiling_hooks</strong> (<em>tuple</em><em>[</em><em>Any</em><em>, </em><em>...</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>profiling_sample_rate</strong> (<em>float</em>)</p></li>
+<li><p><strong>event_buffer_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>silence</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em>)</p></li>
+<li><p><strong>handler_error_threshold</strong> (<em>int</em>)</p></li>
+<li><p><strong>slow_signal_ms</strong> (<em>float</em>)</p></li>
+<li><p><strong>slow_signal_level</strong> (<em>str</em>)</p></li>
+<li><p><strong>warning_coalesce_window_s</strong> (<em>float</em>)</p></li>
+<li><p><strong>duplicate_policy</strong> (<em>str</em>)</p></li>
+<li><p><strong>duplicate_every_n</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.args_summary">
+<span class="sig-name descname"><span class="pre">args_summary</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.args_summary" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.capture_exceptions">
+<span class="sig-name descname"><span class="pre">capture_exceptions</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.capture_exceptions" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.capture_logging">
+<span class="sig-name descname"><span class="pre">capture_logging</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.capture_logging" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.capture_warnings">
+<span class="sig-name descname"><span class="pre">capture_warnings</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.capture_warnings" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.duplicate_every_n">
+<span class="sig-name descname"><span class="pre">duplicate_every_n</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.duplicate_every_n" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.duplicate_policy">
+<span class="sig-name descname"><span class="pre">duplicate_policy</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'off'</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.duplicate_policy" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.enabled" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.event_buffer_size">
+<span class="sig-name descname"><span class="pre">event_buffer_size</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.event_buffer_size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.handler_error_threshold">
+<span class="sig-name descname"><span class="pre">handler_error_threshold</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.handler_error_threshold" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.level">
+<span class="sig-name descname"><span class="pre">level</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WARNING'</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.level" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.profile">
+<span class="sig-name descname"><span class="pre">profile</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user'</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.profile" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.profiling">
+<span class="sig-name descname"><span class="pre">profiling</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.profiling" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.profiling_buffer_size">
+<span class="sig-name descname"><span class="pre">profiling_buffer_size</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.profiling_buffer_size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.profiling_hooks">
+<span class="sig-name descname"><span class="pre">profiling_hooks</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.profiling_hooks" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.profiling_sample_rate">
+<span class="sig-name descname"><span class="pre">profiling_sample_rate</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.profiling_sample_rate" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.show_traceback">
+<span class="sig-name descname"><span class="pre">show_traceback</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.show_traceback" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.silence">
+<span class="sig-name descname"><span class="pre">silence</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.silence" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.slow_signal_level">
+<span class="sig-name descname"><span class="pre">slow_signal_level</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'INFO'</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.slow_signal_level" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.slow_signal_ms">
+<span class="sig-name descname"><span class="pre">slow_signal_ms</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.slow_signal_ms" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.strict_schema">
+<span class="sig-name descname"><span class="pre">strict_schema</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.strict_schema" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.strict_signals">
+<span class="sig-name descname"><span class="pre">strict_signals</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.strict_signals" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.theme">
+<span class="sig-name descname"><span class="pre">theme</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'plain'</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.theme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.trace_depth">
+<span class="sig-name descname"><span class="pre">trace_depth</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.trace_depth" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smonitor.core.manager.ManagerConfig.warning_coalesce_window_s">
+<span class="sig-name descname"><span class="pre">warning_coalesce_window_s</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></span><a class="headerlink" href="#smonitor.core.manager.ManagerConfig.warning_coalesce_window_s" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.manager.get_manager">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.manager.</span></span><span class="sig-name descname"><span class="pre">get_manager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/manager.html#get_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.manager.get_manager" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#smonitor.core.manager.Manager" title="smonitor.core.manager.Manager"><em>Manager</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core.runtime">
+<span id="smonitor-core-runtime-module"></span><h2>smonitor.core.runtime module<a class="headerlink" href="#module-smonitor.core.runtime" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smonitor.core.runtime.set_signals_enabled">
+<span class="sig-prename descclassname"><span class="pre">smonitor.core.runtime.</span></span><span class="sig-name descname"><span class="pre">set_signals_enabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enabled</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/smonitor/core/runtime.html#set_signals_enabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smonitor.core.runtime.set_signals_enabled" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>enabled</strong> (<em>bool</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smonitor.core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-smonitor.core" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.context">smonitor.core.context module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.Frame"><code class="docutils literal notranslate"><span class="pre">Frame</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.frame_args"><code class="docutils literal notranslate"><span class="pre">frame_args()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.frame_as_dict"><code class="docutils literal notranslate"><span class="pre">frame_as_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.frame_time"><code class="docutils literal notranslate"><span class="pre">frame_time()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.get_context"><code class="docutils literal notranslate"><span class="pre">get_context()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.pop_frame"><code class="docutils literal notranslate"><span class="pre">pop_frame()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.push_frame"><code class="docutils literal notranslate"><span class="pre">push_frame()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.set_frame_args"><code class="docutils literal notranslate"><span class="pre">set_frame_args()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.context.set_frame_duration"><code class="docutils literal notranslate"><span class="pre">set_frame_duration()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.decorator">smonitor.core.decorator module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.decorator.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.decorator.signal"><code class="docutils literal notranslate"><span class="pre">signal()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.fingerprint">smonitor.core.fingerprint module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.fingerprint.build_event_fingerprint"><code class="docutils literal notranslate"><span class="pre">build_event_fingerprint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.fingerprint.fingerprint_extra_subset"><code class="docutils literal notranslate"><span class="pre">fingerprint_extra_subset()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.human_summary">smonitor.core.human_summary module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.human_summary.build_human_summary"><code class="docutils literal notranslate"><span class="pre">build_human_summary()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.identifiers">smonitor.core.identifiers module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.identifiers.new_identifier"><code class="docutils literal notranslate"><span class="pre">new_identifier()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.manager">smonitor.core.manager module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager"><code class="docutils literal notranslate"><span class="pre">Manager</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.add_handler"><code class="docutils literal notranslate"><span class="pre">Manager.add_handler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.config"><code class="docutils literal notranslate"><span class="pre">Manager.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.configure"><code class="docutils literal notranslate"><span class="pre">Manager.configure()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.emit"><code class="docutils literal notranslate"><span class="pre">Manager.emit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.enabled"><code class="docutils literal notranslate"><span class="pre">Manager.enabled</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.flush_coalesced_warnings"><code class="docutils literal notranslate"><span class="pre">Manager.flush_coalesced_warnings()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.flush_duplicate_summaries"><code class="docutils literal notranslate"><span class="pre">Manager.flush_duplicate_summaries()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.get_codes"><code class="docutils literal notranslate"><span class="pre">Manager.get_codes()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.get_runtime_identifiers"><code class="docutils literal notranslate"><span class="pre">Manager.get_runtime_identifiers()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.get_signals"><code class="docutils literal notranslate"><span class="pre">Manager.get_signals()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.recent_events"><code class="docutils literal notranslate"><span class="pre">Manager.recent_events()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.record_call"><code class="docutils literal notranslate"><span class="pre">Manager.record_call()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.record_redundant_conversion"><code class="docutils literal notranslate"><span class="pre">Manager.record_redundant_conversion()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.record_timing"><code class="docutils literal notranslate"><span class="pre">Manager.record_timing()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.remove_handler"><code class="docutils literal notranslate"><span class="pre">Manager.remove_handler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.report"><code class="docutils literal notranslate"><span class="pre">Manager.report()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.Manager.resolve"><code class="docutils literal notranslate"><span class="pre">Manager.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig"><code class="docutils literal notranslate"><span class="pre">ManagerConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.args_summary"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.args_summary</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.capture_exceptions"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.capture_exceptions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.capture_logging"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.capture_logging</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.capture_warnings"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.capture_warnings</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.duplicate_every_n"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.duplicate_every_n</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.duplicate_policy"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.duplicate_policy</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.enabled"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.enabled</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.event_buffer_size"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.event_buffer_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.handler_error_threshold"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.handler_error_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.level"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.level</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.profile"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profile</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.profiling"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.profiling_buffer_size"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling_buffer_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.profiling_hooks"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling_hooks</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.profiling_sample_rate"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.profiling_sample_rate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.show_traceback"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.show_traceback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.silence"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.silence</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.slow_signal_level"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.slow_signal_level</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.slow_signal_ms"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.slow_signal_ms</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.strict_schema"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.strict_schema</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.strict_signals"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.strict_signals</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.theme"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.theme</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.trace_depth"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.trace_depth</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.ManagerConfig.warning_coalesce_window_s"><code class="docutils literal notranslate"><span class="pre">ManagerConfig.warning_coalesce_window_s</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.manager.get_manager"><code class="docutils literal notranslate"><span class="pre">get_manager()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core.runtime">smonitor.core.runtime module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smonitor.core.runtime.set_signals_enabled"><code class="docutils literal notranslate"><span class="pre">set_signals_enabled()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-smonitor.core">Module contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><div>
+	&copy; 2026, <a href=contents/about/who.html>Liliana M. Moreno Vargas, Diego Prada Gracia
+		and contributors</a> | <a href="https://www.uibcdf.org/">UIBCDF Lab</a> 
+	at the <a href="http://himfg.com.mx">Federico Gómez Children’s Hospital of Mexico</a><br />
+	<a href="https://github.com/uibcdf/depdigest">SMonitor is an open source project</a> shared
+	under <a href="https://github.com/uibcdf/depdigest/blob/main/LICENSE">an MIT license</a>
+</div></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0
+     | 
+    Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0
+    <br/>
+  </p>
+
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><a href= "mailto:uibcdf@gmail.com">Contact us</a><br /></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

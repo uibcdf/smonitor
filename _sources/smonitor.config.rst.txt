@@ -1,0 +1,21 @@
+smonitor.config package
+=======================
+
+Submodules
+----------
+
+smonitor.config.discovery module
+--------------------------------
+
+.. automodule:: smonitor.config.discovery
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: smonitor.config
+   :members:
+   :show-inheritance:
+   :undoc-members:
