@@ -68,7 +68,10 @@ def test_diagnostic_bundle_warn_with_warning_instance(monkeypatch):
     bundle.warn(UserWarning("custom"), stacklevel=3)
     assert seen
     assert "custom" in str(seen[0][0])
-    assert seen[0][1] == 3
+    # `warn()` occupies a frame of its own, so it forwards one more than it was
+    # given: `stacklevel` then blames the same line it would at a plain
+    # `warnings.warn` written on the call site's line.
+    assert seen[0][1] == 4
 
 
 def test_diagnostic_bundle_warn_fallback_emits_debug_event(monkeypatch):

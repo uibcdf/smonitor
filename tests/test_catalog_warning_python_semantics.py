@@ -13,6 +13,7 @@ fields. Both halves have to work at once.
 
 from __future__ import annotations
 
+import inspect
 import logging
 import warnings
 from pathlib import Path
@@ -146,3 +147,39 @@ def test_warning_without_catalog_entry_is_unaffected():
         bundle.warn("uncatalogued", UserWarning)
 
     assert handler.events == []
+
+
+def _library_function(bundle):
+    """Stands in for a library function that notices a problem."""
+    bundle.warn(AtomWarning(code="T-ATOM", extra={"atom_name": "XXX"}))
+
+
+def _library_function_once(bundle):
+    bundle.warn_once(AtomWarning(code="T-ATOM", extra={"atom_name": "XXX"}))
+
+
+def test_stacklevel_blames_the_calling_user_code():
+    """`stacklevel` must mean what it means at a plain `warnings.warn`.
+
+    The default of 2 blames the caller of the library function, i.e. the user's
+    own line — not the library file that noticed the problem, and not a frame
+    inside SMonitor. `warn()` occupies a frame of its own, so it adds that back
+    rather than leaving every call site to compensate.
+    """
+    bundle, _ = _bundle()
+    with pytest.warns(AtomWarning) as record:
+        expected_line = inspect.currentframe().f_lineno + 1
+        _library_function(bundle)
+
+    assert Path(record[0].filename).name == Path(__file__).name
+    assert record[0].lineno == expected_line
+
+
+def test_warn_once_keeps_the_same_attribution():
+    bundle, _ = _bundle()
+    with pytest.warns(AtomWarning) as record:
+        expected_line = inspect.currentframe().f_lineno + 1
+        _library_function_once(bundle)
+
+    assert Path(record[0].filename).name == Path(__file__).name
+    assert record[0].lineno == expected_line

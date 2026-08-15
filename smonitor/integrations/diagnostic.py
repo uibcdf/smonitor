@@ -253,12 +253,18 @@ class DiagnosticBundle:
         # the warning is in flight the capture emitters stand down, so
         # `capture_warnings` does not feed the same incident back in without
         # its code and structured fields.
+        # `stacklevel` counts from the caller of this method, so it means the
+        # same here as it would at a plain `warnings.warn` on that same line:
+        # the extra frame this method occupies is added back, rather than left
+        # for every call site to compensate for. The default of 2 therefore
+        # blames the caller's caller, which is what a library wants — the user's
+        # code, not the library function that noticed the problem.
         token = runtime.begin_catalog_warning_replay() if emitted else None
         try:
             if isinstance(message_or_warning, Warning):
-                warnings.warn(message_or_warning, stacklevel=stacklevel)
+                warnings.warn(message_or_warning, stacklevel=stacklevel + 1)
             else:
-                warnings.warn(msg, cat, stacklevel=stacklevel)
+                warnings.warn(msg, cat, stacklevel=stacklevel + 1)
         finally:
             if token is not None:
                 runtime.end_catalog_warning_replay(token)
@@ -281,7 +287,15 @@ class DiagnosticBundle:
         if key in self._warned_once_cache:
             return
         self._warned_once_cache.add(key)
-        self.warn(message_or_warning, category, stacklevel=stacklevel, caller=caller, extra=extra)
+        # +1 for this method's own frame, so `stacklevel` blames the same line
+        # here as it would in `warn`.
+        self.warn(
+            message_or_warning,
+            category,
+            stacklevel=stacklevel + 1,
+            caller=caller,
+            extra=extra,
+        )
 
     def info(
         self,
