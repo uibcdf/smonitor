@@ -1,7 +1,8 @@
-from pathlib import Path
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
+
 import smonitor
 from smonitor.core.manager import ManagerConfig, get_manager
 
@@ -60,7 +61,9 @@ def test_manager_config_containers_are_deeply_immutable_and_unaliased():
 
 
 def test_configure_accepts_list_containers_without_exposing_mutability():
-    hook = lambda: {"hook": "ran"}
+    def hook():
+        return {"hook": "ran"}
+
     manager = smonitor.configure(
         profile="user",
         handlers=[],

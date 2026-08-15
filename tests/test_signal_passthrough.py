@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import FrozenInstanceError, replace
 import inspect
+from dataclasses import FrozenInstanceError, replace
 
 import pytest
 

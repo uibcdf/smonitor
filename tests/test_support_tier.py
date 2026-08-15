@@ -3,12 +3,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 import smonitor
 from smonitor import integrations
 from smonitor.integrations.diagnostic import DiagnosticBundle, SupportTierRegistry
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -165,7 +162,13 @@ class TestSupportTierRegistryTier2:
 class TestSupportTierRegistryTier3:
 
     def test_tier3_check_emits_info(self):
-        smonitor.configure(profile="user", level="INFO", handlers=[], event_buffer_size=20, enabled=True)
+        smonitor.configure(
+            profile="user",
+            level="INFO",
+            handlers=[],
+            event_buffer_size=20,
+            enabled=True,
+        )
         bundle = _make_bundle()
         reg = bundle.tier_registry()
         reg.register("mylib.FormC", 3)
@@ -176,7 +179,13 @@ class TestSupportTierRegistryTier3:
         assert events[-1]["level"] == "INFO"
 
     def test_tier3_check_deduplicates_per_session(self):
-        smonitor.configure(profile="user", level="INFO", handlers=[], event_buffer_size=20, enabled=True)
+        smonitor.configure(
+            profile="user",
+            level="INFO",
+            handlers=[],
+            event_buffer_size=20,
+            enabled=True,
+        )
         bundle = _make_bundle()
         reg = bundle.tier_registry()
         reg.register("mylib.FormC", 3)
@@ -339,7 +348,13 @@ class TestSupportTierDecoratorTier2:
 class TestSupportTierDecoratorTier3:
 
     def test_tier3_emits_info_on_first_call(self):
-        smonitor.configure(profile="user", level="INFO", handlers=[], event_buffer_size=20, enabled=True)
+        smonitor.configure(
+            profile="user",
+            level="INFO",
+            handlers=[],
+            event_buffer_size=20,
+            enabled=True,
+        )
         bundle = _make_bundle()
 
         @bundle.support_tier(3)
@@ -353,7 +368,13 @@ class TestSupportTierDecoratorTier3:
         assert events[-1]["level"] == "INFO"
 
     def test_tier3_deduplicates_across_calls(self):
-        smonitor.configure(profile="user", level="INFO", handlers=[], event_buffer_size=20, enabled=True)
+        smonitor.configure(
+            profile="user",
+            level="INFO",
+            handlers=[],
+            event_buffer_size=20,
+            enabled=True,
+        )
         bundle = _make_bundle()
 
         @bundle.support_tier(3)
@@ -367,7 +388,13 @@ class TestSupportTierDecoratorTier3:
         assert len(_recent_events()) == count_after_first
 
     def test_tier3_function_still_executes(self):
-        smonitor.configure(profile="user", level="INFO", handlers=[], event_buffer_size=20, enabled=True)
+        smonitor.configure(
+            profile="user",
+            level="INFO",
+            handlers=[],
+            event_buffer_size=20,
+            enabled=True,
+        )
         bundle = _make_bundle()
 
         @bundle.support_tier(3)

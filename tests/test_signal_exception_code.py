@@ -8,7 +8,6 @@ reached telemetry. Downstream contract tests that assert "the error path emits
 a coded signal" could then only be satisfied by unrelated events.
 """
 
-from pathlib import Path
 
 import pytest
 

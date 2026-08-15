@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 signals_enabled = True
 
 
