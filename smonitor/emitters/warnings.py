@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import Any, Callable, Optional
 
+from ..core import runtime
 from ..core.manager import get_manager
 
 _original_showwarning: Optional[Callable[..., Any]] = None
@@ -10,6 +11,10 @@ _enabled = False
 
 
 def _smonitor_showwarning(message, category, filename, lineno, file=None, line=None):
+    if runtime.replaying_catalog_warning():
+        # Already emitted as a structured catalog event; re-emitting here would
+        # duplicate the incident with none of its catalog metadata.
+        return
     manager = get_manager()
     source = None
     if filename:

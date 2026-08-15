@@ -3,13 +3,21 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
+from ..core import runtime
 from ..core.manager import get_manager
+
+#: `logging.captureWarnings(True)` routes Python warnings through this logger.
+_WARNINGS_LOGGER = "py.warnings"
 
 
 class SmonitorLoggingHandler(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         manager = get_manager()
         if getattr(record, "smonitor", False):
+            return
+        if record.name == _WARNINGS_LOGGER and runtime.replaying_catalog_warning():
+            # Already emitted as a structured catalog event; this is the same
+            # diagnostic coming back as formatted text with no code or fields.
             return
         try:
             message = record.getMessage()

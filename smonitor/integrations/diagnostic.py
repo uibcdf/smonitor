@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar
 
 import smonitor
+from smonitor.core import runtime
 
 from .core import emit_from_catalog, merge_extra
 
@@ -41,13 +42,15 @@ class CatalogException(Exception):
 
     def __init__(
         self,
-        *,
         message: Optional[str] = None,
+        *,
         code: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
         catalog: Optional[Dict[str, Any]] = None,
         meta: Optional[Dict[str, Any]] = None,
     ):
+        # Positional-or-keyword `message`, so these read like any other
+        # exception at a raise site and stay symmetric with `CatalogWarning`.
         target_code = code
         # If no code but we have a key, try to find the code in the catalog
         if not target_code and self.catalog_key and catalog:
@@ -80,13 +83,16 @@ class CatalogWarning(Warning):
 
     def __init__(
         self,
-        *,
         message: Optional[str] = None,
+        *,
         code: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
         catalog: Optional[Dict[str, Any]] = None,
         meta: Optional[Dict[str, Any]] = None,
     ):
+        # `message` is positional-or-keyword, like any `Warning`: `warnings.warn`
+        # builds the instance itself as `category(text)` when the caller passed a
+        # string, so a keyword-only signature made this class unusable that way.
         target_code = code
         if not target_code and self.catalog_key and catalog:
             entry = _catalog_entry(catalog, "warnings", self.catalog_key)
@@ -202,6 +208,7 @@ class DiagnosticBundle:
             cls_name = cat.__name__
             msg = message_or_warning
 
+        emitted = False
         entry = _catalog_entry(self.catalog, "warnings", cls_name)
         if entry:
             try:
@@ -216,7 +223,7 @@ class DiagnosticBundle:
                     extra=merge_extra(self.meta, payload),
                     meta=self.meta,
                 )
-                return
+                emitted = True
             except Exception as exc:
                 # Do not silently swallow emission failures. Try a minimal
                 # fallback diagnostic; always preserve python warnings behavior.
@@ -238,10 +245,23 @@ class DiagnosticBundle:
                 except Exception:
                     pass
 
-        if isinstance(message_or_warning, Warning):
-            warnings.warn(message_or_warning, stacklevel=stacklevel)
-        else:
-            warnings.warn(msg, cat, stacklevel=stacklevel)
+        # The warning is raised whether or not the catalog emission succeeded.
+        # A diagnostic that only exists as an SMonitor event is invisible to
+        # `pytest.warns`, to `warnings.filterwarnings`, and to
+        # `simplefilter("error")` — so a library adopting catalogs would have
+        # silently taken those away from its own users and test suites. While
+        # the warning is in flight the capture emitters stand down, so
+        # `capture_warnings` does not feed the same incident back in without
+        # its code and structured fields.
+        token = runtime.begin_catalog_warning_replay() if emitted else None
+        try:
+            if isinstance(message_or_warning, Warning):
+                warnings.warn(message_or_warning, stacklevel=stacklevel)
+            else:
+                warnings.warn(msg, cat, stacklevel=stacklevel)
+        finally:
+            if token is not None:
+                runtime.end_catalog_warning_replay(token)
 
     def warn_once(
         self,

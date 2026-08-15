@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+### Changed
+- `DiagnosticBundle.warn()` now raises the Python warning **as well as** emitting the structured catalog event; on a catalog hit it used to emit and return. A diagnostic that exists only as an SMonitor event is invisible to `pytest.warns`, to `warnings.filterwarnings` and to `simplefilter("error")`, so adopting catalogs silently took those away from the library's own users and test suites. Downstream libraries responded by calling `warnings.warn` directly and losing the catalog instead: across MolSysMT and ArgDigest, 17 call sites did this against 2 using the structured path, and their events arrived with `code=None`, `source="py.warnings"`, no `category` and no structured fields.
+
+  While the warning is in flight the capture emitters stand down, keyed on a `ContextVar`, so `capture_warnings` cannot feed the same incident back in without its catalog metadata — without that guard the incident lands twice, once coded and once stripped. A user filter that hides the warning does not suppress the event, and `simplefilter("error")` promotes it only after the event has been recorded.
+- `CatalogWarning` and `CatalogException` accept `message` positionally. It was keyword-only, which made `warnings.warn(text, MyCatalogWarning)` fail with `TypeError` — Python builds the instance itself as `category(text)` — even though the guide documents that form. The early return had been hiding it.
+
 ### Performance
 - `import smonitor` costs **43 ms instead of 67 ms** (medians of 21 runs, wheel installed into a clean venv). The version lookup tried `importlib.metadata` first — which pulls in `email.message`, `zipfile` and `inspect` — and fell back to `smonitor/_version.py` only on failure. The order is now reversed, and the metadata machinery is imported only when the tree has no build. Every library in the ecosystem paid this before doing any work. The string itself is unchanged: the build writes `_version.py`, so both sources report the same value in an installed distribution.
 
