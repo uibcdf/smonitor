@@ -5,14 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+### Fixed
+- `@signal` emitted the error event for a propagating `CatalogException` with `code=None`, so the coded identity the exception had already resolved never reached telemetry. The wrapper now carries a string `code` and merges the exception's structured `extra` onto the event, keeping its own provenance alongside. Non-catalog exceptions stay uncoded, and a non-string `code` attribute is ignored. Only the exception path changed.
+- `emit()` stored the caller's `extra` dict by reference and then enriched it with `smonitor`, `title`, and the resolved `hint`. A dict reused across calls accumulated those keys, so a later event could carry a stale hint from an earlier, unrelated one. The event now works on a copy.
+- `ruff check .` failed on the repository, and because the lint step runs before the test step, CI on `main` had not executed the test suite since 2026-08-14.
+- `.gitignore` listed `.build/` and `.dist/`, which setuptools never creates. The real `build/` directory left by `pip install .` was therefore versioned-visible, and CI linted the copy of the sources inside it.
+
+## [0.12.0] - 2026-08-08
+
+Releases `0.11.1` through `0.11.6` were tagged without changelog entries; this
+section covers the work merged after `0.11.6` and does not restate them.
+
 ### Added
-- Placeholder for post-`0.11.0` changes.
-- Pre-`1.0.0` stabilization window started on 2026-02-27.
+- Support-tier protocol: `SupportTierRegistry`, the `DiagnosticBundle.support_tier(tier, ...)` decorator, and tier-aware catalog signals. Tier 1 is contractual and silent, tier 2 emits a WARNING once per name per session, tier 3 an INFO. `experimental()` is now an alias for `support_tier(3)`.
 - `CatalogException` and `CatalogWarning` instances now retain `code`, `extra`, `raw_message`, and `message`, so catch sites can branch on structured state instead of parsing rendered text.
+- `FormatError` and `InconsistencyError` are listed in `smonitor.integrations.__all__`. They existed since `0.11.5` but were never exported, so `import *` missed them.
 
 ### Changed
+- Pre-`1.0.0` stabilization window started on 2026-02-27.
 - Repository PR process now includes explicit stabilization release gates (`pytest`, docs build, QA smoke).
 - `DiagnosticBundle.warn(instance)` now re-emits using the instance's structured `extra`, so catalog templates may interpolate their own placeholders and the fields reach `report()` and event fingerprints. Explicit `extra=` still wins; `{message}` is unchanged for string callers.
+- `ManagerConfig` is a frozen dataclass replaced wholesale by `configure()` rather than mutated in place, and is deeply immutable: `silence` and `profiling_hooks` are normalized to tuples so a caller's list cannot alter live configuration.
+- Catalog message templates are interpolated by an explicit formatter that supports `!r`/`!s`/`!a` conversions and format specs, and leaves unknown placeholders untouched instead of raising.
+- `@signal` resolves a method's source module from the runtime class of the bound instance, so classes assembled from mixins across modules report their logical owner. Free functions are unaffected.
+- `@signal` guards each step it performs; a failure inside the instrumentation degrades to a `RuntimeWarning` and the decorated call still runs.
 
 ### Performance
 - A decorated call on the enabled path is **3.1x cheaper** overall (53.5x a bare call down to 17.0x), and a nested operation of the kind sibling libraries actually produce — 16 stacked `@signal` calls — went from **74.9 us to 19.9 us**. No capability was traded away: catalogs, profiles, policy, contracts and the per-step error guards all behave as before. The disabled fast path is unchanged. Reproduce with `benchmarks/signal_enabled.py`.
@@ -21,11 +37,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - A frame is a compact list rather than a dataclass instance, roughly a third of the allocation cost. It is the hottest allocation in the library: one per decorated call, built whether or not anything is ever emitted.
   - `@signal` caches the configuration-derived decisions it makes per call, keyed on config object identity. `ManagerConfig` is frozen and replaced wholesale by `configure()`, so identity is an exact invalidation signal.
   - `@signal` decides at decoration time whether a callable can resolve its module from a bound instance, so free functions skip that lookup per call.
+- A decorated call with telemetry disabled returns through a module-level flag, without reaching the manager at all.
 - What remains is close to the floor for this design: roughly 1240 ns of overhead per enabled call, of which the two `ContextVar` writes that buy correct isolation across asyncio tasks and threads are inherent. Further gains would come from decorating fewer functions on hot paths, not from a cheaper decorator.
 
 ### Fixed
 - Catalog warnings whose template interpolates `{message}` were rendered twice, duplicating both the message prefix and the hint. `warn()` no longer re-injects an instance's already-rendered text as the `message` field.
 - An emitted event's `context.frames` is now a snapshot. It previously aliased the live frame objects, so `duration_ms` appeared in the dict returned by `emit()` after handlers had already received, formatted, and buffered the same event with `None` there.
+- Assigning `manager.enabled = True` did not update the module-level flag that the decorated fast path consults, so already-decorated callables kept taking the disabled bypass. The setter now keeps the two in sync, and mutating a *copy* of the configuration no longer affects live telemetry.
 
 ## [0.11.0] - 2026-02-26
 ### Added
