@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+### Performance
+- `import smonitor` costs **43 ms instead of 67 ms** (medians of 21 runs, wheel installed into a clean venv). The version lookup tried `importlib.metadata` first — which pulls in `email.message`, `zipfile` and `inspect` — and fell back to `smonitor/_version.py` only on failure. The order is now reversed, and the metadata machinery is imported only when the tree has no build. Every library in the ecosystem paid this before doing any work. The string itself is unchanged: the build writes `_version.py`, so both sources report the same value in an installed distribution.
+
+  Deferring `smonitor.bundle` behind PEP 562 was measured at the same time and **rejected**: it is worth 1.6 ms, not the 11.9 ms its cumulative `-X importtime` figure suggests, because `bundle`'s children (`pathlib`, `json`, `dataclasses`, `platform`) are imported by `core.manager` anyway. It is not worth a module-level `__getattr__` in the API being frozen for 1.0. The remaining ~42 ms is the core module graph itself, dominated by `pathlib` and `dataclasses`/`inspect` under `core.manager`; reducing it means moving imports between modules and is deferred to post-1.0.
+
 ### Fixed
 - `@signal` emitted the error event for a propagating `CatalogException` with `code=None`, so the coded identity the exception had already resolved never reached telemetry. The wrapper now carries a string `code` and merges the exception's structured `extra` onto the event, keeping its own provenance alongside. Non-catalog exceptions stay uncoded, and a non-string `code` attribute is ignored. Only the exception path changed.
 - `emit()` stored the caller's `extra` dict by reference and then enriched it with `smonitor`, `title`, and the resolved `hint`. A dict reused across calls accumulated those keys, so a later event could carry a stale hint from an earlier, unrelated one. The event now works on a copy.

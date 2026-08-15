@@ -1,14 +1,20 @@
 from __future__ import annotations
 
-from importlib.metadata import PackageNotFoundError, version
-
+# The build writes `_version.py`, so an installed distribution reports the same
+# string either way — but reading it costs nothing, while `importlib.metadata`
+# drags in `email.message`, `zipfile` and `inspect` and was over a third of the
+# time to import this package. Since every library in the ecosystem pays that
+# before doing any work, the cheap source is tried first and the metadata
+# machinery is imported only when there is no build in this tree.
 try:
-    __version__ = version("smonitor")
-except PackageNotFoundError:
-    # Package is not installed
+    from ._version import __version__
+except ImportError:
     try:
-        from ._version import __version__
-    except ImportError:
+        from importlib.metadata import version
+
+        __version__ = version("smonitor")
+    except Exception:
+        # Nothing here may keep the package from importing.
         __version__ = "0.0.0+unknown"
 
 from pathlib import Path

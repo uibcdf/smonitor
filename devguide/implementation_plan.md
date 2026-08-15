@@ -395,6 +395,35 @@ MVP command-line target:
 - same data source for local and CI workflows.
 - keep implementation lightweight (simple template + minimal JavaScript, no heavy frontend stack).
 
+### Project C — Import-cost reduction of the core module graph
+
+Goal:
+- lower what every dependent library pays to reach SMonitor, beyond the version
+  lookup already corrected pre-1.0.
+
+Baseline (medians of 21 runs, wheel installed into a clean venv, 2026-08-15):
+- before the version-lookup fix: 67.3 ms;
+- after it: 43.1 ms;
+- remainder is the core module graph, dominated by `smonitor.core.manager`
+  (~18 ms) pulling `pathlib` (~12.7 ms) and `dataclasses` → `inspect`.
+
+Scope:
+- defer `pathlib` in `core.manager`, which needs it only for
+  `configure(config_path=...)`;
+- review whether `dataclasses` and `re` must be imported at module scope;
+- keep a subprocess regression guard per deferred module, in the spirit of
+  `test_importing_smonitor_does_not_pull_in_importlib_metadata`.
+
+Constraints:
+- this moves imports between modules and can change import order and cycles,
+  which is why it is deliberately *not* pre-1.0 work;
+- no public symbol may become lazily resolved: deferring `smonitor.bundle`
+  behind a module-level `__getattr__` was measured (worth 1.6 ms) and rejected
+  on those grounds.
+
+Target window:
+- after 1.0.0, alongside Project A/B.
+
 ## Futurist Backlog (Agent-First + Scientific Libraries)
 
 The following 25 ideas are recorded for strategic planning beyond current
