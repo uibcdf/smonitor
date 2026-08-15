@@ -61,10 +61,17 @@ others accidentally. In particular:
   diagnostic when pytest already owns that evidence;
 - pytest-molsyssuite must not become another event collector or renderer.
 
-The pending proposal `catalog_signals_lose_structured_extra.md` is especially
-relevant: structured exception and warning fields must survive at the raise and
-catch boundary before pytest correlation can preserve them. A pytest bridge
-cannot recover semantics already downgraded to prose.
+The precondition this proposal placed on `catalog_signals_lose_structured_extra.md`
+is met. That proposal was implemented in `0c556d8` (shipped in `0.12.0`) and its
+file removed: `CatalogException` and `CatalogWarning` retain `code`, `extra`,
+`raw_message` and `message`, and `DiagnosticBundle.warn(instance)` re-emits from
+the structured fields rather than the rendered text. `eb17196` closed the
+remaining half, carrying the exception's `code` and `extra` onto the event the
+`@signal` wrapper emits as it propagates. Structured exception and warning
+fields therefore now survive the raise and catch boundary, which is what pytest
+correlation needs — a bridge cannot recover semantics already downgraded to
+prose. Regressions live in `tests/test_catalog_structured_extra.py` and
+`tests/test_signal_exception_code.py`.
 
 ## Provisional direction for later digestion
 
@@ -433,7 +440,8 @@ repositories and keep this proposal as the shared design record.
 Before accepting this proposal, perform a dedicated digestion across at least:
 
 - SMonitor's general exception/raise and `agent` profile contracts;
-- `catalog_signals_lose_structured_extra.md`;
+- the structured-extra contract as shipped in `0.12.0` (`0c556d8`, `eb17196`),
+  rather than the removed `catalog_signals_lose_structured_extra.md`;
 - the implemented event, normalized payload, bundle, and comparison contracts;
 - Project A's existing pytest/CI proposal in `implementation_plan.md`;
 - pytest-receptor's critical audit, evidence architecture, trust criteria, and
