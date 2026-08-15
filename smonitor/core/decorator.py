@@ -159,13 +159,25 @@ def signal(
                         set_frame_args(frame, _summarize_args(args, kwargs))
                     if not getattr(exc, "__smonitor_emitted__", False):
                         source = f"{module}.{fn_name}"
-                        extra = {"source_module": module}
+                        # A CatalogException already resolved its own code and
+                        # structured extra; carry both onto the event rather
+                        # than emitting an uncoded one that drops what the
+                        # exception knows about itself.
+                        code = getattr(exc, "code", None)
+                        if not isinstance(code, str):
+                            code = None
+                        extra = {}
+                        catalog_extra = getattr(exc, "extra", None)
+                        if isinstance(catalog_extra, dict):
+                            extra.update(catalog_extra)
+                        extra["source_module"] = module
                         if frame_extra:
                             extra.update(frame_extra)
                         manager.emit(
                             exception_level,
                             str(exc),
                             source=source,
+                            code=code,
                             exception_type=exc.__class__.__name__,
                             extra=extra,
                         )
