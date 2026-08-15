@@ -646,7 +646,11 @@ class Manager:
         exception_type: Optional[str] = None,
         correlation_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        extra_data = extra or {}
+        # Copied, never aliased: the event's `extra` is enriched below with
+        # `smonitor`, `title` and the resolved `hint`. Writing those into the
+        # caller's own dict would leak one event's hint onto the next event
+        # emitted with the same dict — including events with no code at all.
+        extra_data = dict(extra) if extra else {}
         resolved_correlation_id = (
             correlation_id
             or extra_data.get("correlation_id")

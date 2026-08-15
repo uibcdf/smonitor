@@ -58,3 +58,30 @@ def test_disabled_noop():
 
     assert foo() == 1
     smonitor.configure(enabled=True)
+
+
+def test_emit_does_not_mutate_the_caller_extra():
+    """The caller's `extra` dict is an input, not scratch space.
+
+    `emit()` enriches the event's extra with `smonitor`, `title` and the
+    resolved `hint`. Writing those into the caller's dict made a reused dict
+    accumulate them, so a later event carried a stale hint from an earlier,
+    unrelated one.
+    """
+    smonitor.configure(
+        profile="user",
+        handlers=[],
+        codes={"X-1": {"title": "Titled", "user_message": "msg", "user_hint": "do this"}},
+    )
+
+    shared = {"resource": "file.h5"}
+    event = smonitor.emit("WARNING", "", code="X-1", source="mylib.f", extra=shared)
+
+    assert shared == {"resource": "file.h5"}
+    assert event["extra"] is not shared
+    assert event["extra"]["hint"] == "do this"
+
+    # The same dict reused for an unrelated, uncoded event stays clean.
+    second = smonitor.emit("WARNING", "other", source="mylib.g", extra=shared)
+    assert "hint" not in second["extra"]
+    assert "title" not in second["extra"]
