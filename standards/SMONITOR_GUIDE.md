@@ -5,8 +5,8 @@ Source of truth for integrating and using **SMonitor** in this library.
 Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
-- Source version: `smonitor@0.11.5`
-- Last synced: 2026-03-10
+- Source version: `smonitor@0.12.0`
+- Last synced: 2026-08-15
 
 ## What is SMonitor
 
