@@ -103,3 +103,26 @@ def test_context_extra_contract():
         "evidence": {"expected": "download ok", "observed": "timeout", "resource": "181l"},
         "attempt": 2,
     }
+
+
+def test_context_extra_omits_unset_fields():
+    """An unset field is absent, not present as `None`.
+
+    Every one of these fields is optional, and the payload feeds event
+    fingerprints and the normalized JSON section. Emitting `None` placeholders
+    would change fingerprints and put empty keys in machine-read output, so the
+    builder must skip what the caller did not supply.
+    """
+    assert integrations.context_extra() == {}
+
+    payload = integrations.context_extra(caller="pkg.mod.fn")
+    assert payload == {"caller": "pkg.mod.fn"}
+
+    # A falsy-but-set value is supplied, not skipped.
+    assert integrations.context_extra(retry_attempt=0, retryable=False) == {
+        "retry_attempt": 0,
+        "retryable": False,
+    }
+
+    # `extra` merges last and can override an explicit field.
+    assert integrations.context_extra(caller="a", extra={"caller": "b"}) == {"caller": "b"}

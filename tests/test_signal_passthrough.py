@@ -223,3 +223,99 @@ def test_configure_replaces_config_once_and_syncs_enabled(monkeypatch):
     assert manager.config.level == "INFO"
     assert manager.enabled is True
     assert decorator_module.runtime.signals_enabled is True
+
+
+# Each step the wrapper performs around the user's call is guarded on its own.
+# The contract is the same for all of them: the instrumentation may fail, but
+# the decorated call still runs and still returns its value, and the failure is
+# reported as a RuntimeWarning rather than swallowed.
+
+
+def test_signal_manager_lookup_failure_does_not_break_user_call(monkeypatch):
+    smonitor.configure(enabled=True)
+
+    def broken_get_manager():
+        raise RuntimeError("manager unavailable")
+
+    @smonitor.signal
+    def make_layer() -> Fluent:
+        return Fluent()
+
+    monkeypatch.setattr(decorator_module, "get_manager", broken_get_manager)
+
+    with pytest.warns(RuntimeWarning, match="setup failed"):
+        result = make_layer().set_color("red")
+
+    assert result.color == "red"
+
+
+def test_signal_record_call_failure_does_not_break_user_call(monkeypatch):
+    smonitor.configure(enabled=True)
+
+    def broken_record_call():
+        raise RuntimeError("counter failed")
+
+    monkeypatch.setattr(smonitor.get_manager(), "record_call", broken_record_call)
+
+    @smonitor.signal
+    def make_layer() -> Fluent:
+        return Fluent()
+
+    with pytest.warns(RuntimeWarning, match="record_call failed"):
+        result = make_layer().set_color("green")
+
+    assert result.color == "green"
+
+
+def test_signal_args_summary_failure_does_not_break_user_call(monkeypatch):
+    smonitor.configure(enabled=True, args_summary=True)
+
+    def broken_summarize(_args, _kwargs):
+        raise RuntimeError("summary failed")
+
+    monkeypatch.setattr(decorator_module, "_summarize_args", broken_summarize)
+
+    @smonitor.signal
+    def make_layer(value) -> Fluent:
+        return Fluent()
+
+    with pytest.warns(RuntimeWarning, match="argument summary failed"):
+        result = make_layer(1).set_color("blue")
+
+    assert result.color == "blue"
+
+
+def test_signal_push_frame_failure_does_not_break_user_call(monkeypatch):
+    smonitor.configure(enabled=True)
+
+    def broken_push_frame(*_args, **_kwargs):
+        raise RuntimeError("push failed")
+
+    monkeypatch.setattr(decorator_module, "push_frame", broken_push_frame)
+
+    @smonitor.signal
+    def make_layer() -> Fluent:
+        return Fluent()
+
+    with pytest.warns(RuntimeWarning, match="push_frame failed"):
+        result = make_layer().set_color("teal")
+
+    assert result.color == "teal"
+
+
+def test_signal_pop_frame_failure_does_not_break_user_call(monkeypatch):
+    smonitor.configure(enabled=True)
+
+    def broken_pop_frame():
+        raise RuntimeError("pop failed")
+
+    monkeypatch.setattr(decorator_module, "pop_frame", broken_pop_frame)
+
+    @smonitor.signal
+    def make_layer() -> Fluent:
+        return Fluent()
+
+    with pytest.warns(RuntimeWarning, match="pop_frame failed"):
+        result = make_layer().set_color("amber")
+
+    assert result.color == "amber"
