@@ -80,15 +80,27 @@ to marshal. Restoring standard warning semantics is what made this visible. The
 diagnostics themselves are correct; only the controller's reconstruction of them
 is wrong, and only under xdist.
 
-## Options, none taken
+## Options, and the one taken
 
 1. Report upstream. The reconstruction is unsound for any `Warning` subclass
    whose `__init__` is not `(message)`, which is not a MolSysSuite peculiarity.
 2. Give catalog warning subclasses signatures that tolerate a single positional
    rendered message. Spreads a workaround across every library.
-3. Have `CatalogWarning` control what `.args` carries so the round trip is
-   either exact or cleanly refused. Worth weighing before 1.0, since it is the
-   only one of the three inside SMonitor's own contract.
+3. ~~Have `CatalogWarning` control what `.args` carries.~~ **Taken, in a better
+   form.** Emptying `args` was measured and rejected: it breaks `pickle`
+   outright and the `w.args[0]` idiom with it. `__reduce__` on both base classes
+   rebuilds from state instead, which leaves `args` — and therefore `str()` and
+   xdist's behaviour — untouched while making `pickle` and `copy.deepcopy`
+   exact. Those two were broken the same way as xdist and by nothing upstream:
+   that half was ours, and is now closed.
+
+   Removing the subclasses' own `__init__` was also weighed. It would fix the
+   reconstruction at the root, since `cls(rendered_text)` round-trips exactly
+   when no subclass reinterprets the first argument — measured. It was rejected
+   on two counts: those constructors are the per-class argument schema, so a
+   typo would stop raising and start rendering a template with holes in it; and
+   classes that *compute* their message cannot be reduced to field folding, so
+   the root fix would have been partial anyway.
 
 Nothing here blocks the diagnostics contract: serial runs, scripts, notebooks
 and services are unaffected.
