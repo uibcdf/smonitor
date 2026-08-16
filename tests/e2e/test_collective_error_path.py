@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib
+import os
 import sys
 from contextlib import contextmanager
 from pathlib import Path
@@ -14,10 +15,22 @@ SIBLING_DEP = REPO_ROOT.parent / "depdigest"
 SIBLING_SMON = REPO_ROOT.parent / "smonitor"
 
 
+#: CI sets this so a missing sibling is a failure rather than a silent skip. The
+#: criterion this test answers for — a cross-library workflow validated end to end
+#: — was being read as satisfied while the test skipped itself on every run.
+REQUIRED = os.environ.get("SMONITOR_REQUIRE_COLLECTIVE_E2E") == "1"
+
+
+def _missing_siblings() -> list[str]:
+    return [
+        str(path)
+        for path in [SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON]
+        if not path.exists()
+    ]
+
+
 def _siblings_available() -> bool:
-    return all(
-        path.exists() for path in [SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON]
-    )
+    return not _missing_siblings()
 
 
 @contextmanager
@@ -51,10 +64,15 @@ def _force_fresh_imports(packages: list[str]):
 
 
 @pytest.mark.skipif(
-    not _siblings_available(),
+    not _siblings_available() and not REQUIRED,
     reason="Sibling repos are not available in this environment",
 )
 def test_collective_error_path_emits_contract_signal_and_dependency_hints():
+    if not _siblings_available():
+        pytest.fail(
+            "SMONITOR_REQUIRE_COLLECTIVE_E2E=1, but these are missing: "
+            + ", ".join(_missing_siblings())
+        )
     paths = [SIBLING_PYW, SIBLING_ARG, SIBLING_DEP, SIBLING_SMON]
     packages = ["pyunitwizard", "argdigest", "depdigest", "smonitor"]
     with _prepend_paths(paths), _force_fresh_imports(packages):
