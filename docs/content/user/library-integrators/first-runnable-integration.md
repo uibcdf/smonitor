@@ -29,12 +29,23 @@ CATALOG = {
             "user_hint": "Use a more specific selector, for example '{example}'.",
         }
     },
+    "warnings": {
+        "BroadSelectionWarning": {
+            "code": "MYLIB-W001",
+            "source": "mylib.select_atoms",
+            "category": "selection",
+            "level": "WARNING",
+        }
+    },
     "signals": {},
 }
 
 CODES = CATALOG["codes"]
 SIGNALS = CATALOG["signals"]
 ```
+
+`DiagnosticBundle` finds a warning in the `warnings` group by its class name, so
+without that group `warn()` emits nothing.
 
 `mylib/_private/smonitor/__init__.py`
 
@@ -57,6 +68,24 @@ bundle = DiagnosticBundle(CATALOG, {"library": "mylib"}, PACKAGE_ROOT)
 warn = bundle.warn
 ```
 
+`mylib/_private/smonitor/warnings.py`
+
+```python
+from smonitor.integrations import CatalogWarning
+
+from . import CATALOG
+
+
+class BroadSelectionWarning(CatalogWarning):
+    catalog_key = "BroadSelectionWarning"
+
+    def __init__(self, selection, example):
+        super().__init__(
+            catalog=CATALOG,
+            extra={"selection": selection, "example": example},
+        )
+```
+
 `mylib/_smonitor.py`
 
 ```python
@@ -71,12 +100,13 @@ SMONITOR = {"level": "WARNING", "capture_warnings": True, "capture_logging": Tru
 ```python
 from smonitor import signal
 from ._private.smonitor.emitter import warn
+from ._private.smonitor.warnings import BroadSelectionWarning
 
 
 @signal(tags=["selection"])
 def select_atoms(selection: str):
     if selection == "all":
-        warn("Selection warning", code="MYLIB-W001", extra={"selection": selection, "example": "atom_name == 'CA'"})
+        warn(BroadSelectionWarning(selection=selection, example="atom_name == 'CA'"))
 ```
 
 `mylib/__init__.py`

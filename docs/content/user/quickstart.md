@@ -60,12 +60,25 @@ CATALOG = {
             "dev_hint": "Review selector normalization for this call.",
         }
     },
+    "warnings": {
+        "BroadSelectionWarning": {
+            "code": "MYLIB-W001",
+            "source": "mylib.select_atoms",
+            "category": "selection",
+            "level": "WARNING",
+        }
+    },
     "signals": {},
 }
 
 CODES = CATALOG["codes"]
 SIGNALS = CATALOG["signals"]
 ```
+
+`codes` holds the wording, one entry per profile. `warnings` maps a warning class
+to the code it carries, plus the `source` and `category` every event of that kind
+should report. `DiagnosticBundle` looks a warning up here by its class name, so a
+catalog without a `warnings` group emits nothing through `warn()`.
 
 Create `mylib/_private/smonitor/__init__.py`:
 
@@ -89,6 +102,30 @@ warn = bundle.warn
 warn_once = bundle.warn_once
 ```
 
+Create `mylib/_private/smonitor/warnings.py`, one class per catalog entry:
+
+```python
+from smonitor.integrations import CatalogWarning
+
+from . import CATALOG
+
+
+class BroadSelectionWarning(CatalogWarning):
+    catalog_key = "BroadSelectionWarning"
+
+    def __init__(self, selection, example):
+        super().__init__(
+            catalog=CATALOG,
+            extra={"selection": selection, "example": example},
+        )
+```
+
+The class takes the *data*, never the finished sentence: the template in `codes`
+owns the wording, and `selection` reaches `report()` and the event fingerprints as
+a typed field. `warn()` raises the warning through Python's machinery as well as
+emitting the event, so `pytest.warns` and your users' `filterwarnings` keep
+working on it.
+
 ## 4. Enable SMonitor on import
 
 In `mylib/__init__.py`:
@@ -105,14 +142,12 @@ ensure_configured(PACKAGE_ROOT)
 ```python
 from smonitor import signal
 from ._private.smonitor.emitter import warn
+from ._private.smonitor.warnings import BroadSelectionWarning
 
 @signal(tags=["selection"])
 def select_atoms(selection: str):
     if selection == "all":
-        warn(
-            code="MYLIB-W001",
-            extra={"selection": selection, "example": "atom_name == 'CA'"},
-        )
+        warn(BroadSelectionWarning(selection=selection, example="atom_name == 'CA'"))
 ```
 
 ## Expected result
