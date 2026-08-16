@@ -226,6 +226,22 @@ Whether a violation fails an individual test, marks the session as policy
 failed, or only produces a report must be defined explicitly. A diagnostic
 must not silently alter scientific test meaning under the default profile.
 
+**"Newly introduced warning fingerprint" needs a deterministic distribution to
+mean anything.** Measured on MolSysMT: under `-n 12` with the default
+`--dist load`, one subset reported 30, 32, 34 and 40 occurrences of the same
+third-party warning across four runs of unchanged code, and the set of tests
+credited with it changed between runs. Serial and `--dist loadfile` are stable.
+The cause is a per-process cache — the first test in a worker to read a file
+warns, the rest hit the cache — so the count tracks the worker count, not the
+code. `-W always` does not fix it, since nothing was being filtered.
+
+A count-based gate would therefore fail intermittently on unchanged code, and
+sometimes pass a run that should have failed. Baselining on identity — a set of
+`(code, source, fingerprint)` — does not have this problem, and SMonitor already
+computes fingerprints for exactly this kind of comparison. Details and the
+measurements in
+[../warning_baselines_under_parallel_test_runs.md](../warning_baselines_under_parallel_test_runs.md).
+
 ### Avoiding duplicate evidence
 
 ArgDigest warnings may appear simultaneously as:
