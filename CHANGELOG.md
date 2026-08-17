@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 - `CatalogWarning` and `CatalogException` survive `pickle` and `copy.deepcopy` unchanged. Python rebuilds an exception as `type(e)(*e.args)`, which assumes the first constructor argument is the message. These classes appended the resolved hint to the message before storing it, so rebuilding from `args` appended it a second time — `UnknownAtomNameWarning(atom_name="Ar")` came back from `pickle` reading `Atom name 'Atom name 'Ar' is not recognized…'`.
 
-  `args` now carries the message *before* the hint, and `__str__` renders the two together, so the visible text is unchanged while the class became idempotent: `type(e)(*e.args)` reproduces it. The hint is also kept as `.hint` for callers that want it apart from the prose.
+  `args` now carries the message *before* the hint, and `__str__` renders the two together, so the visible text is unchanged while the class became idempotent: `type(e)(*e.args)` reproduces it.
 
   This replaces a `__reduce__` added earlier in this same unreleased window, which made the round trip exact by bypassing the constructor. Rebuilders that call the class directly — pytest-xdist between a worker and the controller — never reach `__reduce__`, and a custom one makes them fall back and lose the class outright. Fixing the class is what fixes every rebuilder at once.
 

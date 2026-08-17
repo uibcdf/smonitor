@@ -73,7 +73,6 @@ class CatalogException(Exception):
         self.code = target_code
         self.extra = resolved_extra
         self.raw_message = message
-        self.hint = hint
         self.message = full_message
         # `args` carries the message *before* the hint is appended, so that
         # `type(e)(*e.args)` reproduces this instance instead of appending the
@@ -131,7 +130,6 @@ class CatalogWarning(Warning):
         self.code = target_code
         self.extra = resolved_extra
         self.raw_message = message
-        self.hint = hint
         self.message = full_message
         # See `CatalogException.__init__`: `args` holds the message without the
         # hint, so rebuilding from it is idempotent.
