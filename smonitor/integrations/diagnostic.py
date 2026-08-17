@@ -13,23 +13,6 @@ T = TypeVar("T", bound="CatalogException")
 W = TypeVar("W", bound="CatalogWarning")
 
 
-def _rebuild_catalog_instance(cls: type, state: Dict[str, Any]) -> Any:
-    """Rebuild a catalog exception or warning from its state, not from its ``args``.
-
-    Reached only through :py:meth:`__reduce__`; see the reasoning there. The
-    instance is built with ``__new__`` and its dictionary restored, so a subclass
-    whose ``__init__`` takes domain fields — or computes the message from them —
-    is reconstructed without being asked to interpret its own rendered text.
-
-    ``args`` is restored from the stored message so ``str()`` keeps working and
-    the result is indistinguishable from the original.
-    """
-    instance = cls.__new__(cls)
-    instance.__dict__.update(state)
-    message = state.get("message")
-    Exception.__init__(instance, *(() if message is None else (message,)))
-    return instance
-
 
 def _catalog_entry(
     catalog: Optional[Dict[str, Any]],
@@ -90,29 +73,26 @@ class CatalogException(Exception):
         self.code = target_code
         self.extra = resolved_extra
         self.raw_message = message
+        self.hint = hint
         self.message = full_message
-        super().__init__(full_message)
+        # `args` carries the message *before* the hint is appended, so that
+        # `type(e)(*e.args)` reproduces this instance instead of appending the
+        # hint a second time. Everything that rebuilds an exception goes through
+        # that call — `pickle`, `copy.deepcopy`, and pytest-xdist between a
+        # worker and the controller — and none of them can be expected to know
+        # that `__init__` here transforms what it is given.
+        super().__init__(resolved_msg)
 
-    def __reduce__(self):
-        """Rebuild from state, because ``args`` holds output rather than input.
+    def __str__(self) -> str:
+        """The rendered message with its hint, which `args` deliberately omits.
 
-        Python rebuilds an exception as ``type(e)(*e.args)`` — pickle and
-        ``copy.deepcopy`` both go through it, and so does pytest-xdist when a
-        warning crosses from a worker to the controller. That assumes the first
-        constructor argument is the message. These classes render their message
-        from structured data, and their subclasses name that data first, so the
-        assumption is false: the rendered sentence is fed back into a domain
-        field and the template renders around its own output.
-
-        Restoring the state instead makes the round trip exact, keeps ``code``
-        and ``extra`` intact, and works for a subclass that computes in
-        ``__init__`` — which no reconstruction through the constructor can.
-
-        This does not reach pytest-xdist, which calls ``cls(*args)`` itself
-        rather than pickling; that half is
-        ``pytest-dev/pytest-xdist#1372``.
+        Without this the text would lose the hint the moment `args` stopped
+        carrying it. `getattr` rather than attribute access, because an instance
+        rebuilt through `__new__` has no dictionary until its state is restored
+        and a half-built exception must still be printable.
         """
-        return (_rebuild_catalog_instance, (type(self), dict(self.__dict__)))
+        message = getattr(self, "message", None)
+        return super().__str__() if message is None else message
 
 
 class CatalogWarning(Warning):
@@ -151,29 +131,22 @@ class CatalogWarning(Warning):
         self.code = target_code
         self.extra = resolved_extra
         self.raw_message = message
+        self.hint = hint
         self.message = full_message
-        super().__init__(full_message)
+        # See `CatalogException.__init__`: `args` holds the message without the
+        # hint, so rebuilding from it is idempotent.
+        super().__init__(resolved_msg)
 
-    def __reduce__(self):
-        """Rebuild from state, because ``args`` holds output rather than input.
+    def __str__(self) -> str:
+        """The rendered message with its hint, which `args` deliberately omits.
 
-        Python rebuilds an exception as ``type(e)(*e.args)`` — pickle and
-        ``copy.deepcopy`` both go through it, and so does pytest-xdist when a
-        warning crosses from a worker to the controller. That assumes the first
-        constructor argument is the message. These classes render their message
-        from structured data, and their subclasses name that data first, so the
-        assumption is false: the rendered sentence is fed back into a domain
-        field and the template renders around its own output.
-
-        Restoring the state instead makes the round trip exact, keeps ``code``
-        and ``extra`` intact, and works for a subclass that computes in
-        ``__init__`` — which no reconstruction through the constructor can.
-
-        This does not reach pytest-xdist, which calls ``cls(*args)`` itself
-        rather than pickling; that half is
-        ``pytest-dev/pytest-xdist#1372``.
+        Without this the text would lose the hint the moment `args` stopped
+        carrying it. `getattr` rather than attribute access, because an instance
+        rebuilt through `__new__` has no dictionary until its state is restored
+        and a half-built exception must still be printable.
         """
-        return (_rebuild_catalog_instance, (type(self), dict(self.__dict__)))
+        message = getattr(self, "message", None)
+        return super().__str__() if message is None else message
 
 
 class FormatError(CatalogException):

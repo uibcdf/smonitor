@@ -32,7 +32,32 @@ CODES = {
 
 
 class AtomWarning(CatalogWarning):
-    """The shape that breaks: a domain field where the message is expected."""
+    """The shape that round-trips: the message first, the datum beside it.
+
+    `Warning` is rebuilt everywhere as `type(w)(*w.args)` — by `pickle`, by
+    `copy.deepcopy`, and by pytest-xdist between a worker and the controller.
+    Taking the message first is what makes that call reproduce the instance, and
+    the classmethod keeps the per-field argument checking a plain `**kwargs`
+    would lose.
+    """
+
+    catalog_key = "AtomWarning"
+
+    def __init__(self, message=None, *, atom_name=None):
+        super().__init__(
+            message,
+            code="T-ATOM",
+            extra={"atom_name": atom_name} if atom_name else None,
+        )
+
+    @classmethod
+    def for_atom(cls, atom_name):
+        rendered, _ = smonitor.resolve(code="T-ATOM", extra={"atom_name": atom_name})
+        return cls(rendered, atom_name=atom_name)
+
+
+class DomainFieldFirstWarning(CatalogWarning):
+    """The shape that does not: a domain field where the message is expected."""
 
     catalog_key = "AtomWarning"
 
@@ -41,19 +66,36 @@ class AtomWarning(CatalogWarning):
 
 
 class ComputedWarning(CatalogWarning):
-    """Worse: the message is derived, so no constructor call can recover it."""
+    """A derived message, kept correct by rendering it before handing it over."""
 
     catalog_key = "ComputedWarning"
 
-    def __init__(self, names):
-        super().__init__(code="T-ATOM", extra={"atom_name": ", ".join(sorted(names))})
+    def __init__(self, message=None, *, atom_name=None):
+        super().__init__(
+            message,
+            code="T-ATOM",
+            extra={"atom_name": atom_name} if atom_name else None,
+        )
+
+    @classmethod
+    def for_names(cls, names):
+        joined = ", ".join(sorted(names))
+        rendered, _ = smonitor.resolve(code="T-ATOM", extra={"atom_name": joined})
+        return cls(rendered, atom_name=joined)
 
 
 class FormError(CatalogException):
     catalog_key = "FormError"
 
-    def __init__(self, form):
-        super().__init__(code="T-FORM", extra={"form": form})
+    def __init__(self, message=None, *, form=None):
+        super().__init__(
+            message, code="T-FORM", extra={"form": form} if form else None
+        )
+
+    @classmethod
+    def for_form(cls, form):
+        rendered, _ = smonitor.resolve(code="T-FORM", extra={"form": form})
+        return cls(rendered, form=form)
 
 
 @pytest.fixture(autouse=True)
@@ -62,11 +104,11 @@ def _configured():
 
 
 @pytest.mark.parametrize(
-    "instance",
+    "build",
     [
-        AtomWarning(atom_name="Ar"),
-        ComputedWarning(names=["CB", "CA"]),
-        FormError(form="file:pdb"),
+        lambda: AtomWarning.for_atom("Ar"),
+        lambda: ComputedWarning.for_names(["CB", "CA"]),
+        lambda: FormError.for_form("file:pdb"),
     ],
     ids=["domain-field", "computed", "exception"],
 )
@@ -74,7 +116,10 @@ def _configured():
     pytest.param(lambda obj: pickle.loads(pickle.dumps(obj)), id="pickle"),
     pytest.param(copy.deepcopy, id="deepcopy"),
 ])
-def test_round_trip_is_exact(instance, rebuild):
+def test_round_trip_is_exact(build, rebuild):
+    # Built here, not in `parametrize`: that runs at collection time, before the
+    # fixture has loaded the codes, and the instance would render to nothing.
+    instance = build()
     rebuilt = rebuild(instance)
 
     assert type(rebuilt) is type(instance)
@@ -86,7 +131,7 @@ def test_round_trip_is_exact(instance, rebuild):
 
 def test_the_message_is_not_rendered_a_second_time():
     """The failure this guards against, stated as the symptom it produced."""
-    original = AtomWarning(atom_name="Ar")
+    original = AtomWarning.for_atom("Ar")
     assert str(original).count("is not recognized") == 1
 
     rebuilt = pickle.loads(pickle.dumps(original))
@@ -109,3 +154,22 @@ def test_unserializable_extra_refuses_instead_of_lying():
     assert str(offender)  # rendering is unaffected
     with pytest.raises((pickle.PicklingError, AttributeError, TypeError)):
         pickle.dumps(offender)
+
+
+def test_a_domain_field_first_does_not_round_trip_its_args():
+    """Why the classes above take the message first, stated as the failure.
+
+    `type(w)(*w.args)` is how every rebuilder reaches a warning. A class naming a
+    domain field first receives its own rendered sentence as that field and
+    renders around it. The rendered text still survives `pickle` — the state
+    restores `message` afterwards — but `args` does not, and a rebuilder that
+    carries only `args`, as released pytest-xdist does, has nothing else to
+    restore from.
+    """
+    original = DomainFieldFirstWarning(atom_name="Ar")
+    assert str(original) == "Atom name 'Ar' is not recognized. Provide an explicit atom type."
+
+    rebuilt = type(original)(*original.args)
+
+    assert str(rebuilt) != str(original)
+    assert "Atom name 'Atom name" in str(rebuilt)
