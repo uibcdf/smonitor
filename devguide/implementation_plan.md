@@ -169,6 +169,10 @@ Status: **Done**
 4. Release-candidate freeze
 - Freeze public export surface.
 - Freeze semantics of published diagnostic codes/signals.
+- Decide which instance attribute names the catalog base classes own
+  (`code`, `message`, `raw_message`, `extra`, and whether `hint` returns):
+  see `devguide/pending_proposals/hint_ownership_on_catalog_instances.md`.
+  Consumers already assign some of these before `super().__init__()`.
 - Update release notes with any contract-relevant change.
 
 5. Exit criteria for 1.0.0
