@@ -4,7 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.13.0] - 2026-08-17
+
+Catalog exceptions and warnings changed shape. Three notes for integrators:
+
+- `warn()` now raises the Python warning as well as emitting the event. Code
+  running under `simplefilter("error")` sees an exception where it previously
+  saw none; `pytest.warns` and `filterwarnings` start working on catalog
+  diagnostics, which is the point.
+- `stacklevel` counts from the caller of `warn()`, as it does at a plain
+  `warnings.warn`. A call site that had compensated for the old off-by-one
+  should drop the compensation.
+- A catalog class must take `message` as its first parameter, with its domain
+  fields keyword-only. Section 3.3.1 of the canonical guide explains why and
+  what breaks otherwise. `args` no longer carries the appended hint; `str()` is
+  unchanged.
+
 ### Changed
 - `DiagnosticBundle.warn()` now raises the Python warning **as well as** emitting the structured catalog event; on a catalog hit it used to emit and return. A diagnostic that exists only as an SMonitor event is invisible to `pytest.warns`, to `warnings.filterwarnings` and to `simplefilter("error")`, so adopting catalogs silently took those away from the library's own users and test suites. Downstream libraries responded by calling `warnings.warn` directly and losing the catalog instead: across MolSysMT and ArgDigest, 17 call sites did this against 2 using the structured path, and their events arrived with `code=None`, `source="py.warnings"`, no `category` and no structured fields.
 

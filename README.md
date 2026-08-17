@@ -232,7 +232,7 @@ make -C docs html
 
 ## Status
 
-Current release: **0.12.0** (pre-1.0 stabilization).  
+Current release: **0.13.0** (pre-1.0 stabilization).  
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)

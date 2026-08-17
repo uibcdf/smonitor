@@ -42,10 +42,10 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.12.0` released as pre-1.0 stabilization checkpoint.
-- Current quality snapshot (2026-08-15): full pytest suite green (281 tests) and `ruff check .` clean locally.
-  Remote CI had been failing since 2026-08-14 on the lint gate, which runs before the test step — so no
-  remote test evidence exists for `0.12.0..HEAD` until a run completes on the corrected tree.
+- Version `0.13.0` released as pre-1.0 stabilization checkpoint.
+- Current quality snapshot (2026-08-17): full pytest suite green (302 tests), `ruff check .` clean, branch-rate 0.9429.
+  Remote CI green across CI, QA CI and Docs CI, with the cross-library end-to-end check now running there
+  rather than skipping.
 
 ## Operational Stabilization Plan (Toward 1.0.0)
 1. Extended stabilization window (until diagnostic operability closure): only bugfixes, hardening, docs/test corrections, and pre-1.0 diagnostic operability work explicitly tracked in `implementation_plan.md`.
