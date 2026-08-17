@@ -79,8 +79,9 @@ from . import CATALOG
 class BroadSelectionWarning(CatalogWarning):
     catalog_key = "BroadSelectionWarning"
 
-    def __init__(self, selection, example):
+    def __init__(self, message=None, *, selection=None, example=None):
         super().__init__(
+            message,
             catalog=CATALOG,
             extra={"selection": selection, "example": example},
         )

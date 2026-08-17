@@ -113,18 +113,29 @@ from . import CATALOG
 class BroadSelectionWarning(CatalogWarning):
     catalog_key = "BroadSelectionWarning"
 
-    def __init__(self, selection, example):
+    def __init__(self, message=None, *, selection=None, example=None):
         super().__init__(
+            message,
             catalog=CATALOG,
             extra={"selection": selection, "example": example},
         )
 ```
 
-The class takes the *data*, never the finished sentence: the template in `codes`
-owns the wording, and `selection` reaches `report()` and the event fingerprints as
-a typed field. `warn()` raises the warning through Python's machinery as well as
-emitting the event, so `pytest.warns` and your users' `filterwarnings` keep
-working on it.
+Two rules, and both matter:
+
+The class takes the *data*, never the finished sentence. The template in `codes`
+owns the wording, and `selection` reaches `report()` and the event fingerprints
+as a typed field.
+
+`message` comes first and the fields are keyword-only. Python rebuilds a warning
+as `type(w)(*w.args)` — `pickle`, `copy.deepcopy`, `warnings.warn(text,
+category)` and pytest-xdist between a worker and the controller all do it — so a
+class naming a field first receives its own rendered sentence as that field and
+renders around it. Keyword-only keeps a misspelled field an error instead of one
+that is silently ignored.
+
+`warn()` raises the warning through Python's machinery as well as emitting the
+event, so `pytest.warns` and your users' `filterwarnings` keep working on it.
 
 ## 4. Enable SMonitor on import
 
