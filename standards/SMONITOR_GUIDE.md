@@ -6,7 +6,7 @@ Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
 - Source version: `smonitor@0.12.0`
-- Last synced: 2026-08-15
+- Last synced: 2026-08-17
 
 ## What is SMonitor
 
