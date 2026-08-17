@@ -1,106 +1,82 @@
-# Catalog warnings are re-rendered when a suite runs under pytest-xdist
+# Catalog warnings are re-rendered when they are rebuilt
 
-**Status:** diagnosed, not ours to fix. Reproduced 2026-08-15.
-**Owner:** pytest-xdist (upstream). MolSysMT and any library with catalog
-warning subclasses that take a domain field positionally are affected.
+**Status:** resolved here in `0.13.0`. One residue remains, and it is upstream's.
+**Reproduced:** 2026-08-15 under pytest-xdist. Root cause found 2026-08-17.
 
 ## Symptom
 
-Running MolSysMT's suite with `-n 12` reports warnings whose text is nested
-inside itself:
+A catalog warning came back from a rebuild reading as its own template applied to
+its own output:
 
 ```
-UnknownAtomNameWarning x50 | Atom name 'Atom name 'Ar' is not recognized; atom
-                             type 'UNK' will be used. Provide an explicit...
-GpuNotAvailableWarning x15 | GPU acceleration was requested but is not
-                             available: GPU acceleration was requested but is
-                             not available: MolSysMT 1.0...
+Atom name 'Atom name 'Ar' is not recognized.' is not recognized.
+GPU acceleration was requested but is not available: GPU acceleration was
+requested but is not available: …
 ```
 
-A second shape appears in the same run, with the class path glued to the front:
+First seen in MolSysMT's suite under `-n 12` and absent serially, which is why it
+was filed as an xdist problem. It was not one. `pickle` and `copy.deepcopy`
+produced the same text, on any machine, with no test runner involved.
 
-```
-CrossChainCovalentBondsWarning x1 | molsysmt._private.smonitor.warnings.
-                                    CrossChainCovalentBondsWarning: Cross-chain
-                                    covalent bonds were detected...
-```
+## Cause
 
-This is the report previously filed as "catalog warning messages are rendered
-twice". It was investigated twice and never reproduced, because both attempts
-ran serially.
+Everything that rebuilds an exception calls `type(e)(*e.args)`: `pickle` and
+`copy.deepcopy` through `BaseException.__reduce__`, `warnings.warn(text,
+category)` when it builds the instance, and pytest-xdist when a warning crosses
+from a worker to the controller.
 
-## It is not SMonitor, and not the call site
+`CatalogWarning.__init__` appended the resolved hint to the message and stored
+the result as `args`. It therefore transformed its own input, and no call of that
+form could reproduce the instance. Subclass parameter order was a second,
+smaller half: a class naming a domain field first received the rendered sentence
+as `atom_name` or `reason`.
 
-Two earlier hypotheses were wrong. It is not two competing resolve+append sites
-inside `DiagnosticBundle.warn` (fixed in `0c556d8`, a real but different
-defect), and it is not a call site pre-rendering the sentence: MolSysMT passes
-`extra={"atom_name": atom_name}`, exactly as the guide prescribes.
+## Resolution
 
-Serial and parallel runs of the same four warnings differ by exactly this:
+`args` now holds the message *before* the hint; `__str__` renders the two
+together, so the visible text is unchanged. Catalog classes across the ecosystem
+take `message` first with their domain fields keyword-only. Section 3.3.1 of the
+canonical guide carries the rule.
 
-| run | text |
-|---|---|
-| `pytest --receptor=llm` | `Atom name 'Ar' is not recognized; ...` |
-| `pytest --receptor=llm -n 2` | `Atom name 'Atom name 'Ar' is not recognized; ...'` |
+With that, `pickle`, `copy.deepcopy`, `warnings.warn(text, category)` and
+released pytest-xdist all reproduce the instance, and three workarounds came out:
+a `__reduce__` on the base classes, a patch in MolSysMT's `conftest.py`, and two
+`isinstance(attributes, str)` branches inside its warning classes.
 
-pytest-receptor is not the cause either; its `pytest_warning_recorded` hook only
-takes `str(warning_message.message)`.
+Guard: `tests/test_catalog_instance_round_trip.py`.
 
-## Mechanism
+## What was refuted
 
-`xdist/workermanage.py::unserialize_warning_message` rebuilds the warning on the
-controller from what the worker sent:
+Two rejections recorded in this document earlier were wrong, and both delayed the
+fix:
 
-```python
-cls = getattr(mod, data["message_class_name"])
-message = cls(*data["message_args"])          # message_args is the original .args
-except TypeError:
-    message = Warning(f"{module}.{cls}: {message_str}")
-```
+- *"Reordering subclass parameters spreads a workaround across every library."*
+  It is not a workaround; it is the shape Python's rebuild protocol requires.
+  ArgDigest's classes already took the message first and doubled anyway, which is
+  what finally located the defect in the base class rather than in the subclasses.
+- *"Removing the subclasses' own `__init__` loses per-field argument checking, and
+  classes that compute their message cannot be field-folded."* Both objected to a
+  variant nobody proposed. Keeping the fields **keyword-only** preserves the
+  checking exactly, and a class that computes its message renders it in a
+  classmethod and hands the finished text to `__init__`.
 
-`CatalogWarning.__init__` ends in `super().__init__(full_message)`, so `.args`
-is `(rendered_message,)`. On the controller that becomes:
+A `__reduce__` on the base classes was also tried and removed. It made `pickle`
+and `copy` exact by bypassing the constructor, but reached nothing that rebuilds
+by calling the class — and a custom `__reduce__` forces the fix proposed in
+`pytest-dev/pytest-xdist#1372` to fall back and drop the class outright.
 
-- `UnknownAtomNameWarning(rendered_message)` — whose signature is
-  `__init__(self, atom_name)`, so the rendered text lands in `atom_name` and the
-  catalog template wraps it a second time;
-- `GpuNotAvailableWarning(rendered_message)` — same, via `reason`;
-- `CrossChainCovalentBondsWarning(rendered_message)` — signature takes three
-  required arguments, so `TypeError` sends it to the generic fallback, which is
-  the prefixed shape above.
+The review on that pull request is what surfaced all of this. It is worth reading
+before revisiting any of it.
 
-Confirmed directly: `UnknownAtomNameWarning("<rendered text>")` reproduces the
-doubled string character for character.
+## Residue
 
-## Why it surfaced now
+A hint whose template interpolates a field cannot be re-rendered by a rebuilder
+carrying only `args`, because the field is not there. ArgDigest's
+`DigestNotDigestedWarning` shows it: `'unknown'` where the argument name should
+be, and the quickstart's own example shows it too. No class shape fixes this —
+the state has to travel, which is what `pytest-dev/pytest-xdist#1372` proposes.
+`pickle` does carry the state and is unaffected, as are serial runs, scripts,
+notebooks and services.
 
-Before `dd54a9b`, `DiagnosticBundle.warn()` emitted the catalog event and
-returned without raising a Python warning at all, so there was nothing for xdist
-to marshal. Restoring standard warning semantics is what made this visible. The
-diagnostics themselves are correct; only the controller's reconstruction of them
-is wrong, and only under xdist.
-
-## Options, and the one taken
-
-1. Report upstream. The reconstruction is unsound for any `Warning` subclass
-   whose `__init__` is not `(message)`, which is not a MolSysSuite peculiarity.
-2. Give catalog warning subclasses signatures that tolerate a single positional
-   rendered message. Spreads a workaround across every library.
-3. ~~Have `CatalogWarning` control what `.args` carries.~~ **Taken, in a better
-   form.** Emptying `args` was measured and rejected: it breaks `pickle`
-   outright and the `w.args[0]` idiom with it. `__reduce__` on both base classes
-   rebuilds from state instead, which leaves `args` — and therefore `str()` and
-   xdist's behaviour — untouched while making `pickle` and `copy.deepcopy`
-   exact. Those two were broken the same way as xdist and by nothing upstream:
-   that half was ours, and is now closed.
-
-   Removing the subclasses' own `__init__` was also weighed. It would fix the
-   reconstruction at the root, since `cls(rendered_text)` round-trips exactly
-   when no subclass reinterprets the first argument — measured. It was rejected
-   on two counts: those constructors are the per-class argument schema, so a
-   typo would stop raising and start rendering a template with holes in it; and
-   classes that *compute* their message cannot be reduced to field folding, so
-   the root fix would have been partial anyway.
-
-Nothing here blocks the diagnostics contract: serial runs, scripts, notebooks
-and services are unaffected.
+This entry stays open only for that residue. It closes when a released
+pytest-xdist transfers warning state.
