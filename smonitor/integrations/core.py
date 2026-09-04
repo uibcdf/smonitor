@@ -1,19 +1,50 @@
 from __future__ import annotations
 
+import threading
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 import smonitor
 
+
+# These wrap the package's late-defined entry points. `smonitor/__init__.py` imports this
+# package before it defines `emit` and `resolve`, so reading them off the module object is
+# only safe once that body has finished -- true single-threaded, false the moment a second
+# thread enters through another top-level package (uibcdf/smonitor#3). Importing the name
+# goes through the import machinery, which waits on a module still initializing.
+def _emit(*args, **kwargs):
+    from smonitor import emit
+
+    return emit(*args, **kwargs)
+
+
+def _resolve(*args, **kwargs):
+    from smonitor import resolve
+
+    return resolve(*args, **kwargs)
+
 _configured_packages: set[str] = set()
+
+#: Guards the memoization below. Without it the membership test and the `add` are a
+#: check-then-act with nothing between them, and two threads both configure.
+_CONFIGURE_LOCK = threading.RLock()
 
 
 def ensure_configured(package_root: Path) -> None:
     key = str(package_root.resolve())
-    if key in _configured_packages:
-        return
-    smonitor.configure(config_path=package_root)
-    _configured_packages.add(key)
+    with _CONFIGURE_LOCK:
+        if key in _configured_packages:
+            return
+        # Deferred, and deliberately not `smonitor.configure`. The module-level
+        # `import smonitor` above binds the package object; reading an attribute off it is
+        # unsynchronized, and `smonitor/__init__.py` imports this module before it defines
+        # `configure`. A thread arriving inside that window sees the module without the
+        # attribute (uibcdf/smonitor#3). Importing the name here goes through the import
+        # machinery instead, whose per-module lock makes the second thread wait.
+        from smonitor import configure
+
+        configure(config_path=package_root)
+        _configured_packages.add(key)
 
 
 def reset_configured_packages() -> None:
@@ -126,7 +157,7 @@ def emit_from_catalog(
 ) -> Dict[str, Any]:
     if package_root is not None:
         ensure_configured(package_root)
-    return smonitor.emit(
+    return _emit(
         entry.get("level", "WARNING"),
         "",
         source=entry.get("source"),

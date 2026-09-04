@@ -9,6 +9,23 @@ from smonitor.core import runtime
 
 from .core import emit_from_catalog, merge_extra
 
+
+# These wrap the package's late-defined entry points. `smonitor/__init__.py` imports this
+# package before it defines `emit` and `resolve`, so reading them off the module object is
+# only safe once that body has finished -- true single-threaded, false the moment a second
+# thread enters through another top-level package (uibcdf/smonitor#3). Importing the name
+# goes through the import machinery, which waits on a module still initializing.
+def _emit(*args, **kwargs):
+    from smonitor import emit
+
+    return emit(*args, **kwargs)
+
+
+def _resolve(*args, **kwargs):
+    from smonitor import resolve
+
+    return resolve(*args, **kwargs)
+
 T = TypeVar("T", bound="CatalogException")
 W = TypeVar("W", bound="CatalogWarning")
 
@@ -60,7 +77,7 @@ class CatalogException(Exception):
                 target_code = entry.get("code")
 
         resolved_extra = merge_extra(meta, extra)
-        resolved_msg, hint = smonitor.resolve(
+        resolved_msg, hint = _resolve(
             message=message, code=target_code, extra=resolved_extra
         )
 
@@ -119,7 +136,7 @@ class CatalogWarning(Warning):
 
         resolved_extra = merge_extra(meta, extra)
         resolved_extra.setdefault("caller", self.catalog_key or type(self).__name__)
-        resolved_msg, hint = smonitor.resolve(
+        resolved_msg, hint = _resolve(
             message=message, code=target_code, extra=resolved_extra
         )
 
@@ -258,7 +275,7 @@ class DiagnosticBundle:
                 # Do not silently swallow emission failures. Try a minimal
                 # fallback diagnostic; always preserve python warnings behavior.
                 try:
-                    smonitor.emit(
+                    _emit(
                         "DEBUG",
                         "Catalog warning emission failed",
                         source="smonitor.integrations.diagnostic",
@@ -390,7 +407,7 @@ class DiagnosticBundle:
                     meta=self.meta,
                 )
             else:
-                smonitor.emit(
+                _emit(
                     "WARNING",
                     f"'{name}' is a best-effort supported {kind} (Tier 2). "
                     "Results are supported but not contractually guaranteed for all workflows.",
@@ -411,7 +428,7 @@ class DiagnosticBundle:
                     meta=self.meta,
                 )
             else:
-                smonitor.emit(
+                _emit(
                     "INFO",
                     f"'{name}' is an experimental {kind} (Tier 3). Use with caution.",
                     source="smonitor.integrations.support_tier",
@@ -491,7 +508,7 @@ class DiagnosticBundle:
         extra: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Resolves and combines message and hint into a single string."""
-        resolved_msg, hint = smonitor.resolve(
+        resolved_msg, hint = _resolve(
             message=message, code=code, extra=merge_extra(self.meta, extra)
         )
         if hint:

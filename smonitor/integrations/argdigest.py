@@ -10,4 +10,10 @@ def configure_argdigest(**kwargs: Any):
 
     Intended usage: centralize ArgDigest diagnostics via smonitor.configure.
     """
-    return smonitor.configure(**kwargs)
+    # Deferred: `smonitor.configure` reaches through the package object, and
+    # `smonitor/__init__.py` imports this package before it defines `configure`.
+    # Importing the name goes through the import machinery, which waits on a
+    # module still initializing in another thread (uibcdf/smonitor#3).
+    from smonitor import configure
+
+    return configure(**kwargs)
