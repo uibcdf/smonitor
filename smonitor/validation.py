@@ -13,7 +13,7 @@ def validate_event(event: Dict[str, Any]) -> List[str]:
             errors.append(f"Missing required field: {key}")
 
     level = event.get("level")
-    if level and level not in {"DEBUG", "INFO", "WARNING", "ERROR"}:
+    if level and level not in {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}:
         errors.append(f"Invalid level: {level}")
 
     timestamp = event.get("timestamp")

@@ -27,6 +27,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
   The keyword set is now derived from `Manager.configure`'s signature (`CONFIGURE_PARAMETERS`), the `SMONITOR` allowlist is derived from that in turn, and keys arriving from a config file or the environment are dropped rather than forwarded — `validate_project_config` already names them and `strict_config` still raises. Keys passed directly to `smonitor.configure(...)` keep raising, because there a typo is the caller's own and immediate. `style` is gone from the template and the SPEC: a profile block's keys are the same keys as the `SMONITOR` block, and the profile *name* already selects the output style. Guarded by `tests/test_config_surface_agreement.py`, which fails on the shape of the drift rather than on the individual keys.
 
+- `CRITICAL` was rejected by event schema validation, though `Manager` scores it above `ERROR` in `_LEVEL_ORDER` and routes it, and `docs/content/developer/schema-validation.md` publishes it as valid. Only `validation.py` disagreed, so in the `dev` and `qa` profiles every `CRITICAL` event carried a `schema_warning` and `strict_schema` refused it outright — making the highest severity the one severity those profiles could not emit.
+
 ## [0.13.0] - 2026-08-17
 
 Catalog exceptions and warnings changed shape. Three notes for integrators:

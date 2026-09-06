@@ -38,3 +38,17 @@ def test_enforce_schema_strict():
         assert "Missing required field" in str(exc)
     else:
         raise AssertionError("Expected ValueError")
+
+
+def test_critical_is_a_valid_level():
+    # `Manager` routes CRITICAL (`_LEVEL_ORDER` scores it above ERROR) and
+    # `docs/content/developer/schema-validation.md` publishes it as valid. Only
+    # this list disagreed, so a CRITICAL event carried a `schema_warning` in the
+    # dev/qa profiles and raised outright under `strict_schema`.
+    event = {
+        "timestamp": "2026-02-03T12:00:00+00:00",
+        "level": "CRITICAL",
+        "message": "boom",
+        "code": "X-C001",
+    }
+    assert validate_event(event) == []
