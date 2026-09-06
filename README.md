@@ -202,14 +202,16 @@ smonitor compare current_bundle.json previous_bundle.json --format markdown
 
 ## Ecosystem adoption
 
-SMonitor integration is complete across:
-- MolSysMT
-- MolSysViewer
-- ArgDigest
-- DepDigest
-- PyUnitWizard
+Nine libraries in the UIBCDF stack integrate SMonitor and carry the canonical
+guide:
 
-This makes cross-library diagnostics consistent across the current UIBCDF scientific stack.
+- **Integrated and catalogue-driven**: MolSysMT, MolSysViewer, ArgDigest,
+  DepDigest, PyUnitWizard.
+- **Integrated, catalogue work in progress**: TopoMT, PharmacophoreMT,
+  ElastNetMT, LindeLint.
+
+`devtools/sync_smonitor_guide.py` keeps `SMONITOR_GUIDE.md` identical in all of
+them, and finds a consumer on disk rather than trusting a list to remember it.
 
 ## Documentation
 
@@ -232,7 +234,7 @@ make -C docs html
 
 ## Status
 
-Current release: **0.13.0** (pre-1.0 stabilization).  
+Current release: **0.14.0** (pre-1.0 stabilization).  
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)

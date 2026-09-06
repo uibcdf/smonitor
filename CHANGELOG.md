@@ -4,7 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.14.0] - 2026-09-06
+
+Three notes for integrators, in the order they are likely to matter:
+
+- **A catalog entry that defines only `user_message` now renders in every
+  profile.** It previously rendered an empty message under `dev`, `qa`, `agent`
+  and `debug` — the shape the README, the shipped template and section 1 of the
+  canonical guide all show. ArgDigest and PyUnitWizard were emitting no message
+  at all under `qa` and `agent`, DepDigest under `agent`. Nothing to change on
+  your side; a profile whose own field is present resolves exactly as before.
+- **An unrecognised key in `_smonitor.py` no longer raises.** It is reported by
+  `smonitor --validate-config` and ignored, because that file is read during your
+  package's import and a typo must not take the library down. `strict_config`
+  still turns the report into an error.
+- **`_smonitor.py` belongs inside the package**, at `mylib/_smonitor.py`. The
+  canonical guide said "relative to the repository root", which is found in a
+  development checkout and is not packaged into the wheel. If yours is at the
+  repository root, it is absent for everyone who installed your library.
+
+The canonical guide gained two sections worth reading once: **3.5**, what to
+write in a diagnostic and what each choice buys downstream, and **7**, five
+checks that catch an integration that is wired correctly and silently useless.
 
 ### Fixed
 - `ensure_configured()` could fail with `AttributeError: partially initialized module 'smonitor' has no attribute 'configure'` when two threads imported different packages that use SMonitor. `smonitor/__init__.py` imports `integrations` before it defines `configure`, `emit` and `resolve`, so a module that binds the package with `import smonitor` and reads the attribute at call time depends on the package body having progressed past that definition. That holds single-threaded and fails the moment a second top-level package, with its own import lock, enters through another thread. Reproduced 24 times out of 25 from `uibcdf/molsysviewer#76`; never serially.
@@ -29,9 +50,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `CRITICAL` was rejected by event schema validation, though `Manager` scores it above `ERROR` in `_LEVEL_ORDER` and routes it, and `docs/content/developer/schema-validation.md` publishes it as valid. Only `validation.py` disagreed, so in the `dev` and `qa` profiles every `CRITICAL` event carried a `schema_warning` and `strict_schema` refused it outright — making the highest severity the one severity those profiles could not emit.
 
-## [Unreleased]
-
-### Fixed
 - A catalog message resolved in one profile and rendered **empty** in the others. Message lookup consulted exactly one field per profile, so an entry defining `user_message` alone — the shape the README, the shipped template and section 1 of the canonical guide all show — produced an empty message under `dev`, `qa`, `agent` and `debug`. Hints already fell back (`qa_hint` to `dev_hint`); messages did not.
 
   Measured across the ecosystem on 2026-09-06: ArgDigest and PyUnitWizard emitted no message at all under `qa` and `agent`, DepDigest under `agent` — the profile whose entire purpose is machine triage, arriving with nothing to triage. The two libraries that were unaffected were unaffected because each had built its own workaround: MolSysMT writes all four fields by hand, MolSysViewer fans one template across them in `_code_entry`, whose docstring records the limitation. Both workarounds are now optional.
@@ -39,6 +57,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Each profile prefers its own field, then the nearest audience, and ends at the `user_*` field, which is the one every published example defines. The invariant is that an entry defining any message field renders empty in no profile. A profile whose own field is present resolves exactly as before, so no working configuration changes. Guarded by `tests/test_profile_message_fallback.py`.
 
 - The canonical guide told integrators to place `_smonitor.py` "relative to the repository root". Every library in the ecosystem places it at `mylib/_smonitor.py`, and the guide's own location does not survive packaging: configuration discovery walks upward, so a file at the repository root is found in a development checkout and then is simply not in the wheel. The failure is silent — diagnostics fall back to defaults, every catalog code resolves against no template, and messages come out empty for everyone who installed the library.
+
+### Documentation
+- Canonical guide section **3.5**, "What to write, and what it buys you": which of `code`, message, hint and `extra` owns what, the same diagnostic written with prose and with data, how to choose a code, and what each field buys in `report()` and in bundles. It ends with two facts that are not guessable from the API and were written down nowhere — which twelve `extra` keys take part in the incident fingerprint, and that `retry_attempt` is one of them, so fingerprints do not collapse retries and `duplicate_policy` cannot either; `warning_coalesce_window_s` is what does.
+- Canonical guide section **7**, "Verify the integration": five checks, one assertion each, as a copy-pasteable test file. Each corresponds to a defect that reached a released library in this ecosystem.
+- `devguide/decisions/` records decisions that shape a public contract, with the evidence that decided them and what was rejected. The first is `hint_ownership_on_catalog_instances.md`, decided at the 1.0 API freeze it was deferred to: there is no `hint=`, `hint` returns as a read-only derived property, the reserved-name rule is guarded by a static check rather than only documented, and `FunctionContract` does not gain a `violation_code`. The decision is recorded; it is not implemented in this release.
+- `devtools/sync_smonitor_guide.py` syncs to consumers found on disk rather than only to a hand-maintained list. It named five repositories while nine carried the guide, and the four it had forgotten were six months stale.
 
 ## [0.13.0] - 2026-08-17
 
