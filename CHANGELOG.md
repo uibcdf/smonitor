@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+- `ensure_configured()` could fail with `AttributeError: partially initialized module 'smonitor' has no attribute 'configure'` when two threads imported different packages that use SMonitor. `smonitor/__init__.py` imports `integrations` before it defines `configure`, `emit` and `resolve`, so a module that binds the package with `import smonitor` and reads the attribute at call time depends on the package body having progressed past that definition. That holds single-threaded and fails the moment a second top-level package, with its own import lock, enters through another thread. Reproduced 24 times out of 25 from `uibcdf/molsysviewer#76`; never serially.
+
+  The eleven call sites now import the name inside the function. `from smonitor import configure` goes through the import machinery, which waits on a module still initializing elsewhere; an attribute read on an already-bound module object waits for nothing. Isolating the two halves of the change on that reproduction says which one matters: attribute access *with* the new lock still failed 14 of 15 times, the deferred import *without* the lock failed 0 of 15. The lock stays regardless, because `_configured_packages` is a check-then-act between the membership test and the `add` — a second and quieter defect on the same lines, which that reproduction does not exercise.
+
+  `tests/test_no_package_attribute_reachthrough.py` guards the invariant rather than the race: it parses `__init__.py`, collects the names bound after the `integrations` import, and fails on any `smonitor.<name>` attribute read of one of them. That is what found the seven sites beyond the one in the traceback. A race test for this window could not be made to reproduce standalone — it needs two real downstream packages — and a green test that never opens the window would certify the defect instead of catching it.
+
+  Shipped in `31da6a4` (uibcdf/smonitor#3); recorded here after the fact.
+
 ## [0.13.0] - 2026-08-17
 
 Catalog exceptions and warnings changed shape. Three notes for integrators:
