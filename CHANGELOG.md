@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [0.14.0] - 2026-09-06
 
+*Tagged, not yet published: there is no GitHub Release and no conda package for this
+version. Build from the `0.14.0` tag if you need it before it ships.*
+
 Three notes for integrators, in the order they are likely to matter:
 
 - **A catalog entry that defines only `user_message` now renders in every

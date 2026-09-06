@@ -234,7 +234,7 @@ make -C docs html
 
 ## Status
 
-Current release: **0.14.0** (pre-1.0 stabilization).  
+Current release: **0.13.0**. **0.14.0** is tagged and its changelog is final, but no package is published yet — build from the tag if you need it now.  
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)
