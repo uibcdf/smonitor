@@ -38,6 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
   Each profile prefers its own field, then the nearest audience, and ends at the `user_*` field, which is the one every published example defines. The invariant is that an entry defining any message field renders empty in no profile. A profile whose own field is present resolves exactly as before, so no working configuration changes. Guarded by `tests/test_profile_message_fallback.py`.
 
+- The canonical guide told integrators to place `_smonitor.py` "relative to the repository root". Every library in the ecosystem places it at `mylib/_smonitor.py`, and the guide's own location does not survive packaging: configuration discovery walks upward, so a file at the repository root is found in a development checkout and then is simply not in the wheel. The failure is silent — diagnostics fall back to defaults, every catalog code resolves against no template, and messages come out empty for everyone who installed the library.
+
 ## [0.13.0] - 2026-08-17
 
 Catalog exceptions and warnings changed shape. Three notes for integrators:
