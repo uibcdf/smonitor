@@ -16,6 +16,17 @@ CODES = {
 }
 ```
 
+Each profile reads its own field first and falls back through the nearest
+audience to the `user_*` field when its own is absent; a generic `message` sits
+in the middle of every message chain. So the entry above renders under `qa` and
+`agent` too, using `dev_message` and `dev_hint`, and an entry carrying only
+`user_message` renders everywhere.
+
+The invariant is that **an entry defining any message field renders empty in no
+profile**. Define the variants that genuinely differ for their audience; there
+is no need to repeat one sentence four times.
+
+
 ## SIGNALS contracts
 
 ```python

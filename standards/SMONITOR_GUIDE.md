@@ -77,6 +77,39 @@ Recommended pattern:
 
 This avoids drift where emitted catalog codes exist but template messages are missing at runtime.
 
+### 1.2 Profile fields, and what happens when one is missing
+
+A `CODES` entry may carry a message and a hint per profile:
+
+```python
+CODES = {
+    "MYLIB-W010": {
+        "title": "Selection ambiguous",
+        "user_message": "Selection '{selection}' is ambiguous.",
+        "user_hint": "Use a more specific selector, for example '{example}'.",
+        "dev_message": "Selection parser ambiguity on '{selection}'.",
+        "dev_hint": "Review selector normalization.",
+    }
+}
+```
+
+Each profile reads its own field first — `user` reads `user_message`, `qa` reads
+`qa_message`, and so on — and falls back through the nearest audience to the
+`user_*` field when its own is absent. A generic `message` sits in the middle of
+every message chain. **An entry that defines any message field renders in every
+profile**; you are never required to write all four.
+
+Write the variants that genuinely differ. MolSysMT writes all four for 49 codes
+and only 2 of them repeat the same sentence, which is the feature working as
+intended: the end user is told a probe did not succeed, the developer is given
+the exception type and its message. Where one sentence serves every audience,
+write it once.
+
+Before `0.14.0` there was no fallback, and an entry defining `user_message`
+alone rendered an **empty** message under `dev`, `qa`, `agent` and `debug`. If
+your library targets an older SMonitor, keep writing every field you rely on.
+
+
 ## 2. Initialization Protocol
 
 Level: **Mandatory**

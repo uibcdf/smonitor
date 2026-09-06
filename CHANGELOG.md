@@ -29,6 +29,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `CRITICAL` was rejected by event schema validation, though `Manager` scores it above `ERROR` in `_LEVEL_ORDER` and routes it, and `docs/content/developer/schema-validation.md` publishes it as valid. Only `validation.py` disagreed, so in the `dev` and `qa` profiles every `CRITICAL` event carried a `schema_warning` and `strict_schema` refused it outright — making the highest severity the one severity those profiles could not emit.
 
+## [Unreleased]
+
+### Fixed
+- A catalog message resolved in one profile and rendered **empty** in the others. Message lookup consulted exactly one field per profile, so an entry defining `user_message` alone — the shape the README, the shipped template and section 1 of the canonical guide all show — produced an empty message under `dev`, `qa`, `agent` and `debug`. Hints already fell back (`qa_hint` to `dev_hint`); messages did not.
+
+  Measured across the ecosystem on 2026-09-06: ArgDigest and PyUnitWizard emitted no message at all under `qa` and `agent`, DepDigest under `agent` — the profile whose entire purpose is machine triage, arriving with nothing to triage. The two libraries that were unaffected were unaffected because each had built its own workaround: MolSysMT writes all four fields by hand, MolSysViewer fans one template across them in `_code_entry`, whose docstring records the limitation. Both workarounds are now optional.
+
+  Each profile prefers its own field, then the nearest audience, and ends at the `user_*` field, which is the one every published example defines. The invariant is that an entry defining any message field renders empty in no profile. A profile whose own field is present resolves exactly as before, so no working configuration changes. Guarded by `tests/test_profile_message_fallback.py`.
+
 ## [0.13.0] - 2026-08-17
 
 Catalog exceptions and warnings changed shape. Three notes for integrators:

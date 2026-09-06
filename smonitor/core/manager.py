@@ -55,6 +55,59 @@ def _format_template(template: str, fields: Dict[str, Any]) -> str:
     return _TEMPLATE_FIELD.sub(replace, template)
 
 
+#: How each profile resolves a catalog message when its own field is absent.
+#:
+#: Only the profile's own field was consulted for `user`, `qa` and `agent`, so an
+#: entry defining `user_message` alone — the shape the README, the shipped
+#: template and section 1 of the canonical guide all show — rendered an *empty*
+#: message under every profile but `user`. Measured across the ecosystem on
+#: 2026-09-06: ArgDigest and PyUnitWizard emitted no message at all under `qa`
+#: and `agent`, DepDigest under `agent`. That is the `agent` profile, whose
+#: whole purpose is machine triage, arriving with nothing to triage.
+#:
+#: The two libraries that were unaffected were unaffected because each had built
+#: its own workaround for this: MolSysMT writes all four fields by hand (301
+#: distinct texts, so its variants are real editorial work rather than copies),
+#: MolSysViewer fans one template across every field in `_code_entry`. Both
+#: workarounds become optional once the chain below exists.
+#:
+#: Each chain prefers the profile's own field, then the nearest audience, and
+#: ends at the `user_*` field, which is the one every published example defines.
+#: The invariant: an entry that defines any message field renders empty in no
+#: profile. A profile whose own field is present is unaffected, so no working
+#: configuration changes.
+_MESSAGE_FALLBACKS: Dict[str, tuple[str, ...]] = {
+    "user": ("user_message", "message", "dev_message", "qa_message", "agent_message"),
+    "dev": ("dev_message", "message", "qa_message", "agent_message", "user_message"),
+    "debug": ("dev_message", "message", "qa_message", "agent_message", "user_message"),
+    "qa": ("qa_message", "dev_message", "message", "agent_message", "user_message"),
+    "agent": ("agent_message", "dev_message", "message", "qa_message", "user_message"),
+}
+
+#: The same rule for hints. There is no generic `hint` field to sit in the
+#: middle — `extra["hint"]` is a different thing, carried per event — so these
+#: chains run over the four profile fields alone. The `qa` and `agent` chains
+#: already fell back to `dev_hint`; that precedence is preserved.
+_HINT_FALLBACKS: Dict[str, tuple[str, ...]] = {
+    "user": ("user_hint", "dev_hint", "qa_hint", "agent_hint"),
+    "dev": ("dev_hint", "qa_hint", "agent_hint", "user_hint"),
+    "debug": ("dev_hint", "qa_hint", "agent_hint", "user_hint"),
+    "qa": ("qa_hint", "dev_hint", "agent_hint", "user_hint"),
+    "agent": ("agent_hint", "dev_hint", "qa_hint", "user_hint"),
+}
+
+#: An unknown profile is treated as `dev`, as it was before these tables.
+_DEFAULT_PROFILE = "dev"
+
+
+def _first_present(meta: Dict[str, Any], fields: Iterable[str]) -> Optional[str]:
+    for field in fields:
+        value = meta.get(field)
+        if value:
+            return value
+    return None
+
+
 def _level_value(level: str) -> int:
     return _LEVEL_ORDER.get(str(level).upper(), _LEVEL_ORDER["INFO"])
 
@@ -387,16 +440,12 @@ class Manager:
     ) -> tuple[str, Optional[str], Optional[Dict[str, Any]]]:
         """Internal helper to resolve profile-based messages and hints."""
         code_meta = self._codes.get(code) if code else None
+        profile = self._config.profile
         if code_meta and (message is None or message == ""):
-            # Fallback to code-specific message per profile
-            if self._config.profile == "user":
-                message = code_meta.get("user_message", "")
-            elif self._config.profile == "qa":
-                message = code_meta.get("qa_message", "")
-            elif self._config.profile == "agent":
-                message = code_meta.get("agent_message", "")
-            else:
-                message = code_meta.get("dev_message", "") or code_meta.get("message", "")
+            message = _first_present(
+                code_meta,
+                _MESSAGE_FALLBACKS.get(profile, _MESSAGE_FALLBACKS[_DEFAULT_PROFILE]),
+            ) or ""
 
         # Interpolate message using extra fields if templated
         if message and "{" in message:
@@ -404,14 +453,10 @@ class Manager:
 
         hint = None
         if code_meta:
-            if self._config.profile == "user":
-                hint = code_meta.get("user_hint")
-            elif self._config.profile == "qa":
-                hint = code_meta.get("qa_hint") or code_meta.get("dev_hint")
-            elif self._config.profile == "agent":
-                hint = code_meta.get("agent_hint") or code_meta.get("dev_hint")
-            else:
-                hint = code_meta.get("dev_hint")
+            hint = _first_present(
+                code_meta,
+                _HINT_FALLBACKS.get(profile, _HINT_FALLBACKS[_DEFAULT_PROFILE]),
+            )
 
         if hint and "{" in hint:
             hint = _format_template(hint, extra)

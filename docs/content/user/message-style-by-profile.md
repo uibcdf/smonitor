@@ -51,6 +51,26 @@ Template:
 code=MYLIB-E101 level=ERROR source=mylib.core.analysis.run action=fix_input extra.argument=format
 ```
 
+## Which field each profile reads
+
+| profile | message | hint |
+| --- | --- | --- |
+| `user` | `user_message` | `user_hint` |
+| `dev`, `debug` | `dev_message` | `dev_hint` |
+| `qa` | `qa_message` | `qa_hint` |
+| `agent` | `agent_message` | `agent_hint` |
+
+When a profile's own field is absent, resolution falls back through the nearest
+audience and ends at the `user_*` field; a generic `message` sits in the middle
+of every message chain. An entry that defines any message field therefore
+renders in every profile, and writing all four is a choice rather than a
+requirement.
+
+Write a variant where the audiences genuinely need different wording — the end
+user told what happened, the developer given the exception type — and write one
+sentence once where they do not.
+
+
 ## Shared event structure
 
 - exported events and JSON payloads now preserve both:
