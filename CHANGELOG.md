@@ -21,6 +21,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
   `ruff check .` also depended on whether the tree had been built. `tests/test_integrations_entrypoints.py` did `import smonitor._version`, and ruff's isort resolves that dotted path against the filesystem: `smonitor/_version.py` is written by the build and kept out of the tree by `.gitignore`, so the module was first-party after a build and third-party before one — and the two import orderings that satisfies are mutually exclusive. CI never saw it because `pip install .` runs before the lint step. The test now reaches the module as `from smonitor import _version`, which keys on `smonitor` and is stable either way; `ruff check .` is clean on an unbuilt checkout for the first time.
 
+- A key in `_smonitor.py` that `Manager.configure` does not accept reached it as a keyword argument and raised `TypeError`. `ensure_configured()` runs during the host library's import, so a typo in a config file — or a copy of SMonitor's own shipped template — took the whole library down at import time.
+
+  Three lists of configuration keys had drifted apart, in all three directions at once. `silence`, `duplicate_policy` and `duplicate_every_n` were accepted by the manager and rejected by the validator; `silence` appears in the canonical guide's **first example**, so a `_smonitor.py` copied from the guide reported `Unknown SMONITOR key: silence` and raised under `strict_config`. `style` went the other way: it sat in `smonitor/templates/_smonitor.py` and in `SPEC_SMONITOR.md`, was accepted by nobody, and produced `TypeError: Manager.configure() got an unexpected keyword argument 'style'` from the shipped template verbatim.
+
+  The keyword set is now derived from `Manager.configure`'s signature (`CONFIGURE_PARAMETERS`), the `SMONITOR` allowlist is derived from that in turn, and keys arriving from a config file or the environment are dropped rather than forwarded — `validate_project_config` already names them and `strict_config` still raises. Keys passed directly to `smonitor.configure(...)` keep raising, because there a typo is the caller's own and immediate. `style` is gone from the template and the SPEC: a profile block's keys are the same keys as the `SMONITOR` block, and the profile *name* already selects the output style. Guarded by `tests/test_config_surface_agreement.py`, which fails on the shape of the drift rather than on the individual keys.
+
 ## [0.13.0] - 2026-08-17
 
 Catalog exceptions and warnings changed shape. Three notes for integrators:

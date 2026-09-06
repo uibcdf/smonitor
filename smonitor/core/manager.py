@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+# `dataclasses` below already imports `inspect`, so naming it here costs no
+# extra import time. It is used once, at the bottom of this module, to derive
+# the set of configuration keywords from the signature that defines them.
+import inspect
 import re
 import warnings
 from dataclasses import dataclass, replace
@@ -1013,6 +1017,21 @@ class Manager:
             "session_id": self._session_id,
             "correlation_id": self._default_correlation_id,
         }
+
+
+#: Every keyword `Manager.configure` accepts, derived from the signature that
+#: defines them rather than restated beside it.
+#:
+#: Three lists of configuration keys had drifted apart: this signature, the
+#: `SMONITOR` allowlist in `smonitor.config`, and what `smonitor.configure()`
+#: forwards here. `silence` and `duplicate_policy` were accepted here and
+#: rejected by the validator — `silence` in the canonical guide's own first
+#: example — while `style` sat in the shipped template and was accepted by
+#: nobody, raising `TypeError` inside the host library's import. Deriving the
+#: set is what keeps those three in agreement.
+CONFIGURE_PARAMETERS: frozenset[str] = frozenset(
+    inspect.signature(Manager.configure).parameters
+) - {"self"}
 
 
 _manager_singleton: Optional[Manager] = None

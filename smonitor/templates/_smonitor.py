@@ -13,10 +13,13 @@ SMONITOR = {
     "warning_coalesce_window_s": 0.0,
 }
 
+# A profile block overrides the SMONITOR block when that profile is active.
+# Its keys are the same keys: the profile *name* already selects the output
+# style, so there is nothing else to name here.
 PROFILES = {
-    "user": {"level": "WARNING", "style": "user"},
-    "dev": {"level": "INFO", "style": "dev"},
-    "qa": {"level": "INFO", "style": "qa"},
+    "user": {"level": "WARNING"},
+    "dev": {"level": "INFO"},
+    "qa": {"level": "INFO"},
 }
 
 ROUTES = [

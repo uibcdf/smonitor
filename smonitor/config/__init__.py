@@ -4,7 +4,30 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+from ..core.manager import CONFIGURE_PARAMETERS
 from .discovery import discover_config
+
+#: Keywords `Manager.configure` accepts that are *not* keys of the `SMONITOR`
+#: block. Catalogs and policy are separate top-level names in `_smonitor.py`;
+#: the rest are supplied at runtime and have no place in a config file.
+_NOT_CONFIG_BLOCK_KEYS = frozenset(
+    {
+        "codes",
+        "signals",
+        "routes",
+        "filters",
+        "config_path",
+        "run_id",
+        "session_id",
+        "correlation_id",
+    }
+)
+
+#: The `SMONITOR` block is the manager's configuration surface minus what is set
+#: elsewhere, plus `strict_config`, which governs this validation rather than the
+#: manager. Derived, so a keyword added to `Manager.configure` cannot become a
+#: key this validator rejects.
+ALLOWED_SMONITOR_KEYS = (CONFIGURE_PARAMETERS - _NOT_CONFIG_BLOCK_KEYS) | {"strict_config"}
 
 
 def load_project_config(start: Optional[Path] = None) -> Optional[Dict[str, Any]]:
@@ -117,31 +140,6 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         return []
     errors: list[str] = []
     allowed_top = {"PROFILE", "SMONITOR", "PROFILES", "ROUTES", "FILTERS", "CODES", "SIGNALS"}
-    allowed_smonitor = {
-        "level",
-        "theme",
-        "capture_warnings",
-        "capture_logging",
-        "capture_exceptions",
-        "trace_depth",
-        "show_traceback",
-        "profile",
-        "handlers",
-        "args_summary",
-        "profiling",
-        "profiling_buffer_size",
-        "profiling_sample_rate",
-        "profiling_hooks",
-        "strict_signals",
-        "strict_schema",
-        "strict_config",
-        "enabled",
-        "event_buffer_size",
-        "handler_error_threshold",
-        "slow_signal_ms",
-        "slow_signal_level",
-        "warning_coalesce_window_s",
-    }
     for key in project_cfg.keys():
         if key not in allowed_top:
             errors.append(f"Unknown top-level key: {key}")
@@ -161,7 +159,7 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
 
     def _validate_block(prefix: str, cfg: Dict[str, Any]) -> None:
         for key in cfg:
-            if key not in allowed_smonitor:
+            if key not in ALLOWED_SMONITOR_KEYS:
                 errors.append(f"Unknown {prefix} key: {key}")
         bool_keys = {
             "capture_warnings",
@@ -180,9 +178,11 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
             "profiling_buffer_size",
             "event_buffer_size",
             "handler_error_threshold",
+            "duplicate_every_n",
         }
         float_keys = {"profiling_sample_rate", "slow_signal_ms", "warning_coalesce_window_s"}
-        str_keys = {"level", "theme", "profile", "slow_signal_level"}
+        str_keys = {"level", "theme", "profile", "slow_signal_level", "duplicate_policy"}
+        list_keys = {"handlers", "silence", "profiling_hooks"}
         for key in bool_keys:
             if key in cfg and not isinstance(cfg[key], bool):
                 errors.append(f"{prefix}.{key} must be a bool")
@@ -195,8 +195,9 @@ def validate_config(project_cfg: Optional[Dict[str, Any]]) -> list[str]:
         for key in str_keys:
             if key in cfg and not isinstance(cfg[key], str):
                 errors.append(f"{prefix}.{key} must be a string")
-        if "handlers" in cfg and not isinstance(cfg["handlers"], list):
-            errors.append(f"{prefix}.handlers must be a list")
+        for key in list_keys:
+            if key in cfg and not isinstance(cfg[key], list):
+                errors.append(f"{prefix}.{key} must be a list")
 
     smonitor_cfg = project_cfg.get("SMONITOR") or {}
     if isinstance(smonitor_cfg, dict):

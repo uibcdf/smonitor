@@ -253,27 +253,22 @@ PROFILES = {
     "user": {
         "level": "WARNING",
         "show_traceback": False,
-        "style": "user",
     },
     "dev": {
         "level": "INFO",
         "show_traceback": True,
-        "style": "dev",
     },
     "qa": {
         "level": "INFO",
         "show_traceback": True,
-        "style": "qa",
     },
     "agent": {
         "level": "WARNING",
         "show_traceback": False,
-        "style": "agent",
     },
     "debug": {
         "level": "DEBUG",
         "show_traceback": True,
-        "style": "debug",
     },
 }
 

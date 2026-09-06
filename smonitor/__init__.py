@@ -37,8 +37,13 @@ from .config import (
     validate_project_config,
 )
 from .core.decorator import signal
-from .core.manager import get_manager
+from .core.manager import CONFIGURE_PARAMETERS, get_manager
 from .handlers.console import ConsoleHandler, RichConsoleHandler
+
+#: What a configuration file or environment variable may contribute to the
+#: manager. `strict_config` is included because it survives in `effective` until
+#: it is read and popped below; it governs validation, not the manager.
+_CONFIG_FILE_KEYS = CONFIGURE_PARAMETERS | {"strict_config"}
 
 __all__ = [
     "configure",
@@ -66,6 +71,18 @@ def configure(**kwargs):
     project_cfg = load_project_config(config_path or Path.cwd())
     env_cfg = load_env_config()
     effective = build_effective_config(project_cfg, env_cfg)
+    # `_smonitor.py` and the environment are data, not a call signature. A key
+    # the manager does not accept must not reach it as a keyword argument,
+    # because `ensure_configured()` runs during the host library's import and a
+    # `TypeError` there takes the whole library down over a typo in a config
+    # file. `validate_project_config` names such keys, and `strict_config`
+    # still raises on them below.
+    #
+    # Keys passed directly to this function are not filtered: there a typo is
+    # the caller's own, on the line they are looking at, and an immediate
+    # `TypeError` is the right answer.
+    for key in [key for key in effective if key not in _CONFIG_FILE_KEYS]:
+        effective.pop(key)
     effective.update({k: v for k, v in kwargs.items() if v is not None})
     if strict_config is None:
         strict_config = effective.get("strict_config")
