@@ -5,6 +5,8 @@
 These guides are required reading for anyone developing this library. They describe how external tools must be used here.
 
 - `standards/SMONITOR_GUIDE.md` — Required guide for SMonitor integration and diagnostics.
+- `GH_RUN_RECEPTOR_GUIDE.md` — Required guide for compact, truth-preserving inspection of
+  GitHub Actions runs and the native-command fallback.
 
 ## SMonitor Agent Contract (Required)
 
