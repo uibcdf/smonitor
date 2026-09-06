@@ -4,6 +4,15 @@
 Usage:
   python devtools/sync_smonitor_guide.py
   python devtools/sync_smonitor_guide.py --root /home/diego/repos@uibcdf
+
+Authoring note for the guide itself: Ruff formats fenced Python blocks inside
+Markdown, and a vendored copy is checked against the *host* repository's Ruff
+configuration, not this one. Keep every snippet line short enough that no width
+wraps it -- under 88 columns -- and the file then formats identically at 88, 100
+and 120, which is every line-length in use across the suite. That is a
+mitigation, not a fix: `topomt` sets `quote-style = "single"`, which no way of
+writing the document can satisfy alongside the other nine. Tracked in
+uibcdf/molsyssuite#12.
 """
 
 from __future__ import annotations

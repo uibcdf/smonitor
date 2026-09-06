@@ -15,6 +15,7 @@ This folder collects developer documentation for `smonitor`.
 9) `discovery_and_adoption_strategy.md` — Strategy to maximize third-party discovery and adoption (humans + agents).
 10) `collective_evidence_pack.md` — Cross-repo evidence handoff for collective 1.0 closure.
 11) `warning_baselines_under_parallel_test_runs.md` — Why a warning-count gate needs a deterministic test distribution.
+12) `decisions/` — Decisions that shape a public contract, with the evidence that decided them.
 
 ## Scope
 These documents track implementation details. Product-level decisions and
