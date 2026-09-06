@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
   Shipped in `31da6a4` (uibcdf/smonitor#3); recorded here after the fact.
 
+- `ruff check .` was failing on `main`, and the lint step runs before the test step, so the test suite had not executed in CI since 2026-09-04 (runs `33929972827`, `33929972830`, `33930563670`, all failing at `Run linter`; every commit since was `[skip ci]`). Five `import smonitor` bindings under `integrations/` became unused in `31da6a4`, when those call sites deferred their imports into function bodies (uibcdf/smonitor#3); `F401` flagged them and the suite stopped running behind the lint gate. This is the second occurrence of the failure shape recorded under `0.13.0`, and the gate order is what makes it silent.
+
+  Removing them is not only lint hygiene: a module-level binding of the package inside `integrations/` is the raw material of that bug, and `tests/test_no_package_attribute_reachthrough.py` guards the attribute read rather than the binding. Three tests reached the package through `argdigest.smonitor` and three more through `smonitor.integrations.core.smonitor`; those aliases *were* the package object, so they now name it directly.
+
+  `ruff check .` also depended on whether the tree had been built. `tests/test_integrations_entrypoints.py` did `import smonitor._version`, and ruff's isort resolves that dotted path against the filesystem: `smonitor/_version.py` is written by the build and kept out of the tree by `.gitignore`, so the module was first-party after a build and third-party before one — and the two import orderings that satisfies are mutually exclusive. CI never saw it because `pip install .` runs before the lint step. The test now reaches the module as `from smonitor import _version`, which keys on `smonitor` and is stable either way; `ruff check .` is clean on an unbuilt checkout for the first time.
+
 ## [0.13.0] - 2026-08-17
 
 Catalog exceptions and warnings changed shape. Three notes for integrators:

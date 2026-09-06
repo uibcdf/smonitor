@@ -1,8 +1,18 @@
-import smonitor._version as version_module
 from smonitor.integrations import argdigest, depdigest, molsysmt
+
+# The version module is reached as `from smonitor import _version`, never as
+# `import smonitor._version`. The build writes `smonitor/_version.py` and
+# `.gitignore` keeps it out of the tree, so ruff's isort resolves that dotted
+# path against the filesystem and calls it first-party or third-party depending
+# on whether anyone has built. The two import orderings that satisfies are
+# mutually exclusive, so `ruff check .` would pass or fail on the build state
+# rather than on the source. The `from` form keys on `smonitor`, which is
+# always there.
 
 
 def test_version_module_exposes_version_string():
+    from smonitor import _version as version_module
+
     assert isinstance(version_module.__version__, str)
     assert version_module.__version__
 
@@ -14,7 +24,7 @@ def test_configure_argdigest_delegates_to_smonitor(monkeypatch):
         called["kwargs"] = kwargs
         return "ok-arg"
 
-    monkeypatch.setattr(argdigest.smonitor, "configure", fake_configure)
+    monkeypatch.setattr("smonitor.configure", fake_configure)
     out = argdigest.configure_argdigest(profile="qa")
     assert out == "ok-arg"
     assert called["kwargs"]["profile"] == "qa"
@@ -27,7 +37,7 @@ def test_configure_depdigest_delegates_to_smonitor(monkeypatch):
         called["kwargs"] = kwargs
         return "ok-dep"
 
-    monkeypatch.setattr(depdigest.smonitor, "configure", fake_configure)
+    monkeypatch.setattr("smonitor.configure", fake_configure)
     out = depdigest.configure_depdigest(level="INFO")
     assert out == "ok-dep"
     assert called["kwargs"]["level"] == "INFO"
@@ -40,7 +50,7 @@ def test_configure_molsysmt_delegates_to_smonitor(monkeypatch):
         called["kwargs"] = kwargs
         return "ok-msm"
 
-    monkeypatch.setattr(molsysmt.smonitor, "configure", fake_configure)
+    monkeypatch.setattr("smonitor.configure", fake_configure)
     out = molsysmt.configure_molsysmt(theme="plain")
     assert out == "ok-msm"
     assert called["kwargs"]["theme"] == "plain"
@@ -56,6 +66,7 @@ def test_package_version_matches_the_version_module():
     cheap one must not change the string anyone reads.
     """
     import smonitor
+    from smonitor import _version as version_module
 
     assert smonitor.__version__ == version_module.__version__
 

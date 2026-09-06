@@ -4,7 +4,6 @@ import warnings
 from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar
 
-import smonitor
 from smonitor.core import runtime
 
 from .core import emit_from_catalog, merge_extra

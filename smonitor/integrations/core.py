@@ -4,8 +4,6 @@ import threading
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-import smonitor
-
 
 # These wrap the package's late-defined entry points. `smonitor/__init__.py` imports this
 # package before it defines `emit` and `resolve`, so reading them off the module object is
@@ -35,12 +33,12 @@ def ensure_configured(package_root: Path) -> None:
     with _CONFIGURE_LOCK:
         if key in _configured_packages:
             return
-        # Deferred, and deliberately not `smonitor.configure`. The module-level
-        # `import smonitor` above binds the package object; reading an attribute off it is
-        # unsynchronized, and `smonitor/__init__.py` imports this module before it defines
-        # `configure`. A thread arriving inside that window sees the module without the
-        # attribute (uibcdf/smonitor#3). Importing the name here goes through the import
-        # machinery instead, whose per-module lock makes the second thread wait.
+        # Deferred, and deliberately not `smonitor.configure`. Binding the package at
+        # module level and reading an attribute off it is unsynchronized, and
+        # `smonitor/__init__.py` imports this module before it defines `configure`. A
+        # thread arriving inside that window sees the module without the attribute
+        # (uibcdf/smonitor#3). Importing the name here goes through the import machinery
+        # instead, whose per-module lock makes the second thread wait.
         from smonitor import configure
 
         configure(config_path=package_root)

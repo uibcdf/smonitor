@@ -59,7 +59,7 @@ def test_ensure_configured_reset_allows_reconfiguration(monkeypatch, tmp_path):
         calls.append(Path(config_path))
 
     reset_configured_packages()
-    monkeypatch.setattr("smonitor.integrations.core.smonitor.configure", _fake_configure)
+    monkeypatch.setattr("smonitor.configure", _fake_configure)
 
     ensure_configured(tmp_path)
     ensure_configured(tmp_path)

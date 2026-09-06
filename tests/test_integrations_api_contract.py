@@ -41,7 +41,7 @@ def test_ensure_configured_is_idempotent(monkeypatch, tmp_path):
         calls.append(Path(config_path))
 
     integrations.reset_configured_packages()
-    monkeypatch.setattr("smonitor.integrations.core.smonitor.configure", _fake_configure)
+    monkeypatch.setattr("smonitor.configure", _fake_configure)
 
     integrations.ensure_configured(tmp_path)
     integrations.ensure_configured(tmp_path)

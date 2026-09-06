@@ -57,7 +57,7 @@ def test_diagnostic_warn_fallback_when_smonitor_emit_fails(monkeypatch):
         _boom_emit_from_catalog,
     )
     monkeypatch.setattr(
-        "smonitor.integrations.diagnostic.smonitor.emit",
+        "smonitor.emit",
         _boom_emit,
     )
     seen = []
