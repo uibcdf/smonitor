@@ -1,0 +1,119 @@
+{
+  "category": "network",
+  "code": "MYLIB-W010",
+  "context": null,
+  "correlation_id": "corr-fixed",
+  "exception_type": null,
+  "extra": {
+    "caller": "mylib.io.fetch",
+    "causal_chain": [
+      "NET-001",
+      "MYLIB-W010"
+    ],
+    "cause_code": "NET-001",
+    "cause_exception_type": "TimeoutError",
+    "diagnostic_confidence": "high",
+    "evidence": {
+      "expected": "200 OK",
+      "observed": "timeout after 30s"
+    },
+    "failure_class": "network",
+    "form": "file:pdb",
+    "hint": "Retry, or select a mirror.",
+    "incident_kind": "network",
+    "last_failure_reason": "timeout",
+    "next_step": "check-network",
+    "operation": "download",
+    "priority": "normal",
+    "provider": "RCSB",
+    "recommended_action": "retry",
+    "requested_attribute": "coordinates",
+    "resource": "181l.pdb",
+    "retry_attempt": 2,
+    "retry_delay_s": 1.5,
+    "retry_exhausted": false,
+    "retry_max": 5,
+    "retryable": true,
+    "severity": "medium",
+    "smonitor": true,
+    "support_needed": false,
+    "title": "Download failed"
+  },
+  "fingerprint": "95ba030539af748f",
+  "human_summary": {
+    "code": "MYLIB-W010",
+    "hint": "Retry, or select a mirror.",
+    "level": "WARNING",
+    "message": "Download of 181l.pdb from RCSB failed.",
+    "next_step": "check-network",
+    "recommended_action": "retry",
+    "source": "mylib.io.download"
+  },
+  "level": "WARNING",
+  "message": "Download of 181l.pdb from RCSB failed.",
+  "normalized": {
+    "caller": "mylib.io.fetch",
+    "category": "network",
+    "causal_chain": [
+      "NET-001",
+      "MYLIB-W010"
+    ],
+    "cause_code": "NET-001",
+    "cause_exception_type": "TimeoutError",
+    "code": "MYLIB-W010",
+    "correlation_id": "corr-fixed",
+    "diagnostic_confidence": "high",
+    "evidence": {
+      "expected": "200 OK",
+      "observed": "timeout after 30s"
+    },
+    "exception_type": null,
+    "failure_class": "network",
+    "fingerprint": "95ba030539af748f",
+    "form": "file:pdb",
+    "hint": "Retry, or select a mirror.",
+    "human_summary": {
+      "code": "MYLIB-W010",
+      "hint": "Retry, or select a mirror.",
+      "level": "WARNING",
+      "message": "Download of 181l.pdb from RCSB failed.",
+      "next_step": "check-network",
+      "recommended_action": "retry",
+      "source": "mylib.io.download"
+    },
+    "incident_kind": "network",
+    "last_failure_reason": "timeout",
+    "level": "WARNING",
+    "message": "Download of 181l.pdb from RCSB failed.",
+    "next_step": "check-network",
+    "operation": "download",
+    "priority": "normal",
+    "provider": "RCSB",
+    "recommended_action": "retry",
+    "requested_attribute": "coordinates",
+    "resource": "181l.pdb",
+    "retry_attempt": 2,
+    "retry_delay_s": 1.5,
+    "retry_exhausted": false,
+    "retry_max": 5,
+    "retryable": true,
+    "run_id": "<run_id>",
+    "session_id": "<session_id>",
+    "severity": "medium",
+    "source": "mylib.io.download",
+    "support_needed": false,
+    "tags": [
+      "io",
+      "network"
+    ]
+  },
+  "profile": "agent",
+  "run_id": "<run_id>",
+  "session_id": "<session_id>",
+  "source": "mylib.io.download",
+  "tags": [
+    "io",
+    "network"
+  ],
+  "timestamp": "<timestamp>"
+}

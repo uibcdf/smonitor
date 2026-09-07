@@ -1,0 +1,51 @@
+{
+  "category": null,
+  "code": "MYLIB-E001",
+  "context": null,
+  "correlation_id": null,
+  "exception_type": null,
+  "extra": {
+    "smonitor": true,
+    "title": null
+  },
+  "fingerprint": "248dcf13c08fac5c",
+  "human_summary": {
+    "code": "MYLIB-E001",
+    "hint": null,
+    "level": "WARNING",
+    "message": "Nothing optional was supplied.",
+    "next_step": null,
+    "recommended_action": null,
+    "source": "mylib.core"
+  },
+  "level": "WARNING",
+  "message": "Nothing optional was supplied.",
+  "normalized": {
+    "category": null,
+    "code": "MYLIB-E001",
+    "correlation_id": null,
+    "exception_type": null,
+    "fingerprint": "248dcf13c08fac5c",
+    "human_summary": {
+      "code": "MYLIB-E001",
+      "hint": null,
+      "level": "WARNING",
+      "message": "Nothing optional was supplied.",
+      "next_step": null,
+      "recommended_action": null,
+      "source": "mylib.core"
+    },
+    "level": "WARNING",
+    "message": "Nothing optional was supplied.",
+    "run_id": "<run_id>",
+    "session_id": "<session_id>",
+    "source": "mylib.core",
+    "tags": []
+  },
+  "profile": "agent",
+  "run_id": "<run_id>",
+  "session_id": "<session_id>",
+  "source": "mylib.core",
+  "tags": null,
+  "timestamp": "<timestamp>"
+}

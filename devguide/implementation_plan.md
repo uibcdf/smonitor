@@ -106,7 +106,7 @@ Status: **Done**
 - Freeze and document public API surface (and keep internals private-by-default).
 - Add API contract tests for exported symbols and core behavior.
 - Run integration smoke checks in ecosystem repositories.
-Status: **In Progress**
+Status: **Done** — this section describes the `0.11` window and is kept as history.
 
 Progress checkpoint:
 - docs/routes largely stabilized and aligned with runtime behavior,
@@ -143,7 +143,11 @@ Status: **Done**
 ## Next Concrete Steps
 1. Add release-gate CI checks for package build/install smoke + docs build. **Done**
 2. Add explicit public API contract tests (top-level exports + integrations API). **Done**
-3. Add agent-profile payload contract tests and snapshot fixtures. **In Progress**
+3. Add agent-profile payload contract tests and snapshot fixtures. **Done** —
+   `tests/test_agent_payload_snapshot.py` with fixtures under `tests/snapshots/`.
+   The field-by-field tests protect what somebody remembered to assert; the
+   snapshot states that there are no other fields, which is what a frozen
+   contract needs in both directions.
 4. Add a short operational runbook in docs for weekly maintenance loops. **Done**
 
 ## 1.0.0 Operational Checklist
