@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+- A `CODES` entry that is not a mapping raised `AttributeError` from inside `resolve()`. A code pointing straight at a message string is the shape that does it, and one library in the ecosystem is written that way, so the first diagnostic it tried to report crashed the call reporting it. A malformed catalog now degrades to an uncoded diagnostic; `validate_project_config` already named the entry and `strict_config` still refuses to start on it.
+
+### Added
+- `devtools/verify_integration.py` runs section 7's checks 1, 2, 3 and 5 over one library or over every sibling carrying the canonical guide, and exits non-zero on any failure. The section gives each library a test file to copy, which answers "is this library correct"; the sweep answers "where does every library stand", which is what a stabilization pass needs. It reads a catalog without importing its library, under a synthetic package chain, so a library whose `__init__` pulls the scientific stack is still checkable. Check 4 is not covered: it needs one builder per catalog class in the shape a call site uses, which only the library can supply.
+
+  Its first run found the `resolve()` crash above, and independently rediscovered a catalog that is wired but not connected (uibcdf/topomt#15).
+
 ## [0.14.0] - 2026-09-06
 
 *Tagged, not yet published: there is no GitHub Release and no conda package for this

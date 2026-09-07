@@ -63,3 +63,21 @@ def test_strict_signals_raises():
         assert "Missing extra fields" in str(exc)
     else:
         raise AssertionError("Expected ValueError")
+
+
+def test_a_malformed_codes_entry_degrades_instead_of_raising():
+    """A code mapped to a string used to raise `AttributeError` from `resolve()`.
+
+    Found by running the guide's section 7 checks across the ecosystem: one
+    library maps its codes straight to message strings. Diagnostics must not be
+    the thing that breaks the call reporting a problem; `validate_project_config`
+    is where a malformed entry is named.
+    """
+    smonitor.configure(profile="user", handlers=[], codes={"X-BAD": "just a string"})
+
+    message, hint = smonitor.resolve(code="X-BAD", extra={})
+    assert (message, hint) == ("", None)
+
+    event = smonitor.emit("WARNING", "still reported", code="X-BAD")
+    assert event["message"] == "still reported"
+    assert event["code"] == "X-BAD"

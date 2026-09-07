@@ -440,6 +440,14 @@ class Manager:
     ) -> tuple[str, Optional[str], Optional[Dict[str, Any]]]:
         """Internal helper to resolve profile-based messages and hints."""
         code_meta = self._codes.get(code) if code else None
+        if not isinstance(code_meta, dict):
+            # A `CODES` entry that is not a mapping -- a code pointing straight at
+            # a string is the common shape -- used to reach `.get` and raise
+            # `AttributeError` from inside `resolve()`. A malformed catalog must
+            # degrade to an uncoded diagnostic, never take down the call that was
+            # trying to report a problem. `validate_project_config` already names
+            # the entry, and `strict_config` still refuses to start on it.
+            code_meta = None
         profile = self._config.profile
         if code_meta and (message is None or message == ""):
             message = _first_present(
