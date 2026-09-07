@@ -1,3 +1,18 @@
+---
+summary: A catalog hint interpolating a field cannot be re-rendered from args alone.
+issue: uibcdf/smonitor#4
+status: blocked
+opened: 2026-08-15
+closed:
+severity: low
+verification: reproduced
+area: [catalog, integrations]
+guard: tests/test_catalog_instance_round_trip.py
+normative:
+blocked_by: [pytest-dev/pytest-xdist#1372]
+supersedes: []
+---
+
 # Catalog warnings are re-rendered when they are rebuilt
 
 **Status:** resolved here in `0.13.0`. One residue remains, and it is upstream's.

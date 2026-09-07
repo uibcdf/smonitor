@@ -1,3 +1,17 @@
+---
+summary: How SMonitor diagnostics participate in a pytest run, and what a policy layer owns.
+issue: uibcdf/smonitor#6
+status: open
+opened: 2026-07-17
+closed:
+verification: asserted
+area: [pytest, ci, ecosystem]
+guard:
+normative:
+blocked_by: []
+supersedes: []
+---
+
 # Pytest Diagnostics Bridge and MolSysSuite Policy Layer
 
 **Status:** exploratory proposal input; requires later digestion with the

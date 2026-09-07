@@ -1,3 +1,17 @@
+---
+summary: Which names the catalog base classes own, and whether hint returns.
+issue: uibcdf/smonitor#5
+status: partial
+opened: 2026-08-17
+closed:
+verification: measured
+area: [catalog, integrations, api]
+guard:
+normative: standards/SMONITOR_GUIDE.md
+blocked_by: [uibcdf/argdigest#2]
+supersedes: []
+---
+
 # Who owns `hint` on a catalog instance
 
 **Status:** decided 2026-09-06, at the 1.0 API/contract freeze it was deferred to.

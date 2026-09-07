@@ -1,3 +1,18 @@
+---
+summary: The integrations reach through a package that is not finished being imported.
+issue: uibcdf/smonitor#3
+status: resolved
+opened: 2026-09-04
+closed: 2026-09-04
+severity: high
+verification: reproduced
+area: [integrations, imports]
+guard: tests/test_no_package_attribute_reachthrough.py
+normative:
+blocked_by: []
+supersedes: []
+---
+
 # The integrations reach through a package that is not finished being imported
 
 **Status:** resolved in `31da6a4`. Guarded by
