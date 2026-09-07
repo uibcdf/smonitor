@@ -1,12 +1,12 @@
 ---
 summary: Which names the catalog base classes own, and whether hint returns.
 issue: uibcdf/smonitor#5
-status: partial
+status: resolved
 opened: 2026-08-17
-closed:
+closed: 2026-09-07
 verification: measured
 area: [catalog, integrations, api]
-guard:
+guard: tests/test_catalog_instance_round_trip.py
 normative: standards/SMONITOR_GUIDE.md
 blocked_by: [uibcdf/argdigest#2]
 supersedes: []
@@ -14,10 +14,9 @@ supersedes: []
 
 # Who owns `hint` on a catalog instance
 
-**Status:** decided 2026-09-06, at the 1.0 API/contract freeze it was deferred to.
-The three questions this document ends with are answered at the bottom, with the
-measurements that answered them. Implementation is not started; the precondition
-is stated below and belongs to ArgDigest.
+**Status:** decided 2026-09-06 and implemented 2026-09-07. The three questions
+this document ends with are answered at the bottom, with the measurements that
+answered them.
 
 **Recorded:** 2026-08-17
 
@@ -281,3 +280,32 @@ consequence instead.
 `tests/test_catalog_instance_round_trip.py` fails if anything reintroduces state
 outside `args`, including a stored `hint`. Any implementation of this decision has
 to keep it green; the prototype does.
+
+## Implementation — 2026-09-07
+
+Landed in the order the decision required, because the precondition was not a
+preference: `exc.hint` meant the call-site hint, and the property returns the
+catalog one.
+
+1. **ArgDigest first** (`uibcdf/argdigest@be23917`). Its catalog templates were
+   not rendering at all — SMonitor falls back to a template only when the caller
+   passes an empty message, and all 43 raise sites passed one, so four templates
+   carrying a real sentence had never reached a user. The raise sites now pass
+   typed fields; seven hardcoded hints moved into the catalog; `_suggest()` stays
+   at the call site as the `{guess}` field, because it is computed from the real
+   signature. Its three tests asserting a raise-site hint changed **visibly**,
+   which is what landing this repository first buys: the other order leaves them
+   passing while asserting something else.
+2. **The property here.** `hint` on `CatalogException` and `CatalogWarning`,
+   re-resolved from `code` and `extra`, storing nothing. Guarded in
+   `tests/test_catalog_instance_round_trip.py`, beside the `args` invariant it
+   must not disturb.
+
+One thing the migration surfaced that the decision had not anticipated:
+ArgDigest raised a missing optional dependency as a *type* error, with the
+remedy — which distribution to install, and that DepDigest can supply it —
+hardcoded at the raise site. Moving prose to the catalog is what exposed that it
+was about to be dropped. It now has its own code, `ARG-ERR-OPTDEP-001`.
+
+`python devtools/verify_integration.py ../argdigest` passes all five checks of
+guide section 7 for the first time.

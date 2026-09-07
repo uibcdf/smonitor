@@ -109,6 +109,38 @@ class CatalogException(Exception):
         message = getattr(self, "message", None)
         return super().__str__() if message is None else message
 
+    @property
+    def hint(self) -> Optional[str]:
+        """The catalog hint for this instance's code, re-resolved on every read.
+
+        Derived, never stored. `args` carries the message and nothing else, and
+        that is the invariant which makes `type(e)(*e.args)` -- `pickle`,
+        `copy.deepcopy`, `warnings.warn(text, category)` and pytest-xdist --
+        reproduce an instance. A stored hint would be state outside `args`, so
+        every rebuild would drop it and the defect closed in `0.13.0` would
+        reopen somewhere new.
+
+        Being a property is also the enforcement. A subclass that assigns
+        `self.hint` gets `AttributeError` at the offending line, which is what
+        the reserved-name rule needs and what `__init_subclass__` could not
+        provide: it cannot see assignment order at class creation.
+
+        Read at access rather than at construction, so it follows the active
+        profile. `message` is a snapshot taken when the instance was built, so
+        the two can disagree if the profile changes in between -- a bounded
+        consequence, since the profile is set in `configure()` before any
+        diagnostic is raised.
+
+        `getattr` rather than attribute access: an instance rebuilt through
+        `__new__` has no dictionary until its state is restored, and a half-built
+        exception must still be inspectable.
+        """
+        code = getattr(self, "code", None)
+        if not code:
+            return None
+        _, hint = _resolve(code=code, extra=getattr(self, "extra", None) or {})
+        return hint
+
 
 class CatalogWarning(Warning):
     """Base class for warnings backed by an SMonitor catalog."""
@@ -161,6 +193,38 @@ class CatalogWarning(Warning):
         """
         message = getattr(self, "message", None)
         return super().__str__() if message is None else message
+
+    @property
+    def hint(self) -> Optional[str]:
+        """The catalog hint for this instance's code, re-resolved on every read.
+
+        Derived, never stored. `args` carries the message and nothing else, and
+        that is the invariant which makes `type(e)(*e.args)` -- `pickle`,
+        `copy.deepcopy`, `warnings.warn(text, category)` and pytest-xdist --
+        reproduce an instance. A stored hint would be state outside `args`, so
+        every rebuild would drop it and the defect closed in `0.13.0` would
+        reopen somewhere new.
+
+        Being a property is also the enforcement. A subclass that assigns
+        `self.hint` gets `AttributeError` at the offending line, which is what
+        the reserved-name rule needs and what `__init_subclass__` could not
+        provide: it cannot see assignment order at class creation.
+
+        Read at access rather than at construction, so it follows the active
+        profile. `message` is a snapshot taken when the instance was built, so
+        the two can disagree if the profile changes in between -- a bounded
+        consequence, since the profile is set in `configure()` before any
+        diagnostic is raised.
+
+        `getattr` rather than attribute access: an instance rebuilt through
+        `__new__` has no dictionary until its state is restored, and a half-built
+        exception must still be inspectable.
+        """
+        code = getattr(self, "code", None)
+        if not code:
+            return None
+        _, hint = _resolve(code=code, extra=getattr(self, "extra", None) or {})
+        return hint
 
 
 class FormatError(CatalogException):

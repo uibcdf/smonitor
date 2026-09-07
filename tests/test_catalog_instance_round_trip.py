@@ -173,3 +173,45 @@ def test_a_domain_field_first_does_not_round_trip_its_args():
 
     assert str(rebuilt) != str(original)
     assert "Atom name 'Atom name" in str(rebuilt)
+
+
+def test_hint_is_derived_and_survives_every_rebuild():
+    """`hint` holds nothing, so no rebuilder can drop it.
+
+    Decided in `devguide/pending_proposals/hint_ownership_on_catalog_instances.md`
+    and guarded here rather than in a file of its own: this module is where the
+    `args` invariant lives, and a stored hint is the most likely way to break it.
+    """
+    original = AtomWarning.for_atom("Ar")
+    assert original.hint == "Provide an explicit atom type."
+
+    for rebuilt in (pickle.loads(pickle.dumps(original)), copy.deepcopy(original)):
+        assert rebuilt.hint == original.hint
+
+    # `args` carries the message alone, so a rebuilder holding only `args` sees a
+    # hint whose template has nothing to interpolate. It is the known residue,
+    # not a lost hint: the code still resolves, and the text says what is absent.
+    from_args = type(original)(*original.args)
+    assert from_args.hint == "Provide an explicit atom type."
+    assert from_args.args == original.args
+
+
+def test_hint_refuses_assignment():
+    """The property is the reserved-name rule, enforced where it is broken."""
+    warning = AtomWarning.for_atom("Ar")
+    with pytest.raises(AttributeError, match="no setter"):
+        warning.hint = "mine"
+
+
+def test_hint_is_none_without_a_code():
+    assert CatalogWarning("plain text").hint is None
+
+
+def test_hint_follows_the_active_profile():
+    """Derived at access, so it answers for the profile asking."""
+    smonitor.configure(
+        profile="dev",
+        handlers=[],
+        codes={"T-ATOM": {**CODES["T-ATOM"], "dev_hint": "Register the atom type."}},
+    )
+    assert CatalogWarning(code="T-ATOM").hint == "Register the atom type."

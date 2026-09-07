@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- `hint` returns on `CatalogException` and `CatalogWarning`, as a read-only property re-resolved from `code` and `extra`. It stores nothing, so `args` still carries the message and nothing else — the invariant that makes `type(e)(*e.args)` reproduce an instance — and every rebuild reproduces the hint rather than dropping it. Being a property is also the enforcement the reserved-name rule needed: a subclass assigning `self.hint` now raises `AttributeError` at the offending line, which `__init_subclass__` could not do because it cannot see assignment order.
+
+  It is read at access, so it answers for the active profile, while `message` remains the snapshot taken at construction. The two can disagree if the profile changes in between; the profile is set in `configure()` before any diagnostic is raised, so in practice they do not.
+
+  This implements the decision in `devguide/archive/hint_ownership_on_catalog_instances.md`, landed after its precondition: ArgDigest migrated first (`uibcdf/argdigest@be23917`), so `exc.hint` changing from the call-site hint to the catalog one was a visible diff in its tests rather than a silent redefinition.
+
 ### Fixed
 - A `CODES` entry that is not a mapping raised `AttributeError` from inside `resolve()`. A code pointing straight at a message string is the shape that does it, and one library in the ecosystem is written that way, so the first diagnostic it tried to report crashed the call reporting it. A malformed catalog now degrades to an uncoded diagnostic; `validate_project_config` already named the entry and `strict_config` still refuses to start on it.
 

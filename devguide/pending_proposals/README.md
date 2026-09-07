@@ -19,7 +19,6 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
-| [`hint_ownership_on_catalog_instances.md`](hint_ownership_on_catalog_instances.md) | `partial` | [uibcdf/smonitor#5](https://github.com/uibcdf/smonitor/issues/5) | Which names the catalog base classes own, and whether hint returns. |
 | [`pytest_diagnostics_bridge_and_molsyssuite_policy.md`](pytest_diagnostics_bridge_and_molsyssuite_policy.md) | `open` | [uibcdf/smonitor#6](https://github.com/uibcdf/smonitor/issues/6) | How SMonitor diagnostics participate in a pytest run, and what a policy layer owns. |
 
 <!-- /generated -->
