@@ -234,7 +234,7 @@ make -C docs html
 
 ## Status
 
-Current release: **0.14.0**, available from the UIBCDF Conda channel for Python 3.11,
+Current release: **0.15.0**, available from the UIBCDF Conda channel for Python 3.11,
 3.12, and 3.13 and as a GitHub source release.
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 

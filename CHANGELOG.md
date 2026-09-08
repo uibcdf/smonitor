@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.15.0] - 2026-09-08
+
+One change is breaking, and it is first because a subclass hits it at import:
+
+- **`hint` is a read-only property on `CatalogException` and `CatalogWarning`.**
+  A subclass that assigns `self.hint` now raises `AttributeError` at that line.
+  That is deliberate — the base classes own `code`, `message`, `raw_message`,
+  `extra` and `hint`, and assigning one before `super().__init__()` wrote into a
+  variable the base was about to overwrite. `exc.hint` still works and returns
+  the catalog hint for the instance's code, re-resolved on every read. ArgDigest
+  migrated ahead of this release (`uibcdf/argdigest@5d3825e`); check 5 of guide
+  section 7 finds the pattern in any repository.
+- **`recurrent_incidents` no longer reports captured log lines as incidents**,
+  and every `top_fingerprints` row now carries the `code` behind it. Nothing is
+  hidden; the uncoded buckets stay in `top_fingerprints` and in
+  `events_by_fingerprint`, labelled rather than filtered.
+- **A malformed `CODES` entry degrades instead of raising.** A code pointing
+  straight at a message string used to reach `.get` on a `str` and raise from
+  inside `resolve()` — the call that was trying to report a problem.
 
 ### Added
 - `devtools/operability_evidence.py` runs a component's test suite under SMonitor, exports the bundle it produced and reads its triage, without adding anything to the component: the event buffer and the level arrive through the environment, which the component's own `ensure_configured()` reads on import. It is the workflow behind `devguide/operability_evidence_2026-09-08.md`, kept runnable so exit criterion 5 can be reproduced rather than believed.
@@ -15,16 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
   This implements the decision in `devguide/archive/hint_ownership_on_catalog_instances.md`, landed after its precondition: ArgDigest migrated first (`uibcdf/argdigest@be23917`), so `exc.hint` changing from the call-site hint to the catalog one was a visible diff in its tests rather than a silent redefinition.
 
-### Fixed
-- `recurrent_incidents` reported uncoded log lines as incidents, and `top_fingerprints` gave no way to tell. A fingerprint is derived from `code`, `source`, `exception_type` and a subset of `extra`, with the message excluded on purpose so a template rendering different text cannot split one incident. With no code, only `source` remains and every uncoded event from one module collapses into one bucket. Found while confirming exit criterion 5 against a real suite: 219 of 289 events in a single bucket carrying 102 distinct messages, presented as the loudest recurring incident in the run.
-
-  Each `top_fingerprints` row now carries the `code` behind it, and `recurrent_incidents` holds only coded rows. Nothing is hidden: the uncoded buckets remain in `top_fingerprints` and in `events_by_fingerprint`, labelled rather than filtered. The fingerprint itself is untouched — it is the key bundles compare across runs by, and the defect was in what a list named for incidents contained, not in the hash.
-
-  The obvious alternative, reporting how many distinct messages sit behind a row, was tried and rejected: it does not separate the two cases. The same run had a coded fingerprint with six events and six distinct messages, which is one incident whose template interpolates a field.
-
-- A `CODES` entry that is not a mapping raised `AttributeError` from inside `resolve()`. A code pointing straight at a message string is the shape that does it, and one library in the ecosystem is written that way, so the first diagnostic it tried to report crashed the call reporting it. A malformed catalog now degrades to an uncoded diagnostic; `validate_project_config` already named the entry and `strict_config` still refuses to start on it.
-
-### Added
 - The machine payload is pinned as a whole, in `tests/snapshots/`, rather than field by field. `profile="agent"` exists so a triage agent reads structure instead of prose, and `normalized` is the section it reads; it is frozen for 1.0, where a key that disappears breaks every consumer and a key that appears is one we are then obliged to keep.
 
   Measured before writing it, by removing each field in turn: 23 of the 25 promoted `extra` keys were already guarded, but `form`, `requested_attribute`, `message`, `category` and `exception_type` could be deleted with the whole suite green — and a key could be *added* with nothing failing at all, verified by growing `normalized` an `internal_debug_state` holding `repr(event)`. Two snapshots close both directions: one event carrying every canonical field, one carrying nothing optional, so the fields that are always present are pinned too. Regenerating is explicit (`SMONITOR_UPDATE_SNAPSHOTS=1`) and the diff is the record of a contract change. All six previously silent changes now fail.
@@ -34,6 +42,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `devtools/verify_integration.py` runs section 7's checks 1, 2, 3 and 5 over one library or over every sibling carrying the canonical guide, and exits non-zero on any failure. The section gives each library a test file to copy, which answers "is this library correct"; the sweep answers "where does every library stand", which is what a stabilization pass needs. It reads a catalog without importing its library, under a synthetic package chain, so a library whose `__init__` pulls the scientific stack is still checkable. Check 4 is not covered: it needs one builder per catalog class in the shape a call site uses, which only the library can supply.
 
   Its first run found the `resolve()` crash above, and independently rediscovered a catalog that is wired but not connected (uibcdf/topomt#15).
+
+### Fixed
+- `recurrent_incidents` reported uncoded log lines as incidents, and `top_fingerprints` gave no way to tell. A fingerprint is derived from `code`, `source`, `exception_type` and a subset of `extra`, with the message excluded on purpose so a template rendering different text cannot split one incident. With no code, only `source` remains and every uncoded event from one module collapses into one bucket. Found while confirming exit criterion 5 against a real suite: 219 of 289 events in a single bucket carrying 102 distinct messages, presented as the loudest recurring incident in the run.
+
+  Each `top_fingerprints` row now carries the `code` behind it, and `recurrent_incidents` holds only coded rows. Nothing is hidden: the uncoded buckets remain in `top_fingerprints` and in `events_by_fingerprint`, labelled rather than filtered. The fingerprint itself is untouched — it is the key bundles compare across runs by, and the defect was in what a list named for incidents contained, not in the hash.
+
+  The obvious alternative, reporting how many distinct messages sit behind a row, was tried and rejected: it does not separate the two cases. The same run had a coded fingerprint with six events and six distinct messages, which is one incident whose template interpolates a field.
+
+- A `CODES` entry that is not a mapping raised `AttributeError` from inside `resolve()`. A code pointing straight at a message string is the shape that does it, and one library in the ecosystem is written that way, so the first diagnostic it tried to report crashed the call reporting it. A malformed catalog now degrades to an uncoded diagnostic; `validate_project_config` already named the entry and `strict_config` still refuses to start on it.
 
 ## [0.14.0] - 2026-09-06
 

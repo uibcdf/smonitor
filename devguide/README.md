@@ -46,11 +46,12 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.14.0` is the published pre-1.0 stabilization checkpoint. Its GitHub source
-  release and 12 Conda distributions cover Python 3.11--3.13 on Linux, Intel and Apple
-  Silicon macOS, and Windows.
-- Current quality snapshot (2026-09-06): full pytest suite green (393 tests), `ruff check .` clean on an
-  unbuilt checkout, line-rate 0.9750, branch-rate 0.9438. Remote CI green across CI, QA CI and Docs CI.
+- Version `0.15.0` is the published pre-1.0 stabilization checkpoint.
+- **All seven exit criteria for `1.0.0` are met.** Criterion 5 -- operability confirmed in a
+  real workflow -- closed on 2026-09-08 with `operability_evidence_2026-09-08.md`, which
+  itself found the defect fixed in `#11`.
+- Current quality snapshot (2026-09-08): full pytest suite green (435 tests), `ruff check .` clean on an
+  unbuilt checkout, line-rate 0.9728, branch-rate 0.9419. Remote CI green across CI, QA CI and Docs CI.
 - The canonical guide is byte-identical in the nine repositories that carry it, and
   `devtools/sync_smonitor_guide.py` now finds consumers on disk rather than only in a list.
 
