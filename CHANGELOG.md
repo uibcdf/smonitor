@@ -16,6 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   This implements the decision in `devguide/archive/hint_ownership_on_catalog_instances.md`, landed after its precondition: ArgDigest migrated first (`uibcdf/argdigest@be23917`), so `exc.hint` changing from the call-site hint to the catalog one was a visible diff in its tests rather than a silent redefinition.
 
 ### Fixed
+- `recurrent_incidents` reported uncoded log lines as incidents, and `top_fingerprints` gave no way to tell. A fingerprint is derived from `code`, `source`, `exception_type` and a subset of `extra`, with the message excluded on purpose so a template rendering different text cannot split one incident. With no code, only `source` remains and every uncoded event from one module collapses into one bucket. Found while confirming exit criterion 5 against a real suite: 219 of 289 events in a single bucket carrying 102 distinct messages, presented as the loudest recurring incident in the run.
+
+  Each `top_fingerprints` row now carries the `code` behind it, and `recurrent_incidents` holds only coded rows. Nothing is hidden: the uncoded buckets remain in `top_fingerprints` and in `events_by_fingerprint`, labelled rather than filtered. The fingerprint itself is untouched — it is the key bundles compare across runs by, and the defect was in what a list named for incidents contained, not in the hash.
+
+  The obvious alternative, reporting how many distinct messages sit behind a row, was tried and rejected: it does not separate the two cases. The same run had a coded fingerprint with six events and six distinct messages, which is one incident whose template interpolates a field.
+
 - A `CODES` entry that is not a mapping raised `AttributeError` from inside `resolve()`. A code pointing straight at a message string is the shape that does it, and one library in the ecosystem is written that way, so the first diagnostic it tried to report crashed the call reporting it. A malformed catalog now degrades to an uncoded diagnostic; `validate_project_config` already named the entry and `strict_config` still refuses to start on it.
 
 ### Added

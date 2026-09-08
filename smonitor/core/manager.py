@@ -932,6 +932,14 @@ class Manager:
         events_by_code: Dict[str, int] = {}
         events_by_category: Dict[str, int] = {}
         events_by_fingerprint: Dict[str, int] = {}
+        #: The code behind each fingerprint, so a triage row can say whether it
+        #: is an incident at all. A fingerprint is built from `code`, `source`,
+        #: `exception_type` and a subset of `extra`; with no code, only `source`
+        #: remains, and every uncoded event from one module collapses into one
+        #: bucket whatever it says. Measured on a real suite: 219 of 289 events
+        #: in one bucket carrying 102 distinct messages, presented as a single
+        #: recurring incident (uibcdf/smonitor#11).
+        code_by_fingerprint: Dict[str, Optional[str]] = {}
         events_by_source: Dict[str, int] = {}
         events_by_resource: Dict[str, int] = {}
         slow_signals_recent: List[Dict[str, Any]] = []
@@ -948,6 +956,8 @@ class Manager:
             if fingerprint:
                 key = str(fingerprint)
                 events_by_fingerprint[key] = events_by_fingerprint.get(key, 0) + 1
+                if code_by_fingerprint.get(key) is None:
+                    code_by_fingerprint[key] = str(code) if code else None
             source = event.get("source")
             if source:
                 key = str(source)
@@ -979,7 +989,10 @@ class Manager:
         duplicate_summaries = duplicate_summaries[-20:]
         top_codes = _top_items(events_by_code)
         top_sources = _top_items(events_by_source)
-        top_fingerprints = _top_items(events_by_fingerprint)
+        top_fingerprints = [
+            {**item, "code": code_by_fingerprint.get(item["key"])}
+            for item in _top_items(events_by_fingerprint)
+        ]
         most_noisy_resources = _top_items(events_by_resource)
         top_redundant_conversions = _top_items(self._redundant_conversions_by_callsite)
         expensive_entries = sorted(
@@ -1007,7 +1020,14 @@ class Manager:
             if isinstance((event.get("extra") or {}), dict)
             and (event.get("extra") or {}).get("recommended_action")
         ][-10:]
-        recurrent_incidents = [item for item in top_fingerprints if item["count"] > 1]
+        # An uncoded event is a log line the bridge captured, not an incident, and
+        # a list named `recurrent_incidents` should not be where it is reported.
+        # `top_fingerprints` still carries every bucket, now labelled with its
+        # code, so nothing is hidden -- it is only kept out of the list whose
+        # name asserts what it is.
+        recurrent_incidents = [
+            item for item in top_fingerprints if item["count"] > 1 and item["code"]
+        ]
 
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
