@@ -29,8 +29,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [0.14.0] - 2026-09-06
 
-*Tagged, not yet published: there is no GitHub Release and no conda package for this
-version. Build from the `0.14.0` tag if you need it before it ships.*
+*Published on 2026-09-08 as a GitHub source release and through the UIBCDF Conda channel
+for Python 3.11--3.13 on `linux-64`, `osx-64`, `osx-arm64`, and `win-64`.*
 
 Three notes for integrators, in the order they are likely to matter:
 

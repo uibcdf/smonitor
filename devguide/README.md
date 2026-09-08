@@ -45,9 +45,9 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.14.0` tagged as pre-1.0 stabilization checkpoint. The tag and the changelog
-  are final; the GitHub Release and the conda package are deliberately not published yet,
-  so `0.13.0` remains the installable version.
+- Version `0.14.0` is the published pre-1.0 stabilization checkpoint. Its GitHub source
+  release and 12 Conda distributions cover Python 3.11--3.13 on Linux, Intel and Apple
+  Silicon macOS, and Windows.
 - Current quality snapshot (2026-09-06): full pytest suite green (393 tests), `ruff check .` clean on an
   unbuilt checkout, line-rate 0.9750, branch-rate 0.9438. Remote CI green across CI, QA CI and Docs CI.
 - The canonical guide is byte-identical in the nine repositories that carry it, and
