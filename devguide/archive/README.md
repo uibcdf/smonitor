@@ -27,5 +27,6 @@ The table below is generated from front matter by
 | --- | --- | --- | --- |
 | [`hint_ownership_on_catalog_instances.md`](hint_ownership_on_catalog_instances.md) | `resolved` | [uibcdf/smonitor#5](https://github.com/uibcdf/smonitor/issues/5) | Which names the catalog base classes own, and whether hint returns. |
 | [`integrations_reach_through_a_partially_initialized_package.md`](integrations_reach_through_a_partially_initialized_package.md) | `resolved` | [uibcdf/smonitor#3](https://github.com/uibcdf/smonitor/issues/3) | The integrations reach through a package that is not finished being imported. |
+| [`receptor_misclassifies_composite_conda_publication.md`](receptor_misclassifies_composite_conda_publication.md) | `resolved` | [uibcdf/smonitor#10](https://github.com/uibcdf/smonitor/issues/10) | Use the release profile for the composite Conda publication workflow |
 
 <!-- /generated -->
