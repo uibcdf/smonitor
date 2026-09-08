@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- `devtools/operability_evidence.py` runs a component's test suite under SMonitor, exports the bundle it produced and reads its triage, without adding anything to the component: the event buffer and the level arrive through the environment, which the component's own `ensure_configured()` reads on import. It is the workflow behind `devguide/operability_evidence_2026-09-08.md`, kept runnable so exit criterion 5 can be reproduced rather than believed.
+
 - `hint` returns on `CatalogException` and `CatalogWarning`, as a read-only property re-resolved from `code` and `extra`. It stores nothing, so `args` still carries the message and nothing else — the invariant that makes `type(e)(*e.args)` reproduce an instance — and every rebuild reproduces the hint rather than dropping it. Being a property is also the enforcement the reserved-name rule needed: a subclass assigning `self.hint` now raises `AttributeError` at the offending line, which `__init_subclass__` could not do because it cannot see assignment order.
 
   It is read at access, so it answers for the active profile, while `message` remains the snapshot taken at construction. The two can disagree if the profile changes in between; the profile is set in `configure()` before any diagnostic is raised, so in practice they do not.

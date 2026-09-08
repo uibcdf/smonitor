@@ -886,6 +886,12 @@ Reasoning:
 3. slices 1-6 are implemented and covered by tests;
 4. at least an initial bundle comparison workflow exists;
 5. at least one cross-library diagnostic workflow validates the new operability model end to end.
+   **Done (2026-09-08)** — `devguide/operability_evidence_2026-09-08.md`, reproducible with
+   `devtools/operability_evidence.py`. It exercised fingerprints, runtime identifiers, triage
+   summaries, bundle comparison and dual output against ArgDigest's real suite, and produced
+   two findings no test had: a fingerprint is only meaningful for a coded event
+   (`uibcdf/smonitor#11`), and bundle comparison identified a broken integration from its
+   signature alone — 234 events, none coded, sixteen at ERROR — with no traceback read.
 
 Operational closure checklist for the stabilization window:
 
@@ -901,7 +907,8 @@ Operational closure checklist for the stabilization window:
    - no new flakiness in the main gates.
 4. no open high-severity SMonitor bugs remain.
    - nothing breaking public contracts, bundles, profiles, CLI, or support/triage flows.
-5. operability is confirmed in at least one real CI/support workflow.
+5. operability is confirmed in at least one real CI/support workflow. **Done (2026-09-08)**;
+   see `operability_evidence_2026-09-08.md`.
    - fingerprints, runtime identifiers, triage summaries, bundle comparison, and dual human/agent output are all exercised.
 6. no further pre-`1.0.0` API changes are clearly required.
    - no missing canonical fields;

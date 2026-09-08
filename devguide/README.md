@@ -18,6 +18,7 @@ This folder collects developer documentation for `smonitor`.
 12) `reporting_protocol.md` — **Normative.** How a defect or a proposal enters, is worked on, and closes.
 13) `pending_bugs/`, `pending_proposals/`, `archive/` — The report queues. Indexes are generated.
 14) `templates/report.md` — The template both queues use.
+15) `operability_evidence_2026-09-08.md` — Exit criterion 5, confirmed against a real suite.
 
 ## Scope
 These documents track implementation details. Product-level decisions and
