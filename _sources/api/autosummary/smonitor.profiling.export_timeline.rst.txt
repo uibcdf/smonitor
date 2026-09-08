@@ -1,0 +1,6 @@
+﻿smonitor.profiling.export\_timeline
+===================================
+
+.. currentmodule:: smonitor.profiling
+
+.. autofunction:: export_timeline

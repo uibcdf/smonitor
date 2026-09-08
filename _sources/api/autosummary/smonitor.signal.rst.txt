@@ -1,0 +1,6 @@
+﻿smonitor.signal
+===============
+
+.. currentmodule:: smonitor
+
+.. autofunction:: signal
