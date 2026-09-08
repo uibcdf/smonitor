@@ -1,3 +1,8 @@
+<!--
+SYNCHRONIZED MOLSYSSUITE GUIDE — DO NOT EDIT COMPONENT COPIES.
+Canonical source: https://github.com/uibcdf/smonitor/blob/main/standards/SMONITOR_GUIDE.md
+-->
+
 # SMonitor Guide (Canonical)
 
 Source of truth for integrating and using **SMonitor** in this library.
