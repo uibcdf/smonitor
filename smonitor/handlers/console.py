@@ -47,9 +47,9 @@ class ConsoleHandler:
                     continue
                 extras.append(f"{key}={_format_extra_value(value, profile=profile)}")
             extra_part = f" | {'; '.join(extras)}" if extras else ""
-            
+
             output = f"{prefix}{level} {source} | {message} | {ctx_chain}{hint_part}{extra_part}"
-            
+
             # Show arguments for ERRORs if captured in frames
             if level == "ERROR" and "frames" in context:
                 args_details = []
@@ -60,7 +60,7 @@ class ConsoleHandler:
                         args_details.append(f"  \u2514\u2500 {func_name}({args_str})")
                 if args_details:
                     output += "\n" + "\n".join(_truncate_text(item, 240) for item in args_details)
-            
+
             return output
         if profile == "qa":
             prefix = f"[{code}] " if code else ""
@@ -68,7 +68,7 @@ class ConsoleHandler:
         if profile == "agent":
             # Plain machine-readable format
             return f"code={code} level={level} source={source} message={message}"
-        
+
         # user (default)
         hint = (event.get("extra") or {}).get("hint")
         hint_part = f" (Hint: {hint})" if hint else ""
@@ -84,7 +84,7 @@ class RichConsoleHandler(ConsoleHandler):
             from rich.theme import Theme
         except ImportError as exc:
             raise ImportError("rich is not installed") from exc
-            
+
         theme = Theme(
             {
                 "level.debug": "dim italic gray62",
@@ -106,12 +106,13 @@ class RichConsoleHandler(ConsoleHandler):
     def handle(self, event: Dict[str, Any], *, profile: str = "user") -> None:
         level = (event.get("level") or "INFO").upper()
         style = f"level.{level.lower()}"
-        
+
         # Format Timestamp
         ts = ""
         if timestamp := event.get("timestamp"):
             try:
                 from datetime import datetime
+
                 dt = datetime.fromisoformat(timestamp)
                 ts = dt.strftime("%H:%M:%S")
             except ValueError:
@@ -138,13 +139,13 @@ class RichConsoleHandler(ConsoleHandler):
         # Header: [LEVEL] HH:MM:SS
         title = Text.assemble(
             (f" {icon} {level} ", f"white on {self._console.get_style(style).color.name}"),
-            (f" {ts} ", "ts")
+            (f" {ts} ", "ts"),
         )
 
         # Content
         content = Text("\n", end="")
         content.append(event.get("message") or "", style="msg.user")
-        
+
         if hint := (event.get("extra") or {}).get("hint"):
             content.append("\n\n")
             content.append(" \u25c6 ", style="hint.label")
@@ -165,7 +166,7 @@ class RichConsoleHandler(ConsoleHandler):
                 subtitle_align="right",
                 border_style=style,
                 box=ROUNDED,
-                padding=(0, 2, 1, 2)
+                padding=(0, 2, 1, 2),
             )
         )
 
@@ -183,15 +184,15 @@ class RichConsoleHandler(ConsoleHandler):
 
         # Top Rule with Metadata
         source = event.get("source") or "unknown"
-        code_tag = f" {event.get('code')} " if event.get('code') else ""
-        
+        code_tag = f" {event.get('code')} " if event.get("code") else ""
+
         header = Text.assemble(
             (f" {level} ", style),
             (f" {ts} ", "ts"),
             (f" {source} ", "source"),
-            (f" {code_tag} ", "code") if code_tag else ""
+            (f" {code_tag} ", "code") if code_tag else "",
         )
-        
+
         self._console.print(Rule(header, style=style, align="left"))
 
         # Message (The core of the event)
@@ -205,7 +206,7 @@ class RichConsoleHandler(ConsoleHandler):
         extra = event.get("extra") or {}
         if hint := extra.get("hint"):
             details.add_row("hint", f"[hint.text]{hint}[/]")
-        
+
         if chain := (event.get("context") or {}).get("chain", []):
             path_str = " [dim]\u276f[/] ".join([f"[path]{c}[/]" for c in chain])
             details.add_row("path", path_str)
@@ -223,6 +224,6 @@ class RichConsoleHandler(ConsoleHandler):
 
         if details.row_count > 0:
             self._console.print(details)
-        
+
         # Bottom spacing
         self._console.print()

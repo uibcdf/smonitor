@@ -1,4 +1,5 @@
 """Tests for the support-tier protocol: SupportTierRegistry and support_tier decorator."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -10,6 +11,7 @@ from smonitor.integrations.diagnostic import DiagnosticBundle, SupportTierRegist
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _make_bundle(catalog=None):
     smonitor.configure(profile="user", handlers=[], event_buffer_size=20, enabled=True)
@@ -28,8 +30,8 @@ def _recent_events():
 # SupportTierRegistry — registration
 # ---------------------------------------------------------------------------
 
-class TestSupportTierRegistryRegistration:
 
+class TestSupportTierRegistryRegistration:
     def test_register_single(self):
         bundle = _make_bundle()
         reg = bundle.tier_registry()
@@ -59,8 +61,8 @@ class TestSupportTierRegistryRegistration:
 # SupportTierRegistry — check() / tier 1
 # ---------------------------------------------------------------------------
 
-class TestSupportTierRegistryTier1:
 
+class TestSupportTierRegistryTier1:
     def test_tier1_check_emits_nothing(self):
         smonitor.configure(profile="user", handlers=[], event_buffer_size=20, enabled=True)
         bundle = _make_bundle()
@@ -83,8 +85,8 @@ class TestSupportTierRegistryTier1:
 # SupportTierRegistry — check() / tier 2
 # ---------------------------------------------------------------------------
 
-class TestSupportTierRegistryTier2:
 
+class TestSupportTierRegistryTier2:
     def test_tier2_check_emits_warning(self):
         smonitor.configure(profile="user", handlers=[], event_buffer_size=20, enabled=True)
         bundle = _make_bundle()
@@ -159,8 +161,8 @@ class TestSupportTierRegistryTier2:
 # SupportTierRegistry — check() / tier 3
 # ---------------------------------------------------------------------------
 
-class TestSupportTierRegistryTier3:
 
+class TestSupportTierRegistryTier3:
     def test_tier3_check_emits_info(self):
         smonitor.configure(
             profile="user",
@@ -224,8 +226,8 @@ class TestSupportTierRegistryTier3:
 # support_tier decorator — tier 1
 # ---------------------------------------------------------------------------
 
-class TestSupportTierDecoratorTier1:
 
+class TestSupportTierDecoratorTier1:
     def test_tier1_returns_original_function(self):
         bundle = _make_bundle()
 
@@ -258,8 +260,8 @@ class TestSupportTierDecoratorTier1:
 # support_tier decorator — tier 2
 # ---------------------------------------------------------------------------
 
-class TestSupportTierDecoratorTier2:
 
+class TestSupportTierDecoratorTier2:
     def test_tier2_emits_warning_on_first_call(self):
         smonitor.configure(profile="user", handlers=[], event_buffer_size=20, enabled=True)
         bundle = _make_bundle()
@@ -345,8 +347,8 @@ class TestSupportTierDecoratorTier2:
 # support_tier decorator — tier 3
 # ---------------------------------------------------------------------------
 
-class TestSupportTierDecoratorTier3:
 
+class TestSupportTierDecoratorTier3:
     def test_tier3_emits_info_on_first_call(self):
         smonitor.configure(
             profile="user",
@@ -408,8 +410,8 @@ class TestSupportTierDecoratorTier3:
 # Isolation: separate bundles have independent dedup caches
 # ---------------------------------------------------------------------------
 
-class TestSupportTierIsolation:
 
+class TestSupportTierIsolation:
     def test_two_bundles_deduplicate_independently(self):
         smonitor.configure(profile="user", handlers=[], event_buffer_size=40, enabled=True)
         bundle_a = _make_bundle()

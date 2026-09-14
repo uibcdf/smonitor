@@ -100,9 +100,7 @@ def test_structured_extra_reaches_telemetry(bundle_and_events):
     """Fingerprints and counters must see typed fields, not rendered prose."""
     bundle, events = bundle_and_events
     bundle.warn(
-        UnknownAtomNameWarning(
-            code="T-W-ATOM", extra={"atom_name": "Ar", "resource": "traj.h5"}
-        )
+        UnknownAtomNameWarning(code="T-W-ATOM", extra={"atom_name": "Ar", "resource": "traj.h5"})
     )
     extra = events[-1]["extra"]
     assert extra["atom_name"] == "Ar"

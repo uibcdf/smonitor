@@ -32,6 +32,7 @@ def test_validate_event_types():
 
 def test_enforce_schema_strict():
     from smonitor.validation import enforce_schema
+
     try:
         enforce_schema({"level": "INFO"}, strict=True)
     except ValueError as exc:

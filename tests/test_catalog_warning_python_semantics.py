@@ -92,9 +92,7 @@ def test_the_re_raised_warning_is_not_captured_a_second_time(capture_logging, ca
     fields, and once as an uncoded event whose message is Python's formatted
     warning text, file path and source line included.
     """
-    bundle, handler = _bundle(
-        capture_logging=capture_logging, capture_warnings=capture_warnings
-    )
+    bundle, handler = _bundle(capture_logging=capture_logging, capture_warnings=capture_warnings)
     warnings.simplefilter("always")
 
     if capture_warnings:

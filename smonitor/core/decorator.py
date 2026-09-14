@@ -141,9 +141,7 @@ def signal(
 
             frame = None
             try:
-                frame = push_frame(
-                    fn_name, module, args=args_summary, tags=tags, extra=frame_extra
-                )
+                frame = push_frame(fn_name, module, args=args_summary, tags=tags, extra=frame_extra)
             except Exception as exc:
                 warnings.warn(
                     f"SMonitor signal push_frame failed for {signal_label}: {exc}",
@@ -245,6 +243,7 @@ def signal(
                             RuntimeWarning,
                             stacklevel=2,
                         )
+
         return wrapper
 
     if func is not None:

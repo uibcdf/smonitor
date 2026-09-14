@@ -88,9 +88,7 @@ class FormError(CatalogException):
     catalog_key = "FormError"
 
     def __init__(self, message=None, *, form=None):
-        super().__init__(
-            message, code="T-FORM", extra={"form": form} if form else None
-        )
+        super().__init__(message, code="T-FORM", extra={"form": form} if form else None)
 
     @classmethod
     def for_form(cls, form):
@@ -112,10 +110,13 @@ def _configured():
     ],
     ids=["domain-field", "computed", "exception"],
 )
-@pytest.mark.parametrize("rebuild", [
-    pytest.param(lambda obj: pickle.loads(pickle.dumps(obj)), id="pickle"),
-    pytest.param(copy.deepcopy, id="deepcopy"),
-])
+@pytest.mark.parametrize(
+    "rebuild",
+    [
+        pytest.param(lambda obj: pickle.loads(pickle.dumps(obj)), id="pickle"),
+        pytest.param(copy.deepcopy, id="deepcopy"),
+    ],
+)
 def test_round_trip_is_exact(build, rebuild):
     # Built here, not in `parametrize`: that runs at collection time, before the
     # fixture has loaded the codes, and the instance would render to nothing.

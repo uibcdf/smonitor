@@ -92,10 +92,7 @@ class PolicyEngine:
                 target_handlers = [
                     h
                     for h in target_handlers
-                    if (
-                        getattr(h, "name", None) in names
-                        or h.__class__.__name__ in names
-                    )
+                    if (getattr(h, "name", None) in names or h.__class__.__name__ in names)
                 ]
         return event, target_handlers
 

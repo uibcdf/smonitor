@@ -146,6 +146,4 @@ def test_the_generated_indexes_are_current() -> None:
     buffer = io.StringIO()
     with redirect_stdout(buffer):
         stale = [q for q in module.QUEUES if not module.apply(DEVGUIDE / q, check=True)]
-    assert not stale, (
-        "run `python devtools/devguide_index.py`: " + buffer.getvalue().strip()
-    )
+    assert not stale, "run `python devtools/devguide_index.py`: " + buffer.getvalue().strip()

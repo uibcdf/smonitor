@@ -22,13 +22,9 @@ PROFILES = {
     "qa": {"level": "INFO"},
 }
 
-ROUTES = [
-    {"when": {"level": "WARNING"}, "send_to": ["console", "json"]}
-]
+ROUTES = [{"when": {"level": "WARNING"}, "send_to": ["console", "json"]}]
 
-FILTERS = [
-    {"when": {"code": "MSM-W010"}, "rate_limit": "1/100"}
-]
+FILTERS = [{"when": {"code": "MSM-W010"}, "rate_limit": "1/100"}]
 
 CODES = {
     "MSM-W010": {

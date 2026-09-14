@@ -8,7 +8,6 @@ reached telemetry. Downstream contract tests that assert "the error path emits
 a coded signal" could then only be satisfied by unrelated events.
 """
 
-
 import pytest
 
 import smonitor
@@ -22,9 +21,7 @@ class OutOfRangeError(CatalogException):
 
 CODES = {"T-E-RANGE": {"user_message": "Value {value} is out of range."}}
 
-CATALOG = {
-    "exceptions": {"OutOfRangeError": {"code": "T-E-RANGE", "source": "demo.range"}}
-}
+CATALOG = {"exceptions": {"OutOfRangeError": {"code": "T-E-RANGE", "source": "demo.range"}}}
 
 META = {"doc_url": "https://example.invalid/docs"}
 

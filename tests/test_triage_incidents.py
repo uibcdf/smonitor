@@ -36,8 +36,7 @@ def _report_rows(manager, name):
 def test_a_fingerprint_row_says_whether_it_is_an_incident():
     manager = _configured()
     for resource in ("a.pdb", "b.pdb", "c.pdb"):
-        manager.emit("WARNING", "", code="LIB-W001", source="lib.io",
-                     extra={"resource": resource})
+        manager.emit("WARNING", "", code="LIB-W001", source="lib.io", extra={"resource": resource})
     for text in ("started", "finished", "retrying"):
         manager.emit("DEBUG", text, source="lib.io")
 
@@ -54,8 +53,7 @@ def test_a_fingerprint_row_says_whether_it_is_an_incident():
 def test_recurrent_incidents_holds_only_coded_events():
     manager = _configured()
     for _ in range(4):
-        manager.emit("WARNING", "", code="LIB-W001", source="lib.io",
-                     extra={"resource": "a.pdb"})
+        manager.emit("WARNING", "", code="LIB-W001", source="lib.io", extra={"resource": "a.pdb"})
     for text in ("started", "finished", "retrying", "done"):
         manager.emit("DEBUG", text, source="lib.io")
 
@@ -73,8 +71,9 @@ def test_the_message_spread_does_not_separate_the_two_cases():
     manager = _configured()
     for resource in ("a.pdb", "b.pdb"):
         for _ in range(2):
-            manager.emit("WARNING", "", code="LIB-W001", source="lib.io",
-                         extra={"resource": resource})
+            manager.emit(
+                "WARNING", "", code="LIB-W001", source="lib.io", extra={"resource": resource}
+            )
 
     rows = [row for row in manager.report()["top_fingerprints"] if row["code"]]
     messages = {e["message"] for e in manager.recent_events() if e.get("code")}

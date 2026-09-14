@@ -15,6 +15,7 @@ def span(name: str, **meta: Any):
         return
     if manager.config.profiling_sample_rate < 1.0:
         from random import random
+
         if random() > manager.config.profiling_sample_rate:
             yield
             return

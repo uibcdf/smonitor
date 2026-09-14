@@ -15,7 +15,6 @@ def test_warnings_enable_and_disable_roundtrip():
     assert warnings.showwarning == original
 
 
-
 def test_warnings_disable_does_not_clobber_foreign_hook():
     original = warnings.showwarning
 

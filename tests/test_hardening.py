@@ -4,6 +4,7 @@ import smonitor
 def test_handler_errors_counted():
     class BadHandler:
         name = "bad"
+
         def handle(self, event, profile="user"):
             raise RuntimeError("boom")
 

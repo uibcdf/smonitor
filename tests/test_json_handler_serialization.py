@@ -54,6 +54,7 @@ def test_json_handler_includes_normalized_machine_payload(tmp_path):
     }
     handler.handle(event, profile="agent")
     import json
+
     payload = json.loads(path.read_text(encoding="utf-8").strip())
     normalized = payload["normalized"]
     assert payload["human_summary"] == {

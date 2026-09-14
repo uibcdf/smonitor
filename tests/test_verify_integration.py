@@ -42,10 +42,10 @@ def _library(root: Path, name: str, *, config: str, catalog: str, extra: str = "
     return repo
 
 
-GOOD_CATALOG = '''
+GOOD_CATALOG = """
 CATALOG = {"warnings": {"Thing": {"code": "GOOD-W001", "source": "good.thing"}}}
 CODES = {"GOOD-W001": {"user_message": "Thing {name} went sideways."}}
-'''
+"""
 
 
 def test_a_correct_integration_passes_every_check(verifier, tmp_path):

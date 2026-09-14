@@ -266,6 +266,7 @@ class Manager:
     ) -> None:
         if config_path is not None:
             from ..config.discovery import discover_config, load_config_from_path
+
             p = Path(config_path)
             data = load_config_from_path(p) if p.is_file() else discover_config(p)
             if data:
@@ -316,7 +317,7 @@ class Manager:
             self._session_id = session_id
         if correlation_id is not None:
             self._default_correlation_id = correlation_id
-        
+
         if handlers is not None:
             self._handlers = list(handlers)
         elif not self._handlers:
@@ -332,6 +333,7 @@ class Manager:
         from ..emitters.exceptions import disable_exceptions, enable_exceptions
         from ..emitters.logging import disable_logging, enable_logging
         from ..emitters.warnings import disable_warnings, enable_warnings
+
         if self._config.capture_logging:
             enable_logging(capture_warnings=self._config.capture_warnings)
             if self._config.capture_warnings:
@@ -354,12 +356,14 @@ class Manager:
         if self._config.theme == "rich":
             try:
                 from ..handlers.console import RichConsoleHandler
+
                 self._handlers = [RichConsoleHandler()]
                 return
             except (ImportError, Exception):
                 pass
-        
+
         from ..handlers.console import ConsoleHandler
+
         self._handlers = [ConsoleHandler()]
 
     def add_handler(self, handler: Any) -> None:
@@ -450,10 +454,13 @@ class Manager:
             code_meta = None
         profile = self._config.profile
         if code_meta and (message is None or message == ""):
-            message = _first_present(
-                code_meta,
-                _MESSAGE_FALLBACKS.get(profile, _MESSAGE_FALLBACKS[_DEFAULT_PROFILE]),
-            ) or ""
+            message = (
+                _first_present(
+                    code_meta,
+                    _MESSAGE_FALLBACKS.get(profile, _MESSAGE_FALLBACKS[_DEFAULT_PROFILE]),
+                )
+                or ""
+            )
 
         # Interpolate message using extra fields if templated
         if message and "{" in message:
@@ -709,9 +716,7 @@ class Manager:
         # emitted with the same dict — including events with no code at all.
         extra_data = dict(extra) if extra else {}
         resolved_correlation_id = (
-            correlation_id
-            or extra_data.get("correlation_id")
-            or self._default_correlation_id
+            correlation_id or extra_data.get("correlation_id") or self._default_correlation_id
         )
         if not self.enabled:
             hint = None
@@ -779,7 +784,7 @@ class Manager:
 
         if code_meta:
             event["extra"].setdefault("title", code_meta.get("title"))
-        
+
         if hint:
             event["extra"].setdefault("hint", hint)
         event["human_summary"] = build_human_summary(
@@ -996,17 +1001,11 @@ class Manager:
         most_noisy_resources = _top_items(events_by_resource)
         top_redundant_conversions = _top_items(self._redundant_conversions_by_callsite)
         expensive_entries = sorted(
-            (
-                {"key": key, **summary}
-                for key, summary in timings_summary.items()
-            ),
+            ({"key": key, **summary} for key, summary in timings_summary.items()),
             key=lambda item: (-item["p95_ms"], item["key"]),
         )[:5]
         expensive_tags = sorted(
-            (
-                {"key": key, **summary}
-                for key, summary in timings_by_tag.items()
-            ),
+            ({"key": key, **summary} for key, summary in timings_by_tag.items()),
             key=lambda item: (-item["p95_ms"], item["key"]),
         )[:5]
         blocking_incidents = [

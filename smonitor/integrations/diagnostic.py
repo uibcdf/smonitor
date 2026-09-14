@@ -25,9 +25,9 @@ def _resolve(*args, **kwargs):
 
     return resolve(*args, **kwargs)
 
+
 T = TypeVar("T", bound="CatalogException")
 W = TypeVar("W", bound="CatalogWarning")
-
 
 
 def _catalog_entry(
@@ -76,9 +76,7 @@ class CatalogException(Exception):
                 target_code = entry.get("code")
 
         resolved_extra = merge_extra(meta, extra)
-        resolved_msg, hint = _resolve(
-            message=message, code=target_code, extra=resolved_extra
-        )
+        resolved_msg, hint = _resolve(message=message, code=target_code, extra=resolved_extra)
 
         full_message = resolved_msg
         if hint:
@@ -167,9 +165,7 @@ class CatalogWarning(Warning):
 
         resolved_extra = merge_extra(meta, extra)
         resolved_extra.setdefault("caller", self.catalog_key or type(self).__name__)
-        resolved_msg, hint = _resolve(
-            message=message, code=target_code, extra=resolved_extra
-        )
+        resolved_msg, hint = _resolve(message=message, code=target_code, extra=resolved_extra)
 
         full_message = resolved_msg
         if hint:
@@ -229,11 +225,15 @@ class CatalogWarning(Warning):
 
 class FormatError(CatalogException):
     """Exception raised when a data or file format standard is violated."""
+
     catalog_key = "FormatError"
+
 
 class InconsistencyError(CatalogException):
     """Exception raised when internal data structures are inconsistent."""
+
     catalog_key = "InconsistencyError"
+
 
 class SupportTierRegistry:
     """Registry mapping names (forms, objects, functions) to their support tier.
@@ -276,7 +276,6 @@ class SupportTierRegistry:
 
 
 class DiagnosticBundle:
-
     """A bundle of diagnostic tools for a library integration."""
 
     def __init__(
@@ -324,9 +323,7 @@ class DiagnosticBundle:
             try:
                 payload = {**instance_extra, **(extra or {})}
                 payload.setdefault("message", msg)
-                payload["caller"] = (
-                    caller or (extra or {}).get("caller") or payload.get("caller")
-                )
+                payload["caller"] = caller or (extra or {}).get("caller") or payload.get("caller")
                 emit_from_catalog(
                     entry,
                     package_root=self.package_root,
@@ -529,8 +526,10 @@ class DiagnosticBundle:
             tier 2 and ``"SupportTier3Info"`` for tier 3.
         """
         if tier == 1:
+
             def passthrough(fn: Any) -> Any:
                 return fn
+
             return passthrough
 
         def decorator(fn: Any) -> Any:

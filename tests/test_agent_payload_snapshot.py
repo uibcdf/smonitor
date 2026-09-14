@@ -180,8 +180,7 @@ def test_the_normalized_key_set_is_stated_in_one_place(tmp_path):
     )
     expected, actual = set(stored["normalized"]), set(payload["normalized"])
     assert actual == expected, (
-        f"gone: {sorted(expected - actual) or 'none'}; "
-        f"new: {sorted(actual - expected) or 'none'}"
+        f"gone: {sorted(expected - actual) or 'none'}; new: {sorted(actual - expected) or 'none'}"
     )
 
 
@@ -191,6 +190,5 @@ def test_the_record_keys_are_pinned_too(tmp_path):
     payload = _emit(tmp_path, "MYLIB-E001", source="mylib.core")
     expected, actual = set(stored), set(payload)
     assert actual == expected, (
-        f"gone: {sorted(expected - actual) or 'none'}; "
-        f"new: {sorted(actual - expected) or 'none'}"
+        f"gone: {sorted(expected - actual) or 'none'}; new: {sorted(actual - expected) or 'none'}"
     )

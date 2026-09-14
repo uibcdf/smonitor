@@ -67,9 +67,15 @@ def test_any_single_hint_field_renders_in_any_profile(profile, field):
 def test_a_profile_still_prefers_its_own_field(profile, expected_message, expected_hint):
     """A fallback must not change what a fully populated entry already did."""
     entry = {
-        "user_message": "U", "dev_message": "D", "qa_message": "Q", "agent_message": "A",
+        "user_message": "U",
+        "dev_message": "D",
+        "qa_message": "Q",
+        "agent_message": "A",
         "message": "M",
-        "user_hint": "UH", "dev_hint": "DH", "qa_hint": "QH", "agent_hint": "AH",
+        "user_hint": "UH",
+        "dev_hint": "DH",
+        "qa_hint": "QH",
+        "agent_hint": "AH",
     }
     message, hint = _resolve(profile, entry)
     assert message == expected_message
@@ -96,8 +102,9 @@ def test_an_unknown_profile_resolves_as_dev():
     assert (message, hint) == ("D", "DH")
 
 
-@pytest.mark.parametrize("table,fields", [(_MESSAGE_FALLBACKS, MESSAGE_FIELDS),
-                                          (_HINT_FALLBACKS, HINT_FIELDS)])
+@pytest.mark.parametrize(
+    "table,fields", [(_MESSAGE_FALLBACKS, MESSAGE_FIELDS), (_HINT_FALLBACKS, HINT_FIELDS)]
+)
 def test_every_chain_is_a_complete_ordering_of_the_fields(table, fields):
     """A chain that omits a field would leave that field unreachable as a fallback."""
     assert set(table) == set(PROFILES)

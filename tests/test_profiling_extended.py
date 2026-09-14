@@ -83,7 +83,6 @@ def test_signal_extra_factory_attaches_context_to_timeline():
     assert entry["meta"]["selection"] == "name CA"
 
 
-
 def test_report_exposes_timings_by_tag():
     smonitor.configure(profile="user", profiling=True, profiling_buffer_size=10)
 
@@ -95,7 +94,6 @@ def test_report_exposes_timings_by_tag():
     report = smonitor.report()
     assert report["timings_by_tag"]["api"]["count"] >= 1
     assert report["timings_by_tag"]["structure"]["count"] >= 1
-
 
 
 def test_slow_signal_event_is_emitted_when_threshold_is_crossed():

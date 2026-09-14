@@ -54,7 +54,7 @@ def test_the_canonical_guide_first_example_validates(tmp_path):
     # standards/SMONITOR_GUIDE.md, section 1.
     root = _write(
         tmp_path,
-        '''PROFILE = "user"
+        """PROFILE = "user"
 
 SMONITOR = {
     "level": "WARNING",
@@ -64,7 +64,7 @@ SMONITOR = {
     "theme": "plain",
     "silence": ["pint", "networkx"],
 }
-''',
+""",
     )
     assert validate_project_config(load_config_from_path(root / "_smonitor.py")) == []
 

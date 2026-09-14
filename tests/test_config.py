@@ -82,10 +82,7 @@ def test_validate_config_unknown_smonitor_key(tmp_path: Path):
 
 def test_validate_config_profile_types(tmp_path: Path):
     cfg_file = tmp_path / "_smonitor.py"
-    cfg_file.write_text(
-        "SMONITOR = {'trace_depth': 'nope'}\n"
-        "PROFILES = {'dev': {'level': 1}}\n"
-    )
+    cfg_file.write_text("SMONITOR = {'trace_depth': 'nope'}\nPROFILES = {'dev': {'level': 1}}\n")
     cfg = load_project_config(tmp_path)
     errors = validate_config(cfg)
     assert any("SMONITOR.trace_depth must be an int" in e for e in errors)
@@ -94,11 +91,7 @@ def test_validate_config_profile_types(tmp_path: Path):
 
 def test_validate_project_config_codes(tmp_path: Path):
     cfg_file = tmp_path / "_smonitor.py"
-    cfg_file.write_text(
-        "CODES = {\n"
-        "  'X001': {'title': 'Test'}\n"
-        "}\n"
-    )
+    cfg_file.write_text("CODES = {\n  'X001': {'title': 'Test'}\n}\n")
     cfg = load_project_config(tmp_path)
     errors = validate_project_config(cfg)
     assert any("must define a message field" in e for e in errors)
@@ -106,11 +99,7 @@ def test_validate_project_config_codes(tmp_path: Path):
 
 def test_validate_project_config_signals(tmp_path: Path):
     cfg_file = tmp_path / "_smonitor.py"
-    cfg_file.write_text(
-        "SIGNALS = {\n"
-        "  'mod.fn': {'extra_required': 'nope'}\n"
-        "}\n"
-    )
+    cfg_file.write_text("SIGNALS = {\n  'mod.fn': {'extra_required': 'nope'}\n}\n")
     cfg = load_project_config(tmp_path)
     errors = validate_project_config(cfg)
     assert any("extra_required must be a list of strings" in e for e in errors)

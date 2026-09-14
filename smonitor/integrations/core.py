@@ -21,6 +21,7 @@ def _resolve(*args, **kwargs):
 
     return resolve(*args, **kwargs)
 
+
 _configured_packages: set[str] = set()
 
 #: Guards the memoization below. Without it the membership test and the `add` are a
@@ -51,8 +52,6 @@ def reset_configured_packages() -> None:
     Useful for test suites and dynamic multi-config sessions.
     """
     _configured_packages.clear()
-
-
 
 
 def context_extra(

@@ -31,9 +31,7 @@ PARENT = 7
 #: A breadcrumb frame. Always built by `push_frame`, never constructed directly.
 Frame = List[Any]
 
-_context_stack: ContextVar[Optional[Frame]] = ContextVar(
-    "smonitor_context_stack", default=None
-)
+_context_stack: ContextVar[Optional[Frame]] = ContextVar("smonitor_context_stack", default=None)
 
 
 def push_frame(

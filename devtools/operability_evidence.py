@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 #: Run in a child process: the component configures SMonitor on import, and a
 #: suite that has already imported it cannot be re-instrumented from here.
-CHILD = '''
+CHILD = """
 import json, os, sys
 sys.path.insert(0, {smonitor!r})
 sys.path.insert(0, {repo!r})
@@ -38,7 +38,7 @@ code = pytest.main(["-q", "--no-header", "-p", "no:cacheprovider", "tests"])
 events = smonitor.get_manager().recent_events()
 smonitor.export_bundle({out!r}, max_events=100000, force=True)
 print(json.dumps({{"exit": int(code), "events": len(events)}}))
-'''
+"""
 
 
 def run(repo: Path, out: Path, smonitor_path: Path) -> dict:
@@ -47,9 +47,7 @@ def run(repo: Path, out: Path, smonitor_path: Path) -> dict:
     env.setdefault("SMONITOR_EVENT_BUFFER", "100000")
     env.setdefault("SMONITOR_LEVEL", "DEBUG")
     source = CHILD.format(smonitor=str(smonitor_path), repo=str(repo), out=str(out))
-    result = subprocess.run(
-        [sys.executable, "-c", source], env=env, capture_output=True, text=True
-    )
+    result = subprocess.run([sys.executable, "-c", source], env=env, capture_output=True, text=True)
     tail = [line for line in result.stdout.splitlines() if line.startswith("{")]
     if not tail:
         print(result.stdout[-2000:], file=sys.stderr)
@@ -62,10 +60,14 @@ def summarise(bundle_path: Path) -> None:
     bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
     triage, events = bundle["triage"], bundle["events"]
     coded = [e for e in events if e.get("code")]
-    print(f"\n  events {len(events)}   coded {len(coded)}   "
-          f"fingerprints {len(triage['events_by_fingerprint'])}")
-    print(f"  run_id {bundle['runtime']['run_id'][:8]}…  "
-          f"session_id {bundle['runtime']['session_id'][:8]}…")
+    print(
+        f"\n  events {len(events)}   coded {len(coded)}   "
+        f"fingerprints {len(triage['events_by_fingerprint'])}"
+    )
+    print(
+        f"  run_id {bundle['runtime']['run_id'][:8]}…  "
+        f"session_id {bundle['runtime']['session_id'][:8]}…"
+    )
     for name in ("top_codes", "top_sources", "top_fingerprints"):
         rows = triage.get(name) or []
         if rows:
@@ -81,8 +83,9 @@ def summarise(bundle_path: Path) -> None:
     worst = max(by_fp.items(), key=lambda item: len(item[1]), default=(None, set()))
     if worst[0] and len(worst[1]) > 1:
         count = triage["events_by_fingerprint"].get(worst[0], 0)
-        print(f"  widest fingerprint  {worst[0]}: {count} events, "
-              f"{len(worst[1])} distinct messages")
+        print(
+            f"  widest fingerprint  {worst[0]}: {count} events, {len(worst[1])} distinct messages"
+        )
 
 
 def main() -> int:
@@ -100,10 +103,18 @@ def main() -> int:
     if args.compare_with:
         print()
         subprocess.run(
-            [sys.executable, "-m", "smonitor.cli", "compare",
-             str(args.out.resolve()), str(args.compare_with.resolve()),
-             "--format", "markdown"],
-            cwd=ROOT, check=False,
+            [
+                sys.executable,
+                "-m",
+                "smonitor.cli",
+                "compare",
+                str(args.out.resolve()),
+                str(args.compare_with.resolve()),
+                "--format",
+                "markdown",
+            ],
+            cwd=ROOT,
+            check=False,
         )
     return 0
 
