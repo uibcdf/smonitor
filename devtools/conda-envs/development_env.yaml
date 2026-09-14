@@ -4,11 +4,11 @@ channels:
 
 dependencies:
   # --- Python base ---
-  - python=3.12
+  - python=3.13
   - pip
 
   # --- Dev tools: formatting, linting, testing ---
-  - ruff
+  - ruff=0.16.5
   - pytest
   - pytest-cov
   - versioningit

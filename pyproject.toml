@@ -7,7 +7,7 @@ authors = [
   { name = "UIBCDF Development Team" }
 ]
 license = { text = "MIT" }
-requires-python = ">=3.10"
+requires-python = ">=3.11,<3.14"
 dependencies = []
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -48,6 +48,22 @@ smonitor = "smonitor.cli:main"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+include = ["*.py", "*.pyi"]
+extend-exclude = [
+  "GH_RUN_RECEPTOR_GUIDE.md",
+  "MOLSYSSUITE_GUIDE.md",
+]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.format]
+# Preserve prose, examples, and archived evidence; Python files remain gated.
+exclude = ["*.md"]
 
 [tool.versioningit]
 default-version = "0.0.0+unknown"

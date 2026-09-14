@@ -8,5 +8,5 @@ dependencies:
   - pytest
   - pytest-cov
   - pytest-xdist
-  - ruff
+  - ruff=0.16.5
   - versioningit
