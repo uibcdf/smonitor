@@ -1,12 +1,12 @@
 ---
 summary: Adopt the shared Python and Ruff development baseline.
 issue: uibcdf/smonitor#12
-status: active
+status: resolved
 opened: 2026-09-12
-closed:
+closed: 2026-09-19
 verification: measured
 area: [ci, ecosystem]
-guard:
+guard: .github/workflows/molsyssuite-policy.yml
 normative:
 blocked_by: []
 supersedes: []
@@ -48,3 +48,10 @@ shared configuration.
 - The existing SMonitor test suite passes.
 - The local issue and this record close together after the guard is published.
 
+## Resolution
+
+SMonitor now declares Python `>=3.11,<3.14`, uses Ruff 0.16.5 as its formatter,
+import sorter and linter, and calls the versioned MolSysSuite policy workflow.
+The obsolete standalone `ruff.toml` was folded into `pyproject.toml` so Ruff has
+one active configuration. The local suite passed, and policy 1.1.6 passed in
+GitHub Actions run `35468874895`.
