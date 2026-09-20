@@ -1,12 +1,12 @@
 ---
 summary: Publish one staged noarch Conda artifact instead of interpreter-platform duplicates
 issue: uibcdf/smonitor#16
-status: active
+status: resolved
 opened: 2026-09-20
-closed:
+closed: 2026-09-20
 verification: measured
 area: [packaging, release, tooling]
-guard:
+guard: tests/test_noarch_conda_publication.py
 normative:
 blocked_by: []
 supersedes: []
@@ -56,16 +56,27 @@ for `uibcdf/molsyssuite#27`.
 ## First hosted candidate
 
 Run `35503093580` published exactly one `smonitor-0.15.1-py_0` record to staging and GH
-Run Receptor reported one successful noarch job with structured artifact evidence. The
-independent clean-environment audit rejected that artifact: under both Python 3.11 and
-3.13, `importlib.metadata.version("smonitor")` returned `0.13.0+9.g0ec2ef9`, not the
-Conda coordinate `0.15.1`.
+Run Receptor reported one successful noarch job with structured artifact evidence.
 
-The source copy used by conda-build cannot derive the candidate tag and falls back to the
-tracked `_version.py`. The corrective path therefore freezes `PKG_VERSION` into static
-project metadata and `_version.py` before pip builds the package, and the recipe test
-checks both installed version surfaces. Build 0 remains rejected evidence; it is not
-overwritten. The correction will use additive build 1.
+The first external audit was invalid: although it invoked the temporary environment's
+Python executable, its working directory was this source checkout, so Python placed the
+checkout first on `sys.path` and imported its historical tracked `_version.py`. Repeating
+the audit from `/tmp` loaded
+`/tmp/smonitor-noarch-audit-py0/lib/python3.13/site-packages/smonitor/__init__.py`; both
+distribution metadata and `smonitor.__version__` were exactly `0.15.1`. Build 0 was not
+defective. This correction was made while the report was active rather than preserving a
+false diagnosis as history.
+
+Build 1 adds a defense even though build 0 was valid: it freezes `PKG_VERSION` into
+static project metadata and `_version.py` before pip builds the package, and the recipe
+test checks both installed version surfaces. Hosted run `35503447811` passed with one
+noarch job and one structured evidence artifact. Clean Python 3.11 and 3.13 environments,
+both invoked outside the checkout, installed `smonitor-0.15.1-py_1` and reported exact
+metadata and module version `0.15.1`.
+
+The staging channel lists additive coordinates `py_0` and `py_1`; the main `uibcdf`
+channel returns no match for SMonitor 0.15.1. No release or public-channel publication
+occurred.
 
 ## Acceptance criteria
 
@@ -76,3 +87,15 @@ overwritten. The correction will use additive build 1.
 - Distribution metadata and `smonitor.__version__` both equal the Conda coordinate.
 - No GitHub Release, tag publication, or main-channel upload is performed by the staging
   path.
+
+## Resolution
+
+Implemented in `1661bbd` and hardened in `8d47325`. SMonitor now builds once as a
+`noarch: python` package, manual candidates are exact-SHA staging publications, GitHub
+Releases are the only path to `main`, and action v2.1 producer evidence is retained for
+GH Run Receptor. The repository rule declares `package_kind: noarch` rather than
+inventing native-platform coverage.
+
+Local validation passed 458 tests with 12 workers plus Ruff, formatting, devguide, and
+receptor configuration gates. The hosted and registry measurements above satisfy the
+acceptance criteria. The guard is `tests/test_noarch_conda_publication.py`.

@@ -19,7 +19,6 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
-| [`publish_one_staged_noarch_conda_artifact.md`](publish_one_staged_noarch_conda_artifact.md) | `active` | [uibcdf/smonitor#16](https://github.com/uibcdf/smonitor/issues/16) | Publish one staged noarch Conda artifact instead of interpreter-platform duplicates |
 | [`pytest_diagnostics_bridge_and_molsyssuite_policy.md`](pytest_diagnostics_bridge_and_molsyssuite_policy.md) | `open` | [uibcdf/smonitor#6](https://github.com/uibcdf/smonitor/issues/6) | How SMonitor diagnostics participate in a pytest run, and what a policy layer owns. |
 
 <!-- /generated -->
