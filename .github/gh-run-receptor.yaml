@@ -8,7 +8,9 @@ workflows:
     profile: ci
   - match:
       path: .github/workflows/build_and_upload_conda_packages.yaml
-    profile: release
+    profile: conda
+    settings:
+      package_kind: noarch
   - match:
       path: .github/workflows/docs_ci.yaml
     profile: docs
