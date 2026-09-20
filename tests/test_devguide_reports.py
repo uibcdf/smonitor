@@ -11,8 +11,9 @@ MolSysMT runs these checks from a script in its release gate. Our gate is
 
 from __future__ import annotations
 
+import ast
 import re
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import pytest
 
@@ -30,6 +31,83 @@ REQUIRED = ("summary", "issue", "status", "opened", "verification", "area")
 #: `uibcdf/<repo>#<n>`, and the upstream forms a blocker may legitimately take.
 ISSUE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#\d+$")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+PYTHON_IDENTIFIER = re.compile(r"^[A-Za-z_]\w*$")
+GUARD_POLICY_EFFECTIVE_DATE = "2026-09-20"
+PYTEST_ROOTS = (PurePosixPath("tests"), PurePosixPath("devtools/tests"))
+
+
+def _is_test_class(node: ast.ClassDef) -> bool:
+    if node.name.startswith("Test"):
+        return True
+    return any(
+        (isinstance(base, ast.Name) and base.id.endswith("TestCase"))
+        or (isinstance(base, ast.Attribute) and base.attr.endswith("TestCase"))
+        for base in node.bases
+    )
+
+
+def _test_functions(nodes: list[ast.stmt]) -> dict[str, ast.AST]:
+    return {
+        node.name: node
+        for node in nodes
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name.startswith("test_")
+    }
+
+
+def validate_pytest_guard(root: Path, selector: str) -> list[str]:
+    """Validate the safe static pytest selector subset used by MolSysSuite."""
+
+    if any(character.isspace() for character in selector) or any(
+        token in selector for token in (",", "(", ")", "*", "?")
+    ):
+        return [f"guard {selector!r} uses unsupported selector syntax"]
+    parts = selector.split("::")
+    if not 1 <= len(parts) <= 3 or any(not part for part in parts):
+        return [f"guard {selector!r} uses unsupported selector syntax"]
+    if any("[" in part or "]" in part for part in parts[1:]):
+        return [
+            (
+                f"guard {selector!r}: parameterized selectors are not supported by "
+                "the static Python profile; name the unparameterized test or the module"
+            )
+        ]
+
+    relative = PurePosixPath(parts[0])
+    if (
+        relative.is_absolute()
+        or ".." in relative.parts
+        or relative.suffix != ".py"
+        or not any(relative.is_relative_to(base) for base in PYTEST_ROOTS)
+    ):
+        return [f"guard {selector!r} must name a safe Python file under tests/ or devtools/tests/"]
+    target = root.joinpath(*relative.parts)
+    if not target.is_file():
+        return [f"guard {selector!r} names a file that does not exist"]
+    try:
+        tree = ast.parse(target.read_text(encoding="utf-8"), filename=str(target))
+    except (OSError, SyntaxError) as error:
+        return [f"guard {selector!r} cannot be statically indexed: {error}"]
+
+    functions = _test_functions(tree.body)
+    classes = {
+        node.name: node
+        for node in tree.body
+        if isinstance(node, ast.ClassDef) and _is_test_class(node)
+    }
+    if len(parts) == 1:
+        if functions or any(_test_functions(node.body) for node in classes.values()):
+            return []
+        return [f"guard {selector!r} does not resolve to a collected test"]
+    if not all(PYTHON_IDENTIFIER.fullmatch(part) for part in parts[1:]):
+        return [f"guard {selector!r} uses unsupported selector syntax"]
+    if len(parts) == 2 and parts[1] in functions:
+        return []
+    if len(parts) == 3:
+        class_node = classes.get(parts[1])
+        if class_node is not None and parts[2] in _test_functions(class_node.body):
+            return []
+    return [f"guard {selector!r} does not resolve to a collected test"]
 
 
 def read_front_matter(path: Path) -> dict[str, str] | None:
@@ -98,17 +176,25 @@ def test_report_front_matter_is_valid(path: Path) -> None:
 
 @pytest.mark.parametrize("path", reports(), ids=rel)
 def test_a_named_guard_or_normative_document_exists(path: Path) -> None:
-    """A path that has gone stale is wrong in any status, not only in `resolved`.
-
-    The protocol requires the check on resolved entries. Applying it to every
-    entry that names one costs nothing and catches the case the narrower version
-    missed: an open entry pointing at a guard that was renamed or removed.
-    """
+    """New guards resolve as pytest selectors; older records keep path checks."""
     fields = read_front_matter(path) or {}
-    for key in ("guard", "normative"):
-        target = fields.get(key, "")
-        if target:
-            assert (ROOT / target).exists(), f"{rel(path)} names a missing {key}: {target}"
+    normative = fields.get("normative", "")
+    if normative:
+        assert (ROOT / normative).exists(), (
+            f"{rel(path)} names a missing normative document: {normative}"
+        )
+
+    guard = fields.get("guard", "")
+    if not guard:
+        return
+    if (
+        fields.get("status") == "resolved"
+        and fields.get("closed", "") >= GUARD_POLICY_EFFECTIVE_DATE
+    ):
+        assert validate_pytest_guard(ROOT, guard) == []
+    else:
+        target = guard.split("::", maxsplit=1)[0]
+        assert (ROOT / target).exists(), f"{rel(path)} names a missing guard: {guard}"
 
 
 @pytest.mark.parametrize("path", reports(), ids=rel)
@@ -147,3 +233,41 @@ def test_the_generated_indexes_are_current() -> None:
     with redirect_stdout(buffer):
         stale = [q for q in module.QUEUES if not module.apply(DEVGUIDE / q, check=True)]
     assert not stale, "run `python devtools/devguide_index.py`: " + buffer.getvalue().strip()
+
+
+def test_pytest_guard_rejects_a_missing_file(tmp_path: Path) -> None:
+    errors = validate_pytest_guard(tmp_path, "tests/test_missing.py")
+
+    assert any("file that does not exist" in error for error in errors)
+
+
+def test_pytest_guard_rejects_a_missing_node_and_parameter_id(tmp_path: Path) -> None:
+    test_file = tmp_path / "tests/test_example.py"
+    test_file.parent.mkdir()
+    test_file.write_text("def test_present():\n    pass\n", encoding="utf-8")
+
+    missing = validate_pytest_guard(tmp_path, "tests/test_example.py::test_absent")
+    parameterized = validate_pytest_guard(tmp_path, "tests/test_example.py::test_present[param]")
+
+    assert any("does not resolve" in error for error in missing)
+    assert any("parameterized selectors are not supported" in error for error in parameterized)
+
+
+def test_pytest_guard_accepts_a_module_function_and_class_method(tmp_path: Path) -> None:
+    test_file = tmp_path / "tests/test_example.py"
+    test_file.parent.mkdir()
+    test_file.write_text(
+        "def test_function():\n"
+        "    pass\n\n"
+        "class TestGroup:\n"
+        "    def test_method(self):\n"
+        "        pass\n",
+        encoding="utf-8",
+    )
+
+    for selector in (
+        "tests/test_example.py",
+        "tests/test_example.py::test_function",
+        "tests/test_example.py::TestGroup::test_method",
+    ):
+        assert validate_pytest_guard(tmp_path, selector) == []

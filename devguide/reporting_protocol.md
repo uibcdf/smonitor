@@ -155,6 +155,13 @@ that fails if the defect returns.
    **`normative`** instead: the document that absorbed the durable rules. One of
    the two is mandatory for `resolved`; neither is for `withdrawn` or
    `superseded`.
+
+For reports resolved on or after 2026-09-20, the local validator applies the default
+Python guard profile defined by MolSysSuite: one addressable pytest module, function, or
+class-method selector under `tests/` or `devtools/tests/`. This mechanical check proves
+addressability, not relevance; the resolution must explain why the selected assertion
+protects the reported failure mechanism. See `MOLSYSSUITE_GUIDE.md` and the canonical
+`uibcdf/molsyssuite` reporting protocol for the complete contract.
 2. Move the document to `archive/`.
 3. Close the issue with a three-line comment:
 
