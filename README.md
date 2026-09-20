@@ -2,7 +2,6 @@
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/137937243.svg)](https://zenodo.org/badge/latestdoi/137937243)
 [![](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/downloads/)
 [![CI](https://github.com/uibcdf/smonitor/actions/workflows/CI.yaml/badge.svg)](https://github.com/uibcdf/smonitor/actions/workflows/CI.yaml)
 [![codecov](https://codecov.io/github/uibcdf/smonitor/graph/badge.svg?token=tfPUOXP0tW)](https://codecov.io/github/uibcdf/smonitor)
