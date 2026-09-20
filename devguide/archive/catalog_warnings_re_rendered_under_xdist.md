@@ -1,21 +1,22 @@
 ---
 summary: A catalog hint interpolating a field cannot be re-rendered from args alone.
 issue: uibcdf/smonitor#4
-status: blocked
+status: resolved
 opened: 2026-08-15
-closed:
+closed: 2026-09-20
 severity: low
 verification: reproduced
 area: [catalog, integrations]
-guard: tests/test_catalog_instance_round_trip.py
+guard: tests/test_catalog_instance_round_trip.py::test_state_dependent_hint_text_survives_an_args_only_rebuild
 normative:
-blocked_by: [pytest-dev/pytest-xdist#1372]
+blocked_by: []
 supersedes: []
 ---
 
 # Catalog warnings are re-rendered when they are rebuilt
 
-**Status:** resolved here in `0.13.0`. One residue remains, and it is upstream's.
+**Status:** resolved. The broad reconstruction defect was fixed in `0.13.0`; the
+state-dependent visible-hint residue was removed locally on 2026-09-20.
 **Reproduced:** 2026-08-15 under pytest-xdist. Root cause found 2026-08-17.
 
 ## Symptom
@@ -83,7 +84,7 @@ by calling the class — and a custom `__reduce__` forces the fix proposed in
 The review on that pull request is what surfaced all of this. It is worth reading
 before revisiting any of it.
 
-## Residue
+## Former residue
 
 A hint whose template interpolates a field cannot be re-rendered by a rebuilder
 carrying only `args`, because the field is not there. ArgDigest's
@@ -93,5 +94,25 @@ the state has to travel, which is what `pytest-dev/pytest-xdist#1372` proposes.
 `pickle` does carry the state and is unaffected, as are serial runs, scripts,
 notebooks and services.
 
-This entry stays open only for that residue. It closes when a released
-pytest-xdist transfers warning state.
+The repository originally kept this entry blocked until a released pytest-xdist
+transferred warning state. That coupled truthful visible text to a stronger contract than
+SMonitor needs from the transport.
+
+## Resolution
+
+Warnings created from structured catalog data now resolve their message and hint once and
+store the complete visible text in `args`. An explicit message arriving without structured
+inputs is treated as authoritative rebuild text, so an args-only transport does not try to
+interpolate a state-dependent hint from fields it never received.
+
+The boundary is explicit: released pytest-xdist still loses the warning's structured state,
+and `pytest-dev/pytest-xdist#1372` remains valuable for preserving that state and the full
+instance contract. SMonitor no longer waits on it to preserve correct user-visible text.
+
+The new regression first failed with `Use '{suggestion}' instead.` where the original read
+`Use 'AR' instead.` It now passes. On 2026-09-20 the three focused warning modules passed
+35 tests, the complete suite passed 460 tests with 2 skips under 12 xdist workers, and Ruff
+lint and formatting checks passed.
+
+Guard:
+`tests/test_catalog_instance_round_trip.py::test_state_dependent_hint_text_survives_an_args_only_rebuild`.

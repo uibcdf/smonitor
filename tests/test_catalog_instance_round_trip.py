@@ -28,6 +28,10 @@ CODES = {
         "user_hint": "Provide an explicit atom type.",
     },
     "T-FORM": {"user_message": "Form '{form}' cannot be read."},
+    "T-GUESS": {
+        "user_message": "Atom name '{atom_name}' is not recognized.",
+        "user_hint": "Use '{suggestion}' instead.",
+    },
 }
 
 
@@ -94,6 +98,24 @@ class FormError(CatalogException):
     def for_form(cls, form):
         rendered, _ = smonitor.resolve(code="T-FORM", extra={"form": form})
         return cls(rendered, form=form)
+
+
+class SuggestedAtomWarning(CatalogWarning):
+    """A warning whose visible hint depends on state outside ``args`` today."""
+
+    def __init__(self, message=None, *, atom_name=None, suggestion=None):
+        extra = None
+        if atom_name is not None or suggestion is not None:
+            extra = {"atom_name": atom_name, "suggestion": suggestion}
+        super().__init__(message, code="T-GUESS", extra=extra)
+
+    @classmethod
+    def for_atom(cls, atom_name, suggestion):
+        rendered, _ = smonitor.resolve(
+            code="T-GUESS",
+            extra={"atom_name": atom_name, "suggestion": suggestion},
+        )
+        return cls(rendered, atom_name=atom_name, suggestion=suggestion)
 
 
 @pytest.fixture(autouse=True)
@@ -189,12 +211,22 @@ def test_hint_is_derived_and_survives_every_rebuild():
     for rebuilt in (pickle.loads(pickle.dumps(original)), copy.deepcopy(original)):
         assert rebuilt.hint == original.hint
 
-    # `args` carries the message alone, so a rebuilder holding only `args` sees a
-    # hint whose template has nothing to interpolate. It is the known residue,
-    # not a lost hint: the code still resolves, and the text says what is absent.
+    # `args` carries the complete visible text. The code can still derive a
+    # constant hint, while an args-only transport does not pretend to preserve
+    # arbitrary structured fields.
     from_args = type(original)(*original.args)
     assert from_args.hint == "Provide an explicit atom type."
     assert from_args.args == original.args
+
+
+def test_state_dependent_hint_text_survives_an_args_only_rebuild():
+    """Released pytest-xdist must not turn lost state into plausible wrong text."""
+    original = SuggestedAtomWarning.for_atom("Ar", "AR")
+
+    rebuilt = type(original)(*original.args)
+
+    assert str(rebuilt) == str(original)
+    assert rebuilt.args == original.args
 
 
 def test_hint_refuses_assignment():

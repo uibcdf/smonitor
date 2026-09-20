@@ -163,9 +163,25 @@ class CatalogWarning(Warning):
             if entry:
                 target_code = entry.get("code")
 
+        # An explicit message with no structured inputs is also the wire shape
+        # used by rebuilders that carry only ``args`` (including released
+        # pytest-xdist). Treat that text as authoritative: attempting to
+        # resolve a state-dependent hint again would replace its fields with
+        # placeholders and produce plausible but false output.
+        args_only_rebuild = (
+            message is not None and extra is None and meta is None and catalog is None
+        )
+
         resolved_extra = merge_extra(meta, extra)
         resolved_extra.setdefault("caller", self.catalog_key or type(self).__name__)
-        resolved_msg, hint = _resolve(message=message, code=target_code, extra=resolved_extra)
+        if args_only_rebuild:
+            resolved_msg, hint = str(message), None
+        else:
+            resolved_msg, hint = _resolve(
+                message=message,
+                code=target_code,
+                extra=resolved_extra,
+            )
 
         full_message = resolved_msg
         if hint:
@@ -175,17 +191,18 @@ class CatalogWarning(Warning):
         self.extra = resolved_extra
         self.raw_message = message
         self.message = full_message
-        # See `CatalogException.__init__`: `args` holds the message without the
-        # hint, so rebuilding from it is idempotent.
-        super().__init__(resolved_msg)
+        # The visible text is self-contained in ``args``. Rebuilders that also
+        # carry instance state restore ``code`` and ``extra``; args-only
+        # transports preserve the text without claiming that state survived.
+        super().__init__(full_message)
 
     def __str__(self) -> str:
-        """The rendered message with its hint, which `args` deliberately omits.
+        """The rendered message with its hint.
 
-        Without this the text would lose the hint the moment `args` stopped
-        carrying it. `getattr` rather than attribute access, because an instance
-        rebuilt through `__new__` has no dictionary until its state is restored
-        and a half-built exception must still be printable.
+        ``message`` is the structured instance's snapshot. ``args`` carries the
+        same complete visible text so an args-only rebuild stays truthful.
+        ``getattr`` keeps an instance rebuilt through ``__new__`` printable
+        before its dictionary is restored.
         """
         message = getattr(self, "message", None)
         return super().__str__() if message is None else message
@@ -194,12 +211,12 @@ class CatalogWarning(Warning):
     def hint(self) -> Optional[str]:
         """The catalog hint for this instance's code, re-resolved on every read.
 
-        Derived, never stored. `args` carries the message and nothing else, and
-        that is the invariant which makes `type(e)(*e.args)` -- `pickle`,
-        `copy.deepcopy`, `warnings.warn(text, category)` and pytest-xdist --
-        reproduce an instance. A stored hint would be state outside `args`, so
-        every rebuild would drop it and the defect closed in `0.13.0` would
-        reopen somewhere new.
+        Derived, never stored. ``args`` preserves the complete visible text but
+        not arbitrary structured fields. Pickle and copy restore those fields;
+        an args-only transport such as released pytest-xdist can preserve
+        ``str(warning)`` exactly but cannot promise a separately re-derived
+        state-dependent hint. The upstream state-transfer work remains the
+        boundary for that stronger contract.
 
         Being a property is also the enforcement. A subclass that assigns
         `self.hint` gets `AttributeError` at the offending line, which is what

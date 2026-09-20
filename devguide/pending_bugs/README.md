@@ -18,8 +18,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`catalog_warnings_re_rendered_under_xdist.md`](catalog_warnings_re_rendered_under_xdist.md) | `blocked` | [uibcdf/smonitor#4](https://github.com/uibcdf/smonitor/issues/4) | A catalog hint interpolating a field cannot be re-rendered from args alone. |
+_No entries._
 
 <!-- /generated -->
