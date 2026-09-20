@@ -53,11 +53,26 @@ for `uibcdf/molsyssuite#27`.
 - A green workflow is not external publication proof. The staged coordinate will be
   checked independently in the Anaconda channel before this proposal closes.
 
+## First hosted candidate
+
+Run `35503093580` published exactly one `smonitor-0.15.1-py_0` record to staging and GH
+Run Receptor reported one successful noarch job with structured artifact evidence. The
+independent clean-environment audit rejected that artifact: under both Python 3.11 and
+3.13, `importlib.metadata.version("smonitor")` returned `0.13.0+9.g0ec2ef9`, not the
+Conda coordinate `0.15.1`.
+
+The source copy used by conda-build cannot derive the candidate tag and falls back to the
+tracked `_version.py`. The corrective path therefore freezes `PKG_VERSION` into static
+project metadata and `_version.py` before pip builds the package, and the recipe test
+checks both installed version surfaces. Build 0 remains rejected evidence; it is not
+overwritten. The correction will use additive build 1.
+
 ## Acceptance criteria
 
 - Local tests guard the noarch recipe, exact-candidate staging boundary, single-job
   topology, and structured evidence upload.
 - A hosted manual run publishes exactly one staged noarch coordinate from the named SHA.
 - Clean Python 3.11 and 3.13 environments install that coordinate and import SMonitor.
+- Distribution metadata and `smonitor.__version__` both equal the Conda coordinate.
 - No GitHub Release, tag publication, or main-channel upload is performed by the staging
   path.

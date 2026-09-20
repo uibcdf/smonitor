@@ -2,5 +2,6 @@
 echo "Building"
 set -ex
 
-$PYTHON -m pip install . --no-deps -v
+$PYTHON devtools/conda-build/freeze_project_version.py "$PKG_VERSION"
+$PYTHON -m pip install . --no-deps --no-build-isolation --ignore-installed -v
 echo "Done"

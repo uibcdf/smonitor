@@ -22,6 +22,7 @@ test:
   imports:
     - smonitor
   commands:
+    - python -c "import importlib.metadata as md, os, smonitor; expected=os.environ['PKG_VERSION']; assert md.version('smonitor') == expected; assert smonitor.__version__ == expected"
     - smonitor --help
 
 about:
