@@ -18,8 +18,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`release_upload_collides_with_staged_conda_coordinate.md`](release_upload_collides_with_staged_conda_coordinate.md) | `active` | [uibcdf/smonitor#19](https://github.com/uibcdf/smonitor/issues/19) | Release upload collides with a staged Conda build coordinate |
+_No entries._
 
 <!-- /generated -->

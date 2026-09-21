@@ -1,13 +1,13 @@
 ---
 summary: Release upload collides with a staged Conda build coordinate
 issue: uibcdf/smonitor#19
-status: active
+status: resolved
 opened: 2026-09-21
-closed:
+closed: 2026-09-21
 severity: high
 verification: reproduced
 area: [packaging, release, conda]
-guard:
+guard: tests/test_noarch_conda_publication.py::test_manual_candidates_are_exact_and_staging_only
 normative:
 blocked_by: []
 supersedes: []
@@ -79,4 +79,20 @@ another independent noarch-publisher validation.
 
 ## Resolution
 
-Pending exact-file promotion, public-channel verification, and central handoff.
+Commit `6ac5c73` removed the release-triggered second upload. Manual candidate builds
+upload to staging only; public publication is a separate dispatch using the reusable
+exact-file Action. Promotion run `35589475337` succeeded for release tag `0.16.0`,
+commit `7daac74c6641e6003df8bbcc6cca91709ec891b9`, and
+`noarch/smonitor-0.16.0-py_1.tar.bz2` with expected SHA-256
+`a7f0ea073786354695c606e89959e67fcd4afc910a42683bba00955eb17163d7`.
+An independent `conda search --json --override-channels -c uibcdf
+'smonitor=0.16.0=py_1'` found that exact SHA under `uibcdf/noarch`. A fresh Linux
+Python 3.14.7 environment installed the same build from `uibcdf` and `conda-forge`;
+`conda list` attributed SMonitor to `uibcdf`, the import came from that environment's
+`site-packages`, and `smonitor --help` succeeded. The staging file remains available.
+
+The guard fails if the staging workflow regains a release trigger or a direct `main`
+upload. The adjoining promotion-workflow test checks that the public path names an
+exact coordinate and SHA-256 through the shared Action. This is a workflow-contract
+guard; the independent registry and clean-install checks above establish delivered
+behavior, which a static test alone cannot prove.

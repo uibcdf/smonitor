@@ -3,13 +3,14 @@
 
 [![MolSysSuite: Support Library](https://img.shields.io/badge/MolSysSuite-support%20library-2563eb?labelColor=24292f)](https://github.com/uibcdf/molsyssuite/blob/main/devguide/repository_badges.md#support-library)
 [![MolSysSuite policy](https://github.com/uibcdf/smonitor/actions/workflows/molsyssuite-policy.yml/badge.svg?branch=main)](https://github.com/uibcdf/smonitor/actions/workflows/molsyssuite-policy.yml)
-[![Python 3.11 | 3.12 | 3.13](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB?logo=python&logoColor=white)](https://github.com/uibcdf/molsyssuite/blob/main/devguide/python_policy.md)
+[![Python 3.11 | 3.12 | 3.13 | 3.14](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-3776AB?logo=python&logoColor=white)](https://github.com/uibcdf/molsyssuite/blob/main/devguide/python_policy.md)
 [![License](https://img.shields.io/github/license/uibcdf/smonitor)](https://github.com/uibcdf/smonitor/blob/main/LICENSE)
 [![Tests](https://github.com/uibcdf/smonitor/actions/workflows/CI.yaml/badge.svg?branch=main)](https://github.com/uibcdf/smonitor/actions/workflows/CI.yaml)
 [![Codecov](https://codecov.io/github/uibcdf/smonitor/graph/badge.svg)](https://codecov.io/github/uibcdf/smonitor)
 [![Documentation](https://github.com/uibcdf/smonitor/actions/workflows/sphinx_docs_to_gh_pages.yaml/badge.svg)](https://www.uibcdf.org/smonitor/)
 [![GitHub release](https://img.shields.io/github/v/release/uibcdf/smonitor)](https://github.com/uibcdf/smonitor/releases/latest)
 [![Conda](https://img.shields.io/conda/vn/uibcdf/smonitor)](https://anaconda.org/uibcdf/smonitor)
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22872341.svg)](https://doi.org/10.5281/zenodo.22872341)
 
 *Precision diagnostics for scientific Python ecosystems.*
 
@@ -237,8 +238,10 @@ make -C docs html
 
 ## Status
 
-Current release: **0.15.0**, available from the UIBCDF Conda channel for Python 3.11,
-3.12, and 3.13 and as a GitHub source release.
+Current release: **0.16.0**, available as a `noarch: python` package from the UIBCDF
+Conda channel for Python 3.11--3.14 and as a GitHub source release. Zenodo archives
+the 0.16.0 source snapshot under version DOI `10.5281/zenodo.22872342`; it does not
+archive the Conda package.
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)

@@ -34,5 +34,7 @@ The table below is generated from front matter by
 | [`publish_one_staged_noarch_conda_artifact.md`](publish_one_staged_noarch_conda_artifact.md) | `resolved` | [uibcdf/smonitor#16](https://github.com/uibcdf/smonitor/issues/16) | Publish one staged noarch Conda artifact instead of interpreter-platform duplicates |
 | [`publish_the_014_profile_message_fallback.md`](publish_the_014_profile_message_fallback.md) | `resolved` | [uibcdf/smonitor#8](https://github.com/uibcdf/smonitor/issues/8) | Publish the 0.14 profile-message fallback for downstream CI |
 | [`receptor_misclassifies_composite_conda_publication.md`](receptor_misclassifies_composite_conda_publication.md) | `resolved` | [uibcdf/smonitor#10](https://github.com/uibcdf/smonitor/issues/10) | Use the release profile for the composite Conda publication workflow |
+| [`release_upload_collides_with_staged_conda_coordinate.md`](release_upload_collides_with_staged_conda_coordinate.md) | `resolved` | [uibcdf/smonitor#19](https://github.com/uibcdf/smonitor/issues/19) | Release upload collides with a staged Conda build coordinate |
+| [`verify_python_3_14_support_and_noarch_release.md`](verify_python_3_14_support_and_noarch_release.md) | `resolved` | [uibcdf/smonitor#17](https://github.com/uibcdf/smonitor/issues/17) | Establish verified Python 3.14 support and publish a noarch release |
 
 <!-- /generated -->

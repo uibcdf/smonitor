@@ -1,12 +1,12 @@
 ---
 summary: Establish verified Python 3.14 support and publish a noarch release
 issue: uibcdf/smonitor#17
-status: active
+status: resolved
 opened: 2026-09-21
-closed:
+closed: 2026-09-21
 verification: measured
 area: [python, packaging, ci]
-guard:
+guard: tests/test_noarch_conda_publication.py
 normative:
 blocked_by: []
 supersedes: []
@@ -16,10 +16,11 @@ supersedes: []
 
 **Reported:** 2026-09-21 during the dependency-ordered MolSysSuite transition in
 `uibcdf/molsyssuite#29`.
-**Status:** Active. Source compatibility, the complete hosted interpreter/OS matrix,
-and a clean Linux Python 3.14 installation from the staged noarch artifact are measured.
-The GitHub Release and Zenodo source snapshot are public, but Conda publication failed
-at the staged-coordinate collision tracked in `uibcdf/smonitor#19`.
+**Status:** Resolved. Source compatibility, the complete hosted
+interpreter/OS matrix, and clean Linux Python 3.14 installations from both staged and
+public noarch artifacts are measured. GitHub Release 0.16.0 and its Zenodo source
+snapshot are public. The Conda collision in `uibcdf/smonitor#19` was recovered by
+promoting the exact staged file. MolSysSuite admitted SMonitor in commit `8208151`.
 
 ## What
 
@@ -43,10 +44,9 @@ to mark SMonitor `admitted` and let DepDigest use its public 3.14 package.
 ## Why
 
 The candidate `pyproject.toml` and recipe now allow Python 3.14 and the recipe declares
-`noarch: python`, but the published SMonitor 0.15.0 artifacts remain
-interpreter/platform-specific. The staging channel now carries an independently
-verified 0.16.0 noarch candidate; the public `uibcdf` channel does not. A consumer using
-only the public channel still cannot resolve SMonitor 0.16.0 on Python 3.14.
+`noarch: python`; the previously published SMonitor 0.15.0 artifacts remain
+interpreter/platform-specific. The exact verified 0.16.0 `py_1` noarch candidate is now
+also available from the public `uibcdf` channel and resolves on Python 3.14.
 
 ## What is measured and what is assumed
 
@@ -144,7 +144,19 @@ changes the source-feasibility result above.
 ## Resolution
 
 The hosted twelve-cell matrix and a staged noarch Linux Python 3.14 installation are
-green. GitHub Release `0.16.0` and Zenodo record `10.5281/zenodo.22872342` exist, but
-Conda main-channel publication failed with a 409 duplicate-coordinate conflict in run
-`35587726937`; `uibcdf/smonitor#19` tracks recovery. Public Conda installation and
-admission remain pending.
+green. GitHub Release `0.16.0` and independently verified Zenodo record
+`10.5281/zenodo.22872342` exist. The release-triggered Conda upload failed with a 409
+duplicate-coordinate conflict in run `35587726937`, tracked by `uibcdf/smonitor#19`.
+The shared exact-file promotion Action passed in run `35589475337`; independent public
+channel metadata then found `smonitor-0.16.0-py_1.tar.bz2` with the same SHA-256 as the
+tested staging file,
+`a7f0ea073786354695c606e89959e67fcd4afc910a42683bba00955eb17163d7`.
+A fresh Linux Python 3.14.7 environment installed that exact public build from `uibcdf`
+and `conda-forge`; `conda list` attributed it to `uibcdf`, the module imported from
+the environment's `site-packages`, and `smonitor --help` succeeded. This proves public
+Linux installation, not independent installed-package execution on macOS or Windows.
+Central admission was recorded under `uibcdf/molsyssuite#29` in commit `8208151`.
+The registered guard checks the metadata, recipe, hosted Python/OS matrix, staging-only
+build route, and exact-file promotion workflow. Public registry metadata, the clean
+installation, and the independently audited Zenodo record are separately retained
+release evidence; no static test alone claims their continuing availability.
