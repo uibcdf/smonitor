@@ -29,6 +29,11 @@ historical context live in `SPEC_SMONITOR.md`.
   skipped on Linux CPython 3.14.7 with 12 workers after installing NumPy and Pint for
   the cross-library test. This does not admit 3.14 or validate a published package; see
   `uibcdf/smonitor#17` and the pending proposal for the remaining gates.
+- **Python 3.14 candidate (2026-09-21):** metadata, the noarch recipe, and a twelve-cell
+  hosted matrix now target 3.11--3.14. Local suites passed 465 tests (two skipped) on
+  both Python 3.13 and 3.14; an off-checkout 3.14 install of the development wheel
+  worked. Hosted and public-package evidence is still pending, so the README badge
+  retains the published 3.11--3.13 boundary.
 - Core scaffold, manager/context, and `@signal` implemented.
 - Emitters for warnings/logging/exceptions implemented.
 - Policy engine implemented with routing, filtering, rate limits, sampling,

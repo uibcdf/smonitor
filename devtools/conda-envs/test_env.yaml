@@ -8,5 +8,6 @@ dependencies:
   - pytest
   - pytest-cov
   - pytest-xdist
+  - pytest-receptor >=1.1.0
   - ruff=0.16.5
   - versioningit

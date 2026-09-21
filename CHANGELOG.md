@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Changed
+
+- The Python 3.14 transition candidate extends package and Conda recipe metadata to
+  Python 3.11--3.14 and adds Python 3.14 to the hosted Linux, macOS, and Windows test
+  matrix. This is not a public support claim until the staged and released noarch
+  artifacts pass independent clean-install checks; see `uibcdf/smonitor#17`.
+
 ## [0.15.0] - 2026-09-08
 
 One change is breaking, and it is first because a subclass hits it at import:

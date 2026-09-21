@@ -65,6 +65,25 @@ NumPy, then Pint, was absent from the test environment. Adding those dependencie
 resolved that test without a SMonitor source change. This is a source-tree feasibility
 result, not a wheel-installation, Conda-resolution, macOS/Windows, or release result.
 
+The first candidate changes `pyproject.toml` and the noarch recipe to the target range,
+adds the 3.14 classifier, and extends the hosted full matrix to twelve Linux/macOS/Windows
+and Python 3.11--3.14 cells. The source suite must be repeated after these changes and
+the hosted run retained before the candidate can be called compatible. The routine
+development CI remains on Python 3.13, as required by the central policy. The public
+README badge remains on 3.11--3.13 while SMonitor is only `authorized`.
+
+The candidate source suite was repeated in serially scheduled local runs with twelve
+workers each: Python 3.14.7 passed 465 tests with two skipped, then Python 3.13 passed
+the same 465 tests with two skipped. Ruff lint passed. A development wheel built from
+the dirty candidate checkout had version `0.15.0+26.gb00481d.dirty`; installed outside
+the checkout into the temporary Python 3.14 environment, it imported from
+`site-packages`, reported `Requires-Python: <3.15,>=3.11`, and its `smonitor --help`
+command succeeded. This validates a development wheel only, not a tagged or published
+artifact. The CI candidate also removes the public prerelease trigger and runs Ruff's
+format check alongside lint. The new MolSysSuite release-version gate remains pending
+because `uibcdf/molsyssuite#32` currently requires a versioningit `tag-filter` key that
+versioningit ignores; no inert key is being added here as false compliance evidence.
+
 ## What was refuted
 
 - The first missing-NumPy and missing-Pint failures were environmental; they did not
