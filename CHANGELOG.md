@@ -6,12 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-09-21
+
 ### Changed
 
-- The Python 3.14 transition candidate extends package and Conda recipe metadata to
-  Python 3.11--3.14 and adds Python 3.14 to the hosted Linux, macOS, and Windows test
-  matrix. This is not a public support claim until the staged and released noarch
-  artifacts pass independent clean-install checks; see `uibcdf/smonitor#17`.
+- Python 3.14 joins the supported range. The package metadata and Conda recipe now
+  declare Python 3.11--3.14, and the hosted Linux, macOS, and Windows test matrix covers
+  all four interpreters; see `uibcdf/smonitor#17`.
+- Conda publication uses one `noarch: python` artifact instead of interpreter/platform
+  copies; the manual candidate path is isolated to staging and the release path to the
+  main channel.
+- Release tags are parsed with a fail-closed, canonical `X.Y.Z` versioningit rule.
+
+### Fixed
+
+- The frame-time test now allows only the one-microsecond representation discrepancy
+  observed on Windows, without weakening its ISO/UTC or near-call-time checks; see
+  `uibcdf/smonitor#18`.
 
 ## [0.15.0] - 2026-09-08
 

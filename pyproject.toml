@@ -82,5 +82,9 @@ method = "git"
 match = ["*"]
 default-tag = "0.0.0"
 
+[tool.versioningit.tag2version]
+regex = '^(?P<version>(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))$'
+require-match = true
+
 [tool.versioningit.write]
 file = "smonitor/_version.py"

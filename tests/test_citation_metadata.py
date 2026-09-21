@@ -29,16 +29,30 @@ def test_citation_metadata_identifies_smonitor() -> None:
     assert "https://orcid.org/0000-0003-2812-1499" in text
 
 
-def test_citation_version_matches_the_latest_repository_tag() -> None:
-    completed = subprocess.run(
+def test_citation_version_matches_the_release_tag_or_next_candidate() -> None:
+    text = CITATION.read_text(encoding="utf-8")
+    version = _scalar(text, "version")
+    assert re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", version)
+
+    exact = subprocess.run(
+        ["git", "describe", "--tags", "--exact-match", "HEAD"],
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
+        text=True,
+    )
+    if exact.returncode == 0:
+        assert version == exact.stdout.strip()
+        return
+
+    latest = subprocess.run(
         ["git", "describe", "--tags", "--abbrev=0"],
         cwd=ROOT,
         capture_output=True,
         check=False,
         text=True,
     )
-    if completed.returncode != 0:
+    if latest.returncode != 0:
         return  # Source archives and shallow CI checkouts may not contain Git tags.
 
-    text = CITATION.read_text(encoding="utf-8")
-    assert _scalar(text, "version") == completed.stdout.strip()
+    assert tuple(map(int, version.split("."))) >= tuple(map(int, latest.stdout.strip().split(".")))
