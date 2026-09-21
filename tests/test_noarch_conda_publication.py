@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RECIPE = ROOT / "devtools" / "conda-build" / "meta.yaml"
 WORKFLOW = ROOT / ".github" / "workflows" / "build_and_upload_conda_packages.yaml"
+PROMOTION_WORKFLOW = ROOT / ".github" / "workflows" / "promote_conda_package.yaml"
 
 
 def test_recipe_declares_one_supported_noarch_python_artifact():
@@ -38,13 +39,14 @@ def test_python_3_14_candidate_metadata_and_hosted_matrix():
 def test_manual_candidates_are_exact_and_staging_only():
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
-    assert "types: ['released']" in workflow
-    assert "prereleased" not in workflow
+    assert "release:" not in workflow
     assert "candidate_sha:" in workflow
-    assert "ref: ${{ inputs.candidate_sha || github.event.release.tag_name }}" in workflow
+    assert "ref: ${{ inputs.candidate_sha }}" in workflow
     assert 'test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"' in workflow
     assert "Build, test, and upload the staging candidate" in workflow
     assert "label: staging" in workflow
+    assert "label: main" not in workflow
+    assert '[[ "$BUILD_NUMBER" =~ ^[0-9]+$ ]]' in workflow
 
 
 def test_noarch_workflow_has_one_job_and_retains_producer_evidence():
@@ -56,4 +58,23 @@ def test_noarch_workflow_has_one_job_and_retains_producer_evidence():
     assert "platform_linux-64: false" in workflow
     assert "platform_win-64: false" in workflow
     assert "always() && steps.conda_staging.outputs.evidence_path != ''" in workflow
-    assert "always() && steps.conda_release.outputs.evidence_path != ''" in workflow
+
+
+def test_promotion_workflow_checks_exact_release_and_file_identity():
+    workflow = PROMOTION_WORKFLOW.read_text(encoding="utf-8")
+
+    assert 'test "$GITHUB_REF" = refs/heads/main' in workflow
+    assert 'test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"' in workflow
+    assert 'test "$(git rev-list -n 1 "$RELEASE_VERSION")" = "$CANDIDATE_SHA"' in workflow
+    assert "releases/tags/$RELEASE_VERSION" in workflow
+    assert (
+        "uibcdf/smonitor/$RELEASE_VERSION/noarch/smonitor-$RELEASE_VERSION-py_$BUILD_NUMBER.tar.bz2"
+        in workflow
+    )
+    assert "action-build-and-upload-conda-packages/promote@v2.2.2" in workflow
+    assert "expected-sha256: ${{ inputs.sha256 }}" in workflow
+    assert "from-label: staging" in workflow
+    assert "to-label: main" in workflow
+    assert 'record.get("sha256") == expected' in workflow
+    assert 'record["channel"] != "https://conda.anaconda.org/uibcdf/noarch"' in workflow
+    assert "ANACONDA_UIBCDF_TOKEN" in workflow

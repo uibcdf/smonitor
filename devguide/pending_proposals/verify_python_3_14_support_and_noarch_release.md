@@ -17,8 +17,9 @@ supersedes: []
 **Reported:** 2026-09-21 during the dependency-ordered MolSysSuite transition in
 `uibcdf/molsyssuite#29`.
 **Status:** Active. Source compatibility, the complete hosted interpreter/OS matrix,
-and a clean Linux Python 3.14 installation from the staged noarch artifact are measured;
-public artifacts and clean cross-platform consumer installation remain unverified.
+and a clean Linux Python 3.14 installation from the staged noarch artifact are measured.
+The GitHub Release and Zenodo source snapshot are public, but Conda publication failed
+at the staged-coordinate collision tracked in `uibcdf/smonitor#19`.
 
 ## What
 
@@ -143,5 +144,7 @@ changes the source-feasibility result above.
 ## Resolution
 
 The hosted twelve-cell matrix and a staged noarch Linux Python 3.14 installation are
-green. Public-channel publication, independent public-artifact verification, and the
-separate Zenodo requirement remain pending.
+green. GitHub Release `0.16.0` and Zenodo record `10.5281/zenodo.22872342` exist, but
+Conda main-channel publication failed with a 409 duplicate-coordinate conflict in run
+`35587726937`; `uibcdf/smonitor#19` tracks recovery. Public Conda installation and
+admission remain pending.
