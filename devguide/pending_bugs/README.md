@@ -18,8 +18,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`frame_time_test_has_submicrosecond_boundary.md`](frame_time_test_has_submicrosecond_boundary.md) | `active` | [uibcdf/smonitor#18](https://github.com/uibcdf/smonitor/issues/18) | Avoid a one-microsecond false failure in the frame-time test |
+_No entries._
 
 <!-- /generated -->

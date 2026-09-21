@@ -16,8 +16,9 @@ supersedes: []
 
 **Reported:** 2026-09-21 during the dependency-ordered MolSysSuite transition in
 `uibcdf/molsyssuite#29`.
-**Status:** Active. Source compatibility is measured on Linux; packaging, hosted
-platforms, public artifacts, and clean consumer installation remain unverified.
+**Status:** Active. Source compatibility and the complete hosted interpreter/OS matrix
+are measured; staged and public artifacts and clean consumer installation remain
+unverified.
 
 ## What
 
@@ -86,9 +87,13 @@ versioningit ignores; no inert key is being added here as false compliance evide
 
 The first exact-commit hosted matrix, run `35580019186` on `9ec58eb`, passed eleven of
 twelve cells. Windows Python 3.12 reached the test step and failed only the frame-time
-bound assertion by one microsecond. This is tracked as `uibcdf/smonitor#18`; it is a
-test precision defect, not evidence of a Python 3.14 or packaging failure. The matrix
-is not green until an exact-commit rerun passes after that repair.
+bound assertion by one microsecond. The test defect was repaired in `a30438d` and
+tracked to closure as `uibcdf/smonitor#18`. The exact-commit rerun `35585349618` on
+`1e48f7d9b7308adb85e5d763d7e26c5da25101cd` passed all twelve cells: Linux, macOS,
+and Windows on Python 3.11--3.14. The local full suite at this commit passed on Python
+3.13 and 3.14 (469 passed, 3 skipped on each) with twelve workers; Ruff lint and format
+checks passed. This validates source and CI compatibility, not a staged or public Conda
+artifact.
 
 ## What was refuted
 
@@ -119,4 +124,4 @@ changes the source-feasibility result above.
 
 ## Resolution
 
-Pending hosted, package, channel, and release evidence.
+Pending package, channel, and release evidence. The hosted twelve-cell matrix is green.

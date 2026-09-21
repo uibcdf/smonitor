@@ -30,12 +30,12 @@ historical context live in `SPEC_SMONITOR.md`.
   the cross-library test. This does not admit 3.14 or validate a published package; see
   `uibcdf/smonitor#17` and the pending proposal for the remaining gates.
 - **Python 3.14 candidate (2026-09-21):** metadata, the noarch recipe, and a twelve-cell
-  hosted matrix now target 3.11--3.14. Local suites passed 465 tests (two skipped) on
-  both Python 3.13 and 3.14; an off-checkout 3.14 install of the development wheel
-  worked. The first exact-commit hosted matrix passed 11/12 cells; Windows 3.12 hit a
-  one-microsecond test-bound false failure tracked in `uibcdf/smonitor#18`. A repaired
-  hosted rerun and public-package evidence remain pending, so the README badge retains
-  the published 3.11--3.13 boundary.
+  hosted matrix target 3.11--3.14. The full local suite passed on both Python 3.13 and
+  3.14 (469 passed, 3 skipped with 12 workers each), and an off-checkout 3.14 install
+  of the development wheel worked. Hosted run `35585349618` passed all twelve cells on
+  Linux, macOS, and Windows, including Windows 3.12 after the test-bound correction in
+  `uibcdf/smonitor#18`. Staged and public package evidence remain pending, so the README
+  badge retains the published 3.11--3.13 boundary.
 - Core scaffold, manager/context, and `@signal` implemented.
 - Emitters for warnings/logging/exceptions implemented.
 - Policy engine implemented with routing, filtering, rate limits, sampling,

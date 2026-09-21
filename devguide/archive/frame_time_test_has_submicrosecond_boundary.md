@@ -1,13 +1,13 @@
 ---
 summary: Avoid a one-microsecond false failure in the frame-time test
 issue: uibcdf/smonitor#18
-status: active
+status: resolved
 opened: 2026-09-21
-closed:
+closed: 2026-09-21
 severity: medium
 verification: reproduced
 area: [testing, time, ci]
-guard:
+guard: tests/test_core.py::test_frame_time_bound_allows_only_one_microsecond_quantization
 normative:
 blocked_by: []
 supersedes: []
@@ -72,4 +72,14 @@ changed, and its hot-path storage remains a float epoch.
 
 ## Resolution
 
-Pending hosted verification.
+Commit `a30438d` bounds the independently sampled frame time by exactly one
+microsecond at either end. The guard
+`tests/test_core.py::test_frame_time_bound_allows_only_one_microsecond_quantization`
+accepts a one-microsecond representation discrepancy and rejects two; the runtime
+test continues to check ISO/UTC, frame shape, and near-call timing.
+
+On the final candidate SHA `1e48f7d9b7308adb85e5d763d7e26c5da25101cd`, hosted
+matrix run `35585349618` passed all twelve Linux, macOS, and Windows cells on Python
+3.11--3.14, including the formerly failing Windows Python 3.12 cell. Locally, the
+complete suite passed on Python 3.13 and 3.14 with twelve workers (469 passed,
+3 skipped on each); Ruff lint and format checks passed.
