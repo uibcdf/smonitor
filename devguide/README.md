@@ -25,6 +25,10 @@ These documents track implementation details. Product-level decisions and
 historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
+- **Python 3.14 feasibility (2026-09-21):** 461 source-tree tests passed and one was
+  skipped on Linux CPython 3.14.7 with 12 workers after installing NumPy and Pint for
+  the cross-library test. This does not admit 3.14 or validate a published package; see
+  `uibcdf/smonitor#17` and the pending proposal for the remaining gates.
 - Core scaffold, manager/context, and `@signal` implemented.
 - Emitters for warnings/logging/exceptions implemented.
 - Policy engine implemented with routing, filtering, rate limits, sampling,

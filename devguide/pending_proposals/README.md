@@ -19,6 +19,7 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
+| [`verify_python_3_14_support_and_noarch_release.md`](verify_python_3_14_support_and_noarch_release.md) | `active` | [uibcdf/smonitor#17](https://github.com/uibcdf/smonitor/issues/17) | Establish verified Python 3.14 support and publish a noarch release |
 | [`pytest_diagnostics_bridge_and_molsyssuite_policy.md`](pytest_diagnostics_bridge_and_molsyssuite_policy.md) | `open` | [uibcdf/smonitor#6](https://github.com/uibcdf/smonitor/issues/6) | How SMonitor diagnostics participate in a pytest run, and what a policy layer owns. |
 
 <!-- /generated -->
