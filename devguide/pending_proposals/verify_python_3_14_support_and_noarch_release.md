@@ -16,9 +16,9 @@ supersedes: []
 
 **Reported:** 2026-09-21 during the dependency-ordered MolSysSuite transition in
 `uibcdf/molsyssuite#29`.
-**Status:** Active. Source compatibility and the complete hosted interpreter/OS matrix
-are measured; staged and public artifacts and clean consumer installation remain
-unverified.
+**Status:** Active. Source compatibility, the complete hosted interpreter/OS matrix,
+and a clean Linux Python 3.14 installation from the staged noarch artifact are measured;
+public artifacts and clean cross-platform consumer installation remain unverified.
 
 ## What
 
@@ -41,12 +41,11 @@ to mark SMonitor `admitted` and let DepDigest use its public 3.14 package.
 
 ## Why
 
-The current `pyproject.toml` still caps Python below 3.14. The recipe in HEAD declares
-`noarch: python`, but Ackredit's consumer-side observation in `uibcdf/molsyssuite#29`
-reports that the published SMonitor 0.15.0 artifacts remain linux-64 interpreter-specific
-builds. This channel observation has not yet been independently rechecked here. Even a
-fully green source suite therefore cannot resolve a clean Python 3.14 consumer from the
-current channel.
+The candidate `pyproject.toml` and recipe now allow Python 3.14 and the recipe declares
+`noarch: python`, but the published SMonitor 0.15.0 artifacts remain
+interpreter/platform-specific. The staging channel now carries an independently
+verified 0.16.0 noarch candidate; the public `uibcdf` channel does not. A consumer using
+only the public channel still cannot resolve SMonitor 0.16.0 on Python 3.14.
 
 ## What is measured and what is assumed
 
@@ -66,12 +65,11 @@ NumPy, then Pint, was absent from the test environment. Adding those dependencie
 resolved that test without a SMonitor source change. This is a source-tree feasibility
 result, not a wheel-installation, Conda-resolution, macOS/Windows, or release result.
 
-The first candidate changes `pyproject.toml` and the noarch recipe to the target range,
+The candidate changes `pyproject.toml` and the noarch recipe to the target range,
 adds the 3.14 classifier, and extends the hosted full matrix to twelve Linux/macOS/Windows
-and Python 3.11--3.14 cells. The source suite must be repeated after these changes and
-the hosted run retained before the candidate can be called compatible. The routine
-development CI remains on Python 3.13, as required by the central policy. The public
-README badge remains on 3.11--3.13 while SMonitor is only `authorized`.
+and Python 3.11--3.14 cells. The routine development CI remains on Python 3.13, as
+required by the central policy. The public README badge remains on 3.11--3.13 while
+SMonitor is only `authorized`.
 
 The candidate source suite was repeated in serially scheduled local runs with twelve
 workers each: Python 3.14.7 passed 465 tests with two skipped, then Python 3.13 passed
@@ -94,6 +92,26 @@ and Windows on Python 3.11--3.14. The local full suite at this commit passed on 
 3.13 and 3.14 (469 passed, 3 skipped on each) with twelve workers; Ruff lint and format
 checks passed. This validates source and CI compatibility, not a staged or public Conda
 artifact.
+
+The first `0.16.0` staging dispatch, run `35585623430`, supplied an abbreviated SHA and
+failed at checkout before compilation or upload. Repeating with the full candidate SHA
+`a92c378a839dcd84bcf78b6435fe1c01ea2a6a39` in run `35585670456` passed its
+single noarch build/test/upload job and retained one structured producer-evidence
+artifact. This SHA differs from the hosted matrix SHA only by the documentation-only
+checkpoint commit `a92c378`. An independent Conda channel query found exactly
+`uibcdf/label/staging/noarch::smonitor-0.16.0-py_0`, with
+`python >=3.11,<3.15`, SHA-256
+`7eddd73bd8458de7abaf425ce50408505d841071293302f67788487d88c65479`, and
+no native-platform subdirectory. A separate query of the public `uibcdf` channel found
+no `smonitor=0.16.0` record.
+
+A fresh environment at `/tmp/smonitor-stage-audit.NqvdLT/env` was solved from
+`uibcdf/label/staging` and `conda-forge` with `python=3.14 smonitor=0.16.0`. Invoked
+from `/tmp`, it reported Python `3.14.7`, package metadata and module version both
+`0.16.0`, and module origin under that environment's `site-packages`; `smonitor --help`
+succeeded. `conda list --show-channel-urls` attributed SMonitor specifically to
+`uibcdf/label/staging`. This proves one clean Linux 3.14 consumer installation, not
+public-channel availability or installed-package behavior on macOS/Windows.
 
 ## What was refuted
 
@@ -124,4 +142,6 @@ changes the source-feasibility result above.
 
 ## Resolution
 
-Pending package, channel, and release evidence. The hosted twelve-cell matrix is green.
+The hosted twelve-cell matrix and a staged noarch Linux Python 3.14 installation are
+green. Public-channel publication, independent public-artifact verification, and the
+separate Zenodo requirement remain pending.

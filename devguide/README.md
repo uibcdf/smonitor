@@ -34,8 +34,11 @@ historical context live in `SPEC_SMONITOR.md`.
   3.14 (469 passed, 3 skipped with 12 workers each), and an off-checkout 3.14 install
   of the development wheel worked. Hosted run `35585349618` passed all twelve cells on
   Linux, macOS, and Windows, including Windows 3.12 after the test-bound correction in
-  `uibcdf/smonitor#18`. Staged and public package evidence remain pending, so the README
-  badge retains the published 3.11--3.13 boundary.
+  `uibcdf/smonitor#18`. Run `35585670456` built and uploaded exact-SHA
+  `smonitor-0.16.0-py_0` to `uibcdf/label/staging/noarch`; a clean Linux Python 3.14
+  environment installed it from that channel, imported from `site-packages`, and
+  verified both version surfaces and the CLI. Public release and Zenodo verification
+  remain pending, so the README badge retains the published 3.11--3.13 boundary.
 - Core scaffold, manager/context, and `@signal` implemented.
 - Emitters for warnings/logging/exceptions implemented.
 - Policy engine implemented with routing, filtering, rate limits, sampling,
