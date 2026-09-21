@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 import pytest
 
 import smonitor
@@ -172,14 +174,30 @@ def test_args_summary_in_context():
     assert context and context["frames"][0]["args"] is not None
 
 
+def _assert_time_within_clock_read(before, parsed, after):
+    # Frames round a float epoch to microseconds; datetime.now() supplies the bounds.
+    quantization = timedelta(microseconds=1)
+    assert before - quantization <= parsed <= after + quantization
+
+
+def test_frame_time_bound_allows_only_one_microsecond_quantization():
+    moment = datetime(2026, 9, 21, tzinfo=timezone.utc)
+    tick = timedelta(microseconds=1)
+
+    _assert_time_within_clock_read(moment, moment - tick, moment)
+    _assert_time_within_clock_read(moment, moment + tick, moment)
+    with pytest.raises(AssertionError):
+        _assert_time_within_clock_read(moment, moment - 2 * tick, moment)
+    with pytest.raises(AssertionError):
+        _assert_time_within_clock_read(moment, moment + 2 * tick, moment)
+
+
 def test_frame_time_is_iso_utc_in_emitted_context():
     """`context.frames[*].time` is a documented field; keep its shape stable.
 
     It is stored as an epoch float and rendered only here, so this guards the
     rendering rather than the storage.
     """
-    from datetime import datetime, timezone
-
     smonitor.configure(profile="user", level="INFO", handlers=[])
 
     @smonitor.signal
@@ -193,7 +211,7 @@ def test_frame_time_is_iso_utc_in_emitted_context():
     assert isinstance(frame["time"], str)
     parsed = datetime.fromisoformat(frame["time"])
     assert parsed.tzinfo is not None
-    assert before <= parsed <= after
+    _assert_time_within_clock_read(before, parsed, after)
     assert set(frame) == {"function", "module", "args", "time", "tags", "extra", "duration_ms"}
 
 

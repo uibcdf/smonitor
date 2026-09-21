@@ -84,6 +84,12 @@ format check alongside lint. The new MolSysSuite release-version gate remains pe
 because `uibcdf/molsyssuite#32` currently requires a versioningit `tag-filter` key that
 versioningit ignores; no inert key is being added here as false compliance evidence.
 
+The first exact-commit hosted matrix, run `35580019186` on `9ec58eb`, passed eleven of
+twelve cells. Windows Python 3.12 reached the test step and failed only the frame-time
+bound assertion by one microsecond. This is tracked as `uibcdf/smonitor#18`; it is a
+test precision defect, not evidence of a Python 3.14 or packaging failure. The matrix
+is not green until an exact-commit rerun passes after that repair.
+
 ## What was refuted
 
 - The first missing-NumPy and missing-Pint failures were environmental; they did not
