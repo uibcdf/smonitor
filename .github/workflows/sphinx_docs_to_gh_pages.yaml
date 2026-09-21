@@ -56,11 +56,12 @@ jobs:
       - name: Test import module
         shell: bash -l {0}
         run: |
+          set -euo pipefail
           echo "::group::Importing module from home directory"
+          trap 'echo "::endgroup::"' EXIT
           cd
           pwd
-          echo 'import smonitor; print("Version of the package: {}".format(smonitor.__version__))' | python
-          echo "::endgroup::"
+          python -c 'import smonitor; print("Version of the package: {}".format(smonitor.__version__))'
 
       - name: Build docs
         shell: bash -l {0}
