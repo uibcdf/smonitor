@@ -19,26 +19,25 @@ This folder collects developer documentation for `smonitor`.
 13) `pending_bugs/`, `pending_proposals/`, `archive/` — The report queues. Indexes are generated.
 14) `templates/report.md` — The template both queues use.
 15) `operability_evidence_2026-09-08.md` — Exit criterion 5, confirmed against a real suite.
+16) `conda_release_routes.md` — Pre-tag choice and evidence for direct versus staged Conda publication.
 
 ## Scope
 These documents track implementation details. Product-level decisions and
 historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
-- **Python 3.14 feasibility (2026-09-21):** 461 source-tree tests passed and one was
-  skipped on Linux CPython 3.14.7 with 12 workers after installing NumPy and Pint for
-  the cross-library test. This does not admit 3.14 or validate a published package; see
-  `uibcdf/smonitor#17` and the pending proposal for the remaining gates.
-- **Python 3.14 candidate (2026-09-21):** metadata, the noarch recipe, and a twelve-cell
-  hosted matrix target 3.11--3.14. The full local suite passed on both Python 3.13 and
-  3.14 (469 passed, 3 skipped with 12 workers each), and an off-checkout 3.14 install
-  of the development wheel worked. Hosted run `35585349618` passed all twelve cells on
-  Linux, macOS, and Windows, including Windows 3.12 after the test-bound correction in
-  `uibcdf/smonitor#18`. Run `35585670456` built and uploaded exact-SHA
-  `smonitor-0.16.0-py_0` to `uibcdf/label/staging/noarch`; a clean Linux Python 3.14
-  environment installed it from that channel, imported from `site-packages`, and
-  verified both version surfaces and the CLI. Public release and Zenodo verification
-  remain pending, so the README badge retains the published 3.11--3.13 boundary.
+- **Published 0.16.0 and Python 3.14 (2026-09-21):** the twelve-cell hosted matrix
+  passed on Linux, macOS and Windows for Python 3.11--3.14 (run `35585349618`). The
+  exact `smonitor-0.16.0-py_1.tar.bz2` candidate was promoted from staging to the
+  public `uibcdf` channel (run `35589475337`); its public SHA-256 and clean Linux
+  Python 3.14 installation were independently verified. The GitHub source Release is
+  archived by Zenodo as version DOI `10.5281/zenodo.22872342`. SMonitor is admitted
+  for Python 3.14 in MolSysSuite; this does not imply a native-package proof.
+- **Next Conda release route (2026-09-21):** `uibcdf/smonitor#20` tracks restoration of
+  automatic Conda publication for a routine GitHub Release while preserving exact-file
+  promotion for staged versions. The two-route implementation has local contract
+  tests; the first future direct hosted release is still unproven. Follow
+  `conda_release_routes.md` and the central proposal `uibcdf/molsyssuite#27`.
 - Core scaffold, manager/context, and `@signal` implemented.
 - Emitters for warnings/logging/exceptions implemented.
 - Policy engine implemented with routing, filtering, rate limits, sampling,
@@ -60,7 +59,7 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.15.0` is the published pre-1.0 stabilization checkpoint.
+- Version `0.16.0` is the published pre-1.0 stabilization checkpoint.
 - **All seven exit criteria for `1.0.0` are met.** Criterion 5 -- operability confirmed in a
   real workflow -- closed on 2026-09-08 with `operability_evidence_2026-09-08.md`, which
   itself found the defect fixed in `#11`.

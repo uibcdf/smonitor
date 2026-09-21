@@ -39,14 +39,27 @@ def test_python_3_14_candidate_metadata_and_hosted_matrix():
 def test_manual_candidates_are_exact_and_staging_only():
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
-    assert "release:" not in workflow
     assert "candidate_sha:" in workflow
-    assert "ref: ${{ inputs.candidate_sha }}" in workflow
+    assert "ref: ${{ inputs.candidate_sha || github.event.release.tag_name }}" in workflow
     assert 'test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"' in workflow
     assert "Build, test, and upload the staging candidate" in workflow
     assert "label: staging" in workflow
-    assert "label: main" not in workflow
+    assert "id: conda_staging\n        if: github.event_name == 'workflow_dispatch'" in workflow
+    assert "--route staged" in workflow
     assert '[[ "$BUILD_NUMBER" =~ ^[0-9]+$ ]]' in workflow
+
+
+def test_stable_releases_have_a_guarded_direct_route():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "types: ['released']" in workflow
+    assert "prereleased" not in workflow
+    assert "Build, test, and upload the unstaged release" in workflow
+    assert "label: main" in workflow
+    assert "id: conda_release\n        if: github.event_name == 'release'" in workflow
+    assert "--route direct" in workflow
+    assert workflow.index("--route direct") < workflow.index("label: main")
+    assert "smonitor-conda-${{ inputs.version || github.event.release.tag_name }}" in workflow
 
 
 def test_noarch_workflow_has_one_job_and_retains_producer_evidence():
@@ -58,6 +71,9 @@ def test_noarch_workflow_has_one_job_and_retains_producer_evidence():
     assert "platform_linux-64: false" in workflow
     assert "platform_win-64: false" in workflow
     assert "always() && steps.conda_staging.outputs.evidence_path != ''" in workflow
+    assert "always() && steps.conda_release.outputs.evidence_path != ''" in workflow
+    assert '--built-paths "$BUILT_PATHS"' in workflow
+    assert "smonitor-conda-route-${{ github.run_id }}-${{ github.run_attempt }}" in workflow
 
 
 def test_promotion_workflow_checks_exact_release_and_file_identity():
@@ -72,6 +88,7 @@ def test_promotion_workflow_checks_exact_release_and_file_identity():
         in workflow
     )
     assert "action-build-and-upload-conda-packages/promote@v2.2.2" in workflow
+    assert "--route staged" in workflow
     assert "expected-sha256: ${{ inputs.sha256 }}" in workflow
     assert "from-label: staging" in workflow
     assert "to-label: main" in workflow

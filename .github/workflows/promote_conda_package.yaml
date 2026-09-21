@@ -22,6 +22,11 @@ on:
 
 permissions:
   contents: read
+  actions: read
+
+concurrency:
+  group: smonitor-conda-${{ inputs.version }}
+  cancel-in-progress: false
 
 jobs:
   promote:
@@ -58,6 +63,18 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
+
+      - name: Verify the staged release decision and exact CI gates
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          python devtools/conda-build/release_route.py check \
+            --version "$RELEASE_VERSION" --route staged \
+            --sha "$CANDIDATE_SHA" --repository "$GITHUB_REPOSITORY" \
+            --receipt "$RUNNER_TEMP/smonitor-conda-route.json"
 
       - name: Set up the authenticated Anaconda client
         uses: mamba-org/setup-micromamba@v3.2.1
@@ -97,7 +114,9 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: smonitor-conda-promotion-${{ inputs.version }}-py_${{ inputs.build_number }}
-          path: ${{ steps.promotion.outputs.receipt }}
+          path: |
+            ${{ steps.promotion.outputs.receipt }}
+            ${{ runner.temp }}/smonitor-conda-route.json
           if-no-files-found: error
           retention-days: 30
 

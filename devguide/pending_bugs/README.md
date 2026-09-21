@@ -18,6 +18,8 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-_No entries._
+| entry | status | issue | summary |
+| --- | --- | --- | --- |
+| [`routine_release_no_longer_publishes_conda.md`](routine_release_no_longer_publishes_conda.md) | `active` | [uibcdf/smonitor#20](https://github.com/uibcdf/smonitor/issues/20) | Routine GitHub Releases no longer publish Conda packages |
 
 <!-- /generated -->

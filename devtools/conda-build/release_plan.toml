@@ -1,0 +1,7 @@
+# Complete and review this plan in the candidate commit before creating its tag.
+# The workflow rejects this deliberately incomplete template.
+version = ""
+route = ""
+reason = ""
+decision_by = ""
+required_workflows = [".github/workflows/CI_full_matrix.yaml"]
