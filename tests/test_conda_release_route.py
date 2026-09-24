@@ -175,6 +175,14 @@ def test_public_poststate_matches_the_exact_built_file(monkeypatch, tmp_path):
     assert json.loads(receipt.read_text())["public"]["channel"] == route.PUBLIC_CHANNEL
 
 
+def test_windows_built_paths_preserve_backslashes_and_quoted_spaces():
+    package = r"C:\Users\runneradmin\work\smonitor-0.17.0-py_0.tar.bz2"
+    spaced = r"C:\Users\runneradmin\build output\smonitor-0.17.0-py_0.tar.bz2"
+
+    assert route._split_built_paths(package, windows=True) == [package]
+    assert route._split_built_paths(f'"{spaced}"', windows=True) == [spaced]
+
+
 def test_public_poststate_rejects_checksum_mismatch(monkeypatch, tmp_path):
     receipt = tmp_path / "receipt.json"
     receipt.write_text(json.dumps({"version": "0.17.0", "route": "direct"}), encoding="utf-8")

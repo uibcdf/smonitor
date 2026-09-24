@@ -140,12 +140,23 @@ def check_route(*, version: str, route: str, sha: str, repository: str, receipt:
     return evidence
 
 
+def _split_built_paths(value: str, *, windows: bool = os.name == "nt") -> list[str]:
+    """Parse action output without treating Windows path separators as escapes."""
+    paths = shlex.split(value, posix=not windows)
+    if windows:
+        paths = [
+            path[1:-1] if len(path) >= 2 and path[0] == path[-1] and path[0] in "\"'" else path
+            for path in paths
+        ]
+    return paths
+
+
 def verify_public(*, version: str, built_paths: str, receipt: Path, attempts: int = 6) -> dict:
     """Matching the uploaded public record to the exact locally built noarch file."""
     evidence = json.loads(receipt.read_text(encoding="utf-8"))
     if evidence.get("version") != version or evidence.get("route") != "direct":
         raise ReleaseRouteError("public verification requires the matching direct receipt")
-    paths = shlex.split(built_paths)
+    paths = _split_built_paths(built_paths)
     if len(paths) != 1:
         raise ReleaseRouteError("SMonitor noarch release must build exactly one file")
     package = Path(paths[0])

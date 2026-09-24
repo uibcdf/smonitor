@@ -94,10 +94,18 @@ The code-changing commit `c1f50b8` passed hosted CI `36024648440`, QA
 MolSysSuite policy gate `36024649828`; all were inspected with GH Run
 Receptor. This verifies the exact release resolves in the primary Python
 3.13 environments and that those hosted pytest calls accept `--receptor=ci`.
-The scheduled/manual 12-cell full matrix has not been rerun after this change;
-its latest earlier run `35662669121` had eight green jobs and four Windows
-test failures. The developer-tool review is therefore partial until the
-claimed Python-minor and Windows coverage is checked under this commit.
+At that checkpoint, the scheduled/manual 12-cell full matrix had not been
+rerun after this change; its latest earlier run `35662669121` had eight green
+jobs and four Windows test failures. The developer-tool review remained
+partial pending the full hosted gate.
+
+The matrix was subsequently dispatched as `36025853813`: all eight Linux
+and macOS cells passed, and all four Windows cells reproduced the earlier two
+Conda release-verifier test failures. Native failed-step logs identified
+Windows backslash loss in `verify_public()`; that independently closable
+defect is `uibcdf/smonitor#25`. This matrix confirms that the pinned receptor
+resolves and runs on all twelve cells, but it cannot make the full test gate
+green until #25 is fixed and rerun.
 
 ## Acceptance criteria
 
