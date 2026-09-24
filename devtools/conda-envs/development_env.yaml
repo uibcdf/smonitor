@@ -11,6 +11,7 @@ dependencies:
   - ruff=0.16.5
   - pytest
   - pytest-cov
+  - pytest-receptor=1.1.0
   - versioningit
 
   # --- Documentation with Sphinx and MyST ---

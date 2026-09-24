@@ -33,7 +33,7 @@ def test_python_3_14_candidate_metadata_and_hosted_matrix():
         for operating_system in ("ubuntu-latest", "macos-latest", "windows-latest")
         for python_version in ("3.11", "3.12", "3.13", "3.14")
     }
-    assert "--receptor=llm" in matrix
+    assert "--receptor=ci" in matrix
 
 
 def test_manual_candidates_are_exact_and_staging_only():
