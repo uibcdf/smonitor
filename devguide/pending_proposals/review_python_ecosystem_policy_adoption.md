@@ -87,6 +87,18 @@ unit parsing, conversion or dimensional validation was found in this review.
 PyUnitWizard is therefore provisionally non-applicable. This remains an
 inspected conclusion until the member review is closed.
 
+## Hosted checkpoint
+
+The code-changing commit `c1f50b8` passed hosted CI `36024648440`, QA
+`36024648482` (including its separate collective E2E job), and the
+MolSysSuite policy gate `36024649828`; all were inspected with GH Run
+Receptor. This verifies the exact release resolves in the primary Python
+3.13 environments and that those hosted pytest calls accept `--receptor=ci`.
+The scheduled/manual 12-cell full matrix has not been rerun after this change;
+its latest earlier run `35662669121` had eight green jobs and four Windows
+test failures. The developer-tool review is therefore partial until the
+claimed Python-minor and Windows coverage is checked under this commit.
+
 ## Acceptance criteria
 
 - All hosted pytest calls use `--receptor=ci` with an exact published version.
