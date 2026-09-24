@@ -68,6 +68,25 @@ directly, so changing only the primary test environment would miss them.
 - Record GH Run Receptor active-use evidence and then update the suite's two
   review states separately. Keep `pending` until each review is complete.
 
+## Support-library applicability checkpoint
+
+The package's published metadata declares no runtime dependency; `rich` is
+an optional presentation extra. `smonitor.configure()` and
+`smonitor.validation.validate_event()` perform nontrivial configuration and
+event validation, so the ArgDigest boundary requires a decision. The rich
+handler imports its backend lazily and explains its absence, so the DepDigest
+boundary also requires a decision. Both proposed libraries already depend on
+SMonitor (`argdigest` directly and through `depdigest`; `depdigest` directly),
+which would create a runtime dependency cycle if SMonitor added them. This is
+not evidence that the boundaries do not exist; a bounded architecture exception
+or a contract change is needed before calling support-library adoption done.
+
+SMonitor is itself the diagnostic provider. Its profiling values are numeric
+elapsed times with explicit fixed millisecond keys and thresholds; no public
+unit parsing, conversion or dimensional validation was found in this review.
+PyUnitWizard is therefore provisionally non-applicable. This remains an
+inspected conclusion until the member review is closed.
+
 ## Acceptance criteria
 
 - All hosted pytest calls use `--receptor=ci` with an exact published version.
