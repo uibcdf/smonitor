@@ -21,6 +21,5 @@ The table below is generated from front matter by
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
 | [`routine_release_no_longer_publishes_conda.md`](routine_release_no_longer_publishes_conda.md) | `active` | [uibcdf/smonitor#20](https://github.com/uibcdf/smonitor/issues/20) | Routine GitHub Releases no longer publish Conda packages |
-| [`windows_built_path_loses_backslashes_in_conda_release_verification.md`](windows_built_path_loses_backslashes_in_conda_release_verification.md) | `active` | [uibcdf/smonitor#25](https://github.com/uibcdf/smonitor/issues/25) | Windows built path loses backslashes in Conda release verification. |
 
 <!-- /generated -->

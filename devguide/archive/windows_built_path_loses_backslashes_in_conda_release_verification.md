@@ -1,9 +1,9 @@
 ---
 summary: Windows built path loses backslashes in Conda release verification.
 issue: uibcdf/smonitor#25
-status: active
+status: resolved
 opened: 2026-09-24
-closed:
+closed: 2026-09-24
 severity: medium
 verification: reproduced
 area: [ci, packaging]
@@ -52,5 +52,11 @@ Changing the checksum assertion would hide the earlier path parsing error.
 
 ## Resolution
 
-The parser and regression test are prepared. Closure requires a passing
-Windows hosted matrix and the report's move to the archive.
+Commit `a470286` adds a parser that retains Windows backslashes and strips
+balanced outer quotes while preserving the one-file release invariant. The
+new test exercises both an unquoted Windows path and a quoted path with
+spaces; the old POSIX parsing rule loses backslashes in the first case, so
+the test guards the reported mechanism. Local pytest-receptor passed 510
+tests with five skips, Ruff and the component checker passed. The manual
+hosted full matrix `36032583387` passed all twelve jobs across Linux, macOS
+and Windows with Python 3.11 through 3.14. The defect is resolved.

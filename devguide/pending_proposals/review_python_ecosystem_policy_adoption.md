@@ -107,6 +107,13 @@ defect is `uibcdf/smonitor#25`. This matrix confirms that the pinned receptor
 resolves and runs on all twelve cells, but it cannot make the full test gate
 green until #25 is fixed and rerun.
 
+Commit `a470286` repaired that Windows path defect under
+`uibcdf/smonitor#25`; repeat matrix `36032583387` passed all twelve cells.
+The pinned pytest-receptor release therefore ran under the full claimed
+Python and OS coverage. The GH Run Receptor profile and live inspection
+evidence are recorded above. The developer-tool review is complete; the
+support-library cycle remains the separate unresolved part of this issue.
+
 ## Acceptance criteria
 
 - All hosted pytest calls use `--receptor=ci` with an exact published version.
