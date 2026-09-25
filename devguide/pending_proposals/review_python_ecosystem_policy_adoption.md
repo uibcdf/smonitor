@@ -1,7 +1,7 @@
 ---
 summary: Review inherited Python ecosystem policies for SMonitor.
 issue: uibcdf/smonitor#24
-status: active
+status: partial
 opened: 2026-09-24
 closed:
 verification: inspected
@@ -113,6 +113,19 @@ The pinned pytest-receptor release therefore ran under the full claimed
 Python and OS coverage. The GH Run Receptor profile and live inspection
 evidence are recorded above. The developer-tool review is complete; the
 support-library cycle remains the separate unresolved part of this issue.
+
+## Support-library status under MolSysSuite policy-v1.4.11
+
+The inherited support-library policy is unchanged at MOLI
+`6a91433bd38582980d0781474be6a80c58f48886`. This review now has enough
+evidence for `partial` rather than `pending`: SMonitor owns the diagnostic
+boundary; PyUnitWizard is inapplicable because the public timing data use fixed
+millisecond fields rather than unit parsing or conversion; the ArgDigest and
+DepDigest boundaries are identified above but remain unresolved because both
+providers depend on SMonitor. The central inventory records this as `partial`,
+not `adopted`. Closing the review requires a member-owned architecture decision
+or bounded exception for each cycle, including a removal condition and expiry
+if an exception is chosen. `uibcdf/smonitor#24` remains open.
 
 ## Acceptance criteria
 

@@ -19,7 +19,7 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
-| [`review_python_ecosystem_policy_adoption.md`](review_python_ecosystem_policy_adoption.md) | `active` | [uibcdf/smonitor#24](https://github.com/uibcdf/smonitor/issues/24) | Review inherited Python ecosystem policies for SMonitor. |
+| [`review_python_ecosystem_policy_adoption.md`](review_python_ecosystem_policy_adoption.md) | `partial` | [uibcdf/smonitor#24](https://github.com/uibcdf/smonitor/issues/24) | Review inherited Python ecosystem policies for SMonitor. |
 | [`pytest_diagnostics_bridge_and_molsyssuite_policy.md`](pytest_diagnostics_bridge_and_molsyssuite_policy.md) | `open` | [uibcdf/smonitor#6](https://github.com/uibcdf/smonitor/issues/6) | How SMonitor diagnostics participate in a pytest run, and what a policy layer owns. |
 
 <!-- /generated -->
