@@ -21,6 +21,7 @@ classifiers = [
 
 [project.optional-dependencies]
 rich = ["rich>=13"]
+pytest = ["pytest>=8,<10", "pytest-receptor>=1.2,<2"]
 
 [project.urls]
 Homepage = "https://github.com/uibcdf/smonitor"
@@ -48,6 +49,9 @@ packages = [
 
 [project.scripts]
 smonitor = "smonitor.cli:main"
+
+[project.entry-points."pytest11"]
+smonitor = "smonitor.pytest_plugin"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

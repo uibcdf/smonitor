@@ -1,18 +1,51 @@
 ---
 summary: How SMonitor diagnostics participate in a pytest run, and what a policy layer owns.
 issue: uibcdf/smonitor#6
-status: blocked
+status: active
 opened: 2026-07-17
 closed:
 verification: asserted
 area: [pytest, ci, ecosystem]
 guard:
 normative:
-blocked_by: [uibcdf/pytest-receptor#7]
+blocked_by: []
 supersedes: []
 ---
 
 # Pytest Diagnostics Bridge and MolSysSuite Policy Layer
+
+## 2026-09-26 publication checkpoint
+
+The neutral producer contract shipped in
+[pytest-receptor 1.2.0](https://github.com/uibcdf/pytest-receptor/releases/tag/1.2.0)
+on PyPI and as a digest-verified Conda package in the public `uibcdf` channel.
+The provider's issue `uibcdf/pytest-receptor#7` is closed. SMonitor's bridge
+passes its local serial and xdist contract tests against the installed PyPI
+package. Hosted SMonitor gates and the installed candidate remain the final
+checks for this release.
+
+The present implementation is an observational bridge. Diagnostic baselines,
+strict QA outcomes, fixtures and markers, and a possible `pytest-molsyssuite`
+package are future policy work. They are not claimed by SMonitor 0.18.0.
+
+## Earlier implementation checkpoint
+
+Pytest Receptor `main` now contains a producer-neutral `extension` protocol
+with an unrelated dummy producer and tests for serial phases, xdist transport,
+reruns, worker loss, redaction, bounded overflow and artifact integrity.
+SMonitor has a candidate optional pytest plugin using that public service. It
+adds structured diagnostic identity to the receptor-owned artifact and omits
+free-form messages, context and arbitrary `extra` data from the shared record.
+The plugin has no effect without `--receptor-events`; it does not alter pytest
+outcomes or replace the receptor's reporter. A local two-worker integration run
+produced six correctly correlated setup/call/teardown events with a valid final
+artifact and no dropped extension evidence.
+
+This record remains blocked until the provider API is published in a versioned
+package, SMonitor's hosted integration contract passes against that package,
+and the bridge's acceptance criteria below are reviewed against real consumer
+diagnostics. The possible `pytest-molsyssuite` policy package remains a
+separate extraction decision.
 
 ## 2026-09-26 digestion checkpoint
 

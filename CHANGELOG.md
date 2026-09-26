@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-09-26
+
+### Added
+
+- An optional pytest bridge adds bounded, redacted SMonitor diagnostic identity
+  to the pytest-receptor 1.2 event artifact, correlated with test phase, worker,
+  and attempt (`uibcdf/smonitor#6`). Install with `smonitor[pytest]`.
+
+### Fixed
+
+- The release workflow accepts a committed staged route without reporting a
+  failed direct upload; this release provides its live publication proof
+  (`uibcdf/smonitor#28`).
+- Local diagnostics in the ArgDigest/DepDigest bootstrap boundary are governed
+  by the narrow MolSysSuite policy exception (`uibcdf/smonitor#29`).
+
 ## [0.17.3] - 2026-09-26
 
 ### Fixed

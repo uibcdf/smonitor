@@ -28,6 +28,20 @@ _LEVEL_ORDER = {
     "CRITICAL": 50,
 }
 
+# Optional in-process consumers observe normalized events independently of
+# routing, so a test's configure(handlers=[]) cannot detach a pytest bridge.
+_EVENT_OBSERVERS: List[Any] = []
+
+
+def _add_event_observer(observer: Any) -> None:
+    if observer not in _EVENT_OBSERVERS:
+        _EVENT_OBSERVERS.append(observer)
+
+
+def _remove_event_observer(observer: Any) -> None:
+    if observer in _EVENT_OBSERVERS:
+        _EVENT_OBSERVERS.remove(observer)
+
 
 _TEMPLATE_FIELD = re.compile(
     r"\{(?P<name>[A-Za-z_][A-Za-z0-9_]*)(?:!(?P<conversion>[rsa]))?(?::(?P<spec>[^{}]+))?\}"
@@ -846,6 +860,12 @@ class Manager:
             self._counts["errors_total"] += 1
 
         routed_event, target_handlers = self._policy.apply(event, self._handlers)
+        for observer in tuple(_EVENT_OBSERVERS):
+            try:
+                observer(routed_event, profile=self._config.profile)
+            except Exception:
+                # A diagnostic observer must never change the library call.
+                pass
         for handler in target_handlers:
             try:
                 handler.handle(routed_event, profile=self._config.profile)
