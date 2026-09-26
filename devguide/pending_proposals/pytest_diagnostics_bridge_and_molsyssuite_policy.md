@@ -1,18 +1,39 @@
 ---
 summary: How SMonitor diagnostics participate in a pytest run, and what a policy layer owns.
 issue: uibcdf/smonitor#6
-status: open
+status: blocked
 opened: 2026-07-17
 closed:
 verification: asserted
 area: [pytest, ci, ecosystem]
 guard:
 normative:
-blocked_by: []
+blocked_by: [uibcdf/pytest-receptor#7]
 supersedes: []
 ---
 
 # Pytest Diagnostics Bridge and MolSysSuite Policy Layer
+
+## 2026-09-26 digestion checkpoint
+
+The published pytest-receptor consumer contract and provider `origin/main` have
+no neutral extension-event producer API. The provider's `PR-ARCH-002` register
+explicitly requires a dummy producer before an SMonitor adapter. That provider
+need is now addressable as `uibcdf/pytest-receptor#7`; this proposal remains
+blocked on its published contract. An SMonitor-only artifact or terminal
+reporter would violate the evidence ownership recorded below.
+
+The current MolSysSuite conformance system already owns member policy and
+inventory. No separate `pytest-molsyssuite` package is justified by this
+proposal alone; its extraction gates below remain unmet. Warning baselines
+should compare diagnostic identity, not occurrence counts or credited test
+nodes under pytest-xdist's default load distribution, as measured in
+`devguide/warning_baselines_under_parallel_test_runs.md`.
+
+The work that remains local to SMonitor is an optional adapter and contract
+tests after the provider protocol exists. The general SMonitor event and bundle
+paths remain independent of pytest. No bridge implementation or release claim
+is accepted at this checkpoint.
 
 **Status:** exploratory proposal input; requires later digestion with the
 existing exception/agent, pytest/CI, operability, and pytest-receptor proposals
