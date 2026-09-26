@@ -26,6 +26,7 @@ The table below is generated from front matter by
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
 | [`adopt_molsyssuite_python_tooling_policy.md`](adopt_molsyssuite_python_tooling_policy.md) | `resolved` | [uibcdf/smonitor#12](https://github.com/uibcdf/smonitor/issues/12) | Adopt the shared Python and Ruff development baseline. |
+| [`catalog_warning_wrapper_duplicates_hint_on_rebuild.md`](catalog_warning_wrapper_duplicates_hint_on_rebuild.md) | `resolved` | [uibcdf/smonitor#21](https://github.com/uibcdf/smonitor/issues/21) | CatalogWarning duplicates a hint when a wrapper supplies its catalog on rebuild. |
 | [`catalog_warnings_re_rendered_under_xdist.md`](catalog_warnings_re_rendered_under_xdist.md) | `resolved` | [uibcdf/smonitor#4](https://github.com/uibcdf/smonitor/issues/4) | A catalog hint interpolating a field cannot be re-rendered from args alone. |
 | [`doi_badge_cites_molsysmt.md`](doi_badge_cites_molsysmt.md) | `resolved` | [uibcdf/smonitor#13](https://github.com/uibcdf/smonitor/issues/13) | The README DOI badge cites the MolSysMT archive. |
 | [`frame_time_test_has_submicrosecond_boundary.md`](frame_time_test_has_submicrosecond_boundary.md) | `resolved` | [uibcdf/smonitor#18](https://github.com/uibcdf/smonitor/issues/18) | Avoid a one-microsecond false failure in the frame-time test |
@@ -35,6 +36,7 @@ The table below is generated from front matter by
 | [`publish_the_014_profile_message_fallback.md`](publish_the_014_profile_message_fallback.md) | `resolved` | [uibcdf/smonitor#8](https://github.com/uibcdf/smonitor/issues/8) | Publish the 0.14 profile-message fallback for downstream CI |
 | [`receptor_misclassifies_composite_conda_publication.md`](receptor_misclassifies_composite_conda_publication.md) | `resolved` | [uibcdf/smonitor#10](https://github.com/uibcdf/smonitor/issues/10) | Use the release profile for the composite Conda publication workflow |
 | [`release_upload_collides_with_staged_conda_coordinate.md`](release_upload_collides_with_staged_conda_coordinate.md) | `resolved` | [uibcdf/smonitor#19](https://github.com/uibcdf/smonitor/issues/19) | Release upload collides with a staged Conda build coordinate |
+| [`signal_wrapper_shifts_warning_attribution.md`](signal_wrapper_shifts_warning_attribution.md) | `resolved` | [uibcdf/smonitor#23](https://github.com/uibcdf/smonitor/issues/23) | The signal wrapper shifts Python warning attribution into SMonitor. |
 | [`verify_python_3_14_support_and_noarch_release.md`](verify_python_3_14_support_and_noarch_release.md) | `resolved` | [uibcdf/smonitor#17](https://github.com/uibcdf/smonitor/issues/17) | Establish verified Python 3.14 support and publish a noarch release |
 | [`windows_built_path_loses_backslashes_in_conda_release_verification.md`](windows_built_path_loses_backslashes_in_conda_release_verification.md) | `resolved` | [uibcdf/smonitor#25](https://github.com/uibcdf/smonitor/issues/25) | Windows built path loses backslashes in Conda release verification. |
 
