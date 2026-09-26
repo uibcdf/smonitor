@@ -105,4 +105,4 @@ jobs:
           # cannot report success by not running the thing it exists to run.
           SMONITOR_REQUIRE_COLLECTIVE_E2E: "1"
           PYTHONPATH: ${{ github.workspace }}
-        run: pytest --receptor=ci -v -rs tests/e2e/
+        run: pytest --receptor=ci -v -rs tests/e2e/ tests/test_support_library_bootstrap.py

@@ -15,10 +15,17 @@ import pytest
 from packaging.requirements import Requirement
 
 ROOT = Path(__file__).resolve().parents[1]
+REQUIRE_COLLECTIVE = os.environ.get("SMONITOR_REQUIRE_COLLECTIVE_E2E") == "1"
+SIBLINGS = {name: ROOT.parent / name for name in ("argdigest", "depdigest")}
 
 
 def _required_names(distribution: str) -> set[str]:
-    requirements = importlib.metadata.requires(distribution) or []
+    source = SIBLINGS[distribution] / "pyproject.toml"
+    if REQUIRE_COLLECTIVE:
+        assert source.is_file(), f"missing required sibling metadata: {source}"
+        requirements = tomllib.loads(source.read_text(encoding="utf-8"))["project"]["dependencies"]
+    else:
+        requirements = importlib.metadata.requires(distribution) or []
     return {
         parsed.name.lower().replace("_", "-")
         for raw in requirements
@@ -32,24 +39,34 @@ def test_no_required_dependency_cycle_with_diagnostic_providers():
         Requirement(raw).name.lower().replace("_", "-")
         for raw in project["project"]["dependencies"]
     }
-    for provider in ("argdigest", "depdigest"):
+    reviewed = 0
+    for provider in SIBLINGS:
         try:
             provider_requires = _required_names(provider)
         except importlib.metadata.PackageNotFoundError:
             continue
+        reviewed += 1
         if "smonitor" in provider_requires:
             assert provider not in smonitor_requires, (
                 f"{provider} requires smonitor; a reverse required edge would form a cycle"
             )
+    if reviewed == 0:
+        pytest.skip("no provider metadata installed in this environment")
 
 
-@pytest.mark.skipif(
-    any(importlib.util.find_spec(name) is None for name in ("argdigest", "depdigest")),
-    reason="both diagnostic providers must be installed for the import-order check",
-)
 def test_provider_import_orders_preserve_smonitor_validation(tmp_path):
+    if REQUIRE_COLLECTIVE:
+        for name, source in SIBLINGS.items():
+            assert source.is_dir(), f"missing required sibling checkout: {name}"
+        provider_paths = [str(source) for source in SIBLINGS.values()]
+    else:
+        if any(importlib.util.find_spec(name) is None for name in SIBLINGS):
+            pytest.skip("both diagnostic providers must be installed")
+        provider_paths = []
     env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join(filter(None, (str(ROOT), env.get("PYTHONPATH", ""))))
+    env["PYTHONPATH"] = os.pathsep.join(
+        filter(None, (str(ROOT), *provider_paths, env.get("PYTHONPATH", "")))
+    )
     for order in itertools.permutations(("smonitor", "argdigest", "depdigest")):
         code = (
             "import importlib; "
