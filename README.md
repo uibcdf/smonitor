@@ -238,10 +238,10 @@ make -C docs html
 
 ## Status
 
-Current release: **0.16.0**, available as a `noarch: python` package from the UIBCDF
-Conda channel for Python 3.11--3.14 and as a GitHub source release. Zenodo archives
-the 0.16.0 source snapshot under version DOI `10.5281/zenodo.22872342`; it does not
-archive the Conda package.
+Current release: **0.17.0**, available as a `noarch: python` package from the UIBCDF
+Conda channel for Python 3.11--3.14 and as a GitHub source release. Zenodo archived
+the previous 0.16.0 source snapshot under version DOI `10.5281/zenodo.22872342`; it
+does not archive Conda packages.
 Next milestone: **1.0.0** (stable), focused on hardening, API/contract freeze, and sustained CI stability.
 
 ## AI Support (Future)

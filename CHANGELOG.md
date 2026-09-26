@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-09-26
+
 ### Fixed
 
 - `CatalogWarning` keeps its visible text when a consumer wrapper supplies its

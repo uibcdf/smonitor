@@ -36,8 +36,13 @@ def test_committed_plan_rejects_unset_fields_and_missing_matrix(tmp_path):
     )
     with pytest.raises(route.ReleaseRouteError, match="full-matrix"):
         route.read_plan(plan)
+    plan.write_text(
+        'version = ""\nroute = "direct"\nreason = "routine"\n'
+        'decision_by = "maintainer"\nrequired_workflows = [".github/workflows/CI_full_matrix.yaml"]\n',
+        encoding="utf-8",
+    )
     with pytest.raises(route.ReleaseRouteError, match="canonical"):
-        route.read_plan(route.PLAN)
+        route.read_plan(plan)
 
 
 @pytest.mark.parametrize("wrong_field", ["head_sha", "path", "conclusion", "status"])
