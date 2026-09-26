@@ -1,9 +1,9 @@
 ---
 summary: Staged release marks the automatic Conda workflow failed despite successful promotion
 issue: uibcdf/smonitor#28
-status: active
+status: resolved
 opened: 2026-09-26
-closed:
+closed: 2026-09-26
 severity: medium
 verification: reproduced
 area: [packaging, release, ci]
@@ -45,3 +45,17 @@ and hosted CI can verify the implementation without touching the occupied
 `0.17.0` coordinate. The issue remains active until a later staged release
 event shows a successful routing run and promotion; the historical run cannot
 be changed.
+
+## Resolution on 2026-09-26
+
+SMonitor `0.18.0` supplied the live staged release proof. The exact-commit
+full matrix passed in [run 36271371022](https://github.com/uibcdf/smonitor/actions/runs/36271371022).
+The candidate build and Windows installed-command check passed in
+[run 36271508179](https://github.com/uibcdf/smonitor/actions/runs/36271508179).
+The [release-triggered route run 36271867139](https://github.com/uibcdf/smonitor/actions/runs/36271867139)
+concluded successfully after validating the tag and staged plan, and skipped
+the direct upload. [Promotion run 36271902608](https://github.com/uibcdf/smonitor/actions/runs/36271902608)
+added the public `uibcdf` label to the same `noarch/smonitor-0.18.0-py_0.tar.bz2`
+file. The public channel independently reports SHA-256
+`7fba29b56853771ceaf477de50aeed0cf9e93e2053e484de4e18c18ea1abe578`,
+the staging digest. The earlier `0.17.0` failed run remains historical evidence.

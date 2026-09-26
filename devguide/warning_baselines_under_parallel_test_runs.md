@@ -3,7 +3,7 @@
 A constraint on any QA policy built on warning counts, measured rather than
 assumed. It applies to `Project A — Pytest/CI Diagnostic Integration` in
 [implementation_plan.md](implementation_plan.md) and to the baseline sections of
-[pending_proposals/pytest_diagnostics_bridge_and_molsyssuite_policy.md](pending_proposals/pytest_diagnostics_bridge_and_molsyssuite_policy.md),
+[archive/pytest_diagnostics_bridge_and_molsyssuite_policy.md](archive/pytest_diagnostics_bridge_and_molsyssuite_policy.md),
 both of which plan to compare warning sets between runs.
 
 ## The constraint

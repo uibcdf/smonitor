@@ -68,10 +68,12 @@ implicitly, or move the tag.
 Retain the route receipt, producer or promotion evidence, complete workflow conclusion,
 and independent Conda query with the exact file and SHA-256. GH Run Receptor provides a
 compact first inspection, but its summary does not replace those primary checks.
-The 0.16.0 and 0.17.0 exact-file promotions are proven in hosted runs; the guarded
+The 0.16.0, 0.17.0, and 0.18.0 exact-file promotions are proven in hosted runs; the guarded
 direct route has local contract tests but has **not** yet been exercised by a new
 public release. The 0.17.0 release event incorrectly reported a failed direct
-workflow despite successful staged promotion; `uibcdf/smonitor#28` tracks the
-corrected routing and its first hosted proof.
+workflow despite successful staged promotion. The 0.18.0 release event
+[passed the corrected staged route](https://github.com/uibcdf/smonitor/actions/runs/36271867139),
+and [exact-file promotion](https://github.com/uibcdf/smonitor/actions/runs/36271902608)
+published the verified digest; `uibcdf/smonitor#28` is resolved.
 Track that first live proof in `uibcdf/smonitor#20`. Native ABI3 publishers should
 reuse the decision and evidence contract, not copy this one-job noarch build shape.

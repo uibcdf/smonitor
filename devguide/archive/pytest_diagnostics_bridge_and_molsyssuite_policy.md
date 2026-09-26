@@ -1,18 +1,37 @@
 ---
 summary: How SMonitor diagnostics participate in a pytest run, and what a policy layer owns.
 issue: uibcdf/smonitor#6
-status: active
+status: resolved
 opened: 2026-07-17
-closed:
+closed: 2026-09-26
 verification: asserted
 area: [pytest, ci, ecosystem]
-guard:
-normative:
+guard: tests/test_pytest_bridge.py
+normative: docs/content/developer/testing-and-coverage.md
 blocked_by: []
 supersedes: []
 ---
 
 # Pytest Diagnostics Bridge and MolSysSuite Policy Layer
+
+## Resolution on 2026-09-26
+
+The initial bridge shipped in
+[SMonitor 0.18.0](https://github.com/uibcdf/smonitor/releases/tag/0.18.0)
+against the published pytest-receptor 1.2 producer protocol. It is optional,
+observational, and uses receptor's canonical artifact. Hosted CI, QA, docs,
+the full platform/Python matrix, staged package verification, and exact-file
+Conda promotion passed at release commit `b79cca8eb9bd878d0d3439876eca4ed26560e916`.
+A local test with a real ArgDigest `DigestNotDigestedWarning` yielded one
+correlated `ARG-WARN-MISS-001` extension event in a complete, integrity-valid
+artifact. The MolSysSuite policy layer remains in central governance; an
+additional `pytest-molsyssuite` package is not justified by this bridge alone.
+
+The strict QA rules, diagnostic baselines, optional support-bundle links,
+fixtures and markers, and wider consumer dogfooding below are design inputs
+for [follow-up #32](https://github.com/uibcdf/smonitor/issues/32). They are not
+claims about the observational `0.18.0` bridge. The dated checkpoints and
+broader acceptance ideas below are retained as the design history.
 
 ## 2026-09-26 publication checkpoint
 
