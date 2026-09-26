@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.17.2] - 2026-09-26
+
+### Fixed
+
+- Corrected the release citation version and added a pre-tag check that compares
+  `CITATION.cff` with the committed release plan (`uibcdf/smonitor#30`).
+
 ## [0.17.1] - 2026-09-26
 
 ### Changed

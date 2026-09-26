@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import re
 import subprocess
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CITATION = ROOT / "CITATION.cff"
+RELEASE_PLAN = ROOT / "devtools" / "conda-build" / "release_plan.toml"
 
 
 def _scalar(text: str, key: str) -> str:
@@ -56,3 +58,9 @@ def test_citation_version_matches_the_release_tag_or_next_candidate() -> None:
         return  # Source archives and shallow CI checkouts may not contain Git tags.
 
     assert tuple(map(int, version.split("."))) >= tuple(map(int, latest.stdout.strip().split(".")))
+
+
+def test_citation_version_matches_committed_release_plan() -> None:
+    citation_version = _scalar(CITATION.read_text(encoding="utf-8"), "version")
+    plan = tomllib.loads(RELEASE_PLAN.read_text(encoding="utf-8"))
+    assert citation_version == plan["version"]

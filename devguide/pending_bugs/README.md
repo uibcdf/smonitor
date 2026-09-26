@@ -20,6 +20,7 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
+| [`release_citation_version_lags_tag.md`](release_citation_version_lags_tag.md) | `active` | [uibcdf/smonitor#30](https://github.com/uibcdf/smonitor/issues/30) | The 0.17.1 citation version lags its immutable release tag. |
 | [`staged_release_marks_conda_workflow_failed.md`](staged_release_marks_conda_workflow_failed.md) | `active` | [uibcdf/smonitor#28](https://github.com/uibcdf/smonitor/issues/28) | Staged release marks the automatic Conda workflow failed despite successful promotion |
 
 <!-- /generated -->
