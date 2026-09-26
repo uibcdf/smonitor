@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.17.3] - 2026-09-26
+
+### Fixed
+
+- The README status links to the latest stable Release and the Zenodo project
+  record instead of naming an outdated package or source archive (`uibcdf/smonitor#31`).
+
 ## [0.17.2] - 2026-09-26
 
 ### Fixed
