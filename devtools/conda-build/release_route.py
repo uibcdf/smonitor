@@ -53,6 +53,16 @@ def read_plan(path: Path = PLAN) -> dict:
     return plan
 
 
+def committed_plan_for(version: str) -> dict:
+    """Select a release route only for the version committed with that plan."""
+    if not VERSION.fullmatch(version):
+        raise ReleaseRouteError("release identity needs a canonical version")
+    plan = read_plan()
+    if plan["version"] != version:
+        raise ReleaseRouteError("tag or dispatch does not match the committed release plan")
+    return plan
+
+
 def _read_json(url: str, *, token: str | None = None) -> dict:
     headers = {"Accept": "application/json", "User-Agent": "smonitor-release-route"}
     if token is not None:
@@ -118,8 +128,8 @@ def check_route(*, version: str, route: str, sha: str, repository: str, receipt:
         raise ReleaseRouteError("release identity needs a canonical version and full SHA")
     if repository != "uibcdf/smonitor":
         raise ReleaseRouteError("release route must run in uibcdf/smonitor")
-    plan = read_plan()
-    if plan["version"] != version or plan["route"] != route:
+    plan = committed_plan_for(version)
+    if plan["route"] != route:
         raise ReleaseRouteError("tag or dispatch does not match the committed release plan")
     gates = verified_workflow_runs(
         repository, sha, plan["required_workflows"], os.environ.get("GH_TOKEN", "")
@@ -215,6 +225,8 @@ def verify_public(*, version: str, built_paths: str, receipt: Path, attempts: in
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     subcommands = parser.add_subparsers(dest="command", required=True)
+    plan_route = subcommands.add_parser("plan-route")
+    plan_route.add_argument("--version", required=True)
     check = subcommands.add_parser("check")
     check.add_argument("--version", required=True)
     check.add_argument("--route", choices=("direct", "staged"), required=True)
@@ -226,7 +238,9 @@ def main() -> None:
     public.add_argument("--built-paths", required=True)
     public.add_argument("--receipt", required=True, type=Path)
     args = parser.parse_args()
-    if args.command == "check":
+    if args.command == "plan-route":
+        print(committed_plan_for(args.version)["route"])
+    elif args.command == "check":
         check_route(
             version=args.version,
             route=args.route,

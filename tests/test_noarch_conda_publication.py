@@ -59,10 +59,32 @@ def test_stable_releases_have_a_guarded_direct_route():
     assert "prereleased" not in workflow
     assert "Build, test, and upload the unstaged release" in workflow
     assert "label: main" in workflow
-    assert "id: conda_release\n        if: github.event_name == 'release'" in workflow
+    assert (
+        "id: conda_release\n        if: github.event_name == 'release' "
+        "&& steps.release_plan.outputs.route == 'direct'"
+    ) in workflow
     assert "--route direct" in workflow
     assert workflow.index("--route direct") < workflow.index("label: main")
     assert "smonitor-conda-${{ inputs.version || github.event.release.tag_name }}" in workflow
+
+
+def test_staged_release_is_validated_without_entering_the_direct_build():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "release_route: ${{ steps.release_plan.outputs.route }}" in workflow
+    assert 'plan-route --version "$RELEASE_VERSION"' in workflow
+    assert (
+        "id: route_staged\n        if: github.event_name == 'workflow_dispatch' "
+        "|| steps.release_plan.outputs.route == 'staged'"
+    ) in workflow
+    assert (
+        "id: route_direct\n        if: github.event_name == 'release' "
+        "&& steps.release_plan.outputs.route == 'direct'"
+    ) in workflow
+    assert (
+        "if: github.event_name == 'workflow_dispatch' || "
+        "needs.conda_deployment_with_new_tag.outputs.release_route == 'direct'"
+    ) in workflow
 
 
 def test_noarch_workflow_retains_producer_evidence():

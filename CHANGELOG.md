@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- A stable release with a committed `staged` plan now validates that route and
+  skips the automatic direct Conda uploader cleanly; an invalid or mismatched
+  plan still fails before any upload (`uibcdf/smonitor#28`).
+
 ## [0.17.0] - 2026-09-26
 
 ### Fixed

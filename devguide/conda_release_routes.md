@@ -54,7 +54,8 @@ a higher build number, never overwritten bytes.
 
 Independently verify the exact staged coordinate, SHA-256, installed-candidate gates,
 and any coupled consumers. Only then tag the *same* SHA and publish its stable GitHub
-Release. Its direct-upload branch rejects the `staged` plan. Dispatch
+Release. Its release-event job validates the staged plan and exact-commit gates, then
+skips the direct uploader and installed-package smoke job. Dispatch
 `.github/workflows/promote_conda_package.yaml` with the exact tag SHA, version, build
 number and verified digest. It checks the published release and exact-commit gates,
 then uses the shared `promote@v2.2.2` action to add the `main` label to the **same file**.
@@ -67,7 +68,10 @@ implicitly, or move the tag.
 Retain the route receipt, producer or promotion evidence, complete workflow conclusion,
 and independent Conda query with the exact file and SHA-256. GH Run Receptor provides a
 compact first inspection, but its summary does not replace those primary checks.
-The 0.16.0 exact-file promotion is proven in a hosted run; the guarded direct route
-has local contract tests but has **not** yet been exercised by a new public release.
+The 0.16.0 and 0.17.0 exact-file promotions are proven in hosted runs; the guarded
+direct route has local contract tests but has **not** yet been exercised by a new
+public release. The 0.17.0 release event incorrectly reported a failed direct
+workflow despite successful staged promotion; `uibcdf/smonitor#28` tracks the
+corrected routing and its first hosted proof.
 Track that first live proof in `uibcdf/smonitor#20`. Native ABI3 publishers should
 reuse the decision and evidence contract, not copy this one-job noarch build shape.

@@ -24,8 +24,8 @@ The current `.github/workflows/build_and_upload_conda_packages.yaml` subscribes 
 `workflow_dispatch`. Its staging route uploads only to `uibcdf/label/staging`. The separate
 promotion workflow also requires manual dispatch. Therefore tagging and publishing a
 routine GitHub Release cannot trigger a Conda upload, even if no pre-public staging gate
-is needed. No 0.17.0 tag or Release has been created to test this externally; the trigger
-absence is established by source inspection.
+is needed. At the time this report was opened, no 0.17.0 tag or Release existed; the
+trigger absence was established by source inspection.
 
 ## How
 
@@ -76,8 +76,11 @@ or coupled-consumer gate is required.
 ## Current implementation and remaining proof
 
 The two-route workflow, exact-commit gate check, all-label preflight, public digest
-postcheck, negative tests, and maintainer procedure are implemented locally. The
-targeted local suite passes. This report remains active until the first future direct
-GitHub Release demonstrates the complete hosted route; no 0.17.0 tag or Release has
-been created as a synthetic proof. Central policy review remains with
+postcheck, negative tests, and maintainer procedure are implemented. Release `0.17.0`
+used the staged route because its Conda entry point and Windows installed-package
+gate changed. The staged build, Windows check and exact-file promotion passed, but
+this cannot prove the direct route. Its release-triggered direct job failed on the
+staged plan before upload; `uibcdf/smonitor#28` tracks making that valid route
+finish cleanly. This report remains active until a future direct GitHub Release
+demonstrates its complete hosted route. Central policy review remains with
 `uibcdf/molsyssuite#27`.

@@ -21,5 +21,6 @@ The table below is generated from front matter by
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
 | [`routine_release_no_longer_publishes_conda.md`](routine_release_no_longer_publishes_conda.md) | `active` | [uibcdf/smonitor#20](https://github.com/uibcdf/smonitor/issues/20) | Routine GitHub Releases no longer publish Conda packages |
+| [`staged_release_marks_conda_workflow_failed.md`](staged_release_marks_conda_workflow_failed.md) | `active` | [uibcdf/smonitor#28](https://github.com/uibcdf/smonitor/issues/28) | Staged release marks the automatic Conda workflow failed despite successful promotion |
 
 <!-- /generated -->

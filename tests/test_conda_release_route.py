@@ -45,6 +45,18 @@ def test_committed_plan_rejects_unset_fields_and_missing_matrix(tmp_path):
         route.read_plan(plan)
 
 
+def test_release_event_selects_only_the_matching_committed_route(monkeypatch):
+    monkeypatch.setattr(route, "read_plan", lambda: _plan(chosen_route="staged"))
+    assert route.committed_plan_for("0.17.0")["route"] == "staged"
+    with pytest.raises(route.ReleaseRouteError, match="does not match"):
+        route.committed_plan_for("0.17.1")
+    with pytest.raises(route.ReleaseRouteError, match="canonical"):
+        route.committed_plan_for("v0.17.0")
+
+    monkeypatch.setattr(route, "read_plan", lambda: _plan(chosen_route="direct"))
+    assert route.committed_plan_for("0.17.0")["route"] == "direct"
+
+
 @pytest.mark.parametrize("wrong_field", ["head_sha", "path", "conclusion", "status"])
 def test_required_ci_must_have_exact_identity_and_success(monkeypatch, wrong_field):
     run = {
