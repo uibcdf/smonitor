@@ -214,3 +214,28 @@ jobs:
           path: ${{ steps.conda_release.outputs.evidence_path }}
           if-no-files-found: error
           retention-days: 7
+
+  windows_installed_package_smoke:
+    name: Verify installed Conda command on Windows
+    needs: conda_deployment_with_new_tag
+    runs-on: windows-latest
+    steps:
+      - name: Install the exact uploaded package
+        uses: mamba-org/setup-micromamba@v3.2.1
+        with:
+          environment-name: smoke
+          condarc: |
+            channels:
+              - ${{ github.event_name == 'workflow_dispatch' && 'uibcdf/label/staging' || 'uibcdf' }}
+              - conda-forge
+            channel_priority: strict
+          create-args: >-
+            python=3.13
+            smonitor=${{ inputs.version || github.event.release.tag_name }}=py_${{ inputs.build_number || 0 }}
+
+      - name: Run the installed command
+        shell: bash -l {0}
+        run: |
+          micromamba activate smoke
+          python -c "import shutil; assert shutil.which('smonitor'), 'Conda did not create the smonitor launcher'"
+          smonitor --help

@@ -118,6 +118,19 @@ class SuggestedAtomWarning(CatalogWarning):
         return cls(rendered, atom_name=atom_name, suggestion=suggestion)
 
 
+class CatalogBoundWarning(CatalogWarning):
+    """A consumer wrapper that supplies catalog and metadata on every call."""
+
+    catalog_key = "CatalogBoundWarning"
+    catalog = {"warnings": {"CatalogBoundWarning": {"code": "T-GUESS"}}}
+
+    def __init__(self, message=None, *, atom_name=None, suggestion=None):
+        extra = None
+        if atom_name is not None or suggestion is not None:
+            extra = {"atom_name": atom_name, "suggestion": suggestion}
+        super().__init__(message, catalog=self.catalog, meta={}, extra=extra or {})
+
+
 @pytest.fixture(autouse=True)
 def _configured():
     smonitor.configure(profile="user", handlers=[], codes=CODES)
@@ -227,6 +240,16 @@ def test_state_dependent_hint_text_survives_an_args_only_rebuild():
 
     assert str(rebuilt) == str(original)
     assert rebuilt.args == original.args
+
+
+def test_catalog_bound_wrapper_preserves_the_visible_text_on_rebuild():
+    original = CatalogBoundWarning(atom_name="Ar", suggestion="AR")
+
+    rebuilt = type(original)(*original.args)
+
+    assert str(rebuilt) == str(original)
+    assert rebuilt.args == original.args
+    assert str(rebuilt).count("Use 'AR' instead.") == 1
 
 
 def test_hint_refuses_assignment():

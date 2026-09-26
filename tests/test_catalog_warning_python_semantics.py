@@ -181,3 +181,24 @@ def test_warn_once_keeps_the_same_attribution():
 
     assert Path(record[0].filename).name == Path(__file__).name
     assert record[0].lineno == expected_line
+
+
+@smonitor.signal(tags=["test"])
+def _signaled_library_function(bundle):
+    bundle.warn(AtomWarning(code="T-ATOM", extra={"atom_name": "XXX"}))
+
+
+@smonitor.signal(tags=["test"])
+def _signaled_library_function_once(bundle):
+    bundle.warn_once(AtomWarning(code="T-ATOM", extra={"atom_name": "XXX"}))
+
+
+@pytest.mark.parametrize("call", [_signaled_library_function, _signaled_library_function_once])
+def test_catalog_warning_inside_signal_blames_its_application_caller(call):
+    bundle, _ = _bundle()
+    with pytest.warns(AtomWarning) as record:
+        expected_line = inspect.currentframe().f_lineno + 1
+        call(bundle)
+
+    assert Path(record[0].filename).name == Path(__file__).name
+    assert record[0].lineno == expected_line

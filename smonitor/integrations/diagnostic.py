@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import warnings
 from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar
@@ -28,6 +29,23 @@ def _resolve(*args, **kwargs):
 
 T = TypeVar("T", bound="CatalogException")
 W = TypeVar("W", bound="CatalogWarning")
+
+
+def _warning_stacklevel(stacklevel: int) -> int:
+    """Count caller frames while ignoring SMonitor's integration wrappers."""
+    frame = inspect.currentframe()
+    if frame is None:
+        return stacklevel + 1
+    frame = frame.f_back  # DiagnosticBundle.warn
+    level = 1
+    remaining = max(1, stacklevel)
+    while frame is not None and frame.f_back is not None and remaining:
+        frame = frame.f_back
+        level += 1
+        module = frame.f_globals.get("__name__", "")
+        if not (module == "smonitor" or module.startswith("smonitor.")):
+            remaining -= 1
+    return level
 
 
 def _catalog_entry(
@@ -163,14 +181,13 @@ class CatalogWarning(Warning):
             if entry:
                 target_code = entry.get("code")
 
-        # An explicit message with no structured inputs is also the wire shape
-        # used by rebuilders that carry only ``args`` (including released
-        # pytest-xdist). Treat that text as authoritative: attempting to
-        # resolve a state-dependent hint again would replace its fields with
-        # placeholders and produce plausible but false output.
-        args_only_rebuild = (
-            message is not None and extra is None and meta is None and catalog is None
-        )
+        # An explicit message without occurrence-specific fields is also the
+        # wire shape used by rebuilders that carry only ``args`` (including
+        # released pytest-xdist). Consumer subclasses often supply their catalog
+        # and library metadata on every construction, including a rebuild; those
+        # inputs do not restore the occurrence fields. Treat the text as
+        # authoritative rather than appending its catalog hint a second time.
+        args_only_rebuild = message is not None and not extra
 
         resolved_extra = merge_extra(meta, extra)
         resolved_extra.setdefault("caller", self.catalog_key or type(self).__name__)
@@ -377,18 +394,15 @@ class DiagnosticBundle:
         # the warning is in flight the capture emitters stand down, so
         # `capture_warnings` does not feed the same incident back in without
         # its code and structured fields.
-        # `stacklevel` counts from the caller of this method, so it means the
-        # same here as it would at a plain `warnings.warn` on that same line:
-        # the extra frame this method occupies is added back, rather than left
-        # for every call site to compensate for. The default of 2 therefore
-        # blames the caller's caller, which is what a library wants — the user's
-        # code, not the library function that noticed the problem.
+        # `stacklevel` counts application frames, skipping SMonitor's own
+        # `warn_once` and `@signal` wrappers. The default of 2 blames the
+        # caller of the library function that noticed the problem.
         token = runtime.begin_catalog_warning_replay() if emitted else None
         try:
             if isinstance(message_or_warning, Warning):
-                warnings.warn(message_or_warning, stacklevel=stacklevel + 1)
+                warnings.warn(message_or_warning, stacklevel=_warning_stacklevel(stacklevel))
             else:
-                warnings.warn(msg, cat, stacklevel=stacklevel + 1)
+                warnings.warn(msg, cat, stacklevel=_warning_stacklevel(stacklevel))
         finally:
             if token is not None:
                 runtime.end_catalog_warning_replay(token)
@@ -411,12 +425,10 @@ class DiagnosticBundle:
         if key in self._warned_once_cache:
             return
         self._warned_once_cache.add(key)
-        # +1 for this method's own frame, so `stacklevel` blames the same line
-        # here as it would in `warn`.
         self.warn(
             message_or_warning,
             category,
-            stacklevel=stacklevel + 1,
+            stacklevel=stacklevel,
             caller=caller,
             extra=extra,
         )

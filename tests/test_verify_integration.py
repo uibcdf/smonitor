@@ -69,6 +69,28 @@ def test_it_reports_a_code_with_no_template(verifier, tmp_path):
     assert "O-W001" in rows["2 templates"][1]
 
 
+def test_it_reports_a_flat_catalog_code_with_no_template(verifier, tmp_path):
+    repo = _library(
+        tmp_path,
+        "flat_orphan",
+        config='PROFILE = "user"\n',
+        catalog='CATALOG = {"Thing": {"code": "O-W002"}}\nCODES = {}\n',
+    )
+    rows = {check: (ok, detail) for check, ok, detail in verifier.verify(repo).rows}
+    assert rows["2 templates"] == (False, "O-W002")
+
+
+def test_an_empty_catalog_cannot_pass_the_template_check(verifier, tmp_path):
+    repo = _library(
+        tmp_path,
+        "empty_catalog",
+        config='PROFILE = "user"\n',
+        catalog="CATALOG = {}\nCODES = {}\n",
+    )
+    rows = {check: (ok, detail) for check, ok, detail in verifier.verify(repo).rows}
+    assert rows["2 templates"] == (False, "no catalog codes found")
+
+
 def test_it_reports_codes_that_render_empty(verifier, tmp_path):
     repo = _library(
         tmp_path,

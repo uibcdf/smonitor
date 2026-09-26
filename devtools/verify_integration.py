@@ -106,12 +106,14 @@ def catalog_codes(catalog: object) -> set[str]:
     found: set[str] = set()
     if not isinstance(catalog, dict):
         return found
-    for group in CATALOG_GROUPS:
-        entries = catalog.get(group)
-        if isinstance(entries, dict):
-            for entry in entries.values():
-                if isinstance(entry, dict) and isinstance(entry.get("code"), str):
-                    found.add(entry["code"])
+    for key, entry in catalog.items():
+        if key in CATALOG_GROUPS and isinstance(entry, dict):
+            entries = entry.values()
+        else:
+            entries = (entry,)
+        for item in entries:
+            if isinstance(item, dict) and isinstance(item.get("code"), str):
+                found.add(item["code"])
     return found
 
 
@@ -185,8 +187,10 @@ def verify(repo: Path) -> Result:
         result.add("3 renders", None, detail)
     else:
         # Check 2 -- every code the catalog emits has a template.
-        orphans = sorted(catalog_codes(catalog) - set(codes))
-        result.add("2 templates", not orphans, ", ".join(orphans))
+        emitted_codes = catalog_codes(catalog)
+        orphans = sorted(emitted_codes - set(codes))
+        detail = ", ".join(orphans) if emitted_codes else "no catalog codes found"
+        result.add("2 templates", bool(emitted_codes) and not orphans, detail)
 
         # Check 3 -- every code renders in every profile.
         empty: list[str] = []

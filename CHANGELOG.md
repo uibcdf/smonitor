@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `CatalogWarning` keeps its visible text when a consumer wrapper supplies its
+  catalog and metadata during an args-only rebuild, avoiding a duplicated hint
+  (`uibcdf/smonitor#21`).
+- The noarch Conda recipe declares the `smonitor` console entry point. The
+  publication workflow now installs the exact uploaded package on Windows and
+  checks its command before reporting success (`uibcdf/smonitor#26`).
+- Catalog template checks in the canonical guide and integration verifier cover
+  grouped and flat catalogs and fail when no coded entries are found
+  (`uibcdf/smonitor#22`).
+- `DiagnosticBundle.warn()` and `warn_once()` skip SMonitor's `@signal` wrapper
+  when attributing Python warnings to application code (`uibcdf/smonitor#23`).
+
 ## [0.16.0] - 2026-09-21
 
 ### Changed

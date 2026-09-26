@@ -9,8 +9,11 @@ PROMOTION_WORKFLOW = ROOT / ".github" / "workflows" / "promote_conda_package.yam
 
 def test_recipe_declares_one_supported_noarch_python_artifact():
     recipe = RECIPE.read_text(encoding="utf-8")
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 
     assert "noarch: python" in recipe
+    assert "entry_points:\n    - smonitor = smonitor.cli:main" in recipe
+    assert 'smonitor = "smonitor.cli:main"' in pyproject
     assert recipe.count("python >=3.11,<3.15") == 2
     assert "SMONITOR_CONDA_BUILD_NUMBER" in recipe
 
@@ -62,7 +65,7 @@ def test_stable_releases_have_a_guarded_direct_route():
     assert "smonitor-conda-${{ inputs.version || github.event.release.tag_name }}" in workflow
 
 
-def test_noarch_workflow_has_one_job_and_retains_producer_evidence():
+def test_noarch_workflow_retains_producer_evidence():
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
     assert "matrix:" not in workflow
@@ -74,6 +77,20 @@ def test_noarch_workflow_has_one_job_and_retains_producer_evidence():
     assert "always() && steps.conda_release.outputs.evidence_path != ''" in workflow
     assert '--built-paths "$BUILT_PATHS"' in workflow
     assert "smonitor-conda-route-${{ github.run_id }}-${{ github.run_attempt }}" in workflow
+
+
+def test_uploaded_package_command_is_checked_on_windows():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "windows_installed_package_smoke:" in workflow
+    assert "needs: conda_deployment_with_new_tag" in workflow
+    assert "runs-on: windows-latest" in workflow
+    assert (
+        "smonitor=${{ inputs.version || github.event.release.tag_name }}=py_${{ inputs.build_number || 0 }}"
+        in workflow
+    )
+    assert "shutil.which('smonitor')" in workflow
+    assert "smonitor --help" in workflow
 
 
 def test_promotion_workflow_checks_exact_release_and_file_identity():

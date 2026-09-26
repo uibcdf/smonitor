@@ -16,6 +16,12 @@ warn_once = bundle.warn_once
 resolve = bundle.resolve
 ```
 
+`warn()` and `warn_once()` also raise ordinary Python warnings. Their
+`stacklevel` counts application frames and skips SMonitor's `@signal` wrapper,
+so the default value attributes a warning to the caller of the library function.
+Plain `warnings.warn()` inside a decorated function still counts that wrapper;
+adjust its `stacklevel` when using Python's warning API directly.
+
 When to use:
 - whenever the host library emits repeated warning families,
 - when you need stable `code` + templated message/hint resolution.
