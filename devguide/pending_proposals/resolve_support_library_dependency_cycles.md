@@ -6,7 +6,7 @@ opened: 2026-09-26
 closed:
 verification: inspected
 area: [architecture, ecosystem, dependencies]
-guard:
+guard: tests/test_support_library_bootstrap.py
 normative: MOLSYSSUITE_GUIDE.md
 blocked_by: [uibcdf/moli#29]
 supersedes: []
@@ -30,6 +30,14 @@ inventory remains `excepted` until that normative decision is effective and
 the public-boundary, installation and import-order evidence below passes.
 This report is blocked on that decision; neither closing it nor advancing the
 inventory would be accurate yet.
+
+The preparatory guard reads installed provider metadata and rejects a required
+SMonitor dependency that would close a reverse edge. With ArgDigest and
+DepDigest installed, it also exercises all six import orders in subprocesses
+and checks that SMonitor's public configuration and event validation still
+work. These tests protect the current bootstrap boundary; they do not settle
+MOLI applicability or prove a clean Conda installation on every claimed
+platform.
 
 The completed member review in `uibcdf/smonitor#24` found two applicable
 support-library boundaries. Public configuration and event validation are
