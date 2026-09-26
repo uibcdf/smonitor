@@ -1,13 +1,13 @@
 ---
 summary: Routine GitHub Releases no longer publish Conda packages
 issue: uibcdf/smonitor#20
-status: active
+status: resolved
 opened: 2026-09-21
-closed:
+closed: 2026-09-26
 severity: high
 verification: inspected
 area: [packaging, release, ci]
-guard:
+guard: tests/test_conda_release_route.py
 normative:
 blocked_by: []
 supersedes: []
@@ -81,6 +81,19 @@ used the staged route because its Conda entry point and Windows installed-packag
 gate changed. The staged build, Windows check and exact-file promotion passed, but
 this cannot prove the direct route. Its release-triggered direct job failed on the
 staged plan before upload; `uibcdf/smonitor#28` tracks making that valid route
-finish cleanly. This report remains active until a future direct GitHub Release
-demonstrates its complete hosted route. Central policy review remains with
-`uibcdf/molsyssuite#27`.
+finish cleanly.
+
+Release `0.17.1` supplied the first live direct-route proof on 2026-09-26.
+Its exact commit `0febfa77e15c3842d4d8cfdee7e353d351b82b78` passed the
+twelve-cell full matrix in run `36229622914`. The stable Release triggered
+workflow run `36229731054`; its retained route receipt records the direct
+decision, exact-commit gate, an Anaconda 404 before upload, and the public
+`noarch/smonitor-0.17.1-py_0.tar.bz2` file with SHA-256
+`275673eaa974ccc76e178bd91ed29739ea40ec73a7366b35151e50ac72ab9995`.
+The public Conda index independently returned that exact file and digest.
+The Windows job installed the released package and ran `smonitor --help`.
+
+`tests/test_conda_release_route.py` guards route selection, fail-closed
+preflight and post-upload identity checks. The hosted run proves the release
+event wiring and public publication that local tests cannot simulate.
+Shared route policy review remains with `uibcdf/molsyssuite#27`.
