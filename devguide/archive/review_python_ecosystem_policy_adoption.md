@@ -1,9 +1,9 @@
 ---
 summary: Review inherited Python ecosystem policies for SMonitor.
 issue: uibcdf/smonitor#24
-status: partial
+status: resolved
 opened: 2026-09-24
-closed:
+closed: 2026-09-26
 verification: inspected
 area: [governance, ci, ecosystem]
 guard:
@@ -125,7 +125,25 @@ DepDigest boundaries are identified above but remain unresolved because both
 providers depend on SMonitor. The central inventory records this as `partial`,
 not `adopted`. Closing the review requires a member-owned architecture decision
 or bounded exception for each cycle, including a removal condition and expiry
-if an exception is chosen. `uibcdf/smonitor#24` remains open.
+if an exception is chosen.
+
+The review was completed on 2026-09-26 with a bounded architecture exception
+for the ArgDigest and DepDigest boundaries. Both providers depend on SMonitor
+at runtime, so adding either to SMonitor would introduce a cycle at the
+diagnostic bootstrap layer. SMonitor retains its dependency-free core
+validation and lazy optional `rich` loading for this exception only. This does
+not claim adoption of ArgDigest or DepDigest in SMonitor.
+
+The SMonitor maintainers own the exception through 2027-03-26. Issue
+`uibcdf/smonitor#29` tracks removal: select a cycle-free dependency
+architecture or obtain a revised platform applicability rule, then test the
+public validation and optional-backend boundaries, package installation, and
+import order. The MolSysSuite member inventory records
+`support-libraries=excepted` with the same owner, expiry, and removal
+condition; `developer-tools=adopted` remains independently evidenced.
+
+This closes the member review in `uibcdf/smonitor#24`. The continuing
+architecture work is explicitly owned by `uibcdf/smonitor#29`.
 
 ## Acceptance criteria
 
@@ -134,3 +152,13 @@ if an exception is chosen. `uibcdf/smonitor#24` remains open.
   CI confirms the commands work.
 - The support-library applicability review and developer-tool evidence are
   recorded here and in `uibcdf/smonitor#24`; the suite inventory cites them.
+
+## Verification at closure
+
+- Public boundaries and the dependency graph were inspected in SMonitor,
+  ArgDigest, and DepDigest package metadata and implementation.
+- Hosted CI, QA, and the complete twelve-cell matrix evidence above verify the
+  exact Pytest Receptor integration; GH Run Receptor inspected those runs.
+- `python devtools/devguide_index.py --check` validates the archived record's
+  generated index. The central MolSysSuite governance validator checks the
+  bounded exception metadata.
