@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-09-26
+
+### Changed
+
+- Completed the Python ecosystem policy review. The Pytest Receptor and GH Run
+  Receptor developer-tool requirements are verified; the ArgDigest and DepDigest
+  integration boundaries have a bounded dependency-cycle exception tracked in
+  `uibcdf/smonitor#29` (`uibcdf/smonitor#24`).
+
 ### Fixed
 
 - A stable release with a committed `staged` plan now validates that route and
