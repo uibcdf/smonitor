@@ -1,6 +1,6 @@
-# Reviewed for the 0.17.0 candidate before creating its tag.
-version = "0.17.0"
-route = "staged"
-reason = "The Conda console entry point and Windows installed-package gate changed; verify the exact staged package before public promotion."
+# Reviewed for the 0.17.1 candidate before creating its tag.
+version = "0.17.1"
+route = "direct"
+reason = "The Python package, dependencies, Conda recipe, and installed command are unchanged since the staged and Windows-verified 0.17.0 release; this patch records the completed ecosystem policy review. The 0.17.1 coordinate is unoccupied and the full matrix must pass at the exact candidate commit before publication."
 decision_by = "Repository maintainer via Codex on 2026-09-26"
 required_workflows = [".github/workflows/CI_full_matrix.yaml"]
