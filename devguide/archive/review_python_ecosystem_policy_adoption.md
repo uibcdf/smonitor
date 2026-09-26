@@ -145,6 +145,15 @@ condition; `developer-tools=adopted` remains independently evidenced.
 This closes the member review in `uibcdf/smonitor#24`. The continuing
 architecture work is explicitly owned by `uibcdf/smonitor#29`.
 
+## 2026-09-26 correction
+
+MOLI commit `15b38fb` defined a narrow bootstrap-provider applicability rule,
+and MolSysSuite `policy-v1.4.12` changed the SMonitor support-library inventory
+to `adopted`. The temporary exception recorded above was removed when
+`uibcdf/smonitor#29` passed its hosted source-checkout guard and clean Conda
+installation/import-order verification. The earlier text remains as the
+historical state of this review.
+
 ## Acceptance criteria
 
 - All hosted pytest calls use `--receptor=ci` with an exact published version.

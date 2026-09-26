@@ -1,18 +1,43 @@
 ---
 summary: Resolve ArgDigest and DepDigest dependency cycles at SMonitor boundaries.
 issue: uibcdf/smonitor#29
-status: blocked
+status: resolved
 opened: 2026-09-26
-closed:
-verification: inspected
+closed: 2026-09-26
+verification: measured
 area: [architecture, ecosystem, dependencies]
 guard: tests/test_support_library_bootstrap.py
 normative: MOLSYSSUITE_GUIDE.md
-blocked_by: [uibcdf/moli#29]
+blocked_by: []
 supersedes: []
 ---
 
 # Resolve support-library dependency cycles
+
+## Resolution on 2026-09-26
+
+MOLI commit [`15b38fb`](https://github.com/uibcdf/moli/commit/15b38fbe17b6ee9fa9aac2a8e21b80d76a8da70f)
+adopted a narrow bootstrap-provider rule: while ArgDigest or DepDigest has a
+required runtime dependency on SMonitor, local validation at that public
+boundary is structurally applicable and must have behavior, diagnostic,
+installation, and import-order tests. The rule requires reassessment if the
+reverse dependency disappears. MolSysSuite
+[`policy-v1.4.12`](https://github.com/uibcdf/molsyssuite/tree/policy-v1.4.12)
+pins that MOLI decision and records SMonitor `support-libraries=adopted` with
+the guard and clean-install evidence below. The temporary exception and its
+expiry were removed from the central inventory.
+
+The guard passed in hosted collective QA run
+[`36233454261`](https://github.com/uibcdf/smonitor/actions/runs/36233454261)
+with fresh provider source checkouts (three passed, none skipped). A clean
+Linux/Python 3.13 Conda install of the published packages passed all six
+import orders, public configuration and validation, and the missing-optional-
+backend diagnostic. The policy guide copy is synchronized from the central
+snapshot. These observations satisfy the scoped applicability rule on the
+tested platforms; they do not assert all-platform installation coverage.
+
+The historical checkpoint and exception rationale below record the state
+before the normative decision. The exception is now closed.
 
 ## 2026-09-26 governance checkpoint
 
