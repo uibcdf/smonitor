@@ -68,6 +68,10 @@ found zero later skipped commits, and omitted the full matrix.
 The `main` branch now requires strict checks `Test on ubuntu-latest, Python
 3.13`, `qa` and `collective-e2e`. Administrators are exempt from this PR gate;
 the only current collaborators with push permission are `dprada` and `LMMV`,
-both administrators. Hosted PR and first nightly execution have not yet been
-observed. Keep the issue open until those outcomes and the central adoption
-review are recorded.
+both administrators. The direct push of `69bb1a3` with `[skip ci]` exercised
+that bypass. A second [probe-only dispatch](https://github.com/uibcdf/smonitor/actions/runs/36484514827)
+found exactly that skipped commit after the `fc042c4` full-matrix watermark
+and reported that full recovery is due. The probe omitted all matrix jobs by
+design. Hosted PR and first nightly execution have not yet been observed.
+Keep the issue open until those outcomes and the platform-claim review are
+recorded.
