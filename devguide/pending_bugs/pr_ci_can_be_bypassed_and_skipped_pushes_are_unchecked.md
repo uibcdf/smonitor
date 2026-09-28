@@ -55,6 +55,19 @@ suite policy permits maintainers to iterate more quickly.
 
 ## Resolution
 
-The workflow and detector are implemented with focused local tests. Hosted PR
-and first nightly execution, branch-rule verification and central adoption
-review are pending. Keep the issue open until those outcomes are recorded.
+Commits `4b3f8c3` and `709ecfd` implement the workflow and detector. The first
+hosted QA run failed during collection because the new test imported `devtools`
+through a path unavailable to the `pytest` executable; `709ecfd` loads the
+script by file path. At that exact commit, [CI](https://github.com/uibcdf/smonitor/actions/runs/36483279101),
+[QA and collective E2E](https://github.com/uibcdf/smonitor/actions/runs/36483279046),
+and [MolSysSuite policy](https://github.com/uibcdf/smonitor/actions/runs/36483280197)
+passed. The [probe-only dispatch](https://github.com/uibcdf/smonitor/actions/runs/36483329864)
+recognized executed weekly matrix `36457179148` at `fc042c4` as the watermark,
+found zero later skipped commits, and omitted the full matrix.
+
+The `main` branch now requires strict checks `Test on ubuntu-latest, Python
+3.13`, `qa` and `collective-e2e`. Administrators are exempt from this PR gate;
+the only current collaborators with push permission are `dprada` and `LMMV`,
+both administrators. Hosted PR and first nightly execution have not yet been
+observed. Keep the issue open until those outcomes and the central adoption
+review are recorded.
