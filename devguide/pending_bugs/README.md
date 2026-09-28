@@ -18,6 +18,8 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-_No entries._
+| entry | status | issue | summary |
+| --- | --- | --- | --- |
+| [`pr_ci_can_be_bypassed_and_skipped_pushes_are_unchecked.md`](pr_ci_can_be_bypassed_and_skipped_pushes_are_unchecked.md) | `partial` | [uibcdf/smonitor#33](https://github.com/uibcdf/smonitor/issues/33) | PR CI can be bypassed and skipped direct pushes are unchecked |
 
 <!-- /generated -->
