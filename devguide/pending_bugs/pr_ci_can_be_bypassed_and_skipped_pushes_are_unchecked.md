@@ -72,6 +72,11 @@ both administrators. The direct push of `69bb1a3` with `[skip ci]` exercised
 that bypass. A second [probe-only dispatch](https://github.com/uibcdf/smonitor/actions/runs/36484514827)
 found exactly that skipped commit after the `fc042c4` full-matrix watermark
 and reported that full recovery is due. The probe omitted all matrix jobs by
-design. Hosted PR and first nightly execution have not yet been observed.
+design. A [manual full-matrix dispatch](https://github.com/uibcdf/smonitor/actions/runs/36485266297)
+then passed all twelve jobs at `534367f`, including the four Linux test steps.
+The [post-matrix probe](https://github.com/uibcdf/smonitor/actions/runs/36485441346)
+recognized `534367f` as the new executed watermark and found zero pending
+skipped commits; its matrix jobs were omitted. Hosted PR and first nightly
+execution have not yet been observed.
 Keep the issue open until those outcomes and the platform-claim review are
 recorded.
