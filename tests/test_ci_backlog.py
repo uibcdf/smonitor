@@ -40,16 +40,37 @@ def test_only_an_executed_full_linux_matrix_clears_debt(monkeypatch):
     def fake_api(path, _token):
         if "/runs?" in path:
             assert "status=success" not in path
+            assert "branch=main" not in path
             return {
                 "workflow_runs": [
-                    {"id": 3, "event": "schedule", "head_sha": "failed", "conclusion": "failure"},
+                    {
+                        "id": 3,
+                        "event": "schedule",
+                        "head_branch": "main",
+                        "head_sha": "failed",
+                        "conclusion": "failure",
+                    },
                     {
                         "id": 2,
                         "event": "workflow_dispatch",
+                        "head_branch": "main",
                         "head_sha": "probe",
                         "conclusion": "success",
                     },
-                    {"id": 1, "event": "schedule", "head_sha": "green", "conclusion": "success"},
+                    {
+                        "id": 4,
+                        "event": "workflow_dispatch",
+                        "head_branch": "feature",
+                        "head_sha": "feature",
+                        "conclusion": "success",
+                    },
+                    {
+                        "id": 1,
+                        "event": "schedule",
+                        "head_branch": "main",
+                        "head_sha": "green",
+                        "conclusion": "success",
+                    },
                 ]
             }
         probe = "/runs/2/" in path

@@ -80,3 +80,11 @@ skipped commits; its matrix jobs were omitted. Hosted PR and first nightly
 execution have not yet been observed.
 Keep the issue open until those outcomes and the platform-claim review are
 recorded.
+
+**Correction on 2026-09-29:** GitHub's workflow-run API listing with
+`branch=main` returned an old run (`31378148035`), omitting the more recent
+green matrix `36485266297`; the unfiltered listing included the current runs
+with `head_branch=main`. The detector now lists runs without the API branch
+filter and checks `head_branch` itself. It still requires an ancestor commit
+and four executed green Linux test jobs. A hosted probe after this correction
+must verify that the latest executed matrix remains the watermark.
