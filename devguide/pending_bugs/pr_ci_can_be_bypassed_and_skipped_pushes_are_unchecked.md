@@ -86,5 +86,11 @@ recorded.
 green matrix `36485266297`; the unfiltered listing included the current runs
 with `head_branch=main`. The detector now lists runs without the API branch
 filter and checks `head_branch` itself. It still requires an ancestor commit
-and four executed green Linux test jobs. A hosted probe after this correction
-must verify that the latest executed matrix remains the watermark.
+and four executed green Linux test jobs. The
+[corrected probe](https://github.com/uibcdf/smonitor/actions/runs/36539973071)
+recognized `534367f` as the executed watermark and reported zero skipped
+commits. The [actual daily scheduled run](https://github.com/uibcdf/smonitor/actions/runs/36571010365)
+at `2e03716` also executed the detector, found zero debt, and omitted
+the matrix jobs. The first real daily trigger is now observed; hosted PR
+execution and platform claims still need review. Routine CI, QA and
+MolSysSuite policy also passed at `2e03716`.
