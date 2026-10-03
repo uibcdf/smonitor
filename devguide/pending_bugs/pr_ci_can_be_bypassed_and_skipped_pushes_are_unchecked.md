@@ -31,7 +31,7 @@ also passed at the same commit.
 
 ## How
 
-Run the complete Linux 3.13 PR route without workflow path or title/branch
+Run the complete Linux 3.14 PR route without workflow path or title/branch
 skip conditions. Require its stable test check along with the QA and collective
 integration checks on PRs, while administrators retain direct pushes. Preserve
 the existing weekly and manual full matrix. Add a conditional daily full matrix
