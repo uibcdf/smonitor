@@ -111,3 +111,15 @@ The single Linux routine package suite moves to Python 3.14; the required
 PR check must use its new name while preserving strict checks and administrator
 direct-push bypass. The complete weekly matrix still includes every older minor.
 
+## Python 3.14 hosted routine checks — 2026-10-03
+
+The branch protection API reports strict required checks `qa`,
+`collective-e2e` and `Test on ubuntu-latest, Python 3.14`. Commit `65f981f`
+completed the documentation and publication-tooling transition through the
+authorized administrator direct-push route. GitHub reported a bypass of the PR
+rule and the three expected pre-push checks. After the push, [CI](https://github.com/uibcdf/smonitor/actions/runs/37154594493),
+[QA](https://github.com/uibcdf/smonitor/actions/runs/37154594483),
+[Docs CI](https://github.com/uibcdf/smonitor/actions/runs/37154594525) and
+[MolSysSuite policy](https://github.com/uibcdf/smonitor/actions/runs/37154594874)
+all passed on that exact commit. This verifies the hosted direct-push route at
+Python 3.14; the hosted PR route and platform-claim review remain unobserved.
