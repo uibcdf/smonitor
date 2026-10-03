@@ -15,6 +15,24 @@ ci_backlog = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(ci_backlog)
 
 
+def test_pr_route_ignores_documentation_and_skip_markers():
+    workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/CI.yaml").read_text(
+        encoding="utf-8"
+    )
+    pr_trigger = workflow.split("  pull_request:\n", 1)[1].split("  workflow_dispatch:\n", 1)[0]
+    job_condition = workflow.split("    if: >\n", 1)[1].split("    runs-on:", 1)[0]
+
+    assert 'branches: [ "main" ]' in pr_trigger
+    assert "paths" not in pr_trigger
+    assert "github.event_name == 'pull_request'" in job_condition
+    assert (
+        "github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]')"
+        in job_condition
+    )
+    assert "github.event.pull_request.title" not in job_condition
+    assert "github.head_ref" not in job_condition
+
+
 def git(repo, *args):
     return subprocess.check_output(["git", "-C", str(repo), *args], text=True).strip()
 

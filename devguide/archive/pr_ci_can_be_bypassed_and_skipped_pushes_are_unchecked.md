@@ -1,13 +1,13 @@
 ---
 summary: PR CI can be bypassed and skipped direct pushes are unchecked
 issue: uibcdf/smonitor#33
-status: partial
+status: resolved
 opened: 2026-09-28
-closed:
+closed: 2026-10-03
 severity: high
 verification: inspected
 area: [ci, governance]
-guard: tests/test_ci_backlog.py
+guard: tests/test_ci_backlog.py::test_pr_route_ignores_documentation_and_skip_markers
 normative:
 blocked_by: []
 supersedes: []
@@ -123,3 +123,22 @@ rule and the three expected pre-push checks. After the push, [CI](https://github
 [MolSysSuite policy](https://github.com/uibcdf/smonitor/actions/runs/37154594874)
 all passed on that exact commit. This verifies the hosted direct-push route at
 Python 3.14; the hosted PR route and platform-claim review remain unobserved.
+
+## Final verification — 2026-10-03
+
+[PR #34](https://github.com/uibcdf/smonitor/pull/34) changed only this report,
+used `skip-ci` in its branch name and `[skip ci]` in its title, and merged as
+`8ee2dac`. Its required [Python 3.14 test job](https://github.com/uibcdf/smonitor/actions/runs/37154925144),
+[QA and collective E2E jobs](https://github.com/uibcdf/smonitor/actions/runs/37154925156)
+all executed and passed. The hosted CI run inspector counted one executed test
+job; the QA run inspector counted both jobs. The policy check also passed.
+
+The GitHub branch-protection API reports strict required checks `qa`,
+`collective-e2e` and `Test on ubuntu-latest, Python 3.14`, zero required
+approving reviews, and `enforce_admins=false`. The direct push of `65f981f`
+was accepted with GitHub's explicit rule-bypass notice, confirming the intended
+administrator route. These platform observations agree with the implemented
+workflow and the hosted PR result. The scheduled backlog detector and recovery
+matrix outcomes are recorded above. `tests/test_ci_backlog.py` guards the
+skipped-commit detector, and its PR-route test guards the documentation trigger
+and the push-only skip condition.
