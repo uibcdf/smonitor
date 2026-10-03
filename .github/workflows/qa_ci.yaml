@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: 3.13
+          python-version: 3.14
 
       - name: Setup conda env
         uses: mamba-org/setup-micromamba@v3.2.1
@@ -30,7 +30,7 @@ jobs:
               - conda-forge
             channel_priority: strict
           create-args: >-
-            python=3.13
+            python=3.14
           cache-downloads: true
 
       - name: Install package
@@ -86,7 +86,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Check out the sibling libraries beside this one
         run: |
