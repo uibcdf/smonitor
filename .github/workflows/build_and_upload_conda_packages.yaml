@@ -71,7 +71,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Select the committed release route
         id: release_plan
@@ -126,7 +126,7 @@ jobs:
             channel_priority: strict
 
           create-args: >-
-            python=3.13
+            python=3.14
 
       - name: Setup the public release build environment
         if: github.event_name == 'release' && steps.release_plan.outputs.route == 'direct'
@@ -140,7 +140,7 @@ jobs:
               - conda-forge
             channel_priority: strict
           create-args: >-
-            python=3.13
+            python=3.14
 
       - name: Info conda
         if: github.event_name == 'workflow_dispatch' || steps.release_plan.outputs.route == 'direct'
@@ -247,7 +247,7 @@ jobs:
               - conda-forge
             channel_priority: strict
           create-args: >-
-            python=3.13
+            python=3.14
             smonitor=${{ inputs.version || github.event.release.tag_name }}=py_${{ inputs.build_number || 0 }}
 
       - name: Run the installed command

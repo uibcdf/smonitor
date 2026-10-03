@@ -62,7 +62,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Verify the staged release decision and exact CI gates
         shell: bash
@@ -88,7 +88,7 @@ jobs:
               - conda-forge
             channel_priority: strict
           create-args: >-
-            python=3.13
+            python=3.14
 
       - name: Derive the exact package identity
         id: identity

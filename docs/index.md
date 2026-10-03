@@ -17,7 +17,7 @@ Precision diagnostics for scientific Python ecosystems.
 ```{image} https://img.shields.io/badge/install%20with-conda-white.svg
 :target: https://anaconda.org/uibcdf/smonitor
 ```
-```{image} https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-white.svg
+```{image} https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-white.svg
 :target: https://www.python.org/downloads/
 ```
 :::
