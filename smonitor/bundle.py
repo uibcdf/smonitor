@@ -3,12 +3,14 @@ from __future__ import annotations
 import json
 import platform
 import sys
+from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 
 import smonitor
+from smonitor._diagnostics import CODES as INTERNAL_CODES
 from smonitor.config import load_project_config
 from smonitor.core.manager import get_manager
 
@@ -192,6 +194,7 @@ def collect_bundle(
             "filters": manager._policy.get_filters(),
         },
         "codes": manager.get_codes(),
+        "internal_codes": deepcopy(INTERNAL_CODES),
         "signals": manager.get_signals(),
         "providers": {
             identity: {

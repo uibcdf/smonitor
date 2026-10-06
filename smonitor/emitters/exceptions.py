@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 from typing import Callable, Optional, Type
 
+from ..core.capture import get_capture_policy
 from ..core.manager import get_manager
 
 _original_excepthook: Optional[Callable[[Type[BaseException], BaseException, object], None]] = None
@@ -13,7 +14,7 @@ def _smonitor_excepthook(exc_type, exc, tb):
     manager = get_manager()
     manager.emit(
         "ERROR",
-        str(exc),
+        str(exc) if get_capture_policy().exception_text else "",
         source=getattr(exc_type, "__name__", "Exception"),
         exception_type=getattr(exc_type, "__name__", "Exception"),
     )

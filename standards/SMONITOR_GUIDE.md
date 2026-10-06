@@ -47,6 +47,11 @@ At minimum, a sibling library should have:
    bootstrap only), or `register_provider(PACKAGE_ROOT, provider="mylib")` for
    declaration-only registration. Both preserve an already configured application
    policy. Only explicit `use_provider_policy=True` opts into reconfiguration.
+   Applications requiring metadata-only capture should enter
+   `smonitor.diagnostic_scope(safe_extra={...})` before provider calls; providers
+   inspect `get_capture_policy()` before constructing native-error payloads.
+   See `docs/content/user/library-integrators/scoped-capture.md` for permissions,
+   bounded primitives, task/thread propagation and ownership limits.
 3. catalog-driven emission via `DiagnosticBundle` / catalog exceptions and warnings.
 4. `@signal` on public orchestration entry points.
 5. `context_extra(...)` for repeated structured diagnostic fields.

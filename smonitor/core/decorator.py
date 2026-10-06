@@ -2,15 +2,45 @@ from __future__ import annotations
 
 import warnings
 from functools import wraps
+from inspect import iscoroutinefunction
 from random import random
 from time import perf_counter
 from typing import Any, Callable, Optional
 
+from .._diagnostics import CODES
 from . import runtime
+from .capture import (
+    CapturePolicy,
+    capture_facts,
+    derived_metadata,
+    diagnostic_scope,
+    get_capture_policy,
+    safe_metadata,
+)
 from .context import frame_args, pop_frame, push_frame, set_frame_args, set_frame_duration
 from .manager import get_manager
 
 ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
+
+
+def _signal_warning(stage, signal_label, exc):
+    entry = CODES["SMONITOR-SIGNAL-FALLBACK"]
+    facts = {"stage": stage, "signal": signal_label}
+    if get_capture_policy().exception_text:
+        try:
+            facts["detail"] = str(exc)
+        except Exception:
+            facts["detail"] = type(exc).__name__
+        template = entry["dev_message"]
+    else:
+        template = entry["message"]
+        facts["signal"] = signal_label[:256] if type(signal_label) is str else "unknown"
+    try:
+        warnings.warn(template.format_map(facts), RuntimeWarning, stacklevel=3)
+    except Exception:
+        # Diagnostic failures, including warnings promoted to errors, cannot
+        # replace the operation's exception or prevent a successful call.
+        pass
 
 
 def _summarize_args(args: tuple[Any, ...], kwargs: dict[str, Any]) -> dict[str, Any]:
@@ -48,6 +78,8 @@ def signal(
     tags: Optional[list[str]] = None,
     exception_level: str = "ERROR",
     extra_factory: Optional[ExtraFactory] = None,
+    capture_policy: Optional[CapturePolicy] = None,
+    safe_extra: Optional[dict[str, Any]] = None,
 ):
     def decorator(fn: Callable[..., Any]):
         # Decided once, at decoration time: only a callable whose qualname is
@@ -67,10 +99,10 @@ def signal(
         # Layout: [config, profiling, sample_rate, slow_ms, args_summary]
         plan: list[Any] = [None, False, 1.0, 0.0, False]
 
-        @wraps(fn)
-        def wrapper(*args: Any, **kwargs: Any):
+        def begin(args, kwargs):
             if not runtime.signals_enabled:
-                return fn(*args, **kwargs)
+                return None
+            policy = get_capture_policy()
 
             try:
                 manager = get_manager()
@@ -82,24 +114,16 @@ def signal(
                     plan[3] = config.slow_signal_ms
                     plan[4] = config.args_summary
             except Exception as exc:
-                warnings.warn(
-                    f"SMonitor signal setup failed for {signal_label}: {exc}",
-                    RuntimeWarning,
-                    stacklevel=2,
-                )
-                return fn(*args, **kwargs)
+                _signal_warning("setup", signal_label, exc)
+                return None
 
             if not config.enabled:
-                return fn(*args, **kwargs)
+                return None
 
             try:
                 manager.record_call()
             except Exception as exc:
-                warnings.warn(
-                    f"SMonitor signal record_call failed for {signal_label}: {exc}",
-                    RuntimeWarning,
-                    stacklevel=2,
-                )
+                _signal_warning("record_call", signal_label, exc)
 
             should_profile = False
             should_measure_slow = False
@@ -110,139 +134,229 @@ def signal(
                 if should_profile or should_measure_slow:
                     start = perf_counter()
             except Exception as exc:
-                warnings.warn(
-                    f"SMonitor signal profiling setup failed for {signal_label}: {exc}",
-                    RuntimeWarning,
-                    stacklevel=2,
-                )
+                _signal_warning("profiling setup", signal_label, exc)
 
             try:
-                args_summary = _summarize_args(args, kwargs) if plan[4] else None
-            except Exception as exc:
-                warnings.warn(
-                    f"SMonitor signal argument summary failed for {signal_label}: {exc}",
-                    RuntimeWarning,
-                    stacklevel=2,
+                args_summary = (
+                    _summarize_args(args, kwargs) if plan[4] and policy.arguments else None
                 )
+            except Exception as exc:
+                _signal_warning("argument summary", signal_label, exc)
                 args_summary = None
 
             frame_extra = None
-            if extra_factory is not None:
+            if not policy.extra:
+                frame_extra = capture_facts()
+            if extra_factory is not None and policy.extra:
                 try:
                     frame_extra = extra_factory(args, kwargs)
                 except Exception as exc:
-                    warnings.warn(
-                        f"SMonitor signal extra_factory failed for {signal_label}: {exc}",
-                        RuntimeWarning,
-                        stacklevel=2,
-                    )
+                    _signal_warning("extra_factory", signal_label, exc)
 
             module = _resolve_owner_module(fn, args) if may_be_method and args else fn_module
 
             frame = None
             try:
-                frame = push_frame(fn_name, module, args=args_summary, tags=tags, extra=frame_extra)
-            except Exception as exc:
-                warnings.warn(
-                    f"SMonitor signal push_frame failed for {signal_label}: {exc}",
-                    RuntimeWarning,
-                    stacklevel=2,
+                frame = push_frame(
+                    fn_name,
+                    module,
+                    args=args_summary,
+                    tags=tags if policy.extra else None,
+                    extra=frame_extra,
                 )
-
-            try:
-                return fn(*args, **kwargs)
             except Exception as exc:
+                _signal_warning("push_frame", signal_label, exc)
+
+            return (
+                manager,
+                config,
+                policy,
+                frame,
+                module,
+                start,
+                should_profile,
+                should_measure_slow,
+                frame_extra,
+            )
+
+        def on_failure(call, args, kwargs, exc):
+            (
+                manager,
+                config,
+                policy,
+                frame,
+                module,
+                start,
+                should_profile,
+                should_measure_slow,
+                frame_extra,
+            ) = call
+
+            if policy.arguments and frame is not None and frame_args(frame) is None:
                 try:
-                    if frame is not None and frame_args(frame) is None:
-                        set_frame_args(frame, _summarize_args(args, kwargs))
-                    if not getattr(exc, "__smonitor_emitted__", False):
-                        source = f"{module}.{fn_name}"
-                        # A CatalogException already resolved its own code and
-                        # structured extra; carry both onto the event rather
-                        # than emitting an uncoded one that drops what the
-                        # exception knows about itself.
-                        code = getattr(exc, "code", None)
-                        if not isinstance(code, str):
-                            code = None
-                        extra = {}
-                        catalog_extra = getattr(exc, "extra", None)
-                        if isinstance(catalog_extra, dict):
-                            extra.update(catalog_extra)
-                        extra["source_module"] = module
+                    set_frame_args(frame, _summarize_args(args, kwargs))
+                except Exception as summary_exc:
+                    _signal_warning("argument summary", signal_label, summary_exc)
+            try:
+                state = BaseException.__getattribute__(exc, "__dict__")
+                already_emitted = (
+                    getattr(exc, "__smonitor_emitted__", False)
+                    if policy.exception_text
+                    else state.get("__smonitor_emitted__", False)
+                )
+                if not already_emitted:
+                    source = f"{module}.{fn_name}"
+                    # A CatalogException already resolved its own code and
+                    # structured extra; carry both onto the event rather
+                    # than emitting an uncoded one that drops what the
+                    # exception knows about itself.
+                    code = (
+                        getattr(exc, "code", None) if policy.exception_text else state.get("code")
+                    )
+                    if type(code) is not str:
+                        code = None
+                    if not policy.exception_text and code not in manager.get_codes():
+                        code = "SMONITOR-NATIVE-FAILURE"
+                    extra = {}
+                    catalog_extra = getattr(exc, "extra", None) if policy.extra else None
+                    if isinstance(catalog_extra, dict):
+                        extra.update(catalog_extra)
+                    extra["source_module"] = module
+                    if frame_extra:
+                        extra.update(frame_extra)
+                    manager.emit(
+                        exception_level,
+                        str(exc) if policy.exception_text else "",
+                        source=source,
+                        code=code,
+                        exception_type=type(exc).__name__,
+                        extra=extra,
+                    )
+                    try:
+                        if policy.exception_text:
+                            setattr(exc, "__smonitor_emitted__", True)
+                        else:
+                            state["__smonitor_emitted__"] = True
+                    except Exception:
+                        pass
+            except Exception as smonitor_exc:
+                _signal_warning("exception emission", signal_label, smonitor_exc)
+
+        def finish(call):
+            (
+                manager,
+                config,
+                policy,
+                frame,
+                module,
+                start,
+                should_profile,
+                should_measure_slow,
+                frame_extra,
+            ) = call
+
+            if start is not None:
+                try:
+                    duration_ms = (perf_counter() - start) * 1000.0
+                    if frame is not None:
+                        # Set before the frame is popped, so a slow-signal
+                        # event emitted just below carries it in its context.
+                        set_frame_duration(frame, duration_ms)
+                    key = f"{module}.{fn_name}"
+                    if should_profile:
+                        manager.record_timing(
+                            key,
+                            duration_ms,
+                            tags=tags if policy.extra else None,
+                            meta=frame_extra,
+                        )
+                    if should_measure_slow and duration_ms >= plan[3]:
+                        extra = {
+                            "module": module,
+                            "function": fn_name,
+                            "duration_ms": duration_ms,
+                            "threshold_ms": plan[3],
+                            "cache_state": "n/a",
+                        }
+                        if tags and policy.extra:
+                            extra["signal_tags"] = list(tags)
                         if frame_extra:
                             extra.update(frame_extra)
                         manager.emit(
-                            exception_level,
-                            str(exc),
-                            source=source,
-                            code=code,
-                            exception_type=exc.__class__.__name__,
+                            config.slow_signal_level,
+                            f"Slow signal call detected for {key}.",
+                            source=key,
+                            category="profiling",
+                            code="SMONITOR-SIGNAL-SLOW",
+                            tags=tags,
                             extra=extra,
+                            safe_extra=derived_metadata(extra) if not policy.extra else None,
                         )
-                        try:
-                            setattr(exc, "__smonitor_emitted__", True)
-                        except Exception:
-                            pass
-                except Exception as smonitor_exc:
-                    warnings.warn(
-                        f"SMonitor signal exception emission failed for "
-                        f"{signal_label}: {smonitor_exc}",
-                        RuntimeWarning,
-                        stacklevel=2,
-                    )
+                except Exception as exc:
+                    _signal_warning("finalization", signal_label, exc)
+            if frame is not None:
+                try:
+                    pop_frame()
+                except Exception as exc:
+                    _signal_warning("pop_frame", signal_label, exc)
+
+        def invoke_scope():
+            from contextlib import nullcontext
+
+            from .capture import DETAILED
+
+            return (
+                diagnostic_scope(capture_policy or DETAILED, safe_extra=approved)
+                if capture_policy is not None or approved
+                else nullcontext()
+            )
+
+        approved = safe_metadata(safe_extra)
+        if capture_policy is not None and type(capture_policy) is not CapturePolicy:
+            from .._diagnostics import CapturePolicyError
+
+            raise CapturePolicyError()
+
+        @wraps(fn)
+        def invoke(*args: Any, **kwargs: Any):
+            if not runtime.signals_enabled:
+                return fn(*args, **kwargs)
+            call = begin(args, kwargs)
+            try:
+                return fn(*args, **kwargs)
+            except Exception as exc:
+                if call is not None:
+                    on_failure(call, args, kwargs, exc)
                 raise
             finally:
-                if start is not None:
+                if call is not None:
+                    finish(call)
+
+        if iscoroutinefunction(fn):
+
+            @wraps(fn)
+            async def async_wrapper(*args: Any, **kwargs: Any):
+                with invoke_scope():
+                    call = begin(args, kwargs)
                     try:
-                        duration_ms = (perf_counter() - start) * 1000.0
-                        if frame is not None:
-                            # Set before the frame is popped, so a slow-signal
-                            # event emitted just below carries it in its context.
-                            set_frame_duration(frame, duration_ms)
-                        key = f"{module}.{fn_name}"
-                        if should_profile:
-                            manager.record_timing(
-                                key,
-                                duration_ms,
-                                tags=tags,
-                                meta=frame_extra,
-                            )
-                        if should_measure_slow and duration_ms >= plan[3]:
-                            extra = {
-                                "module": module,
-                                "function": fn_name,
-                                "duration_ms": duration_ms,
-                                "threshold_ms": plan[3],
-                                "cache_state": "n/a",
-                            }
-                            if tags:
-                                extra["signal_tags"] = list(tags)
-                            if frame_extra:
-                                extra.update(frame_extra)
-                            manager.emit(
-                                config.slow_signal_level,
-                                f"Slow signal call detected for {key}.",
-                                source=key,
-                                category="profiling",
-                                code="SMONITOR-SIGNAL-SLOW",
-                                tags=tags,
-                                extra=extra,
-                            )
+                        return await fn(*args, **kwargs)
                     except Exception as exc:
-                        warnings.warn(
-                            f"SMonitor signal finalization failed for {signal_label}: {exc}",
-                            RuntimeWarning,
-                            stacklevel=2,
-                        )
-                if frame is not None:
-                    try:
-                        pop_frame()
-                    except Exception as exc:
-                        warnings.warn(
-                            f"SMonitor signal pop_frame failed for {signal_label}: {exc}",
-                            RuntimeWarning,
-                            stacklevel=2,
-                        )
+                        if call is not None:
+                            on_failure(call, args, kwargs, exc)
+                        raise
+                    finally:
+                        if call is not None:
+                            finish(call)
+
+            return async_wrapper
+
+        if capture_policy is None and not approved:
+            return invoke
+
+        @wraps(fn)
+        def wrapper(*args: Any, **kwargs: Any):
+            with invoke_scope():
+                return invoke(*args, **kwargs)
 
         return wrapper
 

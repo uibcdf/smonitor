@@ -2,6 +2,9 @@
 
 This page covers integration helpers beyond basic `@signal` usage.
 
+For bounded diagnostics without argument `repr`, native exception text or inherited
+payloads, see [scoped diagnostic capture](scoped-capture.md).
+
 ## `DiagnosticBundle`
 
 Use `DiagnosticBundle` to centralize warning/error emission from catalog

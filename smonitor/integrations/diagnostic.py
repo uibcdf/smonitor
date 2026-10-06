@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar
 
 from smonitor.core import runtime
+from smonitor.core.capture import get_capture_policy
 
 from .core import emit_from_catalog, merge_extra
 
@@ -187,7 +188,9 @@ class CatalogWarning(Warning):
         # and library metadata on every construction, including a rebuild; those
         # inputs do not restore the occurrence fields. Treat the text as
         # authoritative rather than appending its catalog hint a second time.
-        args_only_rebuild = message is not None and not extra
+        args_only_rebuild = (
+            message is not None and not extra and get_capture_policy().exception_text
+        )
 
         resolved_extra = merge_extra(meta, extra)
         resolved_extra.setdefault("caller", self.catalog_key or type(self).__name__)
@@ -336,7 +339,7 @@ class DiagnosticBundle:
         instance_extra: Dict[str, Any] = {}
         if isinstance(message_or_warning, Warning):
             cls_name = type(message_or_warning).__name__
-            msg = str(message_or_warning)
+            msg = str(message_or_warning) if get_capture_policy().exception_text else ""
             cat = type(message_or_warning)
             if isinstance(message_or_warning, CatalogWarning):
                 # The instance already rendered itself from this same catalog.
@@ -379,7 +382,9 @@ class DiagnosticBundle:
                             {
                                 "catalog_warning_class": cls_name,
                                 "original_message": msg,
-                                "emit_error": str(exc),
+                                "emit_error": str(exc)
+                                if get_capture_policy().exception_text
+                                else None,
                             },
                         ),
                     )
@@ -417,7 +422,10 @@ class DiagnosticBundle:
         extra: Optional[Dict[str, Any]] = None,
     ) -> None:
         if isinstance(message_or_warning, Warning):
-            msg, cat = str(message_or_warning), type(message_or_warning)
+            msg, cat = (
+                str(message_or_warning) if get_capture_policy().exception_text else "",
+                type(message_or_warning),
+            )
         else:
             msg, cat = message_or_warning, category or UserWarning
 

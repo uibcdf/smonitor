@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `integrations.register_provider()` registers declarations independently;
   `ensure_configured()` retains first-use bootstrap and offers an explicit
   policy opt-in. `resolve(profile=...)` renders without reconfiguration (#38).
+- Diagnostic fallback failures and promoted runtime warnings preserve the native
+  exception or successful return. Failed argument `repr` no longer prevents error
+  emission (#37; also guards the failure mechanism reported in #36).
+
+### Added
+
+- Immutable `CapturePolicy`, `diagnostic_scope()` and `@signal(capture_policy=...)`
+  provide task-local metadata-only diagnostics. Explicit `emit(metadata_only=True,
+  safe_extra=...)` excludes inherited payloads before processing; deferred summaries
+  preserve restrictions. Async signals span awaited execution (#37).
 
 ## [0.18.0] - 2026-09-26
 

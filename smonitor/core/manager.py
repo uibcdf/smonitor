@@ -13,8 +13,18 @@ from pathlib import Path
 from time import time
 from typing import Any, Dict, Iterable, List, Optional
 
+from .._diagnostics import CODES as INTERNAL_CODES
 from ..policy.engine import PolicyEngine
 from ..validation import validate_event
+from .capture import (
+    DETAILED,
+    capture_facts,
+    capture_key,
+    capture_state,
+    derived_metadata,
+    diagnostic_scope,
+    get_capture_policy,
+)
 from .context import get_context
 from .fingerprint import build_event_fingerprint
 from .human_summary import build_human_summary
@@ -431,6 +441,9 @@ class Manager:
         meta: Optional[Dict[str, Any]] = None,
         tags: Optional[List[str]] = None,
     ) -> None:
+        if not get_capture_policy().extra:
+            meta = capture_facts()
+            tags = None
         self._timings.setdefault(key, []).append(duration_ms)
         # timeline buffer
         if self._config.profiling_buffer_size > 0:
@@ -456,18 +469,31 @@ class Manager:
         code: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
         profile: Optional[str] = None,
+        safe_extra: Optional[Dict[str, Any]] = None,
     ) -> tuple[str, Optional[str]]:
         """Resolves a message and hint from code/template without emitting an event."""
+        policy = get_capture_policy()
+        facts = capture_facts(safe_extra)
         resolved_msg, hint, _ = self._resolve_message_and_hint(
-            message or "", code, extra or {}, profile=profile
+            (message or "") if policy.exception_text else "",
+            code,
+            {**(extra or {}), **facts} if policy.extra else facts,
+            profile=profile,
+            safe_extra=safe_extra,
         )
         return resolved_msg, hint
 
     def _resolve_message_and_hint(
-        self, message: str, code: Optional[str], extra: Dict[str, Any], *, profile=None
+        self,
+        message: str,
+        code: Optional[str],
+        extra: Dict[str, Any],
+        *,
+        profile=None,
+        safe_extra=None,
     ) -> tuple[str, Optional[str], Optional[Dict[str, Any]]]:
         """Internal helper to resolve profile-based messages and hints."""
-        code_meta = self._codes.get(code) if code else None
+        code_meta = (self._codes.get(code) or INTERNAL_CODES.get(code)) if code else None
         if not isinstance(code_meta, dict):
             # A `CODES` entry that is not a mapping -- a code pointing straight at
             # a string is the common shape -- used to reach `.get` and raise
@@ -477,6 +503,34 @@ class Manager:
             # the entry, and `strict_config` still refuses to start on it.
             code_meta = None
         profile = self._config.profile if profile is None else profile
+        if not get_capture_policy().exception_text:
+            from string import Formatter
+
+            facts = capture_facts(safe_extra)
+            template = None
+            hint = None
+            if code_meta:
+                template = code_meta.get("metadata_message") or _first_present(
+                    code_meta, _MESSAGE_FALLBACKS.get(profile, _MESSAGE_FALLBACKS[_DEFAULT_PROFILE])
+                )
+                hint = code_meta.get("metadata_hint")
+            fallback = INTERNAL_CODES["SMONITOR-METADATA-ONLY"]["message"]
+
+            def render(value, default):
+                if type(value) is not str:
+                    return default
+                try:
+                    # Only simple approved fields: no attribute/index traversal.
+                    if any(
+                        field is not None and field not in facts
+                        for _, field, _, _ in Formatter().parse(value)
+                    ):
+                        return default
+                    return value.format_map(facts)
+                except (ValueError, KeyError, TypeError, OverflowError):
+                    return default
+
+            return render(template, fallback), render(hint, None), code_meta
         if code_meta and (message is None or message == ""):
             message = (
                 _first_present(
@@ -517,7 +571,7 @@ class Manager:
             str(extra.get("caller") or ""),
             str(event.get("message") or ""),
         ]
-        return "|".join(parts)
+        return "|".join(parts) + capture_key()
 
     def _build_coalesced_warning_summary(self, state: Dict[str, Any]) -> Dict[str, Any]:
         return {
@@ -546,7 +600,35 @@ class Manager:
             return None
         if event.get("code") in {"SMONITOR-WARNING-COALESCED", "SMONITOR-EVENT-DUPLICATE-SUMMARY"}:
             return None
-        return event.get("fingerprint")
+        fingerprint = event.get("fingerprint")
+        return fingerprint + capture_key() if fingerprint else None
+
+    def _emit_deferred_summary(self, state, level, message, code, summary):
+        saved = state["_capture"]
+        with diagnostic_scope(saved.policy, safe_extra=dict(saved.facts)):
+            approved = None
+            if not get_capture_policy().extra:
+                approved = derived_metadata(
+                    {
+                        key: summary[key]
+                        for key in (
+                            "suppressed_count",
+                            "total_occurrences",
+                            "fingerprint",
+                            "policy",
+                        )
+                        if key in summary
+                    }
+                )
+            self.emit(
+                level,
+                message,
+                source=state.get("source"),
+                category="diagnostics",
+                code=code,
+                extra=summary,
+                safe_extra=approved,
+            )
 
     def _build_duplicate_summary(self, state: Dict[str, Any]) -> Dict[str, Any]:
         return {
@@ -571,13 +653,12 @@ class Manager:
             **state,
             "suppressed_count": 0,
         }
-        self.emit(
+        self._emit_deferred_summary(
+            state,
             state.get("level") or "INFO",
             "Duplicate events were summarized.",
-            source=state.get("source"),
-            category="diagnostics",
-            code="SMONITOR-EVENT-DUPLICATE-SUMMARY",
-            extra=summary,
+            "SMONITOR-EVENT-DUPLICATE-SUMMARY",
+            summary,
         )
         return summary
 
@@ -596,7 +677,8 @@ class Manager:
         state = self._duplicate_state.get(key)
         if state is None:
             self._duplicate_state[key] = {
-                "fingerprint": key,
+                "fingerprint": event.get("fingerprint"),
+                "_capture": capture_state(),
                 "policy": self._config.duplicate_policy,
                 "count": 1,
                 "suppressed_count": 0,
@@ -636,13 +718,12 @@ class Manager:
             **state,
             "count": 0,
         }
-        self.emit(
+        self._emit_deferred_summary(
+            state,
             "WARNING",
             "Coalesced repeated warning events.",
-            source=state.get("source"),
-            category="diagnostics",
-            code="SMONITOR-WARNING-COALESCED",
-            extra=summary,
+            "SMONITOR-WARNING-COALESCED",
+            summary,
         )
         return summary
 
@@ -662,6 +743,7 @@ class Manager:
         state = self._warning_coalesce_state.get(key)
         if state is None:
             self._warning_coalesce_state[key] = {
+                "_capture": capture_state(),
                 "count": 0,
                 "last_timestamp": now,
                 "message": event.get("message"),
@@ -683,6 +765,7 @@ class Manager:
         if now - state["last_timestamp"] > self._config.warning_coalesce_window_s:
             self._finalize_coalesced_warning(key)
             self._warning_coalesce_state[key] = {
+                "_capture": capture_state(),
                 "count": 0,
                 "last_timestamp": now,
                 "message": event.get("message"),
@@ -733,17 +816,55 @@ class Manager:
         tags: Optional[List[str]] = None,
         exception_type: Optional[str] = None,
         correlation_id: Optional[str] = None,
+        metadata_only: bool = False,
+        safe_extra: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
+        if metadata_only or safe_extra is not None:
+            from .capture import METADATA_ONLY
+
+            with diagnostic_scope(
+                METADATA_ONLY if metadata_only else DETAILED, safe_extra=safe_extra
+            ):
+                return self.emit(
+                    level,
+                    message,
+                    source=source,
+                    extra=extra,
+                    category=category,
+                    code=code,
+                    tags=tags,
+                    exception_type=exception_type,
+                    correlation_id=correlation_id,
+                )
+        policy = get_capture_policy()
+        facts = capture_facts(safe_extra)
         # Copied, never aliased: the event's `extra` is enriched below with
         # `smonitor`, `title` and the resolved `hint`. Writing those into the
         # caller's own dict would leak one event's hint onto the next event
         # emitted with the same dict — including events with no code at all.
-        extra_data = dict(extra) if extra else {}
+        extra_data = {**(dict(extra) if extra else {}), **facts} if policy.extra else facts
+        if not policy.extra:
+            # Drop unapproved metadata before fingerprinting/routing/observers.
+            source = source[:256] if type(source) is str else None
+            code = code if type(code) is str else None
+            category = category[:256] if type(category) is str else None
+            exception_type = exception_type[:128] if type(exception_type) is str else None
+            correlation_id = correlation_id[:256] if type(correlation_id) is str else None
+            tags = None
+            if type(level) is not str or len(level) > 32:
+                from .._diagnostics import CapturePolicyError
+
+                raise CapturePolicyError()
+        if not policy.exception_text:
+            message = ""
         resolved_correlation_id = (
             correlation_id or extra_data.get("correlation_id") or self._default_correlation_id
         )
         if not self.enabled:
-            hint = None
+            if not policy.exception_text:
+                message, hint, _ = self._resolve_message_and_hint(message, code, extra_data)
+            else:
+                hint = None
             return {
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "level": level,
@@ -807,7 +928,9 @@ class Manager:
         event["extra"].setdefault("smonitor", True)
 
         if code_meta:
-            event["extra"].setdefault("title", code_meta.get("title"))
+            title = code_meta.get("title")
+            if policy.extra or type(title) is str:
+                event["extra"].setdefault("title", title)
 
         if hint:
             event["extra"].setdefault("hint", hint)
@@ -882,6 +1005,8 @@ class Manager:
             except Exception:
                 # Handlers must not raise
                 name = getattr(handler, "name", handler.__class__.__name__)
+                if not policy.extra and type(name) is not str:
+                    name = type(handler).__name__
                 self._handler_errors[name] = self._handler_errors.get(name, 0) + 1
                 threshold = self._config.handler_error_threshold
                 count = self._handler_errors[name]
@@ -1061,6 +1186,8 @@ class Manager:
         profiling_meta = {}
         hooks = self._config.profiling_hooks or []
         for hook in hooks:
+            if not get_capture_policy().extra:
+                break
             try:
                 data = hook()
                 if isinstance(data, dict):

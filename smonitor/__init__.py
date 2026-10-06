@@ -36,6 +36,13 @@ from .config import (
     load_project_config,
     validate_project_config,
 )
+from .core.capture import (
+    METADATA_ONLY,
+    CapturePolicy,
+    CapturePolicyError,
+    diagnostic_scope,
+    get_capture_policy,
+)
 from .core.decorator import signal
 from .core.manager import CONFIGURE_PARAMETERS, get_manager
 from .handlers.console import ConsoleHandler, RichConsoleHandler
@@ -51,6 +58,11 @@ __all__ = [
     "resolve",
     "report",
     "signal",
+    "CapturePolicy",
+    "CapturePolicyError",
+    "METADATA_ONLY",
+    "diagnostic_scope",
+    "get_capture_policy",
     "get_manager",
     "export_bundle",
     "collect_bundle",

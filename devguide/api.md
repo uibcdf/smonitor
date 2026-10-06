@@ -74,6 +74,9 @@ smonitor.emit('WARNING', 'Selection is ambiguous', source='molsysmt.select')
 ```
 
 ### resolve(message=None, *, code=None, extra=None, profile=None)
+
+`profile` selects an audience without changing runtime policy. `safe_extra` can
+declare approved primitive fields in an active diagnostic capture scope.
 Resolve a message and hint from a code or template without emitting an event.
 
 ```python

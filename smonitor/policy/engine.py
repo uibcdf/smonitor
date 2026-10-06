@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 from random import random
 from typing import Any, Dict, Iterable, List, Tuple
 
+from ..core.capture import DETAILED, get_capture_policy
+
 
 @dataclass
 class PolicyState:
@@ -55,35 +57,36 @@ class PolicyEngine:
                 return event, []
 
         # Routing
+        allow_transforms = get_capture_policy() == DETAILED
         target_handlers = list(handlers)
         for rule in self._routes:
             when = rule.get("when", {})
             if not self._match(event, when):
                 continue
             transform = rule.get("transform")
-            if isinstance(transform, dict):
+            if allow_transforms and isinstance(transform, dict):
                 event.update(transform)
             set_fields = rule.get("set")
-            if isinstance(set_fields, dict):
+            if allow_transforms and isinstance(set_fields, dict):
                 event.update(set_fields)
             set_extra = rule.get("set_extra")
-            if isinstance(set_extra, dict):
+            if allow_transforms and isinstance(set_extra, dict):
                 extra = event.get("extra")
                 if not isinstance(extra, dict):
                     extra = {}
                 extra.update(set_extra)
                 event["extra"] = extra
             rename = rule.get("rename")
-            if isinstance(rename, dict):
+            if allow_transforms and isinstance(rename, dict):
                 for old, new in rename.items():
                     if old in event:
                         event[new] = event.pop(old)
             drop_fields = rule.get("drop_fields")
-            if isinstance(drop_fields, list):
+            if allow_transforms and isinstance(drop_fields, list):
                 for key in drop_fields:
                     event.pop(key, None)
             add_tags = rule.get("add_tags")
-            if isinstance(add_tags, list):
+            if allow_transforms and isinstance(add_tags, list):
                 current = event.get("tags") or []
                 if isinstance(current, list):
                     event["tags"] = list(dict.fromkeys(current + add_tags))

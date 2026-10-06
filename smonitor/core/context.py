@@ -5,6 +5,8 @@ from datetime import datetime, timezone
 from time import time as _now
 from typing import Any, Dict, List, Optional
 
+from .capture import get_capture_policy
+
 # A breadcrumb frame is a plain list, and the stack is a linked list threaded
 # through the frame's last slot — innermost frame first, `None` at the bottom.
 #
@@ -98,6 +100,9 @@ def frame_as_dict(frame: Frame) -> Dict[str, Any]:
 
 
 def get_context(trace_depth: Optional[int] = None) -> Optional[Dict[str, Any]]:
+    policy = get_capture_policy()
+    if not policy.inherited_context:
+        return None
     frame = _context_stack.get()
     if frame is None:
         return None
@@ -111,8 +116,15 @@ def get_context(trace_depth: Optional[int] = None) -> Optional[Dict[str, Any]]:
     # Collected innermost-first; the payload is ordered outermost-first.
     stack.reverse()
     chain = [f"{f[MODULE]}.{f[FUNCTION]}" for f in stack]
+    frames = [frame_as_dict(f) for f in stack]
+    for payload in frames:
+        if not policy.arguments:
+            payload["args"] = None
+        if not policy.extra:
+            payload["extra"] = None
+            payload["tags"] = None
     return {
         "chain": chain,
         "depth": len(chain),
-        "frames": [frame_as_dict(f) for f in stack],
+        "frames": frames,
     }

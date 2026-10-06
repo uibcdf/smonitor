@@ -4,6 +4,7 @@ import logging
 from typing import Optional
 
 from ..core import runtime
+from ..core.capture import get_capture_policy
 from ..core.manager import get_manager
 
 #: `logging.captureWarnings(True)` routes Python warnings through this logger.
@@ -19,10 +20,12 @@ class SmonitorLoggingHandler(logging.Handler):
             # Already emitted as a structured catalog event; this is the same
             # diagnostic coming back as formatted text with no code or fields.
             return
-        try:
-            message = record.getMessage()
-        except Exception:
-            message = str(record.msg)
+        message = ""
+        if get_capture_policy().exception_text:
+            try:
+                message = record.getMessage()
+            except Exception:
+                message = str(record.msg)
         manager.emit(
             record.levelname,
             message,

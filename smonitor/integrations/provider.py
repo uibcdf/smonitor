@@ -5,6 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
 
+from .._diagnostics import CODES as INTERNAL_CODES
 from .._diagnostics import ProviderRegistrationError
 from ..config import validate_codes_signals
 from ..config.discovery import load_config_from_path
@@ -49,6 +50,7 @@ def register_provider(package_root: Path, *, provider: str | None = None) -> dic
     )
     manager = get_manager()
     with manager._catalog_lock:
+        existing_codes = {**INTERNAL_CODES, **manager._codes}
         previous = manager._providers.get(identity)
         if previous is not None:
             if previous != record:
@@ -57,7 +59,7 @@ def register_provider(package_root: Path, *, provider: str | None = None) -> dic
                 )
             return deepcopy(previous)
         conflicts = sorted(
-            [key for key in codes if key in manager._codes and manager._codes[key] != codes[key]]
+            [key for key in codes if key in existing_codes and existing_codes[key] != codes[key]]
             + [
                 key
                 for key in signals

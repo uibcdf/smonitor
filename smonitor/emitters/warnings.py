@@ -4,6 +4,7 @@ import warnings
 from typing import Any, Callable, Optional
 
 from ..core import runtime
+from ..core.capture import get_capture_policy
 from ..core.manager import get_manager
 
 _original_showwarning: Optional[Callable[..., Any]] = None
@@ -21,9 +22,9 @@ def _smonitor_showwarning(message, category, filename, lineno, file=None, line=N
         source = filename
     manager.emit(
         "WARNING",
-        str(message),
+        str(message) if get_capture_policy().exception_text else "",
         source=source,
-        category=getattr(category, "__name__", str(category)),
+        category=category.__name__,
         extra={"smonitor": True},
     )
 

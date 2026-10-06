@@ -16,6 +16,9 @@ This section is generated from SMonitor source docstrings and signatures.
    resolve
    report
    signal
+   diagnostic_scope
+   get_capture_policy
+   CapturePolicy
    export_bundle
    collect_bundle
 ```
@@ -39,6 +42,7 @@ This section is generated from SMonitor source docstrings and signatures.
    :nosignatures:
 
    integrations.ensure_configured
+   integrations.register_provider
    integrations.emit_from_catalog
    integrations.reset_configured_packages
 ```

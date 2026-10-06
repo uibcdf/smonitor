@@ -90,6 +90,7 @@ integration-testing-template.md
 profile-decision-matrix.md
 handlers-and-routing.md
 integration-api-advanced.md
+scoped-capture.md
 ai-agents-workflow.md
 ../message-style-by-profile.md
 ../production-checklist.md

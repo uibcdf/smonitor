@@ -9,22 +9,32 @@ from .core.manager import get_manager
 
 @contextmanager
 def span(name: str, **meta: Any):
-    manager = get_manager()
-    if not manager.config.profiling:
+    try:
+        manager = get_manager()
+        do_profile = manager.config.profiling
+        if do_profile and manager.config.profiling_sample_rate < 1.0:
+            from random import random
+
+            do_profile = random() <= manager.config.profiling_sample_rate
+        start = perf_counter() if do_profile else None
+    except Exception as exc:
+        from .core.decorator import _signal_warning
+
+        _signal_warning("span setup", name, exc)
+        do_profile = False
+    if not do_profile:
         yield
         return
-    if manager.config.profiling_sample_rate < 1.0:
-        from random import random
-
-        if random() > manager.config.profiling_sample_rate:
-            yield
-            return
-    start = perf_counter()
     try:
         yield
     finally:
-        duration_ms = (perf_counter() - start) * 1000.0
-        manager.record_timing(name, duration_ms, span=True, meta=meta)
+        try:
+            duration_ms = (perf_counter() - start) * 1000.0
+            manager.record_timing(name, duration_ms, span=True, meta=meta)
+        except Exception as exc:
+            from .core.decorator import _signal_warning
+
+            _signal_warning("span finalization", name, exc)
 
 
 def export_timeline(path: str, format: str = "json") -> None:

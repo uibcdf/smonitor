@@ -242,7 +242,14 @@ def validate_codes_signals(
                 ]
                 if not any(field in entry for field in message_fields):
                     errors.append(f"CODES[{code}] must define a message field")
-                for field in message_fields + ["user_hint", "dev_hint", "qa_hint", "agent_hint"]:
+                for field in message_fields + [
+                    "user_hint",
+                    "dev_hint",
+                    "qa_hint",
+                    "agent_hint",
+                    "metadata_message",
+                    "metadata_hint",
+                ]:
                     if field in entry and not isinstance(entry[field], str):
                         errors.append(f"CODES[{code}].{field} must be a string")
 
