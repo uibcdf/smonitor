@@ -43,7 +43,10 @@ If time is constrained, implement in that order.
 At minimum, a sibling library should have:
 
 1. `_smonitor.py` plus private catalog/meta files.
-2. `ensure_configured(PACKAGE_ROOT)` in package initialization.
+2. `ensure_configured(PACKAGE_ROOT)` in package initialization (first-use
+   bootstrap only), or `register_provider(PACKAGE_ROOT, provider="mylib")` for
+   declaration-only registration. Both preserve an already configured application
+   policy. Only explicit `use_provider_policy=True` opts into reconfiguration.
 3. catalog-driven emission via `DiagnosticBundle` / catalog exceptions and warnings.
 4. `@signal` on public orchestration entry points.
 5. `context_extra(...)` for repeated structured diagnostic fields.

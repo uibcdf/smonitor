@@ -193,6 +193,14 @@ def collect_bundle(
         },
         "codes": manager.get_codes(),
         "signals": manager.get_signals(),
+        "providers": {
+            identity: {
+                "package_root": record["package_root"],
+                "codes": sorted(record["codes"]),
+                "signals": sorted(record["signals"]),
+            }
+            for identity, record in manager.get_providers().items()
+        },
         "report": report,
         "triage": {
             "events_by_code": report.get("events_by_code", {}),

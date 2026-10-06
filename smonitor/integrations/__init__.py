@@ -18,12 +18,15 @@ from .diagnostic import (
 from .diagnostic import (
     _catalog_entry as _catalog_entry,
 )
+from .provider import ProviderRegistrationError, register_provider
 
 # `_catalog_entry` is re-exported for integrators that resolve catalog entries
 # directly, but stays out of `__all__` on purpose: the leading underscore marks
 # it as not part of the public contract frozen for 1.0.
 __all__ = [
     "ensure_configured",
+    "register_provider",
+    "ProviderRegistrationError",
     "reset_configured_packages",
     "merge_extra",
     "context_extra",

@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Provider imports preserve configured application policy. Atomic, idempotent
+  `integrations.register_provider()` registers declarations independently;
+  `ensure_configured()` retains first-use bootstrap and offers an explicit
+  policy opt-in. `resolve(profile=...)` renders without reconfiguration (#38).
+
 ## [0.18.0] - 2026-09-26
 
 ### Added

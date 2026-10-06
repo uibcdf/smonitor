@@ -22,17 +22,25 @@ def _resolve(*args, **kwargs):
     return resolve(*args, **kwargs)
 
 
-_configured_packages: set[str] = set()
-
 #: Guards the memoization below. Without it the membership test and the `add` are a
 #: check-then-act with nothing between them, and two threads both configure.
 _CONFIGURE_LOCK = threading.RLock()
 
 
-def ensure_configured(package_root: Path) -> None:
-    key = str(package_root.resolve())
+def ensure_configured(package_root: Path, *, use_provider_policy: bool = False) -> None:
+    """Register a provider; bootstrap policy only before application configuration.
+
+    An explicit ``use_provider_policy=True`` applies the provider's policy even
+    in a configured application. Repeated ordinary imports never reconfigure it.
+    """
+    from ..core.manager import get_manager
+    from .provider import register_provider
+
+    package_root = Path(package_root).resolve()
+    key = str(package_root)
     with _CONFIGURE_LOCK:
-        if key in _configured_packages:
+        manager = get_manager()
+        if key in manager._configured_packages and not use_provider_policy:
             return
         # Deferred, and deliberately not `smonitor.configure`. Binding the package at
         # module level and reading an attribute off it is unsynchronized, and
@@ -42,8 +50,15 @@ def ensure_configured(package_root: Path) -> None:
         # instead, whose per-module lock makes the second thread wait.
         from smonitor import configure
 
-        configure(config_path=package_root)
-        _configured_packages.add(key)
+        register_provider(package_root)
+        if use_provider_policy or not manager._policy_configured:
+            from ..config import load_project_config
+
+            if not use_provider_policy and load_project_config(Path.cwd()) is not None:
+                configure()
+            else:
+                configure(config_path=package_root)
+        manager._configured_packages.add(key)
 
 
 def reset_configured_packages() -> None:
@@ -51,7 +66,10 @@ def reset_configured_packages() -> None:
 
     Useful for test suites and dynamic multi-config sessions.
     """
-    _configured_packages.clear()
+    from ..core.manager import get_manager
+
+    with _CONFIGURE_LOCK:
+        get_manager()._configured_packages.clear()
 
 
 def context_extra(

@@ -73,7 +73,7 @@ Emit a raw diagnostic event.
 smonitor.emit('WARNING', 'Selection is ambiguous', source='molsysmt.select')
 ```
 
-### resolve(message=None, *, code=None, extra=None)
+### resolve(message=None, *, code=None, extra=None, profile=None)
 Resolve a message and hint from a code or template without emitting an event.
 
 ```python

@@ -5,6 +5,7 @@ from __future__ import annotations
 # the set of configuration keywords from the signature that defines them.
 import inspect
 import re
+import threading
 import warnings
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
@@ -171,6 +172,10 @@ class Manager:
         self._policy = PolicyEngine()
         self._codes: Dict[str, Dict[str, Any]] = {}
         self._signals: Dict[str, Dict[str, Any]] = {}
+        self._catalog_lock = threading.RLock()
+        self._providers: Dict[str, Dict[str, Any]] = {}
+        self._configured_packages: set[str] = set()
+        self._policy_configured = False
         self._counts = {
             "calls_total": 0,
             "warnings_total": 0,
@@ -319,10 +324,11 @@ class Manager:
         }
         if config_updates:
             self._config = replace(self._config, **config_updates)
-        if codes is not None:
-            self._codes = codes
-        if signals is not None:
-            self._signals = signals
+        with self._catalog_lock:
+            if codes is not None:
+                self._codes = codes
+            if signals is not None:
+                self._signals = signals
         if enabled is not None:
             set_signals_enabled(self._config.enabled)
         if run_id is not None:
@@ -364,6 +370,7 @@ class Manager:
             enable_exceptions()
         else:
             disable_exceptions()
+        self._policy_configured = True
 
     def _setup_default_handler(self) -> None:
         """Internal helper to setup the best available console handler based on theme."""
@@ -448,13 +455,16 @@ class Manager:
         *,
         code: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
+        profile: Optional[str] = None,
     ) -> tuple[str, Optional[str]]:
         """Resolves a message and hint from code/template without emitting an event."""
-        resolved_msg, hint, _ = self._resolve_message_and_hint(message or "", code, extra or {})
+        resolved_msg, hint, _ = self._resolve_message_and_hint(
+            message or "", code, extra or {}, profile=profile
+        )
         return resolved_msg, hint
 
     def _resolve_message_and_hint(
-        self, message: str, code: Optional[str], extra: Dict[str, Any]
+        self, message: str, code: Optional[str], extra: Dict[str, Any], *, profile=None
     ) -> tuple[str, Optional[str], Optional[Dict[str, Any]]]:
         """Internal helper to resolve profile-based messages and hints."""
         code_meta = self._codes.get(code) if code else None
@@ -466,7 +476,7 @@ class Manager:
             # trying to report a problem. `validate_project_config` already names
             # the entry, and `strict_config` still refuses to start on it.
             code_meta = None
-        profile = self._config.profile
+        profile = self._config.profile if profile is None else profile
         if code_meta and (message is None or message == ""):
             message = (
                 _first_present(
@@ -1100,6 +1110,13 @@ class Manager:
     def get_codes(self) -> Dict[str, Dict[str, Any]]:
         return dict(self._codes)
 
+    def get_providers(self) -> Dict[str, Dict[str, Any]]:
+        """Return detached provider declarations and unapplied recommendations."""
+        from copy import deepcopy
+
+        with self._catalog_lock:
+            return deepcopy(self._providers)
+
     def get_signals(self) -> Dict[str, Dict[str, Any]]:
         return dict(self._signals)
 
@@ -1127,10 +1144,13 @@ CONFIGURE_PARAMETERS: frozenset[str] = frozenset(
 
 
 _manager_singleton: Optional[Manager] = None
+_MANAGER_LOCK = threading.RLock()
 
 
 def get_manager() -> Manager:
     global _manager_singleton
     if _manager_singleton is None:
-        _manager_singleton = Manager()
+        with _MANAGER_LOCK:
+            if _manager_singleton is None:
+                _manager_singleton = Manager()
     return _manager_singleton

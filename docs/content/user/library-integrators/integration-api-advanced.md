@@ -60,7 +60,40 @@ from smonitor.integrations import ensure_configured
 ensure_configured(PACKAGE_ROOT)
 ```
 
-This loads `_smonitor.py` defaults and avoids repeated ad-hoc configure calls.
+This registers the package's exact `_smonitor.py` catalog and signals. If the
+application has already called `configure()`, its entire runtime policy is
+preserved. Otherwise the helper bootstraps from the application's discovered
+configuration, or the provider's defaults when none exists. The first bootstrap
+selects policy; subsequent provider imports only register declarations. Environment
+overrides keep their existing precedence.
+
+Applications can explicitly apply a provider's recommendations with
+`ensure_configured(PACKAGE_ROOT, use_provider_policy=True)`. This intentionally
+reconfigures runtime policy, even after a previous import.
+
+## `register_provider`
+
+For libraries that only supply diagnostics, prefer:
+
+```python
+from smonitor.integrations import register_provider
+register_provider(PACKAGE_ROOT, provider="mylib")
+```
+
+Registration never installs handlers or bridges and never changes application
+policy. It validates declarations, then merges them atomically under a lock.
+Identical repeated registrations and identical shared definitions are accepted.
+Conflicting code/signal definitions reject the entire registration with
+`ProviderRegistrationError` (`SMONITOR-PROVIDER-CONFLICT`); changing an existing
+provider identity's declarations raises `SMONITOR-PROVIDER-IDENTITY`. Invalid
+declarations raise `SMONITOR-PROVIDER-INVALID`. Loader failures propagate before
+registration. Provider identities default to the resolved package directory.
+Use unique, namespaced codes and signal names; explicit application catalog
+overrides through `configure()` retain their existing behavior.
+
+`get_manager().get_providers()` returns detached declarations, provenance and
+unapplied recommendations. To render for another audience without reconfiguration,
+use `smonitor.resolve(code="MYLIB-W001", profile="agent", extra={...})`.
 
 ## `context_extra`
 
