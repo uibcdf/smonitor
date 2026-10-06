@@ -1,0 +1,6 @@
+﻿smonitor.integrations.register\_provider
+========================================
+
+.. currentmodule:: smonitor.integrations
+
+.. autofunction:: register_provider

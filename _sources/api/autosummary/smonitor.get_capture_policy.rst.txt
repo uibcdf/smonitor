@@ -1,0 +1,6 @@
+﻿smonitor.get\_capture\_policy
+=============================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: get_capture_policy

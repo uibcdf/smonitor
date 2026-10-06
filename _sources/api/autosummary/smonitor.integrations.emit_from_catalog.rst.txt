@@ -1,0 +1,6 @@
+﻿smonitor.integrations.emit\_from\_catalog
+=========================================
+
+.. currentmodule:: smonitor.integrations
+
+.. autofunction:: emit_from_catalog
