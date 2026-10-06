@@ -42,14 +42,16 @@ class TestConfigPlanCache:
             return 1
 
         work()
-        before = len(smonitor.report()["timings"].get("tests.test_signal_hot_path.work", []))
+        timing_key = f"{work.__module__}.{work.__name__}"
+        before = smonitor.report()["timings"][timing_key]["count"]
+        assert before == 1
 
         smonitor.configure(profiling=False)
         work()
         after = smonitor.report()["timings"]
-        recorded = after.get("tests.test_signal_hot_path.work")
+        recorded = after[timing_key]
         # No new timing entry was added by the second call.
-        assert recorded is None or recorded["count"] == max(before, 1)
+        assert recorded["count"] == before
 
     def test_enabling_args_summary_after_first_call_takes_effect(self):
         handler = _configured(profile="user", level="INFO", args_summary=False)

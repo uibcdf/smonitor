@@ -6,8 +6,8 @@ source:
   path: ../../   # repo root
 
 build:
-  number: {{ environ.get('SMONITOR_CONDA_BUILD_NUMBER', '0') }}
-  string: "py_{{ environ.get('SMONITOR_CONDA_BUILD_NUMBER', '0') }}"
+  number: {{ environ.get('MOLSYSSUITE_CONDA_BUILD_NUMBER', environ.get('SMONITOR_CONDA_BUILD_NUMBER', '0')) }}
+  string: "py_{{ environ.get('MOLSYSSUITE_CONDA_BUILD_NUMBER', environ.get('SMONITOR_CONDA_BUILD_NUMBER', '0')) }}"
   noarch: python
   entry_points:
     - smonitor = smonitor.cli:main

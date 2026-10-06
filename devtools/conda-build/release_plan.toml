@@ -2,10 +2,10 @@
 schema = "molsyssuite.conda-plan@1"
 version = "0.19.0"
 package = "smonitor"
-build_number = 0
+build_number = 1
 route = "staged"
 profile = "noarch-python"
-reason = "Provider registration and scoped metadata-only capture add public integration APIs (#38, #37). Qualify the exact installed Conda artifact across all twelve supported OS/Python cells before public release; retain the local build and exact-file promotion route. Consumer adoption remains separate from provider qualification."
+reason = "Provider registration and scoped metadata-only capture add public integration APIs (#38, #37). Qualify the exact installed Conda artifact across all twelve supported OS/Python cells before public release. Build 0 exposed a stale timing-count assertion under importlib collection; build 1 binds the corrected test to a fresh candidate without overwriting staging bytes. Consumer adoption remains separate from provider qualification."
 decision_by = "Repository maintainer via Codex on 2026-10-06"
 artifact_subdirs = ["noarch"]
 test_platforms = ["linux-64", "osx-arm64", "win-64"]
