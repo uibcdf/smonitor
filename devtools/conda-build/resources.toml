@@ -25,4 +25,4 @@ required_steps = ["Install exact artifact", "Validate installed files", "Run ins
 [installed_tests]
 paths = ["tests"]
 pytest_args = ["--receptor=ci", "--color=yes"]
-conda_dependencies = ["pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "versioningit>=3,<4"]
+conda_dependencies = ["pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "versioningit>=3,<4", "PyYAML>=6,<7", "Jinja2>=3,<4", "packaging>=24"]

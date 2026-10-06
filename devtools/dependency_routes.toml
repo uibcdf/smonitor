@@ -1,0 +1,98 @@
+schema = "molsyssuite.dependency-routes@2"
+reason = "Maintained SMonitor distribution controls under uibcdf/smonitor#35 and uibcdf/molsyssuite#45"
+source_routes = []
+source_reason = "No required Python dependencies; optional pytest bridge/collective source integration do not replace required public dependencies"
+
+[[recipes]]
+path = "devtools/conda-build/meta.yaml"
+kind = "noarch-dependencies"
+plan = "devtools/conda-build/release_plan.toml"
+resource_inventory = "devtools/conda-build/resources.toml"
+environment_from_plan = { SMONITOR_CONDA_BUILD_NUMBER = "build_number" }
+reason = "Local noarch publisher with retained version, coordinate, installed-command and public-poststate controls"
+
+[[environments]]
+path = "devtools/conda-envs/build_env.yaml"
+kind = "build-only"
+reason = "Legacy bootstrap only; recipe supplies runtime and candidate/public contexts select explicit strict channels"
+
+[[environments]]
+path = "devtools/conda-envs/development_env.yaml"
+kind = "runtime"
+purpose = "development"
+channel_priority = "strict"
+narrowing_reason = "Routine owner-qualified Python 3.14 route; compatibility jobs select each supported minor"
+reason = "Complete required public closure is Python only; optional tools keep separate qualification"
+
+[[environments]]
+path = "devtools/conda-envs/docs_env.yaml"
+kind = "runtime"
+purpose = "documentation"
+channel_priority = "strict"
+narrowing_reason = "Routine owner-qualified Python 3.14 route; compatibility jobs select each supported minor"
+reason = "Complete required public closure is Python only; optional tools keep separate qualification"
+
+[[environments]]
+path = "devtools/conda-envs/qa_env.yaml"
+kind = "runtime"
+purpose = "test"
+channel_priority = "strict"
+narrowing_reason = "Routine owner-qualified Python 3.14 route; compatibility jobs select each supported minor"
+reason = "Complete required public closure is Python only; optional tools keep separate qualification"
+
+[[environments]]
+path = "devtools/conda-envs/test_env.yaml"
+kind = "runtime"
+purpose = "test"
+channel_priority = "strict"
+narrowing_reason = "Routine owner-qualified Python 3.14 route; compatibility jobs select each supported minor"
+reason = "Complete required public closure is Python only; optional tools keep separate qualification"
+
+[[workflows]]
+path = ".github/workflows/CI.yaml"
+sha256 = "2f94dbd3ccc9df5a7fc0c86df5673d70d7d3986822b45c6c2d46a6ea50c0e34c"
+reason = "Routine Linux/Python 3.14 source test, strict public Conda and no-deps installation"
+
+[[workflows]]
+path = ".github/workflows/CI_full_matrix.yaml"
+sha256 = "ca2a9b8486786a206e07d83602e155c49332a7cd2866c2f5c5efaa225b376b93"
+reason = "Twelve source cells plus separate backlog decision; strict public channels and no-deps editable source"
+
+[[workflows]]
+path = ".github/workflows/build_and_upload_conda_packages.yaml"
+sha256 = "d13e6924cb253d26c2d5fc15ff78d22b2289d529c2b340de190299380637fa8e"
+reason = "Local single noarch producer; exact source/gates before upload, separate historical Windows installed command smoke"
+
+[[workflows]]
+path = ".github/workflows/docs_ci.yaml"
+sha256 = "b2d5e43f27912682735da39b3c566d5742d4618d2154dc04f6d6a00c446a81f7"
+reason = "Documentation runtime with strict public channels and no-deps installation"
+
+[[workflows]]
+path = ".github/workflows/molsyssuite-policy.yml"
+sha256 = "6cc62208156f765ca0456e3bc5f398934263e03afc7063c69afa692c5dafdffd"
+reason = "Existing versioned shared policy call; no component runtime installation"
+
+[[workflows]]
+path = ".github/workflows/promote_conda_package.yaml"
+sha256 = "18560f2f282f5f4fcf92a5faf8de29a5794b5e5a81075d8c1babe15c7622c959"
+reason = "Local same-file promotion and independent public digest/index verification; no rebuild"
+
+[[workflows]]
+path = ".github/workflows/qa_ci.yaml"
+sha256 = "0a49201bd37f9aef1c9b72ab9e91d3d5fd9d411b89b19d64c1bdcea90cdbcd68"
+reason = "Strict QA environment plus separately bounded optional collective source integration; no required sibling source replacement"
+
+[[workflows]]
+path = ".github/workflows/sphinx_docs_to_gh_pages.yaml"
+sha256 = "27e33a4dce9e29cf5bbdb10e11dcf11a29c347a162bfdc2f0d05d3d785848ffa"
+reason = "Documentation runtime with strict public channels; publication action retained"
+
+[[workflows]]
+path = ".github/workflows/test_staged_conda_package.yaml"
+sha256 = "9930bfb576947020bd49f182697f2ad2b032d1ec9bff597298b481715e4a9f0a"
+reason = "Pinned shared installed qualification of the exact archive; no source-provider replacement; all twelve cells retain final provenance checks"
+
+[shared_tool]
+commit = "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918"
+reason = "Accepted general route provider and optional independent source-resource operation under central #45"

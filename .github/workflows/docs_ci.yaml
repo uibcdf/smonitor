@@ -6,11 +6,19 @@ on:
     paths:
       - "docs/**"
       - "*.md"
+      - "devtools/conda-envs/docs_env.yaml"
+      - "devtools/check_distribution_inputs.py"
+      - "devtools/dependency_routes.toml"
+      - ".github/workflows/docs_ci.yaml"
   pull_request:
     branches: ["main"]
     paths:
       - "docs/**"
       - "*.md"
+      - "devtools/conda-envs/docs_env.yaml"
+      - "devtools/check_distribution_inputs.py"
+      - "devtools/dependency_routes.toml"
+      - ".github/workflows/docs_ci.yaml"
 
 jobs:
   docs:
@@ -19,6 +27,14 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Check out reviewed distribution tools
+        uses: actions/checkout@v6
+        with:
+          repository: uibcdf/molsyssuite
+          ref: 25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+          path: .governance-tools
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -34,7 +50,6 @@ jobs:
             channels:
               - uibcdf
               - conda-forge
-              - defaults
             channel_priority: strict
           create-args: >-
             python=3.14
@@ -46,6 +61,10 @@ jobs:
           micromamba activate docs
           micromamba info
           micromamba list
+
+      - name: Check distribution inputs
+        shell: bash -l {0}
+        run: python devtools/check_distribution_inputs.py --suite-root .governance-tools
 
       - name: Install package
         shell: bash -l {0}

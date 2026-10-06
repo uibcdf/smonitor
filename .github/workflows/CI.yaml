@@ -39,6 +39,14 @@ jobs:
       run: |
         uname -a
 
+    - name: Check out reviewed distribution tools
+      uses: actions/checkout@v6
+      with:
+        repository: uibcdf/molsyssuite
+        ref: 25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+        path: .governance-tools
+        persist-credentials: false
+
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
@@ -64,6 +72,10 @@ jobs:
         micromamba activate test
         micromamba info
         micromamba list
+
+    - name: Check distribution inputs
+      shell: bash -l {0}
+      run: python devtools/check_distribution_inputs.py --suite-root .governance-tools
 
     - name: Install package
 

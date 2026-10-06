@@ -19,6 +19,7 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
+| [`complete_distribution_adoption.md`](complete_distribution_adoption.md) | `partial` | [uibcdf/smonitor#35](https://github.com/uibcdf/smonitor/issues/35) | Maintain distribution-route controls and qualify each claimed installed cell. |
 | [`pytest_diagnostic_policy_after_bridge.md`](pytest_diagnostic_policy_after_bridge.md) | `open` | [uibcdf/smonitor#32](https://github.com/uibcdf/smonitor/issues/32) | Evaluate opt-in pytest diagnostic policy after the observational bridge. |
 
 <!-- /generated -->

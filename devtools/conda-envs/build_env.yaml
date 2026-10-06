@@ -8,4 +8,4 @@ dependencies:
   - pip
   - conda-build
   - anaconda-client
-  - versioningit
+  - versioningit >=3,<4

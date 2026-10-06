@@ -14,6 +14,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check out reviewed distribution tools
+        uses: actions/checkout@v6
+        with:
+          repository: uibcdf/molsyssuite
+          ref: 25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+          path: .governance-tools
+          persist-credentials: false
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -32,6 +40,10 @@ jobs:
           create-args: >-
             python=3.14
           cache-downloads: true
+
+      - name: Check distribution inputs
+        shell: bash -l {0}
+        run: python devtools/check_distribution_inputs.py --suite-root .governance-tools
 
       - name: Install package
         shell: bash -l {0}
@@ -83,6 +95,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check out reviewed distribution tools
+        uses: actions/checkout@v6
+        with:
+          repository: uibcdf/molsyssuite
+          ref: 25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+          path: .governance-tools
+          persist-credentials: false
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -97,7 +117,11 @@ jobs:
           ls -1
 
       - name: Install what the siblings need
-        run: python -m pip install --upgrade pip numpy pint pytest pytest-receptor==1.2.0
+        run: python -m pip install --upgrade pip numpy pint pytest pytest-receptor==1.2.0 "PyYAML>=6,<7" "Jinja2>=3,<4" "packaging>=24"
+
+      - name: Check distribution inputs
+        shell: bash
+        run: python devtools/check_distribution_inputs.py --suite-root .governance-tools
 
       - name: Run the collective error path
         env:

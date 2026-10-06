@@ -23,3 +23,6 @@ docs/api/autosummary/
 # In this library
 codex_session.sh
 smonitor/_version.py
+
+# Pinned governance provider, excluded from product builds and local lint.
+.governance-tools/
