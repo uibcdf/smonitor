@@ -53,13 +53,22 @@ only a runner-local tag is created for version derivation. A defective candidate
 a higher build number, never overwritten bytes.
 
 Independently verify the exact staged coordinate, SHA-256, installed-candidate gates,
-and any coupled consumers. Only then tag the *same* SHA and publish its stable GitHub
+and any coupled consumers. Starting with 0.19.0, dispatch
+`test_staged_conda_package.yaml` with the producer SHA, exact filename and digest.
+The committed `resources.toml` binds the full Linux/macOS ARM/Windows and Python
+3.11--3.14 matrix, installed resources, launcher and complete test selection. The
+shared implementation is pinned to a reviewed immutable MolSysSuite commit. Its
+source preflight rejects absent resources or skipped source-test cells before upload.
+Only then tag the *same* SHA and publish its stable GitHub
 Release. Its release-event job validates the staged plan and exact-commit gates, then
 skips the direct uploader and installed-package smoke job. Dispatch
 `.github/workflows/promote_conda_package.yaml` with the exact tag SHA, version, build
-number and verified digest. It checks the published release and exact-commit gates,
+number, verified digest and successful `installed_run_id`. It independently verifies
+all installed cells and required executed steps before mutation, checks the published
+release and exact-commit gates,
 then uses the shared `promote@v2.2.2` action to add the `main` label to the **same file**.
-The staging label is retained. The promotion receipt and an independent public query
+The staging label is retained. The promotion receipt, shared public-label/digest
+verifier and independent Conda query
 provide poststate evidence. Do not rebuild, re-upload, choose the newest staging build
 implicitly, or move the tag.
 

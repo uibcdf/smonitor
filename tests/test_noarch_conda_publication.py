@@ -1,4 +1,5 @@
 import re
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -134,3 +135,29 @@ def test_promotion_workflow_checks_exact_release_and_file_identity():
     assert 'record.get("sha256") == expected' in workflow
     assert 'record["channel"] != "https://conda.anaconda.org/uibcdf/noarch"' in workflow
     assert "ANACONDA_UIBCDF_TOKEN" in workflow
+
+
+def test_staged_promotion_requires_the_complete_installed_profile():
+    plan = tomllib.loads((ROOT / "devtools/conda-build/release_plan.toml").read_text())
+    inventory = tomllib.loads((ROOT / "devtools/conda-build/resources.toml").read_text())
+    gate = inventory["installed_gate"]
+    assert gate["platforms"] == plan["test_platforms"] == ["linux-64", "osx-arm64", "win-64"]
+    assert gate["python_versions"] == plan["python_versions"] == ["3.11", "3.12", "3.13", "3.14"]
+    assert inventory["installed_tests"]["paths"] == ["tests"]
+    assert "Run installed tests" in gate["required_steps"]
+    assert "Recheck installed provenance after scientific tests" in gate["required_steps"]
+    assert len(plan["gate_jobs"][".github/workflows/CI_full_matrix.yaml"]) == 12
+    caller = (ROOT / gate["workflow"]).read_text()
+    assert re.search(r"test-installed-noarch-conda.yaml@[0-9a-f]{40}", caller)
+    promotion = PROMOTION_WORKFLOW.read_text()
+    assert "installed_run_id:" in promotion
+    assert "run-id: ${{ inputs.installed_run_id }}" in promotion
+    assert promotion.index("verify-installed-matrix@") < promotion.index("promote@")
+    assert re.search(r"verify-installed-matrix@[0-9a-f]{40}", promotion)
+    assert re.search(r"verify-public-conda@[0-9a-f]{40}", promotion)
+
+
+def test_publication_checks_resources_and_executed_source_steps_before_upload():
+    workflow = WORKFLOW.read_text()
+    assert workflow.index("noarch_conda.py") < workflow.index("label: staging")
+    assert workflow.index("preflight_conda_release.py") < workflow.index("label: staging")

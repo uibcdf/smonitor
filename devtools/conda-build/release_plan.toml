@@ -1,6 +1,31 @@
-# Reviewed for the 0.18.0 candidate before creating its tag.
-version = "0.18.0"
+# Reviewed for 0.19.0 before creating its immutable tag.
+schema = "molsyssuite.conda-plan@1"
+version = "0.19.0"
+package = "smonitor"
+build_number = 0
 route = "staged"
-reason = "The optional pytest bridge adds a pytest entry point and depends on the newly published pytest-receptor 1.2 protocol. Its installed Conda candidate and coupled consumer behavior must be verified before public release. This staged release also exercises the corrected release-event route for smonitor#28."
-decision_by = "Repository maintainer via Codex on 2026-09-26"
+profile = "noarch-python"
+reason = "Provider registration and scoped metadata-only capture add public integration APIs (#38, #37). Qualify the exact installed Conda artifact across all twelve supported OS/Python cells before public release; retain the local build and exact-file promotion route. Consumer adoption remains separate from provider qualification."
+decision_by = "Repository maintainer via Codex on 2026-10-06"
+artifact_subdirs = ["noarch"]
+test_platforms = ["linux-64", "osx-arm64", "win-64"]
+python_versions = ["3.11", "3.12", "3.13", "3.14"]
 required_workflows = [".github/workflows/CI_full_matrix.yaml"]
+requires_installed_gate = true
+new_compatibility_surface = true
+coupled_release = false
+dependencies_public = true
+
+[gate_jobs.".github/workflows/CI_full_matrix.yaml"]
+"Full test on ubuntu-latest, Python 3.11" = ["Run tests"]
+"Full test on ubuntu-latest, Python 3.12" = ["Run tests"]
+"Full test on ubuntu-latest, Python 3.13" = ["Run tests"]
+"Full test on ubuntu-latest, Python 3.14" = ["Run tests"]
+"Full test on macos-latest, Python 3.11" = ["Run tests"]
+"Full test on macos-latest, Python 3.12" = ["Run tests"]
+"Full test on macos-latest, Python 3.13" = ["Run tests"]
+"Full test on macos-latest, Python 3.14" = ["Run tests"]
+"Full test on windows-latest, Python 3.11" = ["Run tests"]
+"Full test on windows-latest, Python 3.12" = ["Run tests"]
+"Full test on windows-latest, Python 3.13" = ["Run tests"]
+"Full test on windows-latest, Python 3.14" = ["Run tests"]

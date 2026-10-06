@@ -19,6 +19,10 @@ on:
         description: SHA-256 of the independently verified staging package
         required: true
         type: string
+      installed_run_id:
+        description: Successful twelve-cell installed-artifact qualification run
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -76,6 +80,33 @@ jobs:
             --sha "$CANDIDATE_SHA" --repository "$GITHUB_REPOSITORY" \
             --receipt "$RUNNER_TEMP/smonitor-conda-route.json"
 
+      - uses: actions/checkout@v4
+        with:
+          repository: uibcdf/molsyssuite
+          ref: 25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+          path: .molsyssuite
+          persist-credentials: false
+
+      - name: Bind the committed installed matrix to the exact archive
+        id: installed_descriptor
+        env:
+          SHA256: ${{ inputs.sha256 }}
+        run: |
+          python -m pip install 'PyYAML>=6,<7' 'Jinja2>=3,<4' 'packaging>=24'
+          python .molsyssuite/devtools/scripts/noarch_conda.py --root . \
+            --promotion-sha256 "$SHA256" --github-output "$GITHUB_OUTPUT"
+
+      - name: Verify every installed cell and executed test step
+        id: installed_matrix
+        uses: uibcdf/molsyssuite/.github/actions/verify-installed-matrix@25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+        with:
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.installed_run_id }}
+          candidate-sha: ${{ inputs.candidate_sha }}
+          workflow: ${{ steps.installed_descriptor.outputs.workflow }}
+          title: ${{ steps.installed_descriptor.outputs.title }}
+          profile: ${{ steps.installed_descriptor.outputs.profile }}
+
       - name: Set up the authenticated Anaconda client
         uses: mamba-org/setup-micromamba@v3.2.1
         with:
@@ -117,6 +148,7 @@ jobs:
           path: |
             ${{ steps.promotion.outputs.receipt }}
             ${{ runner.temp }}/smonitor-conda-route.json
+            ${{ steps.installed_matrix.outputs.evidence-path }}
           if-no-files-found: error
           retention-days: 30
 
@@ -148,3 +180,22 @@ jobs:
               raise SystemExit(f"unexpected public channel: {record['channel']}")
           print(record["url"])
           PY
+
+      - name: Independently verify registry label and solver digest
+        id: public_verification
+        uses: uibcdf/molsyssuite/.github/actions/verify-public-conda@25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+        with:
+          package: smonitor
+          version: ${{ inputs.version }}
+          subdir: noarch
+          filename: smonitor-${{ inputs.version }}-py_${{ inputs.build_number }}.tar.bz2
+          sha256: ${{ inputs.sha256 }}
+
+      - name: Retain independent public verification
+        if: ${{ always() && steps.public_verification.outputs.evidence-path != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: smonitor-public-conda-${{ inputs.version }}-py_${{ inputs.build_number }}
+          path: ${{ steps.public_verification.outputs.evidence-path }}
+          if-no-files-found: error
+          retention-days: 30

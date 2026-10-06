@@ -1,0 +1,28 @@
+import_name = "smonitor"
+version_file = "site-packages/smonitor/_version.py"
+reason = "Pure Python diagnostics with generated version, CLI, optional pytest entry point and shipped provider templates; no native extension or additional runtime data. Required Python dependencies are empty; optional integrations are qualified separately."
+required_paths = [
+  "site-packages/smonitor/__init__.py",
+  "site-packages/smonitor/_version.py",
+  "site-packages/smonitor/_diagnostics.py",
+  "site-packages/smonitor/core/capture.py",
+  "site-packages/smonitor/core/manager.py",
+  "site-packages/smonitor/integrations/provider.py",
+  "site-packages/smonitor/cli.py",
+  "site-packages/smonitor/pytest_plugin.py",
+  "site-packages/smonitor/templates/_smonitor.py",
+  "site-packages/smonitor/templates/README.md",
+]
+
+[installed_gate]
+workflow = ".github/workflows/test_staged_conda_package.yaml"
+platforms = ["linux-64", "osx-arm64", "win-64"]
+python_versions = ["3.11", "3.12", "3.13", "3.14"]
+prepare_job = "installed / prepare"
+job_template = "installed / {platform} · Python {python}"
+required_steps = ["Install exact artifact", "Validate installed files", "Run installed tests", "Recheck installed provenance after scientific tests"]
+
+[installed_tests]
+paths = ["tests"]
+pytest_args = ["--receptor=ci", "--color=yes"]
+conda_dependencies = ["pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "versioningit>=3,<4"]

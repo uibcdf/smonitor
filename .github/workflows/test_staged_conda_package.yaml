@@ -1,0 +1,29 @@
+name: Test installed staged Conda package
+run-name: Installed ${{ inputs.filename }} ${{ inputs.sha256 }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: Full immutable producer source SHA
+        required: true
+        type: string
+      filename:
+        description: Exact staged noarch archive filename
+        required: true
+        type: string
+      sha256:
+        description: Independently verified archive SHA-256
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  installed:
+    uses: uibcdf/molsyssuite/.github/workflows/test-installed-noarch-conda.yaml@25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+    with:
+      candidate_sha: ${{ inputs.candidate_sha }}
+      filename: ${{ inputs.filename }}
+      sha256: ${{ inputs.sha256 }}
