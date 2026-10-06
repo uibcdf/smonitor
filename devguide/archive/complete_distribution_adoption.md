@@ -1,9 +1,9 @@
 ---
 summary: Maintain distribution-route controls and qualify each claimed installed cell.
 issue: uibcdf/smonitor#35
-status: partial
+status: resolved
 opened: 2026-10-06
-closed:
+closed: 2026-10-06
 verification: measured
 area: [governance, distribution, compatibility]
 guard: tests/test_distribution_inputs.py
@@ -125,3 +125,34 @@ failures. It checks early invocation/publication ordering, separate optional sco
 installed-template recipe tests and declared build requirements. Maintained shared
 route/resource/archive negative guards and existing local freezer/release guards
 remain relevant and addressable. Hosted evidence is recorded separately.
+
+## Resolution — 2026-10-06
+
+Implemented at **169d070b2b0894eb452c5a962db5757b92f202f8**. Exact-head native
+CI 37529262021 and QA 37529261919 both execute the 15-route/default installed
+bounds review before **631 passing tests / five skips**. Two skips represent
+unresolved reports (including this report before closure); unavailable optional
+provider/sibling evidence remains visible. Collective QA independently executes
+three tests, strict QA seven, and wheel/CLI packaging smoke succeeds. Docs
+37529261976 executes the same early review and builds successfully with five
+warnings. Common policy 37529262843 passes all three mandatory checks. GH Run
+Receptor captures complete metadata/jobs/steps/logs for each exact native attempt.
+
+The original public 0.19.0 archive and its twelve-cell qualification are verified
+independently as recorded above, with **617 passing tests / four skips per
+installed cell**. Those historical scientific selections are not replaced by the
+new governance test module. The downloaded hash and promotion receipt identify
+the same original bytes. No new full/installed matrix, package build or public
+mutation is executed by the central review. Future candidate source requirements
+are prospective; this adoption does not assert a new release at 169d070.
+
+The local guards protect provider identity/cleanliness, complete native job
+profiles, candidate identity, qualification labels, provider failures, early
+workflow ordering, installed templates and build-tool metadata. Four controlled
+current-input mutations independently fail through maintained provider operations.
+This meets the review acceptance while preserving required-dependency
+non-applicability, optional integrations and local publication ownership.
+
+Central adoption and artifact receipts are coordinated in uibcdf/molsyssuite#45;
+provider API adoption stays separate in uibcdf/molsyssuite#106. Closing this member
+review does not qualify another consumer or guarantee future publication access.
