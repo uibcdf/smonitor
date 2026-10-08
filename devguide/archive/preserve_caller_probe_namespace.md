@@ -62,3 +62,11 @@ files), local report/index checks and central offline governance guard pass.
 No public package/installed matrix, solver or deferred scientific suite invoked.
 Native exact-source gates and source-only operator notice delivery are retained
 in the owning issue and central #104 receipt before board closeout.
+
+### Skip clarification — 2026-10-08
+
+The literal "not resolved" skip is intentional in
+`test_a_resolved_report_names_a_guard_or_a_normative_document`: a non-resolved record does not require a
+resolved guard. Source inspection identifies its reason; no receptor defect or
+missing source-test evidence is inferred from that label. The other skip is the
+explicitly absent collective sibling fixture.
