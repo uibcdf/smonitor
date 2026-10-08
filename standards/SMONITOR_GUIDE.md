@@ -10,8 +10,8 @@ Source of truth for integrating and using **SMonitor** in this library.
 Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
-- Source version: `smonitor@0.17.0`
-- Last synced: 2026-09-26
+- Source version: `smonitor@0.19.0`
+- Last synced: 2026-10-08
 
 ## What is SMonitor
 
@@ -56,6 +56,22 @@ At minimum, a sibling library should have:
 4. `@signal` on public orchestration entry points.
 5. `context_extra(...)` for repeated structured diagnostic fields.
 6. the verification tests of section 7, plus one smoke test covering bundle export.
+
+### Version boundary for the modern capabilities
+
+The application-policy-preserving setup, declaration-only provider registration
+and scoped diagnostic capture described here are publicly delivered in
+**SMonitor >=0.19.0**, under `uibcdf/smonitor#35`,
+`uibcdf/smonitor#37` and `uibcdf/smonitor#38`. Select that
+capability floor when relying on these promises. An earlier supported provider
+retains its original released behavior; an existing lower dependency floor does
+not establish the same registration or scoped-capture guarantees.
+
+This capability boundary does not require every consumer to upgrade now.
+Detailed diagnostics remain available, and restrictive capture is an explicit
+application/consumer choice. Consumers own their chosen dependency floor,
+integration and receiving tests. A scope controls the provider's documented
+capture paths; it is not a global guarantee over arbitrary third-party code.
 
 ## 1. Required Configuration Structure
 
