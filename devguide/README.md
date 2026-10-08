@@ -20,6 +20,7 @@ This folder collects developer documentation for `smonitor`.
 14) `templates/report.md` — The template both queues use.
 15) `operability_evidence_2026-09-08.md` — Exit criterion 5, confirmed against a real suite.
 16) `conda_release_routes.md` — Pre-tag choice and evidence for direct versus staged Conda publication.
+17) `resource_lifecycle_review.md` — Bounded tool/resource evidence and remaining owner review.
 
 ## Scope
 These documents track implementation details. Product-level decisions and

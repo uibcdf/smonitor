@@ -75,18 +75,25 @@ def load_catalog(package: Path, path: Path) -> tuple[types.ModuleType | None, st
     one-level probe cannot resolve.
     """
     parts = path.parent.relative_to(package).parts
-    created = [PROBE]
-    root = types.ModuleType(PROBE)
-    root.__path__ = [str(package)]  # type: ignore[attr-defined]
-    sys.modules[PROBE] = root
-    for depth, part in enumerate(parts, start=1):
-        name = f"{PROBE}." + ".".join(parts[:depth])
-        module = types.ModuleType(name)
-        module.__path__ = [str(package.joinpath(*parts[:depth]))]  # type: ignore[attr-defined]
-        sys.modules[name] = module
-        setattr(sys.modules[name.rsplit(".", 1)[0]], part, module)
-        created.append(name)
+    previous = {
+        name: module
+        for name, module in sys.modules.items()
+        if name == PROBE or name.startswith(PROBE + ".")
+    }
     try:
+        # Isolate this catalog from prior probe imports, then restore the exact
+        # caller namespace on every exit. No caller module belongs to this load.
+        for name in previous:
+            sys.modules.pop(name, None)
+        root = types.ModuleType(PROBE)
+        root.__path__ = [str(package)]  # type: ignore[attr-defined]
+        sys.modules[PROBE] = root
+        for depth, part in enumerate(parts, start=1):
+            name = f"{PROBE}." + ".".join(parts[:depth])
+            module = types.ModuleType(name)
+            module.__path__ = [str(package.joinpath(*parts[:depth]))]  # type: ignore[attr-defined]
+            sys.modules[name] = module
+            setattr(sys.modules[name.rsplit(".", 1)[0]], part, module)
         full = f"{PROBE}." + ".".join((*parts, path.stem))
         spec = importlib.util.spec_from_file_location(full, path)
         if spec is None or spec.loader is None:
@@ -100,6 +107,7 @@ def load_catalog(package: Path, path: Path) -> tuple[types.ModuleType | None, st
     finally:
         for key in [k for k in sys.modules if k == PROBE or k.startswith(PROBE + ".")]:
             sys.modules.pop(key, None)
+        sys.modules.update(previous)
 
 
 def catalog_codes(catalog: object) -> set[str]:

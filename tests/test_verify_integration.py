@@ -132,3 +132,49 @@ def test_it_reports_an_invalid_configuration(verifier, tmp_path):
     rows = {check: (ok, detail) for check, ok, detail in verifier.verify(repo).rows}
     assert rows["1 config"][0] is False
     assert "levl" in rows["1 config"][1]
+
+
+@pytest.mark.parametrize("failure", [None, "ValueError", "KeyboardInterrupt"])
+@pytest.mark.parametrize("occupied", [False, True])
+def test_probe_restores_caller_namespace_on_every_exit(
+    verifier, tmp_path, monkeypatch, failure, occupied
+):
+    import types
+
+    prefix = verifier.PROBE
+    # Isolate only this fixture's namespace and let monkeypatch restore the
+    # process's genuine prior state; never purge another test's modules.
+    for name in list(sys.modules):
+        if name == prefix or name.startswith(prefix + "."):
+            monkeypatch.delitem(sys.modules, name)
+    caller = {}
+    if occupied:
+        for name in (prefix, prefix + ".caller_owned", prefix + "._private.smonitor.helper"):
+            module = types.ModuleType(name)
+            module.VALUE = "caller-owned"
+            monkeypatch.setitem(sys.modules, name, module)
+            caller[name] = module
+    repo = _library(tmp_path, "custody", config="", catalog="")
+    package = repo / "custody"
+    catalog = package / "_private/smonitor/catalog.py"
+    helper = catalog.with_name("helper.py")
+    helper.write_text('VALUE = "fixture-source"\n', encoding="utf-8")
+    catalog.write_text(
+        "from . import helper\nVALUE = helper.VALUE\n"
+        + (f'raise {failure}("controlled catalog failure")\n' if failure else ""),
+        encoding="utf-8",
+    )
+    if failure == "KeyboardInterrupt":
+        with pytest.raises(KeyboardInterrupt, match="controlled"):
+            verifier.load_catalog(package, catalog)
+    else:
+        module, error = verifier.load_catalog(package, catalog)
+        if failure:
+            assert module is None and "ValueError: controlled" in error
+        else:
+            assert error == ""
+            assert module.VALUE == "fixture-source"
+    remaining = {k: v for k, v in sys.modules.items() if k == prefix or k.startswith(prefix + ".")}
+    assert remaining == caller
+    assert all(remaining[name] is module for name, module in caller.items())
+    assert helper.read_text(encoding="utf-8") == 'VALUE = "fixture-source"\n'

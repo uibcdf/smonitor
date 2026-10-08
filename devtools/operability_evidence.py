@@ -100,9 +100,10 @@ def main() -> int:
     print(f"  {args.repo}: pytest exit={summary['exit']}, {summary['events']} events buffered")
     summarise(args.out.resolve())
 
+    comparison_status = 0
     if args.compare_with:
         print()
-        subprocess.run(
+        comparison = subprocess.run(
             [
                 sys.executable,
                 "-m",
@@ -116,7 +117,8 @@ def main() -> int:
             cwd=ROOT,
             check=False,
         )
-    return 0
+        comparison_status = comparison.returncode
+    return int(summary["exit"]) or comparison_status
 
 
 if __name__ == "__main__":

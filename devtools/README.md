@@ -57,3 +57,22 @@ version/file/public guards. Original public 0.18.0 and 0.19.0 evidence remains u
 future releases need their own installed and public qualification.
 
 Owning review: uibcdf/smonitor#35. Durable guard: tests/test_distribution_inputs.py.
+
+## Integration and operability probes
+
+`python devtools/verify_integration.py --help` describes the source integration
+sweep. Its existing catalog loader isolates its temporary module namespace and
+restores prior caller module identities on success, diagnosed error and
+interruption. It does not import the scientific package root.
+
+`python devtools/operability_evidence.py COMPONENT --out REPORT.json` executes
+that component's configured `tests` selection and retains diagnostic evidence.
+Use it only for an explicitly authorized suite; a resource review does not
+request execution of deferred scientific tests. Optional `--compare-with BASELINE`
+compares the retained report. The CLI returns the pytest status, or comparison
+status after a passing suite; a useful bundle after failure is not a passing
+check. The existing explicit output overwrite remains the operator's choice.
+The tool does not delete requested reports, baseline inputs or caller work.
+
+See `devguide/resource_lifecycle_review.md`, uibcdf/smonitor#43/#44 and
+uibcdf/molsyssuite#104 for bounded evidence and historical cleanup limitations.
