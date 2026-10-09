@@ -79,7 +79,7 @@ jobs:
       uses: actions/checkout@v6
       with:
         repository: uibcdf/molsyssuite
-        ref: 25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918
+        ref: 6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26
         path: .governance-tools
         persist-credentials: false
 

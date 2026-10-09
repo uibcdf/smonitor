@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import subprocess
 import tomllib
@@ -20,7 +21,7 @@ SPEC.loader.exec_module(preflight)
 def test_inventory_classifies_required_and_optional_scope():
     data = tomllib.loads((ROOT / "devtools/dependency_routes.toml").read_text())
     assert data["schema"] == "molsyssuite.dependency-routes@2"
-    assert data["shared_tool"]["commit"] == "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918"
+    assert data["shared_tool"]["commit"] == "6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26"
     assert len(data["recipes"]) == 1
     assert len(data["environments"]) == 5
     assert len(data["workflows"]) == 9
@@ -86,7 +87,7 @@ def test_source_workflows_execute_default_qualification_before_tests_or_builds()
         text = (ROOT / ".github/workflows" / filename).read_text()
         assert text.index("- name: Check distribution inputs") < text.index(marker)
         assert "--declared-only" not in text
-        assert "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918" in text
+        assert "6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26" in text
     for filename in ("docs_ci.yaml", "sphinx_docs_to_gh_pages.yaml"):
         text = (ROOT / ".github/workflows" / filename).read_text()
         assert "channel_priority: strict" in text
@@ -175,3 +176,24 @@ def test_recipe_host_respects_the_declared_build_backend_requirements():
     assert expected["versioningit"].specifier.contains("3.0")
     assert actual["versioningit"].specifier.contains("3.0")
     assert not actual["versioningit"].specifier.contains("4.0")
+
+
+def test_reviewed_provider_checkouts_and_workflow_bytes_match_inventory():
+    import yaml
+
+    data = tomllib.loads((ROOT / "devtools/dependency_routes.toml").read_text())
+    expected = data["shared_tool"]["commit"]
+    paired_checkouts = 0
+    for record in data["workflows"]:
+        path = ROOT / record["path"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == record["sha256"]
+        workflow = yaml.safe_load(path.read_text())
+        for job in workflow["jobs"].values():
+            for step in job.get("steps", []):
+                if step.get("name") == "Check out reviewed distribution tools":
+                    assert step["with"]["repository"] == "uibcdf/molsyssuite"
+                    assert step["with"]["ref"] == expected
+                    assert step["with"]["path"] == ".governance-tools"
+                    paired_checkouts += 1
+    # Source CI/docs, both QA jobs and candidate/promotion preflight must agree.
+    assert paired_checkouts == 8

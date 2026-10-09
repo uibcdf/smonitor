@@ -50,22 +50,22 @@ reason = "Complete required public closure is Python only; optional tools keep s
 
 [[workflows]]
 path = ".github/workflows/CI.yaml"
-sha256 = "2f94dbd3ccc9df5a7fc0c86df5673d70d7d3986822b45c6c2d46a6ea50c0e34c"
+sha256 = "45ed025961a91fea3082c18a26090ea3a52bea2fc32e8b64648b791e851c9608"
 reason = "Routine Linux/Python 3.14 source test, strict public Conda and no-deps installation"
 
 [[workflows]]
 path = ".github/workflows/CI_full_matrix.yaml"
-sha256 = "ca2a9b8486786a206e07d83602e155c49332a7cd2866c2f5c5efaa225b376b93"
+sha256 = "57e3dde405b6c7f3fe85ecdecef0994d6a8e85f4c7df4f0ac2d91ee20ca03516"
 reason = "Twelve source cells plus separate backlog decision; strict public channels and no-deps editable source"
 
 [[workflows]]
 path = ".github/workflows/build_and_upload_conda_packages.yaml"
-sha256 = "d13e6924cb253d26c2d5fc15ff78d22b2289d529c2b340de190299380637fa8e"
+sha256 = "4a8b2c5eea6329a8dd3cce0ddb630c1f04948664151ba559e1c4f350593c9f8d"
 reason = "Local single noarch producer; exact source/gates before upload, separate historical Windows installed command smoke"
 
 [[workflows]]
 path = ".github/workflows/docs_ci.yaml"
-sha256 = "b2d5e43f27912682735da39b3c566d5742d4618d2154dc04f6d6a00c446a81f7"
+sha256 = "b5480397b0994d08d46dbe069a0b0e8990cf09a1479305ab8ad7cba9d58d243a"
 reason = "Documentation runtime with strict public channels and no-deps installation"
 
 [[workflows]]
@@ -75,17 +75,17 @@ reason = "Existing versioned shared policy call; no component runtime installati
 
 [[workflows]]
 path = ".github/workflows/promote_conda_package.yaml"
-sha256 = "18560f2f282f5f4fcf92a5faf8de29a5794b5e5a81075d8c1babe15c7622c959"
+sha256 = "27365f1fd0510898ba0f89cdca46ffc78f23220fb2e90fe189116bcffcf2785f"
 reason = "Local same-file promotion and independent public digest/index verification; no rebuild"
 
 [[workflows]]
 path = ".github/workflows/qa_ci.yaml"
-sha256 = "0a49201bd37f9aef1c9b72ab9e91d3d5fd9d411b89b19d64c1bdcea90cdbcd68"
+sha256 = "5c2abf1df767d6a3ab0e8fa719c3e9d009c229255a3f9c05239e2d8c1b727eda"
 reason = "Strict QA environment plus separately bounded optional collective source integration; no required sibling source replacement"
 
 [[workflows]]
 path = ".github/workflows/sphinx_docs_to_gh_pages.yaml"
-sha256 = "27e33a4dce9e29cf5bbdb10e11dcf11a29c347a162bfdc2f0d05d3d785848ffa"
+sha256 = "7b986208f31732fa6bcb77504d1533debd13fe40df0d1eb64e0191e9e4a7c09c"
 reason = "Documentation runtime with strict public channels; publication action retained"
 
 [[workflows]]
@@ -94,5 +94,5 @@ sha256 = "9930bfb576947020bd49f182697f2ad2b032d1ec9bff597298b481715e4a9f0a"
 reason = "Pinned shared installed qualification of the exact archive; no source-provider replacement; all twelve cells retain final provenance checks"
 
 [shared_tool]
-commit = "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918"
-reason = "Accepted general route provider and optional independent source-resource operation under central #45"
+commit = "6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26"
+reason = "Accepted portable route discovery under uibcdf/molsyssuite#112 and uibcdf/smonitor#46; existing @2 contract retained"
