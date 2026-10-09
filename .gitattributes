@@ -1,0 +1,2 @@
+# Reviewed workflow hashes bind the same bytes on every supported platform.
+.github/workflows/* text eol=lf

@@ -197,3 +197,30 @@ def test_reviewed_provider_checkouts_and_workflow_bytes_match_inventory():
                     paired_checkouts += 1
     # Source CI/docs, both QA jobs and candidate/promotion preflight must agree.
     assert paired_checkouts == 8
+
+
+def test_reviewed_workflow_bytes_survive_autocrlf_checkout(tmp_path):
+    fixture = tmp_path / "index"
+    fixture.mkdir()
+    workflow = ".github/workflows/CI.yaml"
+    path = fixture / workflow
+    path.parent.mkdir(parents=True)
+    path.write_bytes((ROOT / workflow).read_bytes())
+    (fixture / ".gitattributes").write_bytes((ROOT / ".gitattributes").read_bytes())
+    subprocess.run(["git", "init", "-q"], cwd=fixture, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "-c", "core.autocrlf=false", "add", ".gitattributes", workflow],
+        cwd=fixture,
+        check=True,
+        capture_output=True,
+    )
+    checkout = tmp_path / "checkout"
+    checkout.mkdir()
+    subprocess.run(
+        ["git", "-c", "core.autocrlf=true", "checkout-index", "--all", f"--prefix={checkout}/"],
+        cwd=fixture,
+        check=True,
+        capture_output=True,
+    )
+    # Exercise Git's Windows checkout conversion; exact hashes must still match.
+    assert (checkout / workflow).read_bytes() == (ROOT / workflow).read_bytes()
