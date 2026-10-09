@@ -18,8 +18,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`windows_distribution_preflight_receiving.md`](windows_distribution_preflight_receiving.md) | `partial` | [uibcdf/smonitor#46](https://github.com/uibcdf/smonitor/issues/46) | Windows rejects the shared distribution preflight before source tests. |
+_No entries._
 
 <!-- /generated -->

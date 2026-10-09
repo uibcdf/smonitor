@@ -1,9 +1,9 @@
 ---
 summary: Windows rejects the shared distribution preflight before source tests.
 issue: uibcdf/smonitor#46
-status: partial
+status: resolved
 opened: 2026-10-09
-closed:
+closed: 2026-10-09
 severity: medium
 verification: reproduced
 area: [distribution, ci, windows]
@@ -80,7 +80,7 @@ workspace closure findings are retained; no shared environment is mutated.
 Original receiving-head CI 37994697153, QA 37994697177, Docs 37994697155 and
 policy 37994697786 pass. Policy and both QA jobs are independently identity/step
 verified. Current strict PR checks and internal administrator direct pushes are
-unchanged. Native Windows receiving after the LF fix remains pending.
+unchanged. Native Windows receiving after the LF fix is verified below.
 
 Public 0.19.0 build 1 remains producer
 `f604b940ab281df4554869fdd24f796ea6d42c27`, producer run 37520722817,
@@ -91,6 +91,32 @@ No rebuild, release, tag, upload, promotion or new installed-file qualification.
 
 ## Resolution
 
-Pending: execute and verify the corrected native Windows preflight on all four
-supported minors; preserve actual full-matrix outcomes and report any remaining
-component-owned failures. Central CI adoption is separately uibcdf/molsyssuite#39.
+Source `57bcf31cc0508fba7f877a5eecc4ec8dd5d725bd` passes manual full
+matrix [37995139887](https://github.com/uibcdf/smonitor/actions/runs/37995139887):
+all twelve Linux/macOS arm64/Windows Python 3.11–3.14 cells execute successfully.
+An independent native verifier binds source, workflow, event, attempt and every
+required checkout/preflight/install/import/lint/test step. Complete inventory has
+exactly twelve executed matrix jobs plus the schedule/probe-only detector, which
+is inapplicable/skipped for this normal manual dispatch and is not counted as an
+executed gate. Representative Python 3.14 jobs on each OS report 656 passed and
+five ordinary skips. macOS setup/logs identify arm64.
+
+Exact-source routine CI 37995139308, QA 37995139461 and policy 37995140043 are
+independently verified for all required jobs and steps; all are successful.
+Neither prior failed matrix is rewritten or counted as a passing watermark.
+The source result qualifies these executed inputs, not a later candidate/public
+artifact. The archival documentation change does not modify these executable,
+workflow, dependency or resource inputs; its own applicable gates stay distinct.
+
+`test_reviewed_workflow_bytes_survive_autocrlf_checkout` exercises Git's actual
+CRLF conversion and fails if LF attributes disappear; the paired provider/hash
+control rejects mismatched checkouts or altered workflows. Provider discovery
+mechanism regression stays in uibcdf/molsyssuite#112. GH Run Receptor's local
+compact report omitted the explicit rejection and retained only runner exit 1;
+incoming provider feedback is uibcdf/gh-run-receptor#64, with tested local
+source `f1a5901ae9543d4d79dd184e694c05b7eb2a901f`. The native fallback recovered
+the diagnosis without changing its original verdict.
+
+Central reconciliation and durable exact receipts remain
+uibcdf/molsyssuite#39. Original public artifact identity, installed tests and
+release ownership remain unchanged.

@@ -51,5 +51,6 @@ The table below is generated from front matter by
 | [`staged_release_marks_conda_workflow_failed.md`](staged_release_marks_conda_workflow_failed.md) | `resolved` | [uibcdf/smonitor#28](https://github.com/uibcdf/smonitor/issues/28) | Staged release marks the automatic Conda workflow failed despite successful promotion |
 | [`verify_python_3_14_support_and_noarch_release.md`](verify_python_3_14_support_and_noarch_release.md) | `resolved` | [uibcdf/smonitor#17](https://github.com/uibcdf/smonitor/issues/17) | Establish verified Python 3.14 support and publish a noarch release |
 | [`windows_built_path_loses_backslashes_in_conda_release_verification.md`](windows_built_path_loses_backslashes_in_conda_release_verification.md) | `resolved` | [uibcdf/smonitor#25](https://github.com/uibcdf/smonitor/issues/25) | Windows built path loses backslashes in Conda release verification. |
+| [`windows_distribution_preflight_receiving.md`](windows_distribution_preflight_receiving.md) | `resolved` | [uibcdf/smonitor#46](https://github.com/uibcdf/smonitor/issues/46) | Windows rejects the shared distribution preflight before source tests. |
 
 <!-- /generated -->
