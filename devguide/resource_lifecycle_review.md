@@ -34,3 +34,24 @@ attributed obsolete resources; cleanup failures remain visible.
 Historical /tmp attribution/owner cleanup and broader installed/platform tool
 qualification remain pending. Source inspection, executed custody/outcome
 regressions and hosted gate receipts are separate. #104 remains partial.
+
+## Local closeout — 2026-10-13
+
+SMonitor #47 inspected the remaining development, test, docs, build and
+qualification entry points in
+[`archive/review_remaining_resource_lifecycle.md`](archive/review_remaining_resource_lifecycle.md).
+`devtools/sync_smonitor_guide.py` is now a read-only hash/drift audit; official
+cross-clone delivery remains with MolSysSuite's registered synchronizer.
+`tests/test_guide_sync_readonly.py` executed the actual CLI against isolated
+canonical and human-modified sibling fixtures and confirmed no overwrite.
+
+The Conda version freezer edits only its runner-owned ephemeral build source.
+`tests/test_conda_version_identity.py::test_failed_version_freeze_stops_build_before_install`
+executed `build.sh` with a failing freezer and confirmed nonzero exit before
+`pip install`; a failed copy cannot enter package publication. This proves
+failure precedence, not atomic replacement of both files or hosted runner
+teardown. Explicit release receipts, generated docs, pytest fixtures/cache
+and caller-selected diagnostics outputs retain their owners and useful lives.
+No shared/human/unknown resource was removed. Historical `/tmp` attribution
+and wider installed/platform qualification remain with MolSysSuite #104 and
+their respective release gates, not this local source closeout.

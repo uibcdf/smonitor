@@ -71,8 +71,9 @@ historical context live in `SPEC_SMONITOR.md`.
   Reassess the current open issues before declaring the final 1.0 release ready.
 - Current quality snapshot (2026-09-08): full pytest suite green (435 tests), `ruff check .` clean on an
   unbuilt checkout, line-rate 0.9728, branch-rate 0.9419. Remote CI green across CI, QA CI and Docs CI.
-- The canonical guide is byte-identical in the nine repositories that carry it, and
-  `devtools/sync_smonitor_guide.py` now finds consumers on disk rather than only in a list.
+- At the 2026-09-08 checkpoint, the canonical guide was byte-identical in nine
+  repositories. `devtools/sync_smonitor_guide.py` now audits copies read-only;
+  MolSysSuite's registered synchronizer owns delivery.
 
 ## Operational Stabilization Plan (Toward 1.0.0)
 1. Extended stabilization window (until diagnostic operability closure): only bugfixes, hardening, docs/test corrections, and pre-1.0 diagnostic operability work explicitly tracked in `implementation_plan.md`.

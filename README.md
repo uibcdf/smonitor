@@ -148,8 +148,9 @@ to emit structured events.
 
 ## Canonical Guide
 
-The canonical integration guide is `standards/SMONITOR_GUIDE.md`. Use it as the
-source of truth and sync it to sibling repos with:
+The canonical integration guide is `standards/SMONITOR_GUIDE.md`.
+MolSysSuite's registered synchronizer distributes its exact bytes to sibling
+repositories. To inspect local copies without changing them, run:
 
 ```bash
 python devtools/sync_smonitor_guide.py
@@ -216,8 +217,8 @@ guide:
 - **Integrated, catalogue work in progress**: TopoMT, PharmacophoreMT,
   ElastNetMT, LindeLint.
 
-`devtools/sync_smonitor_guide.py` keeps `SMONITOR_GUIDE.md` identical in all of
-them, and finds a consumer on disk rather than trusting a list to remember it.
+`devtools/sync_smonitor_guide.py` audits those copies and discovers consumers
+on disk. MolSysSuite owns their synchronized delivery.
 
 ## Documentation
 

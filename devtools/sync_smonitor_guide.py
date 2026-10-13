@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-"""Sync the canonical SMONITOR_GUIDE.md to sibling repos.
+"""Audit canonical SMONITOR_GUIDE.md copies without writing sibling clones.
 
-Usage:
-  python devtools/sync_smonitor_guide.py
-  python devtools/sync_smonitor_guide.py --root /home/diego/repos@uibcdf
+Official guide delivery belongs to MolSysSuite's registered synchronizer.
+This legacy command is retained as a read-only inventory and drift check.
 
 Authoring note for the guide itself: Ruff formats fenced Python blocks inside
 Markdown, and a vendored copy is checked against the *host* repository's Ruff
@@ -18,6 +17,7 @@ uibcdf/molsyssuite#12.
 from __future__ import annotations
 
 import argparse
+import hashlib
 from pathlib import Path
 
 #: Repositories seeded explicitly. A new adopter is listed here to receive its
@@ -65,7 +65,7 @@ def discover_targets(root: Path) -> list[Path]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Sync SMONITOR_GUIDE.md to sibling repos")
+    parser = argparse.ArgumentParser(description="Audit SMONITOR_GUIDE.md copies")
     parser.add_argument(
         "--root",
         type=Path,
@@ -75,7 +75,7 @@ def main() -> int:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print actions without writing files",
+        help="Compatibility alias; the command is always read-only",
     )
     args = parser.parse_args()
 
@@ -84,19 +84,24 @@ def main() -> int:
     if not source.exists():
         raise SystemExit(f"Source guide not found: {source}")
 
-    payload = source.read_text(encoding="utf-8")
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
     listed = set(REPO_NAMES)
+    drifted = False
 
     for repo in discover_targets(root):
         target = repo / "SMONITOR_GUIDE.md"
         note = "" if repo.name in listed else "  (found on disk, not in REPO_NAMES)"
-        if args.dry_run:
-            print(f"[dry-run] {source} -> {target}{note}")
-            continue
-        target.write_text(payload, encoding="utf-8")
-        print(f"Synced {target}{note}")
+        state = (
+            "missing"
+            if not target.is_file()
+            else "in-sync"
+            if hashlib.sha256(target.read_bytes()).hexdigest() == digest
+            else "drift"
+        )
+        print(f"[{state}] {target}{note}")
+        drifted |= state != "in-sync"
 
-    return 0
+    return 1 if drifted else 0
 
 
 if __name__ == "__main__":
