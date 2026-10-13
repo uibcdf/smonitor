@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 from math import isfinite
+from string import Formatter
 
 from .._diagnostics import CapturePolicyError
 
@@ -89,6 +90,19 @@ def safe_metadata(extra=None) -> dict:
         if not valid:
             raise CapturePolicyError()
     return extra.copy()
+
+
+def safe_metadata_template(template) -> bool:
+    """Validate a bounded template of direct named safe-metadata fields."""
+    if type(template) is not str or len(template) > 1024:
+        return False
+    try:
+        for _, field, spec, conversion in Formatter().parse(template):
+            if field is not None and (not field.isidentifier() or spec or conversion):
+                return False
+    except ValueError:
+        return False
+    return True
 
 
 def capture_facts(extra=None) -> dict:

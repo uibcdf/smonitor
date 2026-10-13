@@ -86,6 +86,37 @@ Scopes also do not erase events or profiling data collected before entry.
 Catalogs can provide `metadata_message` and `metadata_hint` using approved primitive
 fields. Otherwise the selected audience's catalog message is used when all fields
 are available; unavailable or unsupported fields produce a fixed catalog description.
+For distinct safe wording by audience, declare opt-in `metadata_messages` and
+`metadata_hints` maps:
+
+```python
+CODES = {
+    "MYLIB-REF": {
+        "user_message": "{count} missing references.",
+        "metadata_messages": {"user": "Restore {count} references."},
+        "metadata_hints": {
+            "user": "Restore retained bytes.",
+            "dev": "Inspect local index binding.",
+        },
+        "metadata_hint": "Review retained references.",
+    }
+}
+
+with smonitor.diagnostic_scope(safe_extra={"count": 2}):
+    message, hint = smonitor.resolve(code="MYLIB-REF", profile="user")
+```
+
+The maps accept `user`, `dev`, `qa`, and `agent`; `debug` uses `dev`.
+An audience-specific metadata template takes precedence over its shared
+`metadata_message` or `metadata_hint`. Missing audience entries fall back to
+the shared metadata field; messages then use the existing ordinary profile
+message fallback. Ordinary profile hints are never assumed safe. Provider
+registration rejects unsupported audiences and templates with attribute or
+index traversal, conversions, format specifications, or more than 1024
+characters. Templates interpolate only explicitly approved bounded primitive
+facts; missing facts produce the fixed description or no hint. `resolve()`
+does not emit an event or configure application policy.
+
 Explicit native/free-text messages and exception-owned extras are omitted. Known
 catalog codes are preserved; unknown native failures use `SMONITOR-NATIVE-FAILURE`
 and a bounded exception type. Bundles expose SMonitor's fixed descriptions under

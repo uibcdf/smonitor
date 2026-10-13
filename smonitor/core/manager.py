@@ -24,6 +24,7 @@ from .capture import (
     derived_metadata,
     diagnostic_scope,
     get_capture_policy,
+    safe_metadata_template,
 )
 from .context import get_context
 from .fingerprint import build_event_fingerprint
@@ -512,10 +513,28 @@ class Manager:
             template = None
             hint = None
             if code_meta:
-                template = code_meta.get("metadata_message") or _first_present(
-                    code_meta, _MESSAGE_FALLBACKS.get(profile, _MESSAGE_FALLBACKS[_DEFAULT_PROFILE])
+                audience = profile if profile in {"user", "dev", "qa", "agent"} else "dev"
+                messages = code_meta.get("metadata_messages")
+                hints = code_meta.get("metadata_hints")
+                audience_template = messages.get(audience) if type(messages) is dict else None
+                audience_hint = hints.get(audience) if type(hints) is dict else None
+                template = (
+                    (
+                        audience_template
+                        if audience_template and safe_metadata_template(audience_template)
+                        else None
+                    )
+                    or code_meta.get("metadata_message")
+                    or _first_present(
+                        code_meta,
+                        _MESSAGE_FALLBACKS.get(profile, _MESSAGE_FALLBACKS[_DEFAULT_PROFILE]),
+                    )
                 )
-                hint = code_meta.get("metadata_hint")
+                hint = (
+                    audience_hint
+                    if audience_hint and safe_metadata_template(audience_hint)
+                    else None
+                ) or code_meta.get("metadata_hint")
             fallback = INTERNAL_CODES["SMONITOR-METADATA-ONLY"]["message"]
 
             def render(value, default):

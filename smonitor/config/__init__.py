@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+from ..core.capture import safe_metadata_template
 from ..core.manager import CONFIGURE_PARAMETERS
 from .discovery import discover_config
 
@@ -252,6 +253,25 @@ def validate_codes_signals(
                 ]:
                     if field in entry and not isinstance(entry[field], str):
                         errors.append(f"CODES[{code}].{field} must be a string")
+                for field in ("metadata_messages", "metadata_hints"):
+                    if field not in entry:
+                        continue
+                    templates = entry[field]
+                    if type(templates) is not dict:
+                        errors.append(f"CODES[{code}].{field} must be a dict")
+                        continue
+                    for audience, template in templates.items():
+                        if type(audience) is not str or audience not in {
+                            "user",
+                            "dev",
+                            "qa",
+                            "agent",
+                        }:
+                            errors.append(f"CODES[{code}].{field} has unsupported audience")
+                        elif not safe_metadata_template(template):
+                            errors.append(
+                                f"CODES[{code}].{field}.{audience} must be a safe metadata template"
+                            )
 
     if signals is not None:
         if not isinstance(signals, dict):
