@@ -56,17 +56,19 @@ def test_failed_version_freeze_stops_build_before_install(tmp_path):
     """A partial ephemeral build source must never reach pip installation (#47)."""
     python = tmp_path / "python"
     marker = tmp_path / "pip-was-invoked"
-    python.write_text(
-        "#!/bin/sh\n"
-        'case "$1" in\n'
-        "  *freeze_project_version.py) exit 7 ;;\n"
-        '  *) touch "$PIP_MARKER"; exit 0 ;;\n'
-        "esac\n"
+    python.write_bytes(
+        (
+            "#!/bin/sh\n"
+            'case "$1" in\n'
+            "  *freeze_project_version.py) exit 7 ;;\n"
+            '  *) touch "$PIP_MARKER"; exit 0 ;;\n'
+            "esac\n"
+        ).encode("ascii")
     )
     python.chmod(0o755)
     env = {
         **os.environ,
-        "PYTHON": str(python),
+        "PYTHON": "./python",
         "PKG_VERSION": "0.21.0",
         "PIP_MARKER": str(marker),
     }
