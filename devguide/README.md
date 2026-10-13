@@ -27,18 +27,22 @@ These documents track implementation details. Product-level decisions and
 historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
-- **Published 0.16.0 and Python 3.14 (2026-09-21):** the twelve-cell hosted matrix
-  passed on Linux, macOS and Windows for Python 3.11--3.14 (run `35585349618`). The
-  exact `smonitor-0.16.0-py_1.tar.bz2` candidate was promoted from staging to the
-  public `uibcdf` channel (run `35589475337`); its public SHA-256 and clean Linux
-  Python 3.14 installation were independently verified. The GitHub source Release is
-  archived by Zenodo as version DOI `10.5281/zenodo.22872342`. SMonitor is admitted
-  for Python 3.14 in MolSysSuite; this does not imply a native-package proof.
-- **Next Conda release route (2026-09-21):** `uibcdf/smonitor#20` tracks restoration of
-  automatic Conda publication for a routine GitHub Release while preserving exact-file
-  promotion for staged versions. The two-route implementation has local contract
-  tests; the first future direct hosted release is still unproven. Follow
-  `conda_release_routes.md` and the central proposal `uibcdf/molsyssuite#27`.
+- **Latest public release: 0.20.0 (2026-10-13).** The exact candidate
+  `f6230af431a7fc185209fa44364c017d711cc2b7` passed the twelve-cell source
+  and installed matrices. [Exact-file promotion](https://github.com/uibcdf/smonitor/actions/runs/38466664766)
+  published `smonitor-0.20.0-py_1.tar.bz2` with SHA-256
+  `887cbbe8fa9056388ee1344c8244138af2c06371846584dc234de1d994335ebf`;
+  the [stable GitHub Release](https://github.com/uibcdf/smonitor/releases/tag/0.20.0)
+  and public Conda index were verified. The opt-in declaration-only bundle capability
+  is recorded in [`archive/declaration_only_diagnostic_bundle.md`](archive/declaration_only_diagnostic_bundle.md).
+- **Python 3.14 milestone: 0.16.0 (2026-09-21).** Its twelve-cell hosted matrix,
+  exact-file Conda promotion and clean Linux Python 3.14 installation established
+  MolSysSuite admission. The source Release is archived by Zenodo as version DOI
+  `10.5281/zenodo.22872342`; that milestone does not imply native-package proof.
+- **Conda release routes.** `0.17.1` provided the first hosted direct-route proof,
+  closing `uibcdf/smonitor#20`; `0.20.0` used the staged route with a complete
+  installed matrix. Follow [`conda_release_routes.md`](conda_release_routes.md)
+  for the route contract; shared criteria remain with `uibcdf/molsyssuite#27`.
 - Core scaffold, manager/context, and `@signal` implemented.
 - Emitters for warnings/logging/exceptions implemented.
 - Policy engine implemented with routing, filtering, rate limits, sampling,
@@ -60,10 +64,11 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.16.0` is the published pre-1.0 stabilization checkpoint.
-- **All seven exit criteria for `1.0.0` are met.** Criterion 5 -- operability confirmed in a
-  real workflow -- closed on 2026-09-08 with `operability_evidence_2026-09-08.md`, which
-  itself found the defect fixed in `#11`.
+- Version `0.20.0` is the latest published pre-1.0 stabilization checkpoint.
+- **The seven `1.0.0` exit criteria were met at the 2026-09-08 checkpoint.**
+  Criterion 5 -- operability confirmed in a real workflow -- closed with
+  `operability_evidence_2026-09-08.md`, which found the defect fixed in `#11`.
+  Reassess the current open issues before declaring the final 1.0 release ready.
 - Current quality snapshot (2026-09-08): full pytest suite green (435 tests), `ruff check .` clean on an
   unbuilt checkout, line-rate 0.9728, branch-rate 0.9419. Remote CI green across CI, QA CI and Docs CI.
 - The canonical guide is byte-identical in the nine repositories that carry it, and
@@ -126,7 +131,7 @@ Pre-`1.0.0` stabilization should only be considered closed when all of the follo
 7. A short observation period passes without structural friction.
    - real usage does not reveal new design-level issues.
 
-## Next-session checkpoint
+## Historical implementation checkpoint
 - The current pre-1.0 profiling/diagnostics checkpoint includes: structured `extra_factory` signal context, `timings_by_tag`, opt-in slow-signal events, and profile-aware truncation in human-readable handlers.
 - Integration helpers now include a canonical `context_extra(...)` builder for common structured diagnostic fields.
 - `report()` and bundle exports now expose triage-oriented summaries for event codes, categories, and recent slow-signal activity.
