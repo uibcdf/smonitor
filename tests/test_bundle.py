@@ -28,9 +28,7 @@ def test_event_buffer_resize_trims_history_and_bundle_immediately():
 
     manager.configure(event_buffer_size=2)
     assert [event["message"] for event in manager.recent_events()] == ["c", "d"]
-    assert [event["message"] for event in smonitor.collect_bundle()["events"]] == [
-        "c", "d"
-    ]
+    assert [event["message"] for event in smonitor.collect_bundle()["events"]] == ["c", "d"]
 
     smonitor.emit("INFO", "e")
     assert [event["message"] for event in manager.recent_events()] == ["d", "e"]

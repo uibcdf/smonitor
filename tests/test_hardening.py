@@ -79,9 +79,7 @@ def test_handler_warning_as_error_does_not_escape_direct_emit():
         smonitor.emit("WARNING", "second emission")
 
     assert event["message"] == "direct emission"
-    assert [item["message"] for item in good.events] == [
-        "direct emission", "second emission"
-    ]
+    assert [item["message"] for item in good.events] == ["direct emission", "second emission"]
     assert manager.report()["handler_errors"]["bad"] == 2
     assert len(manager.report()["runtime_warnings"]) == 1
     assert len(manager.recent_events()) == 2
