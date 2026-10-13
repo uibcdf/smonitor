@@ -2,7 +2,7 @@
 schema = "molsyssuite.conda-plan@1"
 version = "0.20.0"
 package = "smonitor"
-build_number = 0
+build_number = 1
 route = "staged"
 profile = "noarch-python"
 reason = "Declaration-only DiagnosticBundle, emit_from_catalog and emit add opt-in bootstrap_policy=False (#48, #50). Qualify the exact installed noarch candidate across all twelve supported OS/Python cells before publication, including fresh and configured application policy, real warnings and support-tier emission, and the unchanged default. ArgDigest's installed receiving qualification follows publication of this provider artifact."
