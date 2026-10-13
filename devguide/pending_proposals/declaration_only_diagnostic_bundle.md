@@ -1,7 +1,7 @@
 ---
 summary: Emit catalog diagnostics without bootstrapping application policy.
 issue: uibcdf/smonitor#48
-status: active
+status: partial
 opened: 2026-10-13
 closed:
 severity: medium
@@ -14,6 +14,14 @@ supersedes: []
 ---
 
 # Declaration-only DiagnosticBundle
+
+## Maintainer disposition — 2026-10-13
+
+Diego approved the implementation and explicitly authorized direct commit/push
+to main under the internal-maintainer route. The reviewed implementation is
+`986175de7a4456e977183f5dad361b541edfa6fd`; its hosted CI, docs, QA and policy
+checks passed. Provider publication and receiving installed qualification remain
+pending, so this report and uibcdf/smonitor#48 stay open.
 
 ## What
 

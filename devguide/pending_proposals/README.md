@@ -19,7 +19,7 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
-| [`declaration_only_diagnostic_bundle.md`](declaration_only_diagnostic_bundle.md) | `active` | [uibcdf/smonitor#48](https://github.com/uibcdf/smonitor/issues/48) | Emit catalog diagnostics without bootstrapping application policy. |
+| [`declaration_only_diagnostic_bundle.md`](declaration_only_diagnostic_bundle.md) | `partial` | [uibcdf/smonitor#48](https://github.com/uibcdf/smonitor/issues/48) | Emit catalog diagnostics without bootstrapping application policy. |
 | [`pytest_diagnostic_policy_after_bridge.md`](pytest_diagnostic_policy_after_bridge.md) | `open` | [uibcdf/smonitor#32](https://github.com/uibcdf/smonitor/issues/32) | Evaluate opt-in pytest diagnostic policy after the observational bridge. |
 
 <!-- /generated -->
