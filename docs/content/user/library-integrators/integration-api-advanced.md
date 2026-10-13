@@ -19,10 +19,11 @@ warn_once = bundle.warn_once
 resolve = bundle.resolve
 ```
 
-### Proposed declaration-only emission
+### Declaration-only emission (0.20.0+)
 
-The source capability proposed in `uibcdf/smonitor#48` adds
-`DiagnosticBundle(CATALOG, META, PACKAGE_ROOT, bootstrap_policy=False)`.
+Use `DiagnosticBundle(CATALOG, META, PACKAGE_ROOT, bootstrap_policy=False)`
+when a provider must emit catalog diagnostics without bootstrapping application
+policy.
 It registers the provider's declarations without choosing application policy;
 warning, info and support-tier emission does not install a console handler or
 activate warning/logging hooks. Applications can still explicitly configure
@@ -30,9 +31,8 @@ their own diagnostics. The default `True` retains existing first-use behavior.
 
 The lower-level `emit_from_catalog(..., bootstrap_policy=False)` and
 `smonitor.emit(..., bootstrap_policy=False)` preserve the same handler ownership
-boundary. Scoped capture remains independent. A published capability claim
-requires owner review and a separately qualified release; 0.19.0 does not yet
-provide these keyword arguments.
+boundary. Scoped capture remains independent. These keyword arguments were
+introduced in 0.20.0; 0.19.0 does not provide them.
 
 `warn()` and `warn_once()` also raise ordinary Python warnings. Their
 `stacklevel` counts application frames and skips SMonitor's `@signal` wrapper,

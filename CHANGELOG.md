@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-13
+
+### Added
+
+- `DiagnosticBundle`, `emit_from_catalog` and `smonitor.emit` accept opt-in
+  `bootstrap_policy=False` for catalog emission that registers provider
+  declarations without configuring application policy, installing a fallback
+  handler or changing warning/logging hooks. The default remains `True` (#48).
+
 ## [0.19.0] - 2026-10-06
 
 ### Fixed

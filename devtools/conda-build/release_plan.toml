@@ -1,12 +1,12 @@
-# Reviewed for 0.19.0 before creating its immutable tag.
+# Reviewed for the 0.20.0 candidate before creating its immutable tag.
 schema = "molsyssuite.conda-plan@1"
-version = "0.19.0"
+version = "0.20.0"
 package = "smonitor"
-build_number = 1
+build_number = 0
 route = "staged"
 profile = "noarch-python"
-reason = "Provider registration and scoped metadata-only capture add public integration APIs (#38, #37). Qualify the exact installed Conda artifact across all twelve supported OS/Python cells before public release. Build 0 exposed a stale timing-count assertion under importlib collection; build 1 binds the corrected test to a fresh candidate without overwriting staging bytes. Consumer adoption remains separate from provider qualification."
-decision_by = "Repository maintainer via Codex on 2026-10-06"
+reason = "Declaration-only DiagnosticBundle, emit_from_catalog and emit add opt-in bootstrap_policy=False (#48, #50). Qualify the exact installed noarch candidate across all twelve supported OS/Python cells before publication, including fresh and configured application policy, real warnings and support-tier emission, and the unchanged default. ArgDigest's installed receiving qualification follows publication of this provider artifact."
+decision_by = "Repository maintainer via Codex on 2026-10-13"
 artifact_subdirs = ["noarch"]
 test_platforms = ["linux-64", "osx-arm64", "win-64"]
 python_versions = ["3.11", "3.12", "3.13", "3.14"]
