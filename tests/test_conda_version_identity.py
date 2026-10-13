@@ -54,7 +54,16 @@ def test_conda_build_freezes_and_checks_the_exact_version():
 
 def test_failed_version_freeze_stops_build_before_install(tmp_path):
     """A partial ephemeral build source must never reach pip installation (#47)."""
+    bash = "bash"
+    if os.name == "nt":
+        git = shutil.which("git")
+        assert git is not None
+        candidates = (parent / "bin" / "bash.exe" for parent in Path(git).parents)
+        bash = str(next(candidate for candidate in candidates if candidate.is_file()))
+
     python = tmp_path / "python"
+    build_script = tmp_path / "build.sh"
+    shutil.copy2(ROOT / "devtools" / "conda-build" / "build.sh", build_script)
     marker = tmp_path / "pip-was-invoked"
     python.write_bytes(
         (
@@ -74,7 +83,7 @@ def test_failed_version_freeze_stops_build_before_install(tmp_path):
     }
 
     result = subprocess.run(
-        ["bash", str(ROOT / "devtools" / "conda-build" / "build.sh")],
+        [bash, build_script.name],
         cwd=tmp_path,
         env=env,
         capture_output=True,
