@@ -334,6 +334,8 @@ class Manager:
         }
         if config_updates:
             self._config = replace(self._config, **config_updates)
+            if event_buffer_size is not None:
+                self._resize_event_buffer()
         with self._catalog_lock:
             if codes is not None:
                 self._codes = codes
@@ -1015,13 +1017,17 @@ class Manager:
                     and count >= threshold
                     and name not in self._degraded_handlers_announced
                 ):
-                    warning_msg = (
-                        f"Handler '{name}' reached error threshold "
-                        f"({count}/{threshold}) and is considered degraded."
+                    warning_msg = INTERNAL_CODES["SMONITOR-HANDLER-DEGRADED"]["message"].format(
+                        name=name, count=count, threshold=threshold
                     )
                     self._runtime_warnings.append(warning_msg)
                     self._degraded_handlers_announced.add(name)
-                    warnings.warn(warning_msg, RuntimeWarning, stacklevel=2)
+                    try:
+                        warnings.warn(warning_msg, RuntimeWarning, stacklevel=2)
+                    except Exception:
+                        # The report retains the warning and failure count even
+                        # when a warning filter raises during announcement.
+                        pass
 
         self._record_event(routed_event)
         return event
@@ -1033,8 +1039,14 @@ class Manager:
         from copy import deepcopy
 
         self._event_buffer.append(deepcopy(event))
-        if len(self._event_buffer) > size:
-            self._event_buffer.pop(0)
+        self._resize_event_buffer()
+
+    def _resize_event_buffer(self) -> None:
+        size = self._config.event_buffer_size
+        if size <= 0:
+            self._event_buffer.clear()
+        elif len(self._event_buffer) > size:
+            del self._event_buffer[:-size]
 
     def recent_events(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         if limit is None:

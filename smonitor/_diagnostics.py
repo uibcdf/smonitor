@@ -15,6 +15,9 @@ CODES = {
         "message": "SMonitor signal {stage} failed for {signal}.",
         "dev_message": "SMonitor signal {stage} failed for {signal}: {detail}",
     },
+    "SMONITOR-HANDLER-DEGRADED": {
+        "message": "Handler '{name}' reached error threshold ({count}/{threshold}) and is considered degraded.",
+    },
     "SMONITOR-PROVIDER-INVALID": {
         "message": "Provider diagnostic declarations are invalid.",
         "user_hint": "Validate the provider's CODES and SIGNALS before registration.",

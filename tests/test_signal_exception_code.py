@@ -8,6 +8,8 @@ reached telemetry. Downstream contract tests that assert "the error path emits
 a coded signal" could then only be satisfied by unrelated events.
 """
 
+from types import ModuleType
+
 import pytest
 
 import smonitor
@@ -89,3 +91,26 @@ def test_non_string_code_attribute_is_ignored(events):
         decorated()
 
     assert events[-1]["code"] is None
+
+
+def test_argument_repr_failure_preserves_exception_event(events):
+    """An argument-summary failure must not suppress exception emission (#36)."""
+    module = ModuleType("lazy_provider")
+
+    def broken_resolver(_name):
+        raise RuntimeError("repr loader failed")
+
+    module.__getattr__ = broken_resolver
+
+    @smonitor.signal
+    def reject(_module):
+        raise OutOfRangeError(catalog=CATALOG, meta=META, extra={"value": 42})
+
+    with pytest.warns(RuntimeWarning, match="argument summary failed"):
+        with pytest.raises(OutOfRangeError) as caught:
+            reject(module)
+
+    assert caught.value.code == "T-E-RANGE"
+    assert events[-1]["code"] == "T-E-RANGE"
+    assert events[-1]["exception_type"] == "OutOfRangeError"
+    assert events[-1]["source"].endswith(".reject")

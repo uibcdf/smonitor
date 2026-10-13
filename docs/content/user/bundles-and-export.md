@@ -60,6 +60,11 @@ Event exports require buffering:
 SMONITOR = {"event_buffer_size": 500}
 ```
 
+Lowering `event_buffer_size` immediately discards the oldest retained events.
+Setting it to `0` clears the buffer and stops retention; raising it later starts
+with an empty buffer. Bundle exports contain only events still retained at
+collection time.
+
 ## You are done when
 
 - `smonitor export` generates the expected files,

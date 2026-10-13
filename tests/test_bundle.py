@@ -19,6 +19,30 @@ def test_event_buffer_and_export(tmp_path: Path):
     assert len(data["events"]) == 2
 
 
+def test_event_buffer_resize_trims_history_and_bundle_immediately():
+    manager = smonitor.configure(
+        profile="user", level="INFO", handlers=[], event_buffer_size=4, enabled=True
+    )
+    for message in ("a", "b", "c", "d"):
+        smonitor.emit("INFO", message)
+
+    manager.configure(event_buffer_size=2)
+    assert [event["message"] for event in manager.recent_events()] == ["c", "d"]
+    assert [event["message"] for event in smonitor.collect_bundle()["events"]] == [
+        "c", "d"
+    ]
+
+    smonitor.emit("INFO", "e")
+    assert [event["message"] for event in manager.recent_events()] == ["d", "e"]
+    manager.configure(event_buffer_size=0)
+    assert manager.recent_events() == []
+    smonitor.emit("INFO", "not retained")
+    manager.configure(event_buffer_size=3)
+    assert manager.recent_events() == []
+    smonitor.emit("INFO", "new")
+    assert [event["message"] for event in manager.recent_events()] == ["new"]
+
+
 def test_bundle_serializes_immutable_config_containers_as_json_arrays(tmp_path: Path):
     cfg = tmp_path / "_smonitor.py"
     cfg.write_text("SMONITOR = {}\n")

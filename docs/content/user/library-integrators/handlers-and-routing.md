@@ -46,6 +46,10 @@ FILTERS = [
 
 If one handler fails, SMonitor should still attempt delivery to remaining
 handlers. Validate this in QA with a degraded-handler test case.
+When `handler_error_threshold` is reached, SMonitor records the fault and
+degradation warning in the manager report. It also issues a Python
+`RuntimeWarning` under ordinary warning filters. A filter that promotes that
+warning to an exception does not interrupt the original `emit()` call.
 
 ## Validation checklist
 

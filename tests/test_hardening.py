@@ -1,4 +1,9 @@
+import warnings
+
+import pytest
+
 import smonitor
+from smonitor.handlers.memory import MemoryHandler
 
 
 def test_handler_errors_counted():
@@ -43,11 +48,43 @@ def test_handler_degradation_warning_announced_once():
         handlers=[BadHandler()],
         handler_error_threshold=1,
     )
-    smonitor.emit("WARNING", "x")
+    with pytest.warns(RuntimeWarning, match="reached error threshold"):
+        smonitor.emit("WARNING", "x")
     smonitor.emit("WARNING", "y")
     report = manager.report()
     msgs = [m for m in report["runtime_warnings"] if "once" in m]
     assert len(msgs) == 1
+
+
+def test_handler_warning_as_error_does_not_escape_direct_emit():
+    class BadHandler:
+        name = "bad"
+
+        def handle(self, event, *, profile):
+            raise OSError("sink failed")
+
+    good = MemoryHandler()
+    manager = smonitor.configure(
+        profile="user",
+        handlers=[BadHandler(), good],
+        handler_error_threshold=1,
+        event_buffer_size=2,
+        capture_logging=False,
+        capture_warnings=False,
+        capture_exceptions=False,
+    )
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", RuntimeWarning)
+        event = smonitor.emit("WARNING", "direct emission")
+        smonitor.emit("WARNING", "second emission")
+
+    assert event["message"] == "direct emission"
+    assert [item["message"] for item in good.events] == [
+        "direct emission", "second emission"
+    ]
+    assert manager.report()["handler_errors"]["bad"] == 2
+    assert len(manager.report()["runtime_warnings"]) == 1
+    assert len(manager.recent_events()) == 2
 
 
 def test_disabled_noop():
