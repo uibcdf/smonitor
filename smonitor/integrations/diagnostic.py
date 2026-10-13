@@ -320,10 +320,18 @@ class DiagnosticBundle:
         catalog: Dict[str, Any],
         meta: Dict[str, Any],
         package_root: Path,
+        *,
+        bootstrap_policy: bool = True,
     ):
+        if not bootstrap_policy:
+            from .provider import register_provider
+
+            register_provider(package_root)
         self.catalog = catalog
         self.meta = meta
         self.package_root = package_root
+        self.bootstrap_policy = bootstrap_policy
+        self._emission_root = package_root if bootstrap_policy else None
         self._warned_once_cache: set[tuple[Type[Warning], str]] = set()
         self._tier_dedup_cache: set[str] = set()
 
@@ -363,7 +371,8 @@ class DiagnosticBundle:
                 payload["caller"] = caller or (extra or {}).get("caller") or payload.get("caller")
                 emit_from_catalog(
                     entry,
-                    package_root=self.package_root,
+                    package_root=self._emission_root,
+                    bootstrap_policy=self.bootstrap_policy,
                     extra=merge_extra(self.meta, payload),
                     meta=self.meta,
                 )
@@ -387,6 +396,7 @@ class DiagnosticBundle:
                                 else None,
                             },
                         ),
+                        bootstrap_policy=self.bootstrap_policy,
                     )
                 except Exception:
                     pass
@@ -452,7 +462,8 @@ class DiagnosticBundle:
         if entry:
             emit_from_catalog(
                 entry,
-                package_root=self.package_root,
+                package_root=self._emission_root,
+                bootstrap_policy=self.bootstrap_policy,
                 extra=merge_extra(self.meta, extra),
                 meta=self.meta,
             )
@@ -499,7 +510,8 @@ class DiagnosticBundle:
             if entry:
                 emit_from_catalog(
                     entry,
-                    package_root=self.package_root,
+                    package_root=self._emission_root,
+                    bootstrap_policy=self.bootstrap_policy,
                     extra=merge_extra(self.meta, extra),
                     meta=self.meta,
                 )
@@ -511,6 +523,7 @@ class DiagnosticBundle:
                     source="smonitor.integrations.support_tier",
                     category="support_tier",
                     extra=merge_extra(self.meta, extra),
+                    bootstrap_policy=self.bootstrap_policy,
                 )
         elif tier >= 3:
             catalog_key = key or "SupportTier3Info"
@@ -520,7 +533,8 @@ class DiagnosticBundle:
             if entry:
                 emit_from_catalog(
                     entry,
-                    package_root=self.package_root,
+                    package_root=self._emission_root,
+                    bootstrap_policy=self.bootstrap_policy,
                     extra=merge_extra(self.meta, extra),
                     meta=self.meta,
                 )
@@ -531,6 +545,7 @@ class DiagnosticBundle:
                     source="smonitor.integrations.support_tier",
                     category="support_tier",
                     extra=merge_extra(self.meta, extra),
+                    bootstrap_policy=self.bootstrap_policy,
                 )
 
     def support_tier(

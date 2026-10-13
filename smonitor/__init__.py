@@ -137,9 +137,9 @@ def configure(**kwargs):
     return manager
 
 
-def emit(level, message, **kwargs):
+def emit(level, message, *, bootstrap_policy=True, **kwargs):
     manager = get_manager()
-    if not manager._handlers:
+    if bootstrap_policy and not manager._handlers:
         manager.add_handler(ConsoleHandler())
     return manager.emit(level, message, **kwargs)
 

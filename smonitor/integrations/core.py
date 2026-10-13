@@ -169,9 +169,15 @@ def emit_from_catalog(
     extra: Optional[Dict[str, Any]] = None,
     package_root: Optional[Path] = None,
     meta: Optional[Dict[str, Any]] = None,
+    bootstrap_policy: bool = True,
 ) -> Dict[str, Any]:
     if package_root is not None:
-        ensure_configured(package_root)
+        if bootstrap_policy:
+            ensure_configured(package_root)
+        else:
+            from .provider import register_provider
+
+            register_provider(package_root)
     return _emit(
         entry.get("level", "WARNING"),
         "",
@@ -179,4 +185,5 @@ def emit_from_catalog(
         code=entry.get("code"),
         category=entry.get("category"),
         extra=merge_extra(meta, extra),
+        bootstrap_policy=bootstrap_policy,
     )
