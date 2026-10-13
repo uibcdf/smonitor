@@ -1,11 +1,11 @@
-# Reviewed for the 0.20.0 candidate before creating its immutable tag.
+# Reviewed for the 0.21.0 candidate before creating its immutable tag.
 schema = "molsyssuite.conda-plan@1"
-version = "0.20.0"
+version = "0.21.0"
 package = "smonitor"
-build_number = 1
+build_number = 0
 route = "staged"
 profile = "noarch-python"
-reason = "Declaration-only DiagnosticBundle, emit_from_catalog and emit add opt-in bootstrap_policy=False (#48, #50). Qualify the exact installed noarch candidate across all twelve supported OS/Python cells before publication, including fresh and configured application policy, real warnings and support-tier emission, and the unchanged default. ArgDigest's installed receiving qualification follows publication of this provider artifact."
+reason = "SMonitor adds opt-in safe audience metadata templates (#39) and bounded nonemitting identity bundle APIs (#40), and fixes retained event-buffer resizing (#41) and handler-degradation warning precedence (#42). Qualify the exact installed noarch candidate on all twelve supported OS/Python cells before public visibility; Recorda's receiving adoption remains separately owned. The read-only guide audit and build failure guard close local resource review #47."
 decision_by = "Repository maintainer via Codex on 2026-10-13"
 artifact_subdirs = ["noarch"]
 test_platforms = ["linux-64", "osx-arm64", "win-64"]

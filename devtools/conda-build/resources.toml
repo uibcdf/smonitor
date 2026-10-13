@@ -5,6 +5,8 @@ required_paths = [
   "site-packages/smonitor/__init__.py",
   "site-packages/smonitor/_version.py",
   "site-packages/smonitor/_diagnostics.py",
+  "site-packages/smonitor/bundle.py",
+  "site-packages/smonitor/config/__init__.py",
   "site-packages/smonitor/core/capture.py",
   "site-packages/smonitor/core/manager.py",
   "site-packages/smonitor/integrations/provider.py",
