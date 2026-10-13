@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import json
 import platform
+import re
 import sys
 from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime, timezone
+from itertools import islice
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 
@@ -13,6 +15,34 @@ import smonitor
 from smonitor._diagnostics import CODES as INTERNAL_CODES
 from smonitor.config import load_project_config
 from smonitor.core.manager import get_manager
+
+_IDENTITY_BUNDLE_MAX_EVENTS = 100
+_IDENTITY_BUNDLE_MAX_CODES = 128
+_IDENTITY_CODE = re.compile(r"[A-Z][A-Z0-9-]{0,63}\Z")
+_IDENTITY_FINGERPRINT = re.compile(r"[0-9a-f]{16}\Z")
+_IDENTITY_LEVELS = frozenset({"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"})
+_IDENTITY_OMISSIONS = (
+    "smonitor_version",
+    "python",
+    "argv",
+    "platform",
+    "runtime",
+    "config",
+    "project_config",
+    "policy",
+    "codes",
+    "internal_codes",
+    "signals",
+    "providers",
+    "report",
+    "triage",
+    "redactions",
+    "event_messages",
+    "event_source",
+    "event_extra",
+    "event_context",
+    "event_human_summary",
+)
 
 
 def _parse_since(since: Optional[str]) -> Optional[datetime]:
@@ -235,6 +265,82 @@ def collect_bundle(
     if project_config is not None:
         data["project_config"] = project_config
     return data
+
+
+def collect_identity_bundle(
+    *, max_events: int = _IDENTITY_BUNDLE_MAX_EVENTS, allowed_codes: Iterable[str] = ()
+) -> Dict[str, Any]:
+    """Collect a bounded, nonemitting snapshot of retained event identities.
+
+    This is an opt-in narrow support artifact, not a redaction of a rich bundle.
+    Only caller-approved code identifiers may appear as strings from events.
+    Retention, filtering, and pending summaries can make history incomplete.
+    """
+    if type(max_events) is not int or max_events < 0 or type(allowed_codes) is str:
+        raise ValueError(INTERNAL_CODES["SMONITOR-BUNDLE-SELECTION-INVALID"]["message"])
+    try:
+        codes = list(islice(allowed_codes, _IDENTITY_BUNDLE_MAX_CODES + 1))
+    except TypeError as exc:
+        raise ValueError(INTERNAL_CODES["SMONITOR-BUNDLE-SELECTION-INVALID"]["message"]) from exc
+    if len(codes) > _IDENTITY_BUNDLE_MAX_CODES or any(
+        type(code) is not str or _IDENTITY_CODE.fullmatch(code) is None for code in codes
+    ):
+        raise ValueError(INTERNAL_CODES["SMONITOR-BUNDLE-SELECTION-INVALID"]["message"])
+
+    approved = set(codes)
+    retained = get_manager().recent_events()
+    limit = min(max_events, _IDENTITY_BUNDLE_MAX_EVENTS)
+    selected = retained[-limit:] if limit else []
+    events = []
+    for event in selected:
+        level = event.get("level")
+        fingerprint = event.get("fingerprint")
+        code = event.get("code")
+        events.append(
+            {
+                "level": level if type(level) is str and level in _IDENTITY_LEVELS else None,
+                "fingerprint": (
+                    fingerprint
+                    if type(fingerprint) is str and _IDENTITY_FINGERPRINT.fullmatch(fingerprint)
+                    else None
+                ),
+                "code": code if type(code) is str and code in approved else None,
+            }
+        )
+
+    return {
+        "schema": "smonitor.identity-bundle@1",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "producer": "smonitor",
+        "coverage": {
+            "retained_events": len(retained),
+            "selected_events": len(events),
+            "limit": limit,
+            "omitted_before_selection": len(retained) - len(events),
+            "codes_omitted": sum(event["code"] is None for event in events),
+            "history_complete": False,
+            "pending_summaries_flushed": False,
+        },
+        "events": events,
+        "omitted": list(_IDENTITY_OMISSIONS),
+    }
+
+
+def export_identity_bundle(
+    path: str | Path,
+    *,
+    max_events: int = _IDENTITY_BUNDLE_MAX_EVENTS,
+    allowed_codes: Iterable[str] = (),
+    force: bool = False,
+) -> Path:
+    """Write one identity bundle JSON file without loading project configuration."""
+    path = Path(path)
+    if path.exists() and not force:
+        raise FileExistsError(path)
+    bundle = collect_identity_bundle(max_events=max_events, allowed_codes=allowed_codes)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
+    return path
 
 
 def write_bundle(

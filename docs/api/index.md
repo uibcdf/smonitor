@@ -21,6 +21,8 @@ This section is generated from SMonitor source docstrings and signatures.
    CapturePolicy
    export_bundle
    collect_bundle
+   export_identity_bundle
+   collect_identity_bundle
 ```
 
 ## Profiling API

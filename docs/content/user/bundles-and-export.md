@@ -65,6 +65,35 @@ Setting it to `0` clears the buffer and stops retention; raising it later starts
 with an empty buffer. Bundle exports contain only events still retained at
 collection time.
 
+## Narrow identity bundle for strict consumers
+
+`collect_identity_bundle()` and `export_identity_bundle()` are opt-in,
+nonemitting alternatives when a consumer only needs bounded event identities:
+
+```python
+bundle = smonitor.collect_identity_bundle(
+    max_events=20, allowed_codes={"MYLIB-W001"}
+)
+smonitor.export_identity_bundle(
+    "support-identities.json", max_events=20, allowed_codes={"MYLIB-W001"}
+)
+```
+
+This single-file JSON profile exports a schema, timestamp, fixed producer name,
+coverage counts, a list of omitted sections, and at most 100 retained events.
+Each event contains only a validated level, a 16-character fingerprint, and a
+code if the application explicitly approved that exact code in `allowed_codes`.
+The allowlist accepts up to 128 uppercase code identifiers; its strings remain
+the application's responsibility. The profile excludes `argv`, paths, runtime
+identifiers, configuration, catalogs, messages, source, context, extra, report,
+and project configuration. It never flushes pending coalesced or duplicate
+summaries or invokes handlers. It does not claim complete history: the buffer,
+earlier filtering and pending summaries can omit observations. Fingerprints
+support correlation and should not be treated as a secrecy guarantee.
+
+The default `collect_bundle()` and `export_bundle()` remain the rich support
+artifacts and keep their existing export behavior and redaction options.
+
 ## You are done when
 
 - `smonitor export` generates the expected files,

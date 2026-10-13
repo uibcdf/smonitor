@@ -26,6 +26,7 @@ The table below is generated from front matter by
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
 | [`adopt_molsyssuite_python_tooling_policy.md`](adopt_molsyssuite_python_tooling_policy.md) | `resolved` | [uibcdf/smonitor#12](https://github.com/uibcdf/smonitor/issues/12) | Adopt the shared Python and Ruff development baseline. |
+| [`bounded_nonemitting_identity_bundle.md`](bounded_nonemitting_identity_bundle.md) | `resolved` | [uibcdf/smonitor#40](https://github.com/uibcdf/smonitor/issues/40) | Evaluate bounded nonemitting support-bundle export for strict consumers |
 | [`catalog_warning_wrapper_duplicates_hint_on_rebuild.md`](catalog_warning_wrapper_duplicates_hint_on_rebuild.md) | `resolved` | [uibcdf/smonitor#21](https://github.com/uibcdf/smonitor/issues/21) | CatalogWarning duplicates a hint when a wrapper supplies its catalog on rebuild. |
 | [`catalog_warnings_re_rendered_under_xdist.md`](catalog_warnings_re_rendered_under_xdist.md) | `resolved` | [uibcdf/smonitor#4](https://github.com/uibcdf/smonitor/issues/4) | A catalog hint interpolating a field cannot be re-rendered from args alone. |
 | [`complete_distribution_adoption.md`](complete_distribution_adoption.md) | `resolved` | [uibcdf/smonitor#35](https://github.com/uibcdf/smonitor/issues/35) | Maintain distribution-route controls and qualify each claimed installed cell. |

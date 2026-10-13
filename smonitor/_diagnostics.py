@@ -18,6 +18,9 @@ CODES = {
     "SMONITOR-HANDLER-DEGRADED": {
         "message": "Handler '{name}' reached error threshold ({count}/{threshold}) and is considered degraded.",
     },
+    "SMONITOR-BUNDLE-SELECTION-INVALID": {
+        "message": "Invalid identity bundle selection; use a nonnegative event limit and approved code identifiers.",
+    },
     "SMONITOR-PROVIDER-INVALID": {
         "message": "Provider diagnostic declarations are invalid.",
         "user_hint": "Validate the provider's CODES and SIGNALS before registration.",

@@ -23,8 +23,10 @@ from typing import Optional
 from . import integrations
 from .bundle import (
     collect_bundle,
+    collect_identity_bundle,
     compare_bundles,
     export_bundle,
+    export_identity_bundle,
     format_bundle_comparison_markdown,
 )
 from .config import (
@@ -66,6 +68,8 @@ __all__ = [
     "get_manager",
     "export_bundle",
     "collect_bundle",
+    "collect_identity_bundle",
+    "export_identity_bundle",
     "compare_bundles",
     "format_bundle_comparison_markdown",
     "integrations",
