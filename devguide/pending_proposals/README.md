@@ -19,6 +19,7 @@ The table below is generated from front matter by
 
 | entry | status | issue | summary |
 | --- | --- | --- | --- |
+| [`review_remaining_resource_lifecycle.md`](review_remaining_resource_lifecycle.md) | `partial` | [uibcdf/smonitor#47](https://github.com/uibcdf/smonitor/issues/47) | Review remaining temporary-resource ownership and tool lifecycle |
 | [`pytest_diagnostic_policy_after_bridge.md`](pytest_diagnostic_policy_after_bridge.md) | `open` | [uibcdf/smonitor#32](https://github.com/uibcdf/smonitor/issues/32) | Evaluate opt-in pytest diagnostic policy after the observational bridge. |
 
 <!-- /generated -->
