@@ -2,7 +2,7 @@
 schema = "molsyssuite.conda-plan@1"
 version = "0.21.0"
 package = "smonitor"
-build_number = 1
+build_number = 2
 route = "staged"
 profile = "noarch-python"
 reason = "SMonitor adds opt-in safe audience metadata templates (#39) and bounded nonemitting identity bundle APIs (#40), and fixes retained event-buffer resizing (#41) and handler-degradation warning precedence (#42). Qualify the exact installed noarch candidate on all twelve supported OS/Python cells before public visibility; Recorda's receiving adoption remains separately owned. The read-only guide audit and build failure guard close local resource review #47."
