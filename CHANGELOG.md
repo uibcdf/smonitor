@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-14
+
+### Added
+
+- Catalog declarations can provide opt-in, validated `metadata_messages` and
+  `metadata_hints` for each audience. Metadata-only emission uses these safe
+  templates without importing ordinary message hints (#39).
+- `collect_identity_bundle()` and `export_identity_bundle()` provide bounded,
+  nonemitting support artifacts with fixed provenance and omission fields.
+  Event codes require an explicit allowlist; rich payloads are excluded (#40).
+
+### Fixed
+
+- Resizing the manager's retained event buffer now takes effect immediately,
+  including clearing it when the new size is zero (#41).
+- Handler degradation reports its catalog code even with warnings promoted to
+  errors, while subsequent handlers still receive the event (#42).
+- Regression coverage preserves exception diagnostics when argument `repr`
+  fails (#36).
+- The guide synchronization audit is read-only, and the Conda build stops if
+  version freezing fails (#47).
+
 ## [0.20.0] - 2026-10-13
 
 ### Added
