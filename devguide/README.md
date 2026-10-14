@@ -27,14 +27,16 @@ These documents track implementation details. Product-level decisions and
 historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
-- **Latest public release: 0.20.0 (2026-10-13).** The exact candidate
-  `f6230af431a7fc185209fa44364c017d711cc2b7` passed the twelve-cell source
-  and installed matrices. [Exact-file promotion](https://github.com/uibcdf/smonitor/actions/runs/38466664766)
-  published `smonitor-0.20.0-py_1.tar.bz2` with SHA-256
-  `887cbbe8fa9056388ee1344c8244138af2c06371846584dc234de1d994335ebf`;
-  the [stable GitHub Release](https://github.com/uibcdf/smonitor/releases/tag/0.20.0)
-  and public Conda index were verified. The opt-in declaration-only bundle capability
-  is recorded in [`archive/declaration_only_diagnostic_bundle.md`](archive/declaration_only_diagnostic_bundle.md).
+- **Latest public release: 0.21.0 (2026-10-14).** The exact candidate
+  `066b69cad8896cdc126d5586fd53268af4ea6490` passed the twelve-cell
+  [source](https://github.com/uibcdf/smonitor/actions/runs/38524363789) and
+  [installed](https://github.com/uibcdf/smonitor/actions/runs/38525100772)
+  matrices. [Exact-file promotion](https://github.com/uibcdf/smonitor/actions/runs/38525755012)
+  published `smonitor-0.21.0-py_2.tar.bz2` with SHA-256
+  `62b6cbae37f7fa06374af87923792f00253020955d000294b1a7d37eb9d04e56`;
+  the [stable GitHub Release](https://github.com/uibcdf/smonitor/releases/tag/0.21.0)
+  and public Conda index were verified. Builds `py_0` and `py_1` remain in
+  staging only; they were superseded before the immutable tag.
 - **Python 3.14 milestone: 0.16.0 (2026-09-21).** Its twelve-cell hosted matrix,
   exact-file Conda promotion and clean Linux Python 3.14 installation established
   MolSysSuite admission. The source Release is archived by Zenodo as version DOI
@@ -64,7 +66,7 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.20.0` is the latest published pre-1.0 stabilization checkpoint.
+- Version `0.21.0` is the latest published pre-1.0 stabilization checkpoint.
 - **The seven `1.0.0` exit criteria were met at the 2026-09-08 checkpoint.**
   Criterion 5 -- operability confirmed in a real workflow -- closed with
   `operability_evidence_2026-09-08.md`, which found the defect fixed in `#11`.

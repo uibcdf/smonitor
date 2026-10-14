@@ -62,3 +62,11 @@ No primary clone, shared environment, useful build/report output, or unknown
 historical resource was removed by this source review. The source review and
 two focused executed guards close the local #47 disposition. Central #104
 remains independently open for suite coordination and historical attribution.
+
+## Publication (2026-10-14)
+
+The read-only guide audit and fail-closed Conda build guard are included in the
+stable [0.21.0 release](https://github.com/uibcdf/smonitor/releases/tag/0.21.0)
+and exact Conda `py_2` artifact. The
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/38525100772)
+qualified the published build; central #104 remains separately owned.

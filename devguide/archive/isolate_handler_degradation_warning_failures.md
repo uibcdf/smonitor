@@ -39,3 +39,9 @@ record on Python 3.14.
 The isolated path catches ordinary exceptions from the announcement; it does
 not catch `BaseException` subclasses. Other direct-emission validation errors
 retain their own contracts.
+
+## Publication (2026-10-14)
+
+The fix is available in the stable [0.21.0 release](https://github.com/uibcdf/smonitor/releases/tag/0.21.0)
+and the exact Conda `py_2` artifact, qualified by the
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/38525100772).

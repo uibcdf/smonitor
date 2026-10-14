@@ -45,3 +45,9 @@ and checks the full exported key set, nonemission and approved code. Other
 guards check selection limits, omitted codes, pending-summary behavior and
 file overwrite protection. Consumer adoption remains with Recorda and the
 cross-component coordination in uibcdf/moli#62.
+
+## Publication (2026-10-14)
+
+The public API is available in the stable [0.21.0 release](https://github.com/uibcdf/smonitor/releases/tag/0.21.0)
+and the exact Conda `py_2` artifact, qualified by the
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/38525100772).

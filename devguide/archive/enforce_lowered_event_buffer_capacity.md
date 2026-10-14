@@ -36,3 +36,9 @@ disabling and re-enabling retention on Python 3.14.
 
 This is a count-capacity contract. It does not claim aggregate byte limits or
 remove already exported artifacts.
+
+## Publication (2026-10-14)
+
+The fix is available in the stable [0.21.0 release](https://github.com/uibcdf/smonitor/releases/tag/0.21.0)
+and the exact Conda `py_2` artifact, qualified by the
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/38525100772).

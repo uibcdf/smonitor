@@ -47,3 +47,9 @@ and provider contracts.
 This is an opt-in provider capability. Recorda owns any subsequent adoption
 or presentation change, and the current rich and shared metadata templates
 retain their behavior. It does not authorize arbitrary rendered text as safe.
+
+## Publication (2026-10-14)
+
+The capability is available in the stable [0.21.0 release](https://github.com/uibcdf/smonitor/releases/tag/0.21.0)
+and the exact Conda `py_2` artifact, qualified by the
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/38525100772).

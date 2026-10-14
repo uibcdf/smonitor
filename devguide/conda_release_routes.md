@@ -89,3 +89,11 @@ published the verified digest; `uibcdf/smonitor#28` is resolved. The `0.20.0`
 and [exact-file promotion](https://github.com/uibcdf/smonitor/actions/runs/38466664766)
 provide a later complete staged-route proof across twelve cells. Native ABI3 publishers should
 reuse the decision and evidence contract, not copy this one-job noarch build shape.
+
+The `0.21.0` [source matrix](https://github.com/uibcdf/smonitor/actions/runs/38524363789),
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/38525100772) and
+[promotion](https://github.com/uibcdf/smonitor/actions/runs/38525755012)
+qualified and published `smonitor-0.21.0-py_2.tar.bz2` with SHA-256
+`62b6cbae37f7fa06374af87923792f00253020955d000294b1a7d37eb9d04e56`.
+The two earlier builds remain in staging after candidate metadata corrections;
+the stable tag points only to the `py_2` source commit.
