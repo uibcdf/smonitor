@@ -34,6 +34,14 @@ If you are an automation agent contributing to this repository:
 - Do not break bundle export flows.
 - Maintain redaction-safe defaults for shared diagnostics artifacts.
 
+## Public release titles
+
+When preparing, publishing or intentionally editing a public GitHub Release, use
+exactly `X.Y.Z` as its title/name, matching the canonical tag and package/project
+version. Put descriptions in the body/notes. Read
+[the local release-title guide](devguide/release_titles.md) and
+[the canonical rule](MOLSYSSUITE_GUIDE.md#github-release-titles).
+
 ## Modular reusable tools
 
 Before adding a feature, inspect existing tools and identify the owning module or
