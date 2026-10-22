@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+from types import SimpleNamespace
 
 import pytest
 
@@ -127,6 +128,15 @@ def test_policy_uses_identity_set_and_reports_catalog_and_forbidden_rules(
 def test_provider_catalog_validation_is_explicit_and_does_not_register(pytester):
     root = pytester.path / "provider"
     root.mkdir()
+    codes, problems = load_provider_codes([pytester.path / "absent"])
+    assert codes == set()
+    assert problems[0]["rule"] == "provider_config_missing"
+
+    (root / "_smonitor.py").write_text("CODES = {}\n", encoding="utf-8")
+    codes, problems = load_provider_codes([root])
+    assert codes == set()
+    assert problems[0]["rule"] == "provider_codes_missing"
+
     (root / "_smonitor.py").write_text(
         "CODES = {'EXAMPLE-WARN-001': {'message': 'Example {reason}'}}\n",
         encoding="utf-8",
@@ -134,6 +144,16 @@ def test_provider_catalog_validation_is_explicit_and_does_not_register(pytester)
     codes, problems = load_provider_codes([root])
     assert codes == {"EXAMPLE-WARN-001"}
     assert problems == []
+
+    conflicting = pytester.path / "conflicting"
+    conflicting.mkdir()
+    (conflicting / "_smonitor.py").write_text(
+        "CODES = {'EXAMPLE-WARN-001': {'message': 'Different wording'}}\n",
+        encoding="utf-8",
+    )
+    codes, problems = load_provider_codes([root, conflicting])
+    assert codes == {"EXAMPLE-WARN-001"}
+    assert problems[0]["rule"] == "provider_code_conflict"
 
     (root / "_smonitor.py").write_text(
         "CODES = {'EXAMPLE-WARN-001': {'title': 'Missing template'}}\n",
@@ -158,6 +178,21 @@ def test_provider_catalog_validation_is_explicit_and_does_not_register(pytester)
 def test_baseline_rejects_duplicate_and_malformed_identities(tmp_path):
     baseline = tmp_path / "baseline.json"
     identity = {"code": "EXAMPLE-WARN-001", "source": "example.test", "fingerprint": "a" * 16}
+    baseline.write_text(json.dumps({"schema": "future@2", "identities": []}), encoding="utf-8")
+    with pytest.raises(ValueError, match="schema"):
+        load_baseline(baseline)
+    baseline.write_text(
+        json.dumps({"schema": "smonitor.pytest-baseline@1", "identities": {}}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="identities"):
+        load_baseline(baseline)
+    baseline.write_text(
+        json.dumps({"schema": "smonitor.pytest-baseline@1", "identities": [{"code": "X"}]}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="identity"):
+        load_baseline(baseline)
     baseline.write_text(
         json.dumps({"schema": "smonitor.pytest-baseline@1", "identities": [identity, identity]}),
         encoding="utf-8",
@@ -166,3 +201,60 @@ def test_baseline_rejects_duplicate_and_malformed_identities(tmp_path):
         load_baseline(baseline)
     with pytest.raises(FileExistsError):
         write_baseline(baseline, [])
+    with pytest.raises(ValueError, match="identity"):
+        write_baseline(tmp_path / "invalid.json", [("bad code", "example.test", "a" * 16)])
+
+
+def test_policy_rejects_gaps_and_malformed_smonitor_evidence(monkeypatch):
+    receptor = pytest.importorskip("pytest_receptor")
+    artifact = SimpleNamespace(
+        complete=True,
+        integrity_valid=True,
+        issue=None,
+        final=SimpleNamespace(
+            data={
+                "complete": False,
+                "outcome": "FAIL",
+                "extensions": {"incomplete": True, "dropped": 2},
+                "artifact_policy": {"truncated": True},
+            }
+        ),
+        events=[
+            SimpleNamespace(type="extension", data={"namespace": "other@1", "payload": {}}),
+            SimpleNamespace(
+                type="extension", data={"namespace": "uibcdf.smonitor@1", "payload": {}}
+            ),
+            SimpleNamespace(
+                type="extension",
+                data={
+                    "namespace": "uibcdf.smonitor@1",
+                    "payload": {"schema": "smonitor.pytest-event@1", "code": "EXAMPLE-WARN-001"},
+                },
+            ),
+        ],
+    )
+    monkeypatch.setattr(receptor, "read_artifact", lambda path: artifact)
+    result = evaluate_pytest_artifact("unused.jsonl", require_diagnostics=True)
+    assert result["ok"] is False
+    assert result["pytest_outcome"] == "FAIL"
+    assert result["diagnostic_records"] == 2
+    assert {entry["rule"] for entry in result["violations"]} == {
+        "execution_incomplete",
+        "extensions_incomplete",
+        "extensions_dropped",
+        "artifact_truncated",
+        "diagnostic_payload_invalid",
+        "diagnostic_identity_invalid",
+    }
+
+    artifact.final.data.update(
+        complete=True,
+        extensions={"incomplete": False, "dropped": 0},
+        artifact_policy={"truncated": False},
+    )
+    artifact.events = []
+    assert evaluate_pytest_artifact("unused.jsonl")["ok"] is True
+    with pytest.raises(ValueError, match="forbidden_code"):
+        evaluate_pytest_artifact("unused.jsonl", forbidden_codes={"bad code"})
+    with pytest.raises(ValueError, match="known_code"):
+        evaluate_pytest_artifact("unused.jsonl", known_codes={"bad code"})
