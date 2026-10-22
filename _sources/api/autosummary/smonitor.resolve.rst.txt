@@ -1,0 +1,6 @@
+﻿smonitor.resolve
+================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: resolve

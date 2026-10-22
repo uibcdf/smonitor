@@ -1,0 +1,6 @@
+﻿smonitor.collect\_identity\_bundle
+==================================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: collect_identity_bundle
