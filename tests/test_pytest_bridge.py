@@ -7,6 +7,7 @@ import pytest
 import smonitor
 from smonitor.core.manager import _add_event_observer, _remove_event_observer
 from smonitor.pytest_plugin import _ReceptorObserver
+from smonitor.pytest_policy import evaluate_pytest_artifact
 
 pytest_plugins = ["pytester"]
 
@@ -127,3 +128,12 @@ def test_receptor_artifact_correlates_smonitor_events(pytester, distributed):
             assert event["worker_id"] in {"gw0", "gw1"}
         assert event["attempt"] == 1
         assert event["emitted_during"]
+
+    policy = evaluate_pytest_artifact(pytester.path / "events.jsonl", require_diagnostics=True)
+    assert policy["ok"] is True
+    assert policy["diagnostic_records"] == 6
+    assert {item["code"] for item in policy["identities"]} == {
+        "BRIDGE-SETUP",
+        "BRIDGE-CALL",
+        "BRIDGE-TEARDOWN",
+    }

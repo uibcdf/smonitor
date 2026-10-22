@@ -38,6 +38,20 @@ def _parse_args() -> argparse.Namespace:
     compare_parser.add_argument("current")
     compare_parser.add_argument("previous")
     compare_parser.add_argument("--format", choices=["json", "markdown"], default="json")
+    pytest_check = subparsers.add_parser(
+        "pytest-check", help="Evaluate opt-in diagnostic policy on a receptor artifact"
+    )
+    pytest_check.add_argument("artifact")
+    pytest_check.add_argument("--provider-root", action="append", default=[])
+    pytest_check.add_argument("--forbid-code", action="append", default=[])
+    pytest_check.add_argument("--baseline")
+    pytest_check.add_argument("--require-diagnostics", action="store_true")
+    pytest_baseline = subparsers.add_parser(
+        "pytest-baseline", help="Write an accepted identity baseline from complete evidence"
+    )
+    pytest_baseline.add_argument("artifact")
+    pytest_baseline.add_argument("--out", required=True)
+    pytest_baseline.add_argument("--allow-empty", action="store_true")
     parser.add_argument("--profile", default=None)
     parser.add_argument("--level", default=None)
     parser.add_argument("--report", action="store_true")
@@ -85,6 +99,63 @@ def main() -> int:
         else:
             print(json.dumps(diff, indent=2))
         return 0
+
+    if args.command in {"pytest-check", "pytest-baseline"}:
+        from smonitor.pytest_policy import (
+            evaluate_pytest_artifact,
+            load_baseline,
+            load_provider_codes,
+            write_baseline,
+        )
+
+        try:
+            from pytest_receptor import ArtifactError
+
+            provider_codes = None
+            provider_violations = []
+            baseline = None
+            forbidden_codes = ()
+            if args.command == "pytest-check":
+                if args.provider_root:
+                    provider_codes, provider_violations = load_provider_codes(args.provider_root)
+                if args.baseline:
+                    baseline = load_baseline(args.baseline)
+                forbidden_codes = args.forbid_code
+            result = evaluate_pytest_artifact(
+                args.artifact,
+                known_codes=provider_codes,
+                forbidden_codes=forbidden_codes,
+                baseline=baseline,
+                require_diagnostics=args.require_diagnostics
+                if args.command == "pytest-check"
+                else False,
+            )
+            if provider_violations:
+                result["violations"].extend(provider_violations)
+                result["ok"] = False
+            if args.command == "pytest-baseline" and result["pytest_outcome"] != "PASS":
+                result["violations"].append({"rule": "pytest_run_not_passed"})
+                result["ok"] = False
+            if (
+                args.command == "pytest-baseline"
+                and not result["identities"]
+                and not args.allow_empty
+            ):
+                result["violations"].append({"rule": "empty_baseline_requires_opt_in"})
+                result["ok"] = False
+            if args.command == "pytest-baseline" and result["ok"]:
+                write_baseline(
+                    args.out,
+                    (
+                        (item["code"], item["source"], item["fingerprint"])
+                        for item in result["identities"]
+                    ),
+                )
+            print(json.dumps(result, indent=2))
+            return 0 if result["ok"] else 1
+        except (ArtifactError, OSError, ValueError, ImportError) as exc:
+            print(json.dumps({"schema": "smonitor.pytest-policy-result@1", "error": str(exc)}))
+            return 2
 
     base = Path(args.config_path) if args.config_path else Path.cwd()
     if args.validate_config:

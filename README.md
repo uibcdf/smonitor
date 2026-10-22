@@ -207,6 +207,18 @@ smonitor export --out smonitor_bundle --max-events 500
 smonitor compare current_bundle.json previous_bundle.json --format markdown
 ```
 
+For opt-in pytest QA, install `smonitor[pytest]` and inspect Pytest Receptor's
+canonical artifact after the run:
+
+```bash
+mkdir -p .pytest-receptor
+python -m pytest --receptor=ci --receptor-events=.pytest-receptor/events.jsonl
+smonitor pytest-check .pytest-receptor/events.jsonl --provider-root ./my_library
+```
+
+See the [pytest diagnostic policy guide](docs/content/developer/pytest-diagnostic-policy.md)
+for identity baselines, forbidden codes, and evidence-completeness rules.
+
 ## Ecosystem adoption
 
 Nine libraries in the UIBCDF stack integrate SMonitor and carry the canonical

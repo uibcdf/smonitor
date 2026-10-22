@@ -37,6 +37,9 @@ default; the standalone SMonitor bundle remains available separately. The
 receptor marks rejected or lost extension evidence as incomplete without
 turning a failing test into a pass. Neither package uploads artifacts.
 
+For an optional QA gate over completed evidence, see
+[Pytest Diagnostic Policy](pytest-diagnostic-policy.md).
+
 ## 3. Architecture audit command
 
 ```bash

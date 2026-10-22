@@ -17,10 +17,11 @@ If your goal is integrating SMonitor into your own package, start in the [User G
 9. [Contract Versioning](contract-versioning.md)
 10. [Operability Minimum](operability-minimum.md)
 11. [Testing and Coverage](testing-and-coverage.md)
-12. [Editorial Guide](editorial-guide.md)
-13. [Release and Versioning](release-and-versioning.md)
-14. [Agent-Ready Checklist](agent-ready-checklist.md)
-15. [Contributor Checklist](contributor-checklist.md)
+12. [Pytest Diagnostic Policy](pytest-diagnostic-policy.md)
+13. [Editorial Guide](editorial-guide.md)
+14. [Release and Versioning](release-and-versioning.md)
+15. [Agent-Ready Checklist](agent-ready-checklist.md)
+16. [Contributor Checklist](contributor-checklist.md)
 
 ## Canonical references
 
@@ -42,6 +43,7 @@ profiling.md
 contract-versioning.md
 operability-minimum.md
 testing-and-coverage.md
+pytest-diagnostic-policy.md
 editorial-guide.md
 release-and-versioning.md
 agent-ready-checklist.md
