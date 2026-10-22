@@ -12,6 +12,7 @@ required_paths = [
   "site-packages/smonitor/integrations/provider.py",
   "site-packages/smonitor/cli.py",
   "site-packages/smonitor/pytest_plugin.py",
+  "site-packages/smonitor/pytest_policy.py",
   "site-packages/smonitor/templates/_smonitor.py",
   "site-packages/smonitor/templates/README.md",
 ]
@@ -27,4 +28,4 @@ required_steps = ["Install exact artifact", "Validate installed files", "Run ins
 [installed_tests]
 paths = ["tests"]
 pytest_args = ["--receptor=ci", "--color=yes"]
-conda_dependencies = ["pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "versioningit>=3,<4", "PyYAML>=6,<7", "Jinja2>=3,<4", "packaging>=24,<27"]
+conda_dependencies = ["pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "pytest-receptor>=1.2,<2", "versioningit>=3,<4", "PyYAML>=6,<7", "Jinja2>=3,<4", "packaging>=24,<27"]

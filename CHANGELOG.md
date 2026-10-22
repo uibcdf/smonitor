@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-22
+
+### Added
+
+- `smonitor pytest-check` applies opt-in QA rules to Pytest Receptor's
+  integrity-validated artifact: provider catalog membership, forbidden codes,
+  complete evidence, and accepted diagnostic identity baselines. It reports
+  policy results separately from pytest's outcome (#32).
+- `smonitor pytest-baseline` writes a versioned set of warning/error identities
+  from a passing complete run. Empty baselines require explicit opt-in (#32).
+
 ## [0.21.0] - 2026-10-14
 
 ### Added

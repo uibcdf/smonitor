@@ -1,12 +1,12 @@
-# Reviewed for the 0.21.0 candidate before creating its immutable tag.
+# Reviewed for the 0.22.0 candidate before creating its immutable tag.
 schema = "molsyssuite.conda-plan@1"
-version = "0.21.0"
+version = "0.22.0"
 package = "smonitor"
-build_number = 2
+build_number = 0
 route = "staged"
 profile = "noarch-python"
-reason = "SMonitor adds opt-in safe audience metadata templates (#39) and bounded nonemitting identity bundle APIs (#40), and fixes retained event-buffer resizing (#41) and handler-degradation warning precedence (#42). Qualify the exact installed noarch candidate on all twelve supported OS/Python cells before public visibility; Recorda's receiving adoption remains separately owned. The read-only guide audit and build failure guard close local resource review #47."
-decision_by = "Repository maintainer via Codex on 2026-10-13"
+reason = "SMonitor adds an opt-in pytest QA policy and versioned diagnostic-identity baseline over Pytest Receptor's canonical artifact (#32). The public CLI and policy reader are a new compatibility surface. Qualify the exact installed noarch candidate on all twelve supported OS/Python cells before public visibility; keep pytest outcomes and rich support bundles under their existing owners."
+decision_by = "Repository maintainer via Codex on 2026-10-22"
 artifact_subdirs = ["noarch"]
 test_platforms = ["linux-64", "osx-arm64", "win-64"]
 python_versions = ["3.11", "3.12", "3.13", "3.14"]
