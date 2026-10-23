@@ -57,3 +57,13 @@ guide rather than frozen by text-matching tests.
 Local Python 3.14 validation passed 182 selected contract/report tests. The
 canonical Markdown's Python snippets pass the owner's Ruff formatter, and
 `git diff --check` and the generated archive index check pass.
+
+## Delivery handoff, 2026-10-22
+
+The maintainer selected a dedicated MolSysSuite delivery task:
+uibcdf/molsyssuite#124. MolSysSuite developers have explicit permission to
+commit and push this bounded guide-only rollout directly, without PRs.
+uibcdf/molsyssuite#106 links the task and retains its independent receiving
+decisions. No client commit, push or PR was created during provider preparation.
+The eleven generated temporary copies were preparation evidence only; their
+publication and final default-branch audit belong to the central delivery task.
