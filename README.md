@@ -221,16 +221,14 @@ for identity baselines, forbidden codes, and evidence-completeness rules.
 
 ## Ecosystem adoption
 
-Nine libraries in the UIBCDF stack integrate SMonitor and carry the canonical
-guide:
+MolSysSuite maintains the registered guide owners and client repositories in
+[its central inventory](https://github.com/uibcdf/molsyssuite/blob/main/suite.toml).
+The [canonical client guide](standards/SMONITOR_GUIDE.md) describes integration
+contracts and the capability floor for optional features. Receiving a guide
+copy does not establish runtime adoption or raise a client's dependency floor.
 
-- **Integrated and catalogue-driven**: MolSysMT, MolSysViewer, ArgDigest,
-  DepDigest, PyUnitWizard.
-- **Integrated, catalogue work in progress**: TopoMT, PharmacophoreMT,
-  ElastNetMT, LindeLint.
-
-`devtools/sync_smonitor_guide.py` audits those copies and discovers consumers
-on disk. MolSysSuite owns their synchronized delivery.
+`devtools/sync_smonitor_guide.py` audits local copies without changing them.
+MolSysSuite's registered synchronizer owns their delivery.
 
 ## Documentation
 
