@@ -7,6 +7,8 @@ import inspect
 import re
 import threading
 import warnings
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,6 +45,31 @@ _LEVEL_ORDER = {
 # Optional in-process consumers observe normalized events independently of
 # routing, so a test's configure(handlers=[]) cannot detach a pytest bridge.
 _EVENT_OBSERVERS: List[Any] = []
+
+
+@dataclass
+class _EmissionReceipt:
+    accepted: bool = False
+
+
+_EMISSION_RECEIPT: ContextVar[Optional[_EmissionReceipt]] = ContextVar(
+    "smonitor_emission_receipt", default=None
+)
+
+
+@contextmanager
+def _capture_emission_admission():
+    """Observe one call's admission without changing the public event payload.
+
+    Acceptance means the manager admitted the event to aggregation/routing;
+    it does not certify handler delivery or complete retained history.
+    """
+    receipt = _EmissionReceipt()
+    token = _EMISSION_RECEIPT.set(receipt)
+    try:
+        yield receipt
+    finally:
+        _EMISSION_RECEIPT.reset(token)
 
 
 def _add_event_observer(observer: Any) -> None:
@@ -967,6 +994,10 @@ class Manager:
         # Honor configured threshold before routing/printing.
         if _level_value(event["level"]) < _level_value(self._config.level):
             return event
+
+        receipt = _EMISSION_RECEIPT.get()
+        if receipt is not None:
+            receipt.accepted = True
 
         if self._maybe_coalesce_warning(event):
             return event
