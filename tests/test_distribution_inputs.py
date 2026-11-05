@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import re
 import subprocess
 import tomllib
 from pathlib import Path
@@ -176,6 +177,22 @@ def test_recipe_host_respects_the_declared_build_backend_requirements():
     assert expected["versioningit"].specifier.contains("3.0")
     assert actual["versioningit"].specifier.contains("3.0")
     assert not actual["versioningit"].specifier.contains("4.0")
+
+
+def test_no_build_isolation_environments_supply_all_declared_build_tools():
+    import yaml
+    from packaging.requirements import Requirement
+
+    declared = tomllib.loads((ROOT / "pyproject.toml").read_text())["build-system"]["requires"]
+    required = {Requirement(item).name for item in declared}
+    for filename in ("qa_env.yaml", "development_env.yaml", "build_env.yaml"):
+        dependencies = yaml.safe_load((ROOT / "devtools/conda-envs" / filename).read_text())[
+            "dependencies"
+        ]
+        names = {
+            re.match(r"[A-Za-z0-9_.-]+", item)[0] for item in dependencies if isinstance(item, str)
+        }
+        assert required <= names, (filename, required - names)
 
 
 def test_reviewed_provider_checkouts_and_workflow_bytes_match_inventory():
