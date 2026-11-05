@@ -7,6 +7,8 @@ import inspect
 import re
 import threading
 import warnings
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,6 +45,28 @@ _LEVEL_ORDER = {
 # Optional in-process consumers observe normalized events independently of
 # routing, so a test's configure(handlers=[]) cannot detach a pytest bridge.
 _EVENT_OBSERVERS: List[Any] = []
+
+
+@dataclass
+class _EmissionReceipt:
+    claimed: bool = False
+    accepted: bool = False
+
+
+_emission_receipt: ContextVar[Optional[_EmissionReceipt]] = ContextVar(
+    "smonitor_emission_receipt", default=None
+)
+
+
+@contextmanager
+def _track_emission():
+    """Observe one manager emission without changing its public return value."""
+    receipt = _EmissionReceipt()
+    token = _emission_receipt.set(receipt)
+    try:
+        yield receipt
+    finally:
+        _emission_receipt.reset(token)
 
 
 def _add_event_observer(observer: Any) -> None:
@@ -857,6 +881,14 @@ class Manager:
                     exception_type=exception_type,
                     correlation_id=correlation_id,
                 )
+        # Only this call may acknowledge the tracked observation. Diagnostic
+        # callbacks can emit other events while this one is being constructed.
+        receipt = _emission_receipt.get()
+        if receipt is not None:
+            if receipt.claimed:
+                receipt = None
+            else:
+                receipt.claimed = True
         policy = get_capture_policy()
         facts = capture_facts(safe_extra)
         # Copied, never aliased: the event's `extra` is enriched below with
@@ -967,6 +999,9 @@ class Manager:
         # Honor configured threshold before routing/printing.
         if _level_value(event["level"]) < _level_value(self._config.level):
             return event
+
+        if receipt is not None:
+            receipt.accepted = True
 
         if self._maybe_coalesce_warning(event):
             return event
