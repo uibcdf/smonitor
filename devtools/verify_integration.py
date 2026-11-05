@@ -166,11 +166,31 @@ def reserved_name_assignments(package: Path, bases: set[str]) -> list[str]:
     return hits
 
 
-def verify(repo: Path) -> Result:
-    package = repo / repo.name
+def find_package_root(repo: Path, package_dir: Path | None = None) -> Path:
+    """Select one flat/src package root, or an explicit override.
+
+    An override is relative to the repository unless absolute. Ambiguous
+    conventional layouts require an explicit choice rather than a guess.
+    """
+    if package_dir is not None:
+        package = package_dir if package_dir.is_absolute() else repo / package_dir
+        if not package.is_dir():
+            raise ValueError(f"no package directory at {package}")
+        return package
+    candidates = [repo / repo.name, repo / "src" / repo.name]
+    found = [path for path in candidates if path.is_dir()]
+    if len(found) != 1:
+        reason = "ambiguous package directories" if found else "no package directory"
+        raise ValueError(f"{reason}: {', '.join(map(str, candidates))}; use --package-dir")
+    return found[0]
+
+
+def verify(repo: Path, *, package_dir: Path | None = None) -> Result:
     result = Result(repo.name)
-    if not package.is_dir():
-        result.add("layout", False, f"no package directory at {package}")
+    try:
+        package = find_package_root(repo, package_dir)
+    except ValueError as error:
+        result.add("layout", False, str(error))
         return result
 
     # Check 1 -- the configuration is found and understood.
@@ -222,6 +242,7 @@ def main() -> int:
     parser.add_argument("repos", nargs="*", type=Path)
     parser.add_argument("--root", type=Path, default=None)
     parser.add_argument("--all", action="store_true", help="every sibling carrying the guide")
+    parser.add_argument("--package-dir", type=Path, help="package root for one explicit repository")
     args = parser.parse_args()
 
     repos = [p.resolve() for p in args.repos]
@@ -230,8 +251,10 @@ def main() -> int:
         repos += sorted(p.parent for p in root.glob("*/SMONITOR_GUIDE.md"))
     if not repos:
         parser.error("name at least one repository, or pass --all")
+    if args.package_dir is not None and (args.all or len(repos) != 1):
+        parser.error("--package-dir requires one repository and cannot be combined with --all")
 
-    results = [verify(repo) for repo in dict.fromkeys(repos)]
+    results = [verify(repo, package_dir=args.package_dir) for repo in dict.fromkeys(repos)]
     width = max(len(r.name) for r in results)
     failures = 0
     for result in results:
