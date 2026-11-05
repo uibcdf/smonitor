@@ -66,7 +66,7 @@ skips the direct uploader and installed-package smoke job. Dispatch
 number, verified digest and successful `installed_run_id`. It independently verifies
 all installed cells and required executed steps before mutation, checks the published
 release and exact-commit gates,
-then uses the shared `promote@v2.2.2` action to add the `main` label to the **same file**.
+then uses the reviewed immutable v2.3.0 promotion action to add the `main` label to the **same file**.
 The staging label is retained. The promotion receipt, shared public-label/digest
 verifier and independent Conda query
 provide poststate evidence. Do not rebuild, re-upload, choose the newest staging build

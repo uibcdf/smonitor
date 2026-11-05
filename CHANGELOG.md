@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.22.1] - 2026-11-04
+
 ### Fixed
 
 - Filtered or silenced nested diagnostics no longer suppress an admitted outer
   exception signal; native exceptions and accepted-event deduplication remain (#59).
+- Diagnostics emitted by exception formatters or template callbacks cannot
+  acknowledge a different filtered exception observation (#61).
 - Integration audits discover flat and src layouts and offer an explicit package
   directory override. The guide imports only supported configuration keys (#54).
 

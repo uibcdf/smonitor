@@ -10,7 +10,7 @@ Source of truth for integrating and using **SMonitor** in this library.
 Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
-- Source version: `smonitor@0.22.0`
+- Source version: `smonitor@0.22.1`
 - Last synced: 2026-11-04
 
 ## What is SMonitor
@@ -91,6 +91,14 @@ over Pytest Receptor's canonical artifact (section 5.5). The observational
 bridge itself is available from >=0.18.0. Selecting a new QA command requires
 its own capability floor; receiving a guide copy does not activate it or raise
 a consumer's runtime dependency floor.
+
+**SMonitor >=0.22.1** keeps an eligible outer exception signal observable when
+an inner signal is filtered, disabled or silenced. Only the first admitted
+observation suppresses enclosing duplicates; an admitted DEBUG observation is
+not promoted to ERROR. Diagnostics emitted by formatters or template callbacks
+have independent admission. Native exception identity and application-owned
+configuration remain unchanged. Consumers should exercise their normal
+thresholds and capture policies when receiving this correction.
 
 ## 1. Required Configuration Structure
 

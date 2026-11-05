@@ -9,6 +9,8 @@ dependencies:
   - pytest-cov
   - pytest-xdist
   - pytest-receptor=1.2.0
+  # Reviewed optional-renderer qualification cohort, not a runtime dependency.
+  - rich=15.0.0
   - ruff=0.16.5
   - versioningit
 

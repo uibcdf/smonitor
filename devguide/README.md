@@ -27,7 +27,16 @@ These documents track implementation details. Product-level decisions and
 historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
-- **Latest public release: 0.21.0 (2026-10-14).** The exact candidate
+- **Public release status:** [latest stable GitHub Release](https://github.com/uibcdf/smonitor/releases/latest).
+  The last verified release at preparation of this checkpoint is **0.22.0**
+  (2026-10-22), including the optional pytest diagnostic policy. Its public
+  `smonitor-0.22.0-py_0.tar.bz2` file has SHA-256
+  `bbf5890bed4ea657044b904f07d3cef137d474f0862ef5f35b063db9c8f0c949`.
+  Candidate **0.22.1** is tracked in [#62](https://github.com/uibcdf/smonitor/issues/62):
+  signal/callback fixes, layout audits, dependency floors and SPDX/build/provider
+  reviews are source-complete. The issue retains final source, installed and
+  public receipts; preparation is not a publication claim.
+- **Historical 0.21.0 qualification (2026-10-14).** The exact candidate
   `066b69cad8896cdc126d5586fd53268af4ea6490` passed the twelve-cell
   [source](https://github.com/uibcdf/smonitor/actions/runs/38524363789) and
   [installed](https://github.com/uibcdf/smonitor/actions/runs/38525100772)
@@ -66,7 +75,8 @@ historical context live in `SPEC_SMONITOR.md`.
   integrators, end users, showcase scenarios, and contributor path.
 - Standards pack published for ecosystem adoption (`standards/`), including
   end-user rescue/docs templates and sync policy.
-- Version `0.21.0` is the latest published pre-1.0 stabilization checkpoint.
+- Published versions remain pre-1.0 stabilization checkpoints; the live release
+  link and owning release receipts above carry current publication status.
 - **The seven `1.0.0` exit criteria were met at the 2026-09-08 checkpoint.**
   Criterion 5 -- operability confirmed in a real workflow -- closed with
   `operability_evidence_2026-09-08.md`, which found the defect fixed in `#11`.
