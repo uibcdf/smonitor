@@ -240,18 +240,19 @@ def test_nested_diagnostic_does_not_acknowledge_filtered_exception(monkeypatch):
     assert handler.events[1]["source"].endswith(".outer")
 
 
-def test_exception_formatter_diagnostic_has_its_own_admission():
+def test_exception_formatter_diagnostic_does_not_consume_its_exception():
     handler = _configure(level="WARNING")
-    manager = smonitor.get_manager()
 
-    class ReportingFailure(ValueError):
+    class LoggingFailure(ValueError):
+        logged = False
+
         def __str__(self):
-            if not getattr(self, "reported", False):
-                self.reported = True
-                manager.emit("ERROR", "formatter diagnostic", source="exception_formatter")
+            if not self.logged:
+                self.logged = True
+                smonitor.emit("ERROR", "separate diagnostic", source="formatter_callback")
             return "native failure"
 
-    failure = ReportingFailure("native failure")
+    failure = LoggingFailure("native failure")
 
     @smonitor.signal(exception_level="DEBUG")
     def inner():
@@ -261,9 +262,9 @@ def test_exception_formatter_diagnostic_has_its_own_admission():
     def outer():
         inner()
 
-    with pytest.raises(ReportingFailure) as caught:
+    with pytest.raises(LoggingFailure) as caught:
         outer()
     assert caught.value is failure
     assert len(handler.events) == 2
-    assert handler.events[0]["source"] == "exception_formatter"
+    assert handler.events[0]["source"] == "formatter_callback"
     assert handler.events[1]["source"].endswith(".outer")
