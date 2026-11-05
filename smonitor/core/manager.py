@@ -49,6 +49,7 @@ _EVENT_OBSERVERS: List[Any] = []
 
 @dataclass
 class _EmissionReceipt:
+    claimed: bool = False
     accepted: bool = False
 
 
@@ -884,6 +885,14 @@ class Manager:
                     exception_type=exception_type,
                     correlation_id=correlation_id,
                 )
+        # A callback may emit another diagnostic while this event is being
+        # constructed. Only the tracked manager call may acknowledge receipt.
+        receipt = _EMISSION_RECEIPT.get()
+        if receipt is not None:
+            if receipt.claimed:
+                receipt = None
+            else:
+                receipt.claimed = True
         policy = get_capture_policy()
         facts = capture_facts(safe_extra)
         # Copied, never aliased: the event's `extra` is enriched below with
@@ -995,7 +1004,6 @@ class Manager:
         if _level_value(event["level"]) < _level_value(self._config.level):
             return event
 
-        receipt = _EMISSION_RECEIPT.get()
         if receipt is not None:
             receipt.accepted = True
 

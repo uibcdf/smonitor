@@ -41,3 +41,18 @@ during exception formatting. All 27 owning controls pass: admission follows
 the final manager policy rather than an earlier decorator eligibility guess.
 The independently opened receiving records are uibcdf/molsyssuite#163 and
 uibcdf/argdigest#49; those owners retain consumer and public receiving.
+
+## Concurrent owner contribution, 2026-11-04
+
+Liliana's independently prepared PR uibcdf/smonitor#60 at
+f0ef19a368b8ad0295e9f22a02435ac56426c772 adds nineteen useful controls and
+protects the receipt against reentrant diagnostic callbacks. Against main
+7fad8f5, eighteen controls pass and its nested-callback control fails: an
+unrelated admitted callback could acknowledge the filtered exception.
+
+The integration preserves her tests and user edge-case guidance with authorship
+credit. A receipt is now claimed by its exact manager call, and native exception
+formatting runs before receipt tracking. A twentieth control covers a formatter
+that emits a separate diagnostic. All 47 combined owning controls pass. Direct
+main integration follows Diego's standing authorization; PR closure records the
+adopted commit rather than claiming that the parallel branch was merged.

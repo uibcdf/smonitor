@@ -224,10 +224,11 @@ def signal(
                     extra["source_module"] = module
                     if frame_extra:
                         extra.update(frame_extra)
+                    message = str(exc) if policy.exception_text else ""
                     with _capture_emission_admission() as receipt:
                         manager.emit(
                             exception_level,
-                            str(exc) if policy.exception_text else "",
+                            message,
                             source=source,
                             code=code,
                             exception_type=type(exc).__name__,

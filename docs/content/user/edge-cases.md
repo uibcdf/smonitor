@@ -11,6 +11,13 @@ Fix:
 - mark those with `@signal(exception_level="DEBUG")`,
 - keep assertive parsing paths at `ERROR`.
 
+An inner signal whose event is filtered does not consume the exception's
+diagnostic observation. An eligible enclosing signal can still record that
+failure. Once a signal accepts an observation, enclosing signals avoid duplicate
+events; an accepted DEBUG observation is not promoted to ERROR by an outer
+wrapper. Application enablement, source silence and the current level threshold
+control acceptance. Coalescing and duplicate policies retain their own behavior.
+
 ## 2. Duplicate warnings through logging bridge
 
 Problem:
