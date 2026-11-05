@@ -75,3 +75,49 @@ def test_nested_signal_admission(
     assert bool(getattr(failure, "__smonitor_emitted__", False)) == bool(expected)
     if restricted:
         assert all("private controlled failure" not in str(event) for event in handler.events)
+
+
+@pytest.mark.parametrize(
+    "changed_policy",
+    [{"level": "WARNING"}, {"enabled": False}, {"silence": [__name__ + ".inner"]}],
+)
+def test_admission_uses_policy_after_exception_formatting(changed_policy):
+    handler = MemoryHandler()
+    smonitor.configure(
+        handlers=[handler],
+        level="DEBUG",
+        enabled=True,
+        silence=[],
+        capture_warnings=False,
+        capture_logging=False,
+        capture_exceptions=False,
+    )
+
+    class PolicyChangingFailure(ValueError):
+        def __str__(self):
+            if not getattr(self, "formatted", False):
+                self.formatted = True
+                smonitor.configure(**changed_policy)
+            return "controlled failure"
+
+    failure = PolicyChangingFailure("controlled failure")
+
+    @smonitor.signal(exception_level="DEBUG")
+    def inner():
+        raise failure
+
+    @smonitor.signal(exception_level="ERROR")
+    def outer():
+        try:
+            inner()
+        except PolicyChangingFailure:
+            assert not getattr(failure, "__smonitor_emitted__", False)
+            # Restore the application's policy for the enclosing observation.
+            smonitor.configure(level="WARNING", enabled=True, silence=[])
+            raise
+
+    with pytest.raises(PolicyChangingFailure) as caught:
+        outer()
+    assert caught.value is failure
+    assert failure.args == ("controlled failure",)
+    assert [event["level"] for event in handler.events] == ["ERROR"]

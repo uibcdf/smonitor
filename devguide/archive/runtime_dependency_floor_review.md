@@ -37,3 +37,10 @@ NumPy/BioPython restrictions in packmol-memgen/proprep/ndfes/fetkutils/edgembar.
 No caller environment was changed to repair those findings; compatibility
 qualification was isolated. Central receiving belongs to uibcdf/molsyssuite#137;
 the workspace finding belongs to its existing #82 coordination.
+
+## Final guidance correction, 2026-11-04
+
+The canonical guide's introductory Receptor requirement still repeated the
+removed <2 ceiling after the Conda example was corrected. Both now state >=1.2.
+A separate Python 3.14 isolated control with public pytest-receptor 1.2.2,
+pytest 9.1.1 and Rich 15.0.0 passes twelve bridge/policy/real-Rich tests.

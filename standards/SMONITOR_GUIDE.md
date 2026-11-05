@@ -751,7 +751,7 @@ Use duplicate policies for genuinely repeated incidents where aggregate counts a
 Level: **Advanced / CI-support**
 
 Install the optional `smonitor[pytest]` extra to use Pytest Receptor
-`>=1.2,<2`. Conda users install `pytest` and `pytest-receptor>=1.2`
+`>=1.2`. Conda users install `pytest` and `pytest-receptor>=1.2`
 alongside SMonitor. The bridge loads with pytest; activate the receptor's
 `llm` (local) or `ci` profile and explicitly request its artifact:
 

@@ -33,3 +33,11 @@ args and cause; the guard protects the reported mechanism rather than marker
 shape alone. Source publication is distinct from future public-file receiving.
 ArgDigest composition makes the shared-provider notice applicable; coordinate
 receiving with uibcdf/molsyssuite#106 and uibcdf/dockingmt#19.
+
+## Receiving controls, 2026-11-04
+
+Three additional controls change threshold, enabled state or source silence
+during exception formatting. All 27 owning controls pass: admission follows
+the final manager policy rather than an earlier decorator eligibility guess.
+The independently opened receiving records are uibcdf/molsyssuite#163 and
+uibcdf/argdigest#49; those owners retain consumer and public receiving.
