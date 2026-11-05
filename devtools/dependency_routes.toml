@@ -60,7 +60,7 @@ reason = "Twelve source cells plus separate backlog decision; strict public chan
 
 [[workflows]]
 path = ".github/workflows/build_and_upload_conda_packages.yaml"
-sha256 = "4a8b2c5eea6329a8dd3cce0ddb630c1f04948664151ba559e1c4f350593c9f8d"
+sha256 = "0c89801c386aad6d6cadbac35c77acd515bbd85625c2e44c580a95dfdc01b0aa"
 reason = "Local single noarch producer; exact source/gates before upload, separate historical Windows installed command smoke"
 
 [[workflows]]
@@ -75,12 +75,12 @@ reason = "Existing versioned shared policy call; no component runtime installati
 
 [[workflows]]
 path = ".github/workflows/promote_conda_package.yaml"
-sha256 = "27365f1fd0510898ba0f89cdca46ffc78f23220fb2e90fe189116bcffcf2785f"
+sha256 = "b6642e94314f2a63bce9a84cbfe76642c9e3666dc26a9814536c2025c8f4b381"
 reason = "Local same-file promotion and independent public digest/index verification; no rebuild"
 
 [[workflows]]
 path = ".github/workflows/qa_ci.yaml"
-sha256 = "5c2abf1df767d6a3ab0e8fa719c3e9d009c229255a3f9c05239e2d8c1b727eda"
+sha256 = "8e3771b1885c5d7c14fc292c3e5013b1b358bbb849addfad1409b26ffdd6d342"
 reason = "Strict QA environment plus separately bounded optional collective source integration; no required sibling source replacement"
 
 [[workflows]]

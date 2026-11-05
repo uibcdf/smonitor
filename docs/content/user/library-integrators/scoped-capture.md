@@ -129,6 +129,15 @@ operation's exception or prevent its successful return.
 
 ## Tasks, threads and ownership
 
+Nested `@signal` wrappers deduplicate an exception only after the manager admits
+an observation to aggregation/routing. A threshold-filtered or silenced inner
+DEBUG diagnostic does not suppress an admissible outer ERROR. Once an inner
+diagnostic is admitted (including DEBUG at a DEBUG threshold), outer wrappers
+retain the first observation rather than escalating or repeating it. Admission
+is not a guarantee of handler delivery or complete retained history. Disabled
+instrumentation remains passthrough, and the original native exception is
+preserved in detailed and restrictive capture.
+
 Scopes use immutable `ContextVar` state and restore their tokens. Async tasks inherit
 the context at task creation and can interleave independent scopes. For threads and
 thread pools, propagate explicitly with a fresh `copy_context().run(callable, ...)`

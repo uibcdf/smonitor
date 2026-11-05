@@ -20,7 +20,7 @@ Install the optional `smonitor[pytest]` extra, which requires Pytest Receptor
 1.2 or newer, then opt in to its canonical JSONL artifact:
 
 For Conda installations, install `smonitor`, `pytest`, and
-`pytest-receptor>=1.2,<2` from `uibcdf` and `conda-forge`.
+`pytest-receptor>=1.2` from `uibcdf` and `conda-forge`.
 
 ```bash
 mkdir -p .pytest-receptor

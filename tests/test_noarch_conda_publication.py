@@ -46,7 +46,7 @@ def test_manual_candidates_are_exact_and_staging_only():
     assert "candidate_sha:" in workflow
     assert "ref: ${{ inputs.candidate_sha || github.event.release.tag_name }}" in workflow
     assert 'test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"' in workflow
-    assert "Build, test, and upload the staging candidate" in workflow
+    assert "Build and test the staging candidate without upload" in workflow
     assert "label: staging" in workflow
     assert "id: conda_staging\n        if: github.event_name == 'workflow_dispatch'" in workflow
     assert "--route staged" in workflow
@@ -58,7 +58,7 @@ def test_stable_releases_have_a_guarded_direct_route():
 
     assert "types: ['released']" in workflow
     assert "prereleased" not in workflow
-    assert "Build, test, and upload the unstaged release" in workflow
+    assert "Build and test the unstaged release without upload" in workflow
     assert "label: main" in workflow
     assert (
         "id: conda_release\n        if: github.event_name == 'release' "
@@ -92,7 +92,7 @@ def test_noarch_workflow_retains_producer_evidence():
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
     assert "matrix:" not in workflow
-    assert "@v2.1.0" in workflow
+    assert "@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2" in workflow
     assert "--python" not in workflow
     assert "platform_linux-64: false" in workflow
     assert "platform_win-64: false" in workflow
@@ -127,7 +127,10 @@ def test_promotion_workflow_checks_exact_release_and_file_identity():
         "uibcdf/smonitor/$RELEASE_VERSION/noarch/smonitor-$RELEASE_VERSION-py_$BUILD_NUMBER.tar.bz2"
         in workflow
     )
-    assert "action-build-and-upload-conda-packages/promote@v2.2.2" in workflow
+    assert (
+        "action-build-and-upload-conda-packages/promote@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2"
+        in workflow
+    )
     assert "--route staged" in workflow
     assert "expected-sha256: ${{ inputs.sha256 }}" in workflow
     assert "from-label: staging" in workflow
@@ -161,3 +164,32 @@ def test_publication_checks_resources_and_executed_source_steps_before_upload():
     workflow = WORKFLOW.read_text()
     assert workflow.index("noarch_conda.py") < workflow.index("label: staging")
     assert workflow.index("preflight_conda_release.py") < workflow.index("label: staging")
+
+
+def test_inspection_binds_each_upload_to_the_original_built_archive():
+    import yaml
+
+    document = yaml.safe_load(WORKFLOW.read_text())
+    steps = document["jobs"]["conda_deployment_with_new_tag"]["steps"]
+    by_id = {step["id"]: step for step in steps if "id" in step}
+    for build, inspection, upload in (
+        ("conda_staging", "staging_artifact", "staging_upload"),
+        ("conda_release", "direct_artifact", "direct_upload"),
+    ):
+        assert by_id[build]["with"]["upload"] is False
+        assert "token" not in by_id[build]["with"]
+        assert (
+            steps.index(by_id[build]) < steps.index(by_id[inspection]) < steps.index(by_id[upload])
+        )
+        assert (
+            by_id[inspection]["env"]["BUILT_PATHS"]
+            == "${{ steps." + build + ".outputs.built_paths }}"
+        )
+        assert (
+            by_id[upload]["with"]["artifact"] == "${{ steps." + inspection + ".outputs.artifact }}"
+        )
+        assert (
+            by_id[upload]["with"]["expected-sha256"]
+            == "${{ steps." + inspection + ".outputs.sha256 }}"
+        )
+        assert "/upload@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2" in by_id[upload]["uses"]

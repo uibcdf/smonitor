@@ -16,6 +16,14 @@ During this period:
 
 ## 1. Prepare release content
 
+SMonitor declares the unchanged MIT license through SPDX metadata and includes
+the exact repository `LICENSE` notice. Setuptools >=77.0.3 is required for
+these fields, including Conda host and no-build-isolation routes. After building
+artifacts, run `python devtools/check_license_artifacts.py`; this checks notice
+bytes and metadata in the wheel and sdist, then builds and checks a new wheel
+from that sdist. This local administrative check does not qualify a release or
+replace installed-package/publication gates.
+
 Before tagging:
 - ensure tests pass;
 - ensure docs build;

@@ -43,6 +43,7 @@ profiling.md
 contract-versioning.md
 operability-minimum.md
 testing-and-coverage.md
+dependency-contracts.md
 pytest-diagnostic-policy.md
 editorial-guide.md
 release-and-versioning.md
