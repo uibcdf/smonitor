@@ -1,0 +1,193 @@
+{
+  "record_type": "SMonitor 0.22.1 publication evidence",
+  "retained_at": "2026-11-05T05:05:25.338065+00:00",
+  "version": "0.22.1",
+  "build_number": 0,
+  "package": "smonitor",
+  "candidate_sha": "2147c7c641b7cba8a974b193207f686ee3ebe855",
+  "tag": "0.22.1",
+  "release_title": "0.22.1",
+  "release_published_at": "2026-11-05T04:55:08Z",
+  "release_url": "https://github.com/uibcdf/smonitor/releases/tag/0.22.1",
+  "artifact": {
+    "filename": "smonitor-0.22.1-py_0.tar.bz2",
+    "sha256": "e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e",
+    "url": "https://conda.anaconda.org/uibcdf/noarch/smonitor-0.22.1-py_0.tar.bz2",
+    "route": "staged",
+    "main_label": "verified",
+    "solver_index": "verified",
+    "staging_label_retained": true
+  },
+  "license": {
+    "expression": "MIT",
+    "license_file": "LICENSE",
+    "notice_sha256": "201cca3f4381a6fe589d0ee2a0f88092d8d01465744df6eda0a16ac8ec2c35fc",
+    "actual_conda_notice_and_metadata_control": "passed before installed qualification"
+  },
+  "runtime_contract": {
+    "python": ">=3.11,<3.15",
+    "required_providers": [],
+    "optional_providers": {
+      "rich": ">=13",
+      "pytest": ">=8",
+      "pytest-receptor": ">=1.2"
+    }
+  },
+  "runs": {
+    "source": 41957914786,
+    "ci": 41953615113,
+    "qa": 41953615157,
+    "docs": 41953615285,
+    "policy_before_build": 41953615622,
+    "tag_policy": 41970729583,
+    "producer": 41960261508,
+    "installed": 41961945246,
+    "release_route": 41970738259,
+    "promotion": 41970853019
+  },
+  "qualification": {
+    "source_cells": 12,
+    "installed_cells": 12,
+    "platforms": [
+      "linux-64",
+      "osx-arm64",
+      "win-64"
+    ],
+    "python_minors": [
+      "3.11",
+      "3.12",
+      "3.13",
+      "3.14"
+    ],
+    "installed_result_per_cell": {
+      "passed": 812,
+      "skipped": 4
+    },
+    "skip_scope": "Three source-only optional-client checks and one active-report bookkeeping guard. Required source collective E2E/bootstrap executed separately in QA. No skipped installed resource, launcher, test step or final provenance cell.",
+    "public_receiving": {
+      "python": "3.14.10",
+      "platform": "linux",
+      "machine": "x86_64",
+      "signal_controls_passed": 9,
+      "cli_help_controls_passed": 3,
+      "origin": "fresh task-owned Conda prefix outside the checkout; same public file/digest"
+    }
+  },
+  "providers": {
+    "conda_action": "87c70b1443d5f22d738ee3ddf812bdbe0152f6c2",
+    "dependency_tools": "6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26",
+    "publication_tools": "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918"
+  },
+  "infrastructure": {
+    "original_source_run": 41953615699,
+    "original_conclusion": "cancelled after one bounded same-source requeue; 10 passed cells and 2 never-started cancelled macOS cells retained",
+    "qualified_source_run": 41957914786,
+    "org_plan_observed": "free",
+    "documented_default_macos_limit": 5,
+    "support_override_inspected": false,
+    "bounded_snapshot": {
+      "repositories_inspected": 18,
+      "running_macos": [
+        {
+          "id": 126998211057,
+          "labels": [
+            "macos-15"
+          ],
+          "name": "Full matrix — macos-15, Python 3.13",
+          "runner_id": 1000049068,
+          "runner_name": "GitHub Actions 1000049068",
+          "started_at": "2026-11-05T02:57:36Z",
+          "status": "in_progress",
+          "repo": "molsysmt",
+          "run": 41952069798
+        },
+        {
+          "id": 126951295698,
+          "labels": [
+            "macos-15"
+          ],
+          "name": "Full matrix — macos-15, Python 3.11",
+          "runner_id": 1000049060,
+          "runner_name": "GitHub Actions 1000049060",
+          "started_at": "2026-11-05T02:55:22Z",
+          "status": "in_progress",
+          "repo": "molsysmt",
+          "run": 41937569331
+        },
+        {
+          "id": 126951295730,
+          "labels": [
+            "macos-15"
+          ],
+          "name": "Full matrix — macos-15, Python 3.12",
+          "runner_id": 1000048994,
+          "runner_name": "GitHub Actions 1000048994",
+          "started_at": "2026-11-05T02:19:14Z",
+          "status": "in_progress",
+          "repo": "molsysmt",
+          "run": 41937569331
+        },
+        {
+          "id": 126951930234,
+          "labels": [
+            "macos-15"
+          ],
+          "name": "Test on macos-15, Python 3.11",
+          "runner_id": 1000049071,
+          "runner_name": "GitHub Actions 1000049071",
+          "started_at": "2026-11-05T03:03:38Z",
+          "status": "in_progress",
+          "repo": "molsysviewer",
+          "run": 41938197491
+        },
+        {
+          "id": 126928058635,
+          "labels": [
+            "macos-15"
+          ],
+          "name": "Test on macos-15, Python 3.11",
+          "runner_id": 1000049044,
+          "runner_name": "GitHub Actions 1000049044",
+          "started_at": "2026-11-05T02:53:26Z",
+          "status": "in_progress",
+          "repo": "pharmacophoremt",
+          "run": 41931148327
+        }
+      ],
+      "queued_by_repository": {
+        "smonitor": 1,
+        "argdigest": 3,
+        "molsysmt": 16,
+        "molsysviewer": 16,
+        "pharmacophoremt": 15
+      }
+    },
+    "observation_reference": "https://github.com/uibcdf/smonitor/issues/62#issuecomment-6648632750",
+    "foreign_runs_cancelled": false
+  },
+  "guide": {
+    "path": "standards/SMONITOR_GUIDE.md",
+    "sha256": "a78383aaf936b2e691b2a2c5b994b3362a3a05ef29cd1c156b2e9cf20fe5886e",
+    "delivery_owner": "uibcdf/molsyssuite#165"
+  },
+  "scope_limits": [
+    "Original receipts are copied byte-for-byte; the manifest is an owner summary.",
+    "Local prefix/module paths in receiving records identify historical task-owned resources, retired at closeout.",
+    "Source-only client integration, public dependency-floor changes and scientific receiving retain their owners in MolSysSuite #163 / ArgDigest #49 / DockingMT #19.",
+    "No old package/tag/receipt was overwritten and no public file was rebuilt during promotion."
+  ],
+  "retained_file_sha256": {
+    "producer_events.json": "a81012493668ecd1b1ec4d3013ba49d25a744c723ae9b22aea82275e084c7d8f",
+    "upload_receipt.json": "4c00a893e97f76b35ac7ce3b31fcb8206496b33d0349cbce1ae39baf9a6be6c4",
+    "promotion_receipt.json": "68e7e0ae3875a2107bf247237123d3f7067fbed8d08449152da813d4fdefaf9f",
+    "candidate_distribution.json": "e50ef685bbce4d2ef06eaf658534aa561785960889bbe7fbbe565fbe66ba4f66",
+    "installed_matrix_independent.json": "ed06199e949910b764c0d3d8090f534024bf51b77b8503d2ba0132e2c9ec4a8e",
+    "installed_descriptor.json": "1c492dedacd99370b5beb7f2dba24da83542b7c70911ceec080128b1ab5af372",
+    "installed_matrix_hosted.json": "e98c4a23ce464cc561b951eb780302a386fcae87770a6b8afd61c3259ee116fa",
+    "public_verification_hosted.json": "da3a9d45432b288c6daac4b29c442749258e97421b4e8a02506e5d607c9d1bc4",
+    "public_verification_independent.json": "7d3689d75307b9bdf6b27835d3713f75aa00972ce4931e3833b09ef23caad80d",
+    "public_receiving.json": "6321c2f05c29200ccb755e7bce286f28203c57ecc6d498c897848c67164be67b",
+    "public_runtime.json": "6218e6b6b1e84fdebfdc3a45c08136f7d0a28a9ef8334bc7f72b40205f19ea2b",
+    "public_receiving.py.txt": "6e5d7d170bbce6a924eb66fac7f09cc5d49657bde4db8c4c5cfb454a05a6cda3"
+  }
+}

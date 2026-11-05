@@ -17,8 +17,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`publish_0_22_1.md`](publish_0_22_1.md) | `active` | [uibcdf/smonitor#62](https://github.com/uibcdf/smonitor/issues/62) | Qualify and publish the 0.22.1 correction release through staging. |
+_No entries._
 
 <!-- /generated -->

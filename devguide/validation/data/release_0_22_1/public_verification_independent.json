@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-11-05T04:59:22.509034+00:00",
+  "files": [
+    {
+      "filename": "smonitor-0.22.1-py_0.tar.bz2",
+      "main_label": "verified",
+      "owner": "uibcdf",
+      "package": "smonitor",
+      "sha256": "e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e",
+      "solver_index": "verified",
+      "subdir": "noarch",
+      "url": "https://conda.anaconda.org/uibcdf/noarch/smonitor-0.22.1-py_0.tar.bz2",
+      "version": "0.22.1"
+    }
+  ],
+  "schema": "molsyssuite.public-conda@1",
+  "state": "verified"
+}

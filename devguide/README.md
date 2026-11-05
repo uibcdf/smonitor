@@ -28,14 +28,15 @@ historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
 - **Public release status:** [latest stable GitHub Release](https://github.com/uibcdf/smonitor/releases/latest).
-  The last verified release at preparation of this checkpoint is **0.22.0**
-  (2026-10-22), including the optional pytest diagnostic policy. Its public
-  `smonitor-0.22.0-py_0.tar.bz2` file has SHA-256
-  `bbf5890bed4ea657044b904f07d3cef137d474f0862ef5f35b063db9c8f0c949`.
-  Candidate **0.22.1** is tracked in [#62](https://github.com/uibcdf/smonitor/issues/62):
-  signal/callback fixes, layout audits, dependency floors and SPDX/build/provider
-  reviews are source-complete. The issue retains final source, installed and
-  public receipts; preparation is not a publication claim.
+  The latest verified publication at this checkpoint is **0.22.1**
+  (2026-11-04): signal/callback fixes, layout audits, dependency floors and
+  SPDX/build/provider reviews. All twelve source and twelve installed cells
+  pass. The public `smonitor-0.22.1-py_0.tar.bz2` file has SHA-256
+  `e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e`.
+  Exact-file promotion, independent main-label/solver checks and clean public
+  Python 3.14 receiving pass. [#62](https://github.com/uibcdf/smonitor/issues/62)
+  and the [retained receipts](validation/data/release_0_22_1/receipt.json) record
+  source, installed, public and client-receiving scope separately.
 - **Historical 0.21.0 qualification (2026-10-14).** The exact candidate
   `066b69cad8896cdc126d5586fd53268af4ea6490` passed the twelve-cell
   [source](https://github.com/uibcdf/smonitor/actions/runs/38524363789) and
@@ -81,7 +82,7 @@ historical context live in `SPEC_SMONITOR.md`.
   Criterion 5 -- operability confirmed in a real workflow -- closed with
   `operability_evidence_2026-09-08.md`, which found the defect fixed in `#11`.
   Reassess the current open issues before declaring the final 1.0 release ready.
-- Current quality snapshot (2026-09-08): full pytest suite green (435 tests), `ruff check .` clean on an
+- Historical quality snapshot (2026-09-08): full pytest suite green (435 tests), `ruff check .` clean on an
   unbuilt checkout, line-rate 0.9728, branch-rate 0.9419. Remote CI green across CI, QA CI and Docs CI.
 - At the 2026-09-08 checkpoint, the canonical guide was byte-identical in nine
   repositories. `devtools/sync_smonitor_guide.py` now audits copies read-only;

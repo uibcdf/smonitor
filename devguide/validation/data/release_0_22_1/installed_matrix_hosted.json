@@ -1,0 +1,115 @@
+{
+  "candidate_sha": "2147c7c641b7cba8a974b193207f686ee3ebe855",
+  "checked_at": "2026-11-05T04:56:50.943578+00:00",
+  "jobs": [
+    {
+      "conclusion": "success",
+      "job_id": 127030131379,
+      "kind": "prepare",
+      "name": "installed / prepare"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031068960,
+      "kind": "installed",
+      "name": "installed / osx-arm64 \u00b7 Python 3.13",
+      "platform": "osx-arm64",
+      "python": "3.13"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031068966,
+      "kind": "installed",
+      "name": "installed / linux-64 \u00b7 Python 3.11",
+      "platform": "linux-64",
+      "python": "3.11"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031068990,
+      "kind": "installed",
+      "name": "installed / linux-64 \u00b7 Python 3.12",
+      "platform": "linux-64",
+      "python": "3.12"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031068997,
+      "kind": "installed",
+      "name": "installed / win-64 \u00b7 Python 3.11",
+      "platform": "win-64",
+      "python": "3.11"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069004,
+      "kind": "installed",
+      "name": "installed / osx-arm64 \u00b7 Python 3.12",
+      "platform": "osx-arm64",
+      "python": "3.12"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069027,
+      "kind": "installed",
+      "name": "installed / osx-arm64 \u00b7 Python 3.14",
+      "platform": "osx-arm64",
+      "python": "3.14"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069034,
+      "kind": "installed",
+      "name": "installed / linux-64 \u00b7 Python 3.14",
+      "platform": "linux-64",
+      "python": "3.14"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069039,
+      "kind": "installed",
+      "name": "installed / win-64 \u00b7 Python 3.13",
+      "platform": "win-64",
+      "python": "3.13"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069041,
+      "kind": "installed",
+      "name": "installed / osx-arm64 \u00b7 Python 3.11",
+      "platform": "osx-arm64",
+      "python": "3.11"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069046,
+      "kind": "installed",
+      "name": "installed / win-64 \u00b7 Python 3.14",
+      "platform": "win-64",
+      "python": "3.14"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069077,
+      "kind": "installed",
+      "name": "installed / linux-64 \u00b7 Python 3.13",
+      "platform": "linux-64",
+      "python": "3.13"
+    },
+    {
+      "conclusion": "success",
+      "job_id": 127031069128,
+      "kind": "installed",
+      "name": "installed / win-64 \u00b7 Python 3.12",
+      "platform": "win-64",
+      "python": "3.12"
+    }
+  ],
+  "repository": "uibcdf/smonitor",
+  "run_attempt": 1,
+  "run_id": 41961945246,
+  "schema": "molsyssuite.installed-matrix@1",
+  "state": "verified",
+  "title": "Installed smonitor-0.22.1-py_0.tar.bz2 e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e",
+  "workflow": ".github/workflows/test_staged_conda_package.yaml"
+}

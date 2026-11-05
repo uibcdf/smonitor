@@ -1,0 +1,96 @@
+"""Independent receiving in the clean public Conda prefix, outside source."""
+
+import json
+import subprocess
+import sys
+from contextlib import nullcontext
+from importlib import metadata
+from pathlib import Path
+
+import smonitor
+from smonitor.handlers.memory import MemoryHandler
+
+prefix = Path(sys.prefix).resolve()
+assert Path(smonitor.__file__).resolve().is_relative_to(prefix)
+assert smonitor.__version__ == metadata.version('smonitor') == '0.22.1'
+record = json.loads((prefix / 'conda-meta/smonitor-0.22.1-py_0.json').read_text())
+assert record['sha256'] == 'e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e'
+assert record['url'] == 'https://conda.anaconda.org/uibcdf/noarch/smonitor-0.22.1-py_0.tar.bz2'
+controls = 0
+for restricted in (False, True):
+    for level, enabled, silenced, expected in (
+        ('WARNING', True, False, ['ERROR']),
+        ('DEBUG', True, False, ['DEBUG']),
+        ('WARNING', False, False, []),
+        ('DEBUG', True, True, ['ERROR']),
+    ):
+        handler = MemoryHandler()
+        smonitor.configure(handlers=[handler], level=level, enabled=enabled,
+                           silence=[__name__ + '.inner'] if silenced else [],
+                           capture_warnings=False, capture_logging=False,
+                           capture_exceptions=False, duplicate_policy='off')
+        failure = ValueError('controlled receiving failure')
+        cause = RuntimeError('original cause')
+
+        @smonitor.signal(exception_level='DEBUG')
+        def inner():
+            raise failure from cause
+
+        @smonitor.signal(exception_level='ERROR')
+        def outer():
+            inner()
+
+        with smonitor.diagnostic_scope() if restricted else nullcontext():
+            try:
+                outer()
+            except ValueError as caught:
+                assert caught is failure and caught.args == ('controlled receiving failure',)
+                assert caught.__cause__ is cause
+            else:
+                raise AssertionError('native failure lost')
+        assert [event['level'] for event in handler.events] == expected
+        if restricted:
+            assert 'controlled receiving failure' not in json.dumps(handler.events)
+        controls += 1
+
+handler = MemoryHandler()
+manager = smonitor.configure(handlers=[handler], level='WARNING', enabled=True, silence=[],
+                            capture_warnings=False, capture_logging=False,
+                            capture_exceptions=False, duplicate_policy='off')
+
+class ReportingFailure(ValueError):
+    reported = False
+
+    def __str__(self):
+        if not self.reported:
+            self.reported = True
+            manager.emit('ERROR', 'separate callback diagnostic', source='formatter_callback')
+        return 'controlled formatter failure'
+
+failure = ReportingFailure('controlled formatter failure')
+
+@smonitor.signal(exception_level='DEBUG')
+def inner():
+    raise failure
+
+@smonitor.signal(exception_level='ERROR')
+def outer():
+    inner()
+
+try:
+    outer()
+except ReportingFailure as caught:
+    assert caught is failure
+else:
+    raise AssertionError('native formatter failure lost')
+assert len(handler.events) == 2
+assert handler.events[0]['source'] == 'formatter_callback'
+assert handler.events[1]['source'].endswith('.outer')
+controls += 1
+for arguments in (['--help'], ['pytest-check', '--help'], ['pytest-baseline', '--help']):
+    subprocess.run([str(prefix / 'bin/smonitor'), *arguments], check=True,
+                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+print(json.dumps({'version': smonitor.__version__, 'prefix': str(prefix),
+                  'module': smonitor.__file__, 'url': record['url'],
+                  'sha256': record['sha256'], 'signal_controls_passed': controls,
+                  'cli_help_controls_passed': 3}, indent=2))

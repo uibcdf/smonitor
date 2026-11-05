@@ -1,0 +1,10 @@
+{
+  "build_number": 0,
+  "filename": "smonitor-0.22.1-py_0.tar.bz2",
+  "package": "smonitor",
+  "profile": "{\"platforms\": [\"linux-64\", \"osx-arm64\", \"win-64\"], \"python_versions\": [\"3.11\", \"3.12\", \"3.13\", \"3.14\"], \"prepare_job\": \"installed / prepare\", \"required_steps\": [\"Install exact artifact\", \"Validate installed files\", \"Run installed tests\", \"Recheck installed provenance after scientific tests\"], \"job_template\": \"installed / {platform} \\u00b7 Python {python}\"}",
+  "route": "staged",
+  "title": "Installed smonitor-0.22.1-py_0.tar.bz2 e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e",
+  "version": "0.22.1",
+  "workflow": ".github/workflows/test_staged_conda_package.yaml"
+}

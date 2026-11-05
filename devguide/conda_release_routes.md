@@ -97,3 +97,15 @@ qualified and published `smonitor-0.21.0-py_2.tar.bz2` with SHA-256
 `62b6cbae37f7fa06374af87923792f00253020955d000294b1a7d37eb9d04e56`.
 The two earlier builds remain in staging after candidate metadata corrections;
 the stable tag points only to the `py_2` source commit.
+
+The `0.22.1` [source matrix](https://github.com/uibcdf/smonitor/actions/runs/41957914786),
+[installed matrix](https://github.com/uibcdf/smonitor/actions/runs/41961945246)
+and [promotion](https://github.com/uibcdf/smonitor/actions/runs/41970853019)
+qualify and publish `smonitor-0.22.1-py_0.tar.bz2` with SHA-256
+`e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e`.
+This is the owned publisher's live v2.3.0 build-only, inspected-file exact upload
+and same-file promotion proof. Original producer/upload/promotion receipts,
+independent public label/index checks and clean public Python 3.14 receiving
+are retained in [the release record](validation/data/release_0_22_1/receipt.json).
+The immutable tag identifies the tested candidate; later documentary closeout
+commits do not move it or replace qualified package bytes.
