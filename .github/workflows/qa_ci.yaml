@@ -73,6 +73,10 @@ jobs:
           python -m pip install build
           python -m build
 
+      - name: Verify license bytes and wheel rebuilt from sdist
+        shell: bash -l {0}
+        run: python devtools/check_license_artifacts.py
+
       - name: Smoke install from wheel + CLI
         shell: bash -l {0}
         run: |

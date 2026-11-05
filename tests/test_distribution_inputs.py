@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import re
 import subprocess
 import tomllib
 from pathlib import Path
@@ -28,7 +29,7 @@ def test_inventory_classifies_required_and_optional_scope():
     assert data["source_routes"] == []
     project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
     assert project["dependencies"] == []
-    assert "pytest-receptor>=1.2,<2" in project["optional-dependencies"]["pytest"]
+    assert "pytest-receptor>=1.2" in project["optional-dependencies"]["pytest"]
     assert data["recipes"][0]["resource_inventory"] == "devtools/conda-build/resources.toml"
 
 
@@ -97,8 +98,8 @@ def test_source_workflows_execute_default_qualification_before_tests_or_builds()
 def test_candidate_qualification_precedes_all_publication_actions():
     text = (ROOT / ".github/workflows/build_and_upload_conda_packages.yaml").read_text()
     check = text.index("- name: Check candidate distribution inputs and executed source gates")
-    assert check < text.index("- name: Build, test, and upload the staging candidate")
-    assert check < text.index("- name: Build, test, and upload the unstaged release")
+    assert check < text.index("- name: Build and test the staging candidate without upload")
+    assert check < text.index("- name: Build and test the unstaged release without upload")
     assert "--candidate-sha" in text
     assert "distribution-candidate-" in text
 
@@ -176,6 +177,22 @@ def test_recipe_host_respects_the_declared_build_backend_requirements():
     assert expected["versioningit"].specifier.contains("3.0")
     assert actual["versioningit"].specifier.contains("3.0")
     assert not actual["versioningit"].specifier.contains("4.0")
+
+
+def test_no_build_isolation_environments_supply_all_declared_build_tools():
+    import yaml
+    from packaging.requirements import Requirement
+
+    declared = tomllib.loads((ROOT / "pyproject.toml").read_text())["build-system"]["requires"]
+    required = {Requirement(item).name for item in declared}
+    for filename in ("qa_env.yaml", "development_env.yaml", "build_env.yaml"):
+        dependencies = yaml.safe_load((ROOT / "devtools/conda-envs" / filename).read_text())[
+            "dependencies"
+        ]
+        names = {
+            re.match(r"[A-Za-z0-9_.-]+", item)[0] for item in dependencies if isinstance(item, str)
+        }
+        assert required <= names, (filename, required - names)
 
 
 def test_reviewed_provider_checkouts_and_workflow_bytes_match_inventory():

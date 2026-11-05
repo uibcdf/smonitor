@@ -11,7 +11,7 @@ Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
 - Source version: `smonitor@0.22.0`
-- Last synced: 2026-10-22
+- Last synced: 2026-11-04
 
 ## What is SMonitor
 
@@ -136,7 +136,9 @@ stricter behaviour.
 
 Recommended pattern:
 - define `CATALOG`, `CODES`, and `SIGNALS` in `mylib/_private/smonitor/catalog.py`;
-- in `_smonitor.py`, import them from `mylib._private.smonitor.catalog`.
+- in `_smonitor.py`, import only `CODES` and `SIGNALS` from that catalog module.
+  `CATALOG` stays in the private integration API; it is not a supported
+  top-level configuration key.
 
 This avoids drift where emitted catalog codes exist but template messages are missing at runtime.
 
@@ -749,7 +751,7 @@ Use duplicate policies for genuinely repeated incidents where aggregate counts a
 Level: **Advanced / CI-support**
 
 Install the optional `smonitor[pytest]` extra to use Pytest Receptor
-`>=1.2,<2`. Conda users install `pytest` and `pytest-receptor>=1.2,<2`
+`>=1.2,<2`. Conda users install `pytest` and `pytest-receptor>=1.2`
 alongside SMonitor. The bridge loads with pytest; activate the receptor's
 `llm` (local) or `ci` profile and explicitly request its artifact:
 
@@ -1029,6 +1031,17 @@ library stand*, SMonitor ships the same checks as a sweep:
 python devtools/verify_integration.py ../mylib          # one
 python devtools/verify_integration.py --all             # every sibling carrying this guide
 ```
+
+The audit discovers either `<repo>/<repo-name>` or
+`<repo>/src/<repo-name>`. If both exist, or the package name differs from the
+checkout name, choose its directory explicitly:
+
+```bash
+python devtools/verify_integration.py ../my-project --package-dir src/mylib
+```
+
+`--package-dir` is relative to that repository (or absolute) and applies to one
+explicit repository. Missing or ambiguous roots fail the layout check.
 
 It covers checks 1, 2, 3 and 5, reads your catalog without importing your
 library, and exits non-zero on any failure, so it works as a gate. Check 4 stays

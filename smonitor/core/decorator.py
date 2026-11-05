@@ -18,7 +18,7 @@ from .capture import (
     safe_metadata,
 )
 from .context import frame_args, pop_frame, push_frame, set_frame_args, set_frame_duration
-from .manager import _track_emission, get_manager
+from .manager import _capture_emission_admission, get_manager
 
 ExtraFactory = Callable[[tuple[Any, ...], dict[str, Any]], Optional[dict[str, Any]]]
 
@@ -225,7 +225,7 @@ def signal(
                     if frame_extra:
                         extra.update(frame_extra)
                     message = str(exc) if policy.exception_text else ""
-                    with _track_emission() as receipt:
+                    with _capture_emission_admission() as receipt:
                         manager.emit(
                             exception_level,
                             message,
@@ -234,9 +234,9 @@ def signal(
                             exception_type=type(exc).__name__,
                             extra=extra,
                         )
-                    if not receipt.accepted:
-                        return
                     try:
+                        if not receipt.accepted:
+                            return
                         if policy.exception_text:
                             setattr(exc, "__smonitor_emitted__", True)
                         else:

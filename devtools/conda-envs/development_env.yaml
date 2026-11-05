@@ -6,6 +6,8 @@ dependencies:
   # --- Python base ---
   - python=3.14
   - pip
+  - setuptools >=77.0.3
+  - wheel
 
   # --- Dev tools: formatting, linting, testing ---
   - ruff=0.16.5

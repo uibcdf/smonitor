@@ -86,3 +86,15 @@ The owner-review PR carries implementation, guard and this archive together;
 the GitHub issue closes on acceptance/merge, not on local verification. No
 release, public provider version or consumer floor is selected. Consumer/source
 receiving and later public artifacts keep their independent evidence.
+
+## Concurrent-delivery correction — 2026-11-04
+
+This supplementary record describes the independently tested candidate
+f0ef19a368b8ad0295e9f22a02435ac56426c772, not its acceptance into main. While
+it was being prepared, b1241ef delivered the ordinary #59 correction; its
+authoritative closeout is nested_signal_admission.md. Current main
+82dad5a7e26e0fba712e30657a6739188d770d79 passes eighteen of the expanded twenty
+guards. The two remaining callback-receipt cases are separately owned by #61.
+The review branch now retains the delivered implementation and adds only that
+hardening. Prior source/build identities above are not relabeled as main or
+public artifacts; see nested_callback_receipt.md for the final follow-up.

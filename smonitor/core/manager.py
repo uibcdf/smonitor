@@ -53,20 +53,24 @@ class _EmissionReceipt:
     accepted: bool = False
 
 
-_emission_receipt: ContextVar[Optional[_EmissionReceipt]] = ContextVar(
+_EMISSION_RECEIPT: ContextVar[Optional[_EmissionReceipt]] = ContextVar(
     "smonitor_emission_receipt", default=None
 )
 
 
 @contextmanager
-def _track_emission():
-    """Observe one manager emission without changing its public return value."""
+def _capture_emission_admission():
+    """Observe one call's admission without changing the public event payload.
+
+    Acceptance means the manager admitted the event to aggregation/routing;
+    it does not certify handler delivery or complete retained history.
+    """
     receipt = _EmissionReceipt()
-    token = _emission_receipt.set(receipt)
+    token = _EMISSION_RECEIPT.set(receipt)
     try:
         yield receipt
     finally:
-        _emission_receipt.reset(token)
+        _EMISSION_RECEIPT.reset(token)
 
 
 def _add_event_observer(observer: Any) -> None:
@@ -881,9 +885,9 @@ class Manager:
                     exception_type=exception_type,
                     correlation_id=correlation_id,
                 )
-        # Only this call may acknowledge the tracked observation. Diagnostic
-        # callbacks can emit other events while this one is being constructed.
-        receipt = _emission_receipt.get()
+        # Bind the receipt to this invocation; nested template/handler events
+        # cannot acknowledge the parent observation.
+        receipt = _EMISSION_RECEIPT.get()
         if receipt is not None:
             if receipt.claimed:
                 receipt = None

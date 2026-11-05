@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Filtered or silenced nested diagnostics no longer suppress an admitted outer
+  exception signal; native exceptions and accepted-event deduplication remain (#59).
+- Integration audits discover flat and src layouts and offer an explicit package
+  directory override. The guide imports only supported configuration keys (#54).
+
+### Changed
+
+- Optional pytest/receptor requirements retain their tested minima without
+  speculative major-version ceilings (#55).
+- SPDX MIT metadata and explicit license inclusion use Setuptools >=77.0.3;
+  QA verifies actual artifacts and a wheel rebuilt from the sdist (#57).
+- Conda build, separate inspected-file upload and promotion use reviewed
+  immutable provider v2.3.0, preserving candidate/installed/public gates (#58).
+
 ## [0.22.0] - 2026-10-22
 
 ### Added

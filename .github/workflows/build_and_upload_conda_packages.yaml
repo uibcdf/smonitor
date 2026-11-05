@@ -208,41 +208,81 @@ jobs:
           EXPECTED_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: test "$(python -m versioningit)" = "$EXPECTED_VERSION"
 
-      - name: Build, test, and upload the staging candidate
+      - name: Build and test the staging candidate without upload
         id: conda_staging
         if: github.event_name == 'workflow_dispatch'
-        uses: uibcdf/action-build-and-upload-conda-packages@v2.1.0
+        uses: uibcdf/action-build-and-upload-conda-packages@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2 # v2.3.0
         env:
           SMONITOR_CONDA_BUILD_NUMBER: ${{ inputs.build_number }}
         with:
           meta_yaml_dir: devtools/conda-build
-          mambabuild: false
-          user: uibcdf
-          label: staging
-          token: ${{ secrets.ANACONDA_UIBCDF_TOKEN }}
-          conda_build_args: --package-format tar.bz2
+          upload: false
+          conda_build_args: --package-format 1
           platform_linux-64: false
           platform_osx-64: false
           platform_osx-arm64: false
           platform_win-64: false
 
-      - name: Build, test, and upload the unstaged release
+      - name: Inspect the exact staging archive before upload
+        id: staging_artifact
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash -l {0}
+        env:
+          BUILT_PATHS: ${{ steps.conda_staging.outputs.built_paths }}
+        run: |
+          python .molsyssuite/devtools/scripts/noarch_conda.py --root . \
+            --built-paths "$BUILT_PATHS" --output "$RUNNER_TEMP/staging-artifact.json" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Upload only the inspected staging archive
+        id: staging_upload
+        if: github.event_name == 'workflow_dispatch'
+        uses: uibcdf/action-build-and-upload-conda-packages/upload@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2 # v2.3.0
+        with:
+          artifact: ${{ steps.staging_artifact.outputs.artifact }}
+          package-spec: uibcdf/${{ steps.staging_artifact.outputs.package }}/${{ steps.staging_artifact.outputs.version }}/noarch/${{ steps.staging_artifact.outputs.filename }}
+          expected-sha256: ${{ steps.staging_artifact.outputs.sha256 }}
+          candidate-sha: ${{ inputs.candidate_sha }}
+          label: staging
+          token: ${{ secrets.ANACONDA_UIBCDF_TOKEN }}
+
+      - name: Build and test the unstaged release without upload
         id: conda_release
         if: github.event_name == 'release' && steps.release_plan.outputs.route == 'direct'
-        uses: uibcdf/action-build-and-upload-conda-packages@v2.1.0
+        uses: uibcdf/action-build-and-upload-conda-packages@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2 # v2.3.0
         env:
           SMONITOR_CONDA_BUILD_NUMBER: 0
         with:
           meta_yaml_dir: devtools/conda-build
-          mambabuild: false
-          user: uibcdf
-          label: main
-          token: ${{ secrets.ANACONDA_UIBCDF_TOKEN }}
-          conda_build_args: --package-format tar.bz2
+          upload: false
+          conda_build_args: --package-format 1
           platform_linux-64: false
           platform_osx-64: false
           platform_osx-arm64: false
           platform_win-64: false
+
+      - name: Inspect the exact direct archive before upload
+        id: direct_artifact
+        if: github.event_name == 'release' && steps.release_plan.outputs.route == 'direct'
+        shell: bash -l {0}
+        env:
+          BUILT_PATHS: ${{ steps.conda_release.outputs.built_paths }}
+        run: |
+          python .molsyssuite/devtools/scripts/noarch_conda.py --root . \
+            --built-paths "$BUILT_PATHS" --output "$RUNNER_TEMP/direct-artifact.json" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Upload only the inspected direct archive
+        id: direct_upload
+        if: github.event_name == 'release' && steps.release_plan.outputs.route == 'direct'
+        uses: uibcdf/action-build-and-upload-conda-packages/upload@87c70b1443d5f22d738ee3ddf812bdbe0152f6c2 # v2.3.0
+        with:
+          artifact: ${{ steps.direct_artifact.outputs.artifact }}
+          package-spec: uibcdf/${{ steps.direct_artifact.outputs.package }}/${{ steps.direct_artifact.outputs.version }}/noarch/${{ steps.direct_artifact.outputs.filename }}
+          expected-sha256: ${{ steps.direct_artifact.outputs.sha256 }}
+          candidate-sha: ${{ github.sha }}
+          label: main
+          token: ${{ secrets.ANACONDA_UIBCDF_TOKEN }}
 
       - name: Independently verify the exact public release file
         if: github.event_name == 'release' && steps.release_plan.outputs.route == 'direct'
@@ -264,6 +304,10 @@ jobs:
             ${{ runner.temp }}/smonitor-conda-route.json
             ${{ runner.temp }}/smonitor-resources.json
             ${{ runner.temp }}/smonitor-native-gates.json
+            ${{ runner.temp }}/staging-artifact.json
+            ${{ runner.temp }}/direct-artifact.json
+            ${{ steps.staging_upload.outputs.receipt }}
+            ${{ steps.direct_upload.outputs.receipt }}
           if-no-files-found: error
           retention-days: 30
 

@@ -57,6 +57,43 @@ def test_a_correct_integration_passes_every_check(verifier, tmp_path):
     assert dict((c, ok) for c, ok, _ in result.rows)["3 renders"] is True
 
 
+def test_src_layout_runs_the_actual_integration_checks(verifier, tmp_path):
+    repo = _library(tmp_path, "src_consumer", config='PROFILE = "user"\n', catalog=GOOD_CATALOG)
+    (repo / "src").mkdir()
+    (repo / repo.name).rename(repo / "src" / repo.name)
+    assert not verifier.verify(repo).failed
+
+
+def test_layout_ambiguity_requires_explicit_package_choice(verifier, tmp_path):
+    repo = _library(tmp_path, "both", config='PROFILE = "user"\n', catalog=GOOD_CATALOG)
+    (repo / "src" / repo.name).mkdir(parents=True)
+    result = verifier.verify(repo)
+    assert result.failed and "ambiguous" in result.rows[0][2]
+    assert not verifier.verify(repo, package_dir=Path("both")).failed
+
+
+def test_override_supports_package_names_different_from_checkout(verifier, tmp_path):
+    repo = _library(tmp_path, "checkout", config='PROFILE = "user"\n', catalog=GOOD_CATALOG)
+    (repo / "checkout").rename(repo / "actual_package")
+    assert not verifier.verify(repo, package_dir=Path("actual_package")).failed
+    assert verifier.verify(repo, package_dir=Path("missing")).failed
+
+
+def test_cli_uses_explicit_root_and_refuses_sweep_override(verifier, tmp_path, monkeypatch):
+    repo = _library(tmp_path, "cli", config='PROFILE = "user"\n', catalog=GOOD_CATALOG)
+    (repo / "cli").rename(repo / "actual")
+    monkeypatch.setattr(sys, "argv", ["verify", str(repo), "--package-dir", "actual"])
+    assert verifier.main() == 0
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["verify", str(repo), "--package-dir", "actual", "--all", "--root", str(tmp_path)],
+    )
+    with pytest.raises(SystemExit) as caught:
+        verifier.main()
+    assert caught.value.code == 2
+
+
 def test_it_reports_a_code_with_no_template(verifier, tmp_path):
     repo = _library(
         tmp_path,
