@@ -1,0 +1,6 @@
+﻿smonitor.collect\_bundle
+========================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: collect_bundle

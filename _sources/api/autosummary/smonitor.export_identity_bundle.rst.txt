@@ -1,0 +1,6 @@
+﻿smonitor.export\_identity\_bundle
+=================================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: export_identity_bundle

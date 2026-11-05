@@ -1,0 +1,6 @@
+﻿smonitor.configure
+==================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: configure

@@ -1,0 +1,31 @@
+﻿smonitor.CapturePolicy
+======================
+
+.. currentmodule:: smonitor
+
+.. autoclass:: CapturePolicy
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CapturePolicy.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CapturePolicy.arguments
+      ~CapturePolicy.exception_text
+      ~CapturePolicy.inherited_context
+      ~CapturePolicy.extra
+   
+   
