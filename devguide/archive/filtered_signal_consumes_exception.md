@@ -1,9 +1,9 @@
 ---
 summary: A filtered inner signal hides an eligible enclosing exception event
 issue: uibcdf/smonitor#59
-status: partial
+status: resolved
 opened: 2026-11-04
-closed:
+closed: 2026-11-04
 severity: medium
 verification: measured
 area: [signals, filtering, capture, interoperability]
@@ -36,7 +36,7 @@ filtered/disabled event, and an empty dictionary for a silenced source. Its
 return value therefore does not prove acceptance. Source silence and disabling
 diagnostics during a call reproduce the same unwanted marker.
 
-The proposed correction adds a private scoped receipt for the exact manager
+The correction adds a private scoped receipt for the exact manager
 emission. The manager acknowledges it only after enablement, source silence and
 level filtering. A nested callback emission cannot acknowledge its parent's
 event. The context-local receipt is reset after success or failure and is absent
@@ -78,10 +78,11 @@ The nineteen guards cover sync/async filtering, accepted DEBUG and ERROR,
 case-insensitive levels, exact/prefix silence, disabled/dynamically changed
 policy, metadata-only capture, native identity/cause, public preview returns,
 format-time reconfiguration and nested diagnostic callbacks. They pass with the
-proposed correction. Exact-branch full-suite, docs/package smoke, consumer
+correction. Exact-branch full-suite, docs/package smoke, consumer
 receiving and PR/CI evidence are recorded in the linked owner/coordination issues.
 
-The fix is proposed for owner review. This record remains partial and the issue
-open until acceptance; no release, public provider version or consumer floor is
-selected. Archive the record with its executed evidence when the owner accepts
-and closes the defect.
+The candidate resolves the defect with guard tests/test_signal_filtering.py.
+The owner-review PR carries implementation, guard and this archive together;
+the GitHub issue closes on acceptance/merge, not on local verification. No
+release, public provider version or consumer floor is selected. Consumer/source
+receiving and later public artifacts keep their independent evidence.

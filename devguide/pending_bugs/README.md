@@ -18,8 +18,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`filtered_signal_consumes_exception.md`](filtered_signal_consumes_exception.md) | `partial` | [uibcdf/smonitor#59](https://github.com/uibcdf/smonitor/issues/59) | A filtered inner signal hides an eligible enclosing exception event |
+_No entries._
 
 <!-- /generated -->
