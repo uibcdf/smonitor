@@ -10,8 +10,8 @@ Source of truth for integrating and using **SMonitor** in this library.
 Metadata
 - Source repository: `smonitor`
 - Source document: `standards/SMONITOR_GUIDE.md`
-- Source version: `smonitor@0.22.1`
-- Last synced: 2026-11-04
+- Source version: `smonitor@0.23.0`
+- Last synced: 2026-11-10
 
 ## What is SMonitor
 
@@ -99,6 +99,25 @@ not promoted to ERROR. Diagnostics emitted by formatters or template callbacks
 have independent admission. Native exception identity and application-owned
 configuration remain unchanged. Consumers should exercise their normal
 thresholds and capture policies when receiving this correction.
+
+**SMonitor >=0.23.0** adds explicit `bind_provider(PACKAGE_ROOT)` snapshots
+for repeated `emit_from_catalog(..., package_root=bound)` or bootstrap-enabled
+`DiagnosticBundle` use. Binding resolves the root once. Rebind to select a new
+relative/cwd/symlink target; ordinary path inputs retain live resolution.
+Configured-package reset, current-manager registration and application policy
+continue to apply. Bound declaration-only emission retains the current manager's
+first registration. The binding selects a canonical pathname, with provider
+files remaining subject to their normal registration/configuration lifecycle.
+
+The same version adds opt-in `smonitor.profiling.observe_calls` on GIL-enabled
+CPython 3.12–3.14 and `observe_process_family` / `linux_resource_snapshot` on
+Linux. Call observations distinguish code aggregation, callable/receiver
+selection, counts, wall/thread CPU and current/all-thread scope. Process-family
+observations use a sibling worker, all-TID discovery, PID/start-tick checks and
+bounded sampled CPU/PSS/RSS with per-read gaps and overhead. Read the
+[observation contract](https://github.com/uibcdf/smonitor/blob/main/docs/content/developer/observation.md)
+for actual backend/capability limits and examples before selecting an API.
+Consumers own receiving evidence and any new >=0.23.0 capability floor.
 
 ## 1. Required Configuration Structure
 

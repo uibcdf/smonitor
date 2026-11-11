@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from .core import (
+    BoundProvider,
+    bind_provider,
     context_extra,
     emit_from_catalog,
     ensure_configured,
@@ -24,6 +26,8 @@ from .provider import ProviderRegistrationError, register_provider
 # directly, but stays out of `__all__` on purpose: the leading underscore marks
 # it as not part of the public contract frozen for 1.0.
 __all__ = [
+    "BoundProvider",
+    "bind_provider",
     "ensure_configured",
     "register_provider",
     "ProviderRegistrationError",

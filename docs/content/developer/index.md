@@ -40,6 +40,7 @@ policy-engine.md
 catalog-and-signals.md
 schema-validation.md
 profiling.md
+observation.md
 contract-versioning.md
 operability-minimum.md
 testing-and-coverage.md

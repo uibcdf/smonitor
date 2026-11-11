@@ -4,7 +4,26 @@ from contextlib import contextmanager
 from time import perf_counter
 from typing import Any
 
+from ._call_observation import CallObservation, NativeCallTarget, observe_calls
+from ._diagnostics import ObservationError
+from ._process_observation import (
+    ProcessFamilyObservation,
+    linux_resource_snapshot,
+    observe_process_family,
+)
 from .core.manager import get_manager
+
+__all__ = [
+    "span",
+    "export_timeline",
+    "observe_calls",
+    "CallObservation",
+    "NativeCallTarget",
+    "ObservationError",
+    "observe_process_family",
+    "ProcessFamilyObservation",
+    "linux_resource_snapshot",
+]
 
 
 @contextmanager

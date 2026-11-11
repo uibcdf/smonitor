@@ -76,3 +76,10 @@ with metadata (for example, GPU memory or device name). These fields appear in
 - timing summaries are visible in `report()`,
 - timeline export works in JSON/CSV,
 - profiling helps triage real slow paths in your library.
+
+## Scoped observation
+
+For original callable identities, per-thread CPU or sibling process-family
+CPU/PSS sampling, use the explicit operations in `smonitor.profiling`. The
+[observation contract](../developer/observation.md) defines selection, supported
+backends, bounds and completeness evidence.

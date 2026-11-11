@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import threading
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -27,7 +28,32 @@ def _resolve(*args, **kwargs):
 _CONFIGURE_LOCK = threading.RLock()
 
 
-def ensure_configured(package_root: Path, *, use_provider_policy: bool = False) -> None:
+@dataclass(frozen=True, init=False)
+class BoundProvider:
+    """A canonical provider-root snapshot for repeated catalog emission.
+
+    Construct through ``bind_provider``. Resolving a relative path or symlink
+    happens at binding time. Rebind explicitly to follow a changed target.
+    Configuration/registration still belongs to the current manager.
+    """
+
+    package_root: Path
+
+    def __init__(self, package_root: Path):
+        object.__setattr__(self, "package_root", Path(package_root).resolve())
+
+    def __fspath__(self) -> str:
+        return str(self.package_root)
+
+
+def bind_provider(package_root: Path) -> BoundProvider:
+    """Resolve a reusable provider-root snapshot without selecting policy."""
+    return BoundProvider(package_root)
+
+
+def ensure_configured(
+    package_root: Path | BoundProvider, *, use_provider_policy: bool = False
+) -> None:
     """Register a provider; bootstrap policy only before application configuration.
 
     An explicit ``use_provider_policy=True`` applies the provider's policy even
@@ -36,7 +62,11 @@ def ensure_configured(package_root: Path, *, use_provider_policy: bool = False) 
     from ..core.manager import get_manager
     from .provider import register_provider
 
-    package_root = Path(package_root).resolve()
+    package_root = (
+        package_root.package_root
+        if isinstance(package_root, BoundProvider)
+        else Path(package_root).resolve()
+    )
     key = str(package_root)
     with _CONFIGURE_LOCK:
         manager = get_manager()
@@ -167,7 +197,7 @@ def emit_from_catalog(
     entry: Dict[str, Any],
     *,
     extra: Optional[Dict[str, Any]] = None,
-    package_root: Optional[Path] = None,
+    package_root: Path | BoundProvider | None = None,
     meta: Optional[Dict[str, Any]] = None,
     bootstrap_policy: bool = True,
 ) -> Dict[str, Any]:
@@ -177,7 +207,14 @@ def emit_from_catalog(
         else:
             from .provider import register_provider
 
-            register_provider(package_root)
+            if isinstance(package_root, BoundProvider):
+                from ..core.manager import get_manager
+
+                with _CONFIGURE_LOCK:
+                    if str(package_root.package_root) not in get_manager()._providers:
+                        register_provider(package_root.package_root)
+            else:
+                register_provider(package_root)
     return _emit(
         entry.get("level", "WARNING"),
         "",

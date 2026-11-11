@@ -1,12 +1,12 @@
-# Reviewed for the 0.22.1 candidate before creating its immutable tag; owner #62.
+# Reviewed for the 0.23.0 candidate before its immutable tag; owner #67.
 schema = "molsyssuite.conda-plan@1"
-version = "0.22.1"
+version = "0.23.0"
 package = "smonitor"
 build_number = 0
 route = "staged"
 profile = "noarch-python"
-reason = "Patch release of nested-signal/callback admission fixes, src-layout audit support and reviewed runtime floors (#54/#55/#59/#61). SPDX metadata and the Setuptools minimum changed (#57), and this is the first live qualification of immutable Conda provider v2.3.0 with separate inspected-file upload (#58). Stage and qualify the exact noarch archive on all twelve supported OS/Python cells before public visibility; retain source-owned collective E2E and package-only evidence separately."
-decision_by = "Diego Prada Gracia via Codex on 2026-11-04, authorized publication in #62"
+reason = "Additive explicit provider-root binding and opt-in selected-call/Linux process-family observation (#63-#66) introduce new public compatibility surfaces. Qualify the exact source and installed noarch archive on all twelve supported cells before public visibility, with explicit unavailable-backend controls and separate required collective E2E/bootstrap evidence."
+decision_by = "Diego Prada Gracia via Codex on 2026-11-10, authorized publication in #67"
 artifact_subdirs = ["noarch"]
 test_platforms = ["linux-64", "osx-arm64", "win-64"]
 python_versions = ["3.11", "3.12", "3.13", "3.14"]

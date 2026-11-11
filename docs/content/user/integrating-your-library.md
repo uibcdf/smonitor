@@ -90,3 +90,30 @@ Read [Edge Cases](edge-cases.md) before broad rollout.
 - key API boundaries are instrumented with `@signal`,
 - QA tests validate strict signal contracts and bundle export,
 - agent-oriented payloads and bundle comparison are usable in practice.
+
+## Repeated catalog emission
+
+From SMonitor 0.23.0, bind an installed provider's canonical root explicitly
+when repeated catalog emission would otherwise repeat filesystem resolution:
+
+```python
+from smonitor.integrations import bind_provider, emit_from_catalog
+
+BOUND_ROOT = bind_provider(PACKAGE_ROOT)
+
+def report_warning(entry, extra):
+    return emit_from_catalog(entry, package_root=BOUND_ROOT, extra=extra)
+```
+
+Binding resolves the root at construction and selects that canonical pathname
+for subsequent emissions. Rebind to select another relative/cwd/symlink target.
+Provider files retain their ordinary registration/configuration lifecycle.
+Ordinary `Path`/string inputs continue resolving their live target on each call.
+
+Bound emission checks the current manager under the existing setup lock.
+`reset_configured_packages()` makes its next bootstrap-enabled call reconsider
+registration; existing application policy remains authoritative. An explicit
+`ensure_configured(BOUND_ROOT, use_provider_policy=True)` applies provider policy.
+Bound `bootstrap_policy=False` emission registers once per current manager and
+keeps runtime policy under the application. A bootstrap-enabled
+`DiagnosticBundle(..., package_root=BOUND_ROOT)` can use the same binding.

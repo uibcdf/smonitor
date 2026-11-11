@@ -40,3 +40,9 @@ from smonitor.profiling import export_timeline
 
 export_timeline("timeline.json", format="json")
 ```
+
+## Scoped observation
+
+SMonitor 0.23.0 adds selected-call observation and Linux process-family samples.
+The [observation contract](observation.md) describes identity, threads, clocks,
+coverage bounds and resource ownership.
