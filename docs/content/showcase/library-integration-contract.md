@@ -41,7 +41,7 @@ SIGNALS = {
 # A/select.py
 import smonitor
 
-@smonitor.signal(name="mylib.select")
+@smonitor.signal
 def select(items, query):
     if query == "all":
         smonitor.emit(

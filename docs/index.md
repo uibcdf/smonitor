@@ -35,7 +35,7 @@ import smonitor
 
 smonitor.configure(profile="user", theme="rich")
 
-@smonitor.signal(name="mylib.select")
+@smonitor.signal
 def select(items, query):
     if query == "all":
         smonitor.emit(

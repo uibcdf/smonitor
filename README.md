@@ -69,7 +69,7 @@ import smonitor
 
 smonitor.configure(profile="user", theme="plain")
 
-@smonitor.signal(name="mylib.compute")
+@smonitor.signal
 def do_work(x):
     if x < 0:
         smonitor.emit(
