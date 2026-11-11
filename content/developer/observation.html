@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../../_static/favicon-16x16.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../../_static/favicon-124x124.png" sizes="124x124" rel="icon" type="image/png">
+    <link href="../../_static/favicon-128x128.png" sizes="128x128" rel="icon" type="image/png">
+    <link href="../../_static/favicon-192x192.png" sizes="192x192" rel="icon" type="image/png">
+    <link href="../../_static/icon.svg" rel="icon" type="image/svg+xml">
+  
+    <title>Scoped observation – SMonitor 0.23.0</title>
+  
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=d5ef24d1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=d5ef24d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=2753bf86"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/developer/observation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Contract Versioning (CODES and SIGNALS)" href="contract-versioning.html" />
+    <link rel="prev" title="Profiling" href="profiling.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.23.0" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="SMonitor 0.23.0 documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="SMonitor 0.23.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../showcase/index.html">
+    Showcase
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Developer
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/uibcdf/smonitor" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing-workflow.html">Contributing Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development-environment.html">Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation-patterns.html">Implementation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy-engine.html">Policy Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog-and-signals.html">Catalog and Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schema-validation.html">Schema Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profiling.html">Profiling</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Scoped observation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contract-versioning.html">Contract Versioning (CODES and SIGNALS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operability-minimum.html">Operability Minimum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing-and-coverage.html">Testing and Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-contracts.html">Dependency contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytest-diagnostic-policy.html">Pytest diagnostic policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="editorial-guide.html">Editorial Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-and-versioning.html">Release and Versioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agent-ready-checklist.html">Agent-Ready Checklist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributor-checklist.html">Contributor Checklist</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Developer</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Scoped observation</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="scoped-observation">
+<h1>Scoped observation<a class="headerlink" href="#scoped-observation" title="Link to this heading">#</a></h1>
+<p>SMonitor 0.23.0 introduces explicit developer observation operations under
+<code class="docutils literal notranslate"><span class="pre">smonitor.profiling</span></code>. Each operation returns its own bounded primitive report.
+Select representative work and retain its original result and exit evidence.</p>
+<section id="selected-synchronous-calls">
+<h2>Selected synchronous calls<a class="headerlink" href="#selected-synchronous-calls" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">smonitor.profiling</span><span class="w"> </span><span class="kn">import</span> <span class="n">observe_calls</span>
+
+<span class="c1"># Existing function objects are supplied directly.</span>
+<span class="k">with</span> <span class="n">observe_calls</span><span class="p">({</span><span class="s2">"prepare"</span><span class="p">:</span> <span class="n">prepare</span><span class="p">,</span> <span class="s2">"calculate"</span><span class="p">:</span> <span class="n">calculate</span><span class="p">},</span>
+                   <span class="n">identity</span><span class="o">=</span><span class="s2">"callable"</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="s2">"current"</span><span class="p">)</span> <span class="k">as</span> <span class="n">observation</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calculate</span><span class="p">()</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">observation</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">observe_calls(targets,</span> <span class="pre">*,</span> <span class="pre">identity=&quot;code&quot;,</span> <span class="pre">threads=&quot;current&quot;,</span> <span class="pre">mode=&quot;timings&quot;,</span> <span class="pre">tool_id=3,</span> <span class="pre">max_events=100000,</span> <span class="pre">max_threads=64,</span> <span class="pre">max_depth=128)</span></code> returns a single-use
+context manager. Target labels are caller-approved ASCII identifiers of at most
+64 characters. Supply at most 64 synchronous Python functions, bound methods,
+code objects or <code class="docutils literal notranslate"><span class="pre">NativeCallTarget</span></code> selections. Generator/coroutine targets are
+rejected. Enter after application setup and leave after the selected work.</p>
+<p>The backend requires CPython 3.12–3.14 with the GIL enabled. Python 3.11 and other
+unsupported interpreters raise catalog-backed <code class="docutils literal notranslate"><span class="pre">ObservationError</span></code> before entry.
+The observer claims its explicitly selected unused <code class="docutils literal notranslate"><span class="pre">sys.monitoring</span></code> tool ID,
+registers callbacks and removes its own local/global events and callbacks on
+exit. Occupied slots raise <code class="docutils literal notranslate"><span class="pre">SMONITOR-OBSERVATION-CONFLICT</span></code>. Nested independent
+scopes use different tool IDs, e.g. 3 and 4. The observer preserves application
+profile/trace hooks, function/code identities and GC policy/callbacks.</p>
+<p>Selection meanings are explicit:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">identity=&quot;code&quot;</span></code> aggregates every invocation sharing a selected code object,
+including unlisted closures/decorator wrappers. A code object receives one
+label. Distinct code objects are compared by identity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">identity=&quot;callable&quot;</span></code> additionally observes Python CALL events to match the
+selected function and, for bound methods, its receiver identity. Unlisted
+aliases sharing that code remain excluded. Entries without an attributable
+Python CALL, such as some C-initiated callbacks, are counted as unattributed
+and make the observation incomplete.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">threads=&quot;current&quot;</span></code> restricts delivery to the entering thread.
+<code class="docutils literal notranslate"><span class="pre">threads=&quot;all&quot;</span></code> includes current and future Python threads in this interpreter.
+Per-thread stacks keep recursive and nested selected calls independent.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mode=&quot;counts&quot;</span></code> records calls, returns and exception unwinds without selected
+timing clocks, whose fields remain <code class="docutils literal notranslate"><span class="pre">None</span></code>. <code class="docutils literal notranslate"><span class="pre">mode=&quot;timings&quot;</span></code> also reports inclusive and selected-exclusive
+wall nanoseconds and thread CPU nanoseconds. Selected-exclusive subtracts
+nested selected work on that same thread. Unselected nested work remains in
+its enclosing selected duration. Inclusive nested durations overlap.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">scope_process_cpu_ns</span></code> is measured once for the whole scope. It includes all
+process threads and observer overhead. Thread CPU covers the Python thread
+receiving each event. CPU spent in other native threads needs a process/resource
+observation. Scope wall and all selected clocks include instrumentation and
+scheduling costs.</p>
+<p>GC collection/collected/uncollectable counters are process-wide before/after
+snapshots. <code class="docutils literal notranslate"><span class="pre">gc_elapsed_ns</span></code> is unavailable (<code class="docutils literal notranslate"><span class="pre">None</span></code>) because the supported elapsed
+callback route would change an application’s callback admission. Observation
+allocations can themselves affect collection counts.</p>
+<p>For a precise supported native call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">smonitor.profiling</span><span class="w"> </span><span class="kn">import</span> <span class="n">NativeCallTarget</span><span class="p">,</span> <span class="n">observe_calls</span>
+
+<span class="n">selection</span> <span class="o">=</span> <span class="n">NativeCallTarget</span><span class="p">(</span><span class="n">caller</span><span class="o">=</span><span class="n">consume</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="nb">list</span><span class="o">.</span><span class="n">pop</span><span class="p">,</span> <span class="n">receiver</span><span class="o">=</span><span class="n">items</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">observe_calls</span><span class="p">({</span><span class="s2">"pop"</span><span class="p">:</span> <span class="n">selection</span><span class="p">})</span> <span class="k">as</span> <span class="n">observation</span><span class="p">:</span>
+    <span class="n">consume</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">caller</span></code> selects its Python code identity. <code class="docutils literal notranslate"><span class="pre">function</span></code> accepts a builtin function,
+a method descriptor, or a bound builtin with a resolvable descriptor. Optional
+receiver matching uses object identity. Returns and native raises have distinct
+counts. Other native callable implementations require their own supported
+monitoring contract. The report declares native caller code aggregation even
+when Python targets use callable identity.</p>
+<p>Reports use <code class="docutils literal notranslate"><span class="pre">smonitor.call-observation&#64;1</span></code> and contain approved labels, thread
+identifiers, counts, clocks, GC counter deltas and completeness counters.
+Argument/return/receiver/frame payloads and exception text are excluded. Selection
+references are released when the scope closes. Events, threads and stack depth
+are bounded, with an additional 65536-frame product limit. Dropped entries,
+unmatched exits, callback failures, unattributed entries and open calls at stop
+produce <code class="docutils literal notranslate"><span class="pre">status=&quot;incomplete&quot;</span></code>. Closing preserves the original body exception.
+Read the report after context exit. Reusing a scope is rejected.</p>
+<p>The interpreter event and callback contracts are documented in
+<a class="reference external" href="https://docs.python.org/3.14/library/sys.monitoring.html">Python’s monitoring reference</a>.
+GC snapshot and callback semantics follow the
+<a class="reference external" href="https://docs.python.org/3.14/library/gc.html">GC reference</a>.</p>
+</section>
+<section id="linux-process-family-samples">
+<h2>Linux process-family samples<a class="headerlink" href="#linux-process-family-samples" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">smonitor.profiling</span><span class="w"> </span><span class="kn">import</span> <span class="n">observe_process_family</span>
+
+<span class="c1"># The application starts an owned calculation process behind a work barrier.</span>
+<span class="k">with</span> <span class="n">observe_process_family</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">interval_s</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span> <span class="k">as</span> <span class="n">observation</span><span class="p">:</span>
+    <span class="n">release_calculation</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">receive_result</span><span class="p">()</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">observation</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
+<span class="n">returncode</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">observe_process_family(pid,</span> <span class="pre">*,</span> <span class="pre">interval_s=0.1,</span> <span class="pre">max_samples=1000,</span> <span class="pre">max_processes=64,</span> <span class="pre">max_tasks=1024,</span> <span class="pre">max_duration_s=300,</span> <span class="pre">include_host=False)</span></code> supports
+Linux <code class="docutils literal notranslate"><span class="pre">/proc</span></code>. The root must be an existing descendant of the calling process.
+Its PID/start ticks are verified before observation. The worker is a sibling of
+the calculation subtree. A readiness handshake follows its initial sample, so
+the caller can then release a work barrier. Startup time is outside that sample
+window. The caller keeps its process handle, wait/return-code handling and
+scientific result. The observer closes on normal exit, body exceptions, bounds,
+duration or parent EOF. Cleanup targets only its own worker and temporary files.
+If the bounded cleanup cannot retire its worker, the report marks
+<code class="docutils literal notranslate"><span class="pre">observer_cleanup_pending</span></code> and retains its owned directory. Keep the scope
+object and retry <code class="docutils literal notranslate"><span class="pre">stop()</span></code> to complete retirement. Recovered cleanup retains
+incomplete observation status.</p>
+<p>The worker discovers children through every live task’s <code class="docutils literal notranslate"><span class="pre">children</span></code> file,
+deduplicates PIDs, verifies start ticks, and retains already discovered
+identities across reparenting/root disappearance. Reused PIDs and newly found
+children with a changed parent are rejected with retained errors. At most
+<code class="docutils literal notranslate"><span class="pre">max_processes</span></code> distinct process identities are retained for the whole scope.
+Task discovery is bounded per sample. The sample/process product is limited to
+100000 records. Error history retains at most 128 entries per sample and 4096
+in total; previous-success history is also limited to 4096 keys. Omissions are
+reported explicitly and make coverage incomplete.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">smonitor.process-family-observation&#64;1</span></code> report retains sample/read start and
+end monotonic nanoseconds, PID/start ticks, CPU tick counters, RSS and PSS bytes,
+read errors and previous successful operation timestamps. Failed/unverified
+memory reads remain <code class="docutils literal notranslate"><span class="pre">None</span></code>. Error categories preserve uncertainty about process
+exit, reaping, permissions and discovery races. <code class="docutils literal notranslate"><span class="pre">family_pss_bytes</span></code> requires all
+reads/discovery in that sample to succeed. <code class="docutils literal notranslate"><span class="pre">observed_pss_bytes</span></code> retains the
+available subset when coverage is partial. <code class="docutils literal notranslate"><span class="pre">maximum_sampled_family_pss_bytes</span></code>
+uses qualifying samples only. Continuous coverage, atomic family samples and a
+true instantaneous peak remain unavailable. Short-lived undiscovered children
+and peaks between samples can be missed even with zero read errors.</p>
+<p>Requested wait is <strong>additional to read time</strong>. Actual sample/read windows and
+<code class="docutils literal notranslate"><span class="pre">observer_cpu_ns</span></code> expose effective cadence and sampler overhead.
+<code class="docutils literal notranslate"><span class="pre">observer_startup_wall_ns</span></code> covers launch-to-readiness, and
+<code class="docutils literal notranslate"><span class="pre">observer_process_cpu_ns</span></code> retains total observer-process CPU including startup. Sample and
+duration limits stop observation with incomplete status. Duration is checked
+between reads. Choose cadence and limits for the workload’s peak duration and
+retain separate unobserved latency/CPU cohorts when measuring performance.</p>
+<p>RSS sums can count shared mappings more than once. PSS and RSS describe process
+mappings; device memory requires a separate backend.</p>
+<p>CPU counters are per process. <code class="docutils literal notranslate"><span class="pre">self_cpu_ticks</span></code> includes that process’s threads;
+<code class="docutils literal notranslate"><span class="pre">waited_children_cpu_ticks</span></code> contains its reaped children. Deltas span the first
+to last successful observation of each discovered identity, with
+<code class="docutils literal notranslate"><span class="pre">cpu_ticks_per_second</span></code> specifying clock quantization. Short lifetimes and work
+before discovery can be missed. Root, joined-child and observed-descendant data
+are retained individually. Summing descendant lifetime deltas with joined-child
+counters can double-count the same work after reaping. The application can retain
+its independent <code class="docutils literal notranslate"><span class="pre">wait</span></code>/rusage evidence for a complete owned execution.</p>
+</section>
+<section id="capacity-and-pressure-snapshots">
+<h2>Capacity and pressure snapshots<a class="headerlink" href="#capacity-and-pressure-snapshots" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">linux_resource_snapshot(pid)</span></code> exposes effective affinity CPU IDs, raw host
+CPU/memory/I/O PSI, available RAM/swap bytes and visible cgroup-v2 ancestor
+<code class="docutils literal notranslate"><span class="pre">cpu.max</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu.stat</span></code>, <code class="docutils literal notranslate"><span class="pre">memory.max</span></code> and <code class="docutils literal notranslate"><span class="pre">memory.high</span></code> contents. <code class="docutils literal notranslate"><span class="pre">include_host=True</span></code>
+adds one such initial snapshot to a process-family report. Values and read errors
+are separate fields, with before/after process identity verification. Cgroup
+inspection covers at most 64 ancestors under the visible <code class="docutils literal notranslate"><span class="pre">/sys/fs/cgroup</span></code> mount.
+Unavailable or inaccessible controls retain incomplete status. The execution
+owner interprets demand, quotas, pressure and admission using its own policy.</p>
+<p>The backend’s stat, RSS, PSS and task interfaces follow the
+<a class="reference external" href="https://docs.kernel.org/filesystems/proc.html">Linux proc filesystem reference</a>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="profiling.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Profiling</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="contract-versioning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contract Versioning (CODES and SIGNALS)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selected-synchronous-calls">Selected synchronous calls</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-process-family-samples">Linux process-family samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-and-pressure-snapshots">Capacity and pressure snapshots</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><div>
+	&copy; 2026, <a href=contents/about/who.html>Liliana M. Moreno Vargas, Diego Prada Gracia
+		and contributors</a> | <a href="https://www.uibcdf.org/">UIBCDF Lab</a> 
+	at the <a href="http://himfg.com.mx">Federico Gómez Children’s Hospital of Mexico</a><br />
+	<a href="https://github.com/uibcdf/depdigest">SMonitor is an open source project</a> shared
+	under <a href="https://github.com/uibcdf/depdigest/blob/main/LICENSE">an MIT license</a>
+</div></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0
+     | 
+    Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0
+    <br/>
+  </p>
+
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><a href= "mailto:uibcdf@gmail.com">Contact us</a><br /></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

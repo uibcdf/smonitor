@@ -1,0 +1,6 @@
+﻿smonitor.diagnostic\_scope
+==========================
+
+.. currentmodule:: smonitor
+
+.. autofunction:: diagnostic_scope

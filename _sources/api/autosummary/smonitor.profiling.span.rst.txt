@@ -1,0 +1,6 @@
+﻿smonitor.profiling.span
+=======================
+
+.. currentmodule:: smonitor.profiling
+
+.. autofunction:: span

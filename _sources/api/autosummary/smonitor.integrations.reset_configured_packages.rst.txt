@@ -1,0 +1,6 @@
+﻿smonitor.integrations.reset\_configured\_packages
+=================================================
+
+.. currentmodule:: smonitor.integrations
+
+.. autofunction:: reset_configured_packages
