@@ -1,0 +1,24 @@
+{
+  "candidate_sha": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+  "checked_at": "2026-11-11T03:04:55.679453+00:00",
+  "coordinate": {
+    "filename": "smonitor-0.23.0-py_0.tar.bz2",
+    "owner": "uibcdf",
+    "package": "smonitor",
+    "subdir": "noarch",
+    "version": "0.23.0"
+  },
+  "label": "staging",
+  "preflight": {
+    "scope": "all-labels",
+    "state": "absent"
+  },
+  "schema": "uibcdf.conda-upload@1",
+  "sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+  "state": "verified",
+  "subject": {
+    "repository": "uibcdf/smonitor",
+    "run_attempt": "1",
+    "run_id": "42950020732"
+  }
+}

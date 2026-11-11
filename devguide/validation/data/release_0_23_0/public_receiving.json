@@ -1,0 +1,381 @@
+{
+  "state": "passed",
+  "version": "0.23.0",
+  "python": "3.14.10 | packaged by conda-forge | (main, Oct 26 2026, 11:35:38) [GCC 15.3.0]",
+  "prefix": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix",
+  "origins": {
+    "smonitor": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix/lib/python3.14/site-packages/smonitor/__init__.py",
+    "smonitor._call_observation": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix/lib/python3.14/site-packages/smonitor/_call_observation.py",
+    "smonitor._process_observation": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix/lib/python3.14/site-packages/smonitor/_process_observation.py",
+    "smonitor.profiling": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix/lib/python3.14/site-packages/smonitor/profiling.py",
+    "smonitor.integrations.core": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix/lib/python3.14/site-packages/smonitor/integrations/core.py"
+  },
+  "file_sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+  "conda_url": "https://conda.anaconda.org/uibcdf/noarch/smonitor-0.23.0-py_0.tar.bz2",
+  "checks": {
+    "public_installed_identity": true,
+    "bound_emission_and_application_policy": true,
+    "call_identity_threads_errors_and_policy": true,
+    "native_receiver_return_and_raise": true,
+    "process_scope_refusal": true,
+    "process_sampling_owned_exit_and_cleanup": true,
+    "installed_cli_commands": true
+  },
+  "cli": [
+    {
+      "args": [
+        "--help"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "pytest-check",
+        "--help"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "pytest-baseline",
+        "--help"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "call_observation": {
+    "schema": "smonitor.call-observation@1",
+    "backend": "cpython.sys.monitoring",
+    "identity": "callable",
+    "thread_scope": "all",
+    "mode": "timings",
+    "status": "observed",
+    "callback_errors": 0,
+    "observation_errors": 0,
+    "tool_released": true,
+    "callbacks": 95,
+    "dropped_entries": 0,
+    "unmatched_exits": 0,
+    "unattributed_entries": 0,
+    "open_frames_at_stop": 0,
+    "scope_wall_ns": 1011163,
+    "scope_process_cpu_ns": 1132382,
+    "gc_counters_delta": [
+      {
+        "collections": 0,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      {
+        "collections": 0,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      {
+        "collections": 0,
+        "collected": 0,
+        "uncollectable": 0
+      }
+    ],
+    "gc_elapsed_ns": null,
+    "targets": [
+      {
+        "label": "outer",
+        "kind": "python",
+        "caller_identity": null
+      },
+      {
+        "label": "inner",
+        "kind": "python",
+        "caller_identity": null
+      }
+    ],
+    "threads": [
+      {
+        "sequence": 0,
+        "python_thread_id": 127073885796224,
+        "native_thread_id": 2,
+        "targets": {
+          "outer": {
+            "calls": 2,
+            "returns": 1,
+            "unwinds": 1,
+            "inclusive_wall_ns": 79981,
+            "selected_exclusive_wall_ns": 60231,
+            "inclusive_thread_cpu_ns": 79413,
+            "selected_exclusive_thread_cpu_ns": 59378
+          },
+          "inner": {
+            "calls": 2,
+            "returns": 1,
+            "unwinds": 1,
+            "inclusive_wall_ns": 19750,
+            "selected_exclusive_wall_ns": 19750,
+            "inclusive_thread_cpu_ns": 20035,
+            "selected_exclusive_thread_cpu_ns": 20035
+          }
+        }
+      },
+      {
+        "sequence": 1,
+        "python_thread_id": 127073855805120,
+        "native_thread_id": 59,
+        "targets": {
+          "outer": {
+            "calls": 1,
+            "returns": 1,
+            "unwinds": 0,
+            "inclusive_wall_ns": 77706,
+            "selected_exclusive_wall_ns": 57807,
+            "inclusive_thread_cpu_ns": 76287,
+            "selected_exclusive_thread_cpu_ns": 55636
+          },
+          "inner": {
+            "calls": 1,
+            "returns": 1,
+            "unwinds": 0,
+            "inclusive_wall_ns": 19899,
+            "selected_exclusive_wall_ns": 19899,
+            "inclusive_thread_cpu_ns": 20651,
+            "selected_exclusive_thread_cpu_ns": 20651
+          }
+        }
+      }
+    ]
+  },
+  "native_observation": {
+    "schema": "smonitor.call-observation@1",
+    "backend": "cpython.sys.monitoring",
+    "identity": "code",
+    "thread_scope": "current",
+    "mode": "counts",
+    "status": "observed",
+    "callback_errors": 0,
+    "observation_errors": 0,
+    "tool_released": true,
+    "callbacks": 11,
+    "dropped_entries": 0,
+    "unmatched_exits": 0,
+    "unattributed_entries": 0,
+    "open_frames_at_stop": 0,
+    "scope_wall_ns": 164213,
+    "scope_process_cpu_ns": 163795,
+    "gc_counters_delta": [
+      {
+        "collections": 0,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      {
+        "collections": 0,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      {
+        "collections": 0,
+        "collected": 0,
+        "uncollectable": 0
+      }
+    ],
+    "gc_elapsed_ns": null,
+    "targets": [
+      {
+        "label": "pop",
+        "kind": "native",
+        "caller_identity": "code"
+      }
+    ],
+    "threads": [
+      {
+        "sequence": 0,
+        "python_thread_id": 127073885796224,
+        "native_thread_id": 2,
+        "targets": {
+          "pop": {
+            "calls": 2,
+            "returns": 1,
+            "unwinds": 1,
+            "inclusive_wall_ns": null,
+            "selected_exclusive_wall_ns": null,
+            "inclusive_thread_cpu_ns": null,
+            "selected_exclusive_thread_cpu_ns": null
+          }
+        }
+      }
+    ]
+  },
+  "family_observation": {
+    "schema": "smonitor.process-family-observation@1",
+    "backend": "linux.proc",
+    "root_pid": 60,
+    "root_start_ticks": 192017657,
+    "observer_pid": 61,
+    "requested_wait_s": 0.01,
+    "status": "observed",
+    "continuous_coverage": false,
+    "atomic_family_sample": false,
+    "true_peak_pss_bytes": null,
+    "maximum_sampled_family_pss_bytes": 5648384,
+    "read_failures": 0,
+    "errors_omitted": 0,
+    "success_history_omitted": 0,
+    "discovery_limits": 0,
+    "cpu_ticks_per_second": 100,
+    "process_cpu_deltas": [
+      {
+        "pid": 60,
+        "start_ticks": 192017657,
+        "observed_self_cpu_ticks_delta": 0,
+        "observed_waited_children_cpu_ticks_delta": 0
+      }
+    ],
+    "samples": [
+      {
+        "start_ns": 1920176668884909,
+        "processes": [
+          {
+            "pid": 60,
+            "start_ticks": 192017657,
+            "ppid": 2,
+            "state": "S",
+            "self_cpu_ticks": 1,
+            "waited_children_cpu_ticks": 0,
+            "threads": 1,
+            "rss_bytes": 10682368,
+            "read_start_ns": 1920176668890634,
+            "pss_bytes": 5648384,
+            "identity_verified": true,
+            "read_end_ns": 1920176669473748
+          }
+        ],
+        "errors": [],
+        "read_failures": 0,
+        "errors_omitted": 0,
+        "observed_pss_bytes": 5648384,
+        "family_pss_bytes": 5648384,
+        "observed_rss_bytes": 10682368,
+        "end_ns": 1920176669483004
+      }
+    ],
+    "stop_reason": "caller_stop_or_eof",
+    "observation_start_ns": 1920176667252516,
+    "observation_end_ns": 1920176669921916,
+    "observer_cpu_ns": 2322986,
+    "observer_process_cpu_ns": 78646874,
+    "resources_at_start": {
+      "schema": "smonitor.linux-resources@1",
+      "pid": 60,
+      "start_ticks": 192017657,
+      "identity_verified": true,
+      "start_ns": 1920176667294166,
+      "end_ns": 1920176668881241,
+      "affinity_cpus": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "host_memory_bytes": {
+        "MemAvailable": 15266508800,
+        "SwapTotal": 8589930496,
+        "SwapFree": 86016
+      },
+      "host_pressure_raw": {
+        "cpu": "some avg10=0.00 avg60=0.06 avg300=0.43 total=11719976593\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+        "memory": "some avg10=0.00 avg60=0.00 avg300=0.00 total=2700508647\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=2601715216\n",
+        "io": "some avg10=0.53 avg60=1.18 avg300=2.23 total=63777149281\nfull avg10=0.37 avg60=1.11 avg300=2.12 total=61485831266\n"
+      },
+      "visible_cgroup_v2_ancestors": [
+        {
+          "visible_ancestor": 0,
+          "controls": {
+            "cpu.max": "max 100000\n",
+            "cpu.stat": "usage_usec 482052606819\nuser_usec 446682546687\nsystem_usec 35370060132\nnice_usec 876000\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+            "memory.max": "max\n",
+            "memory.high": "max\n"
+          }
+        },
+        {
+          "visible_ancestor": 1,
+          "controls": {
+            "cpu.max": "max 100000\n",
+            "cpu.stat": "usage_usec 1379406032602\nuser_usec 1227418590163\nsystem_usec 151987442438\nnice_usec 48368380000\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+            "memory.max": "max\n",
+            "memory.high": "max\n"
+          }
+        },
+        {
+          "visible_ancestor": 2,
+          "controls": {
+            "cpu.max": "max 100000\n",
+            "cpu.stat": "usage_usec 1765282457981\nuser_usec 1539159065687\nsystem_usec 226123392294\nnice_usec 49184400000\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+            "memory.max": "max\n",
+            "memory.high": "max\n"
+          }
+        },
+        {
+          "visible_ancestor": 3,
+          "controls": {
+            "cpu.max": "max 100000\n",
+            "cpu.stat": "usage_usec 1792091259938\nuser_usec 1557040536402\nsystem_usec 235050723535\nnice_usec 49185112000\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+            "memory.max": "max\n",
+            "memory.high": "max\n"
+          }
+        },
+        {
+          "visible_ancestor": 4,
+          "controls": {
+            "cpu.max": "max 100000\n",
+            "cpu.stat": "usage_usec 1792103284500\nuser_usec 1557048874969\nsystem_usec 235054409530\nnice_usec 49185112000\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+            "memory.max": "max\n",
+            "memory.high": "max\n"
+          }
+        },
+        {
+          "visible_ancestor": 5,
+          "controls": {
+            "cpu.max": null,
+            "cpu.stat": "usage_usec 1759488381000\nuser_usec 1513796243000\nsystem_usec 245692138000\nnice_usec 49343307000\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+            "memory.max": null,
+            "memory.high": null
+          }
+        }
+      ],
+      "errors": [
+        {
+          "operation": "cgroup_5_cpu.max",
+          "category": "not_found_or_exited"
+        },
+        {
+          "operation": "cgroup_5_memory.max",
+          "category": "not_found_or_exited"
+        },
+        {
+          "operation": "cgroup_5_memory.high",
+          "category": "not_found_or_exited"
+        }
+      ],
+      "status": "incomplete"
+    },
+    "observer_exit_code": 0,
+    "observer_startup_wall_ns": 78872837,
+    "observer_cleanup_pending": false
+  },
+  "scope": "Linux x86_64 Python3.14 public artifact controls; explicit sampled coverage"
+}

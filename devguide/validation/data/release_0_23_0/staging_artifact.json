@@ -1,0 +1,10 @@
+{
+  "artifact": "/tmp/compilation-guzwsGiHPw/noarch/smonitor-0.23.0-py_0.tar.bz2",
+  "build_number": 0,
+  "filename": "smonitor-0.23.0-py_0.tar.bz2",
+  "package": "smonitor",
+  "route": "staged",
+  "sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+  "subdir": "noarch",
+  "version": "0.23.0"
+}

@@ -1,0 +1,8 @@
+{
+  "package": "uibcdf/smonitor/0.23.0/noarch/smonitor-0.23.0-py_0.tar.bz2",
+  "schema": "uibcdf.conda-promotion@1",
+  "sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+  "source_label": "staging",
+  "status": "verified",
+  "target_label": "main"
+}

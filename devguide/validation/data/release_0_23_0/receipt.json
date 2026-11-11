@@ -1,0 +1,169 @@
+{
+  "record_type": "SMonitor 0.23.0 publication evidence",
+  "retained_at": "2026-11-11T03:57:21.008255+00:00",
+  "version": "0.23.0",
+  "package": "smonitor",
+  "build_number": 0,
+  "candidate_sha": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+  "tag": "0.23.0",
+  "release_title": "0.23.0",
+  "release_published_at": "2026-11-11T03:42:43Z",
+  "release_url": "https://github.com/uibcdf/smonitor/releases/tag/0.23.0",
+  "artifact": {
+    "filename": "smonitor-0.23.0-py_0.tar.bz2",
+    "sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+    "bytes": 69009,
+    "url": "https://conda.anaconda.org/uibcdf/noarch/smonitor-0.23.0-py_0.tar.bz2",
+    "route": "staged",
+    "main_label": "verified",
+    "solver_index": "verified",
+    "staging_label_retained": true
+  },
+  "license": {
+    "expression": "MIT",
+    "notice_path": "site-packages/smonitor-0.23.0.dist-info/licenses/LICENSE",
+    "notice_sha256": "201cca3f4381a6fe589d0ee2a0f88092d8d01465744df6eda0a16ac8ec2c35fc"
+  },
+  "runtime_contract": {
+    "python": ">=3.11,<3.15",
+    "required_providers": [],
+    "optional_providers": {
+      "rich": ">=13",
+      "pytest": ">=8",
+      "pytest-receptor": ">=1.2"
+    }
+  },
+  "runs": {
+    "source": 42949342319,
+    "ci": 42949176725,
+    "qa": 42949176814,
+    "docs": 42949176734,
+    "policy_before_build": 42949177257,
+    "producer": 42950020732,
+    "installed": 42951310668,
+    "tag_policy": 42954230622,
+    "release_route": 42954538123,
+    "docs_deploy": 42954538083,
+    "promotion": 42955042087
+  },
+  "qualification": {
+    "source_cells": 12,
+    "installed_cells": 12,
+    "platforms": [
+      "linux-64",
+      "osx-arm64",
+      "win-64"
+    ],
+    "python_minors": [
+      "3.11",
+      "3.12",
+      "3.13",
+      "3.14"
+    ],
+    "required_source_collective_e2e_bootstrap": "executed in QA",
+    "skip_scope": "The non-required nightly-decision source job is deliberately skipped for manual dispatch. Python 3.11 call-observer and non-Linux process backend negative controls preserve explicit unsupported capability. Optional-client source-only/bookkeeping skips remain scoped. No installed resource, launcher, test or final provenance step is skipped.",
+    "local_isolated_source": {
+      "python": "3.14.7",
+      "passed": 913,
+      "scoped_skips": 4,
+      "branch_covered": 1224,
+      "branch_total": 1328,
+      "pip_check": "clean",
+      "metadata_note": "The retained isolated-prefix package metadata predates the last source commit and tag. Tests used the final source checkout; this metadata is not an installed 0.23.0 artifact qualification."
+    },
+    "public_receiving": {
+      "python": "3.14.10",
+      "platform": "linux",
+      "machine": "x86_64",
+      "controls_passed": [
+        "public_installed_identity",
+        "bound_emission_and_application_policy",
+        "call_identity_threads_errors_and_policy",
+        "native_receiver_return_and_raise",
+        "process_scope_refusal",
+        "process_sampling_owned_exit_and_cleanup",
+        "installed_cli_commands"
+      ],
+      "cli_help_controls": 3,
+      "pip_check": "clean",
+      "origin": "fresh minimal public Conda prefix outside checkout; required-only runtime with no pytest/rich extras"
+    }
+  },
+  "providers": {
+    "conda_action": "87c70b1443d5f22d738ee3ddf812bdbe0152f6c2",
+    "publication_tools": "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918"
+  },
+  "guide": {
+    "path": "standards/SMONITOR_GUIDE.md",
+    "canonical_commit": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+    "sha256": "f7e94a70c4f4344f018925587a4dc5f481822ce312c791300927e62dd794576b",
+    "delivery_owner": "uibcdf/molsyssuite#165"
+  },
+  "follow_up_owners": {
+    "release_notice": "uibcdf/molsyssuite#183",
+    "impact": "uibcdf/molsyssuite#181",
+    "direct_consumers": "uibcdf/moli#82",
+    "observation_receiving": "uibcdf/opencastp#13",
+    "fixed_work_performance": "uibcdf/pharmacophoremt#98",
+    "probe_cost": "uibcdf/pyunitwizard#141"
+  },
+  "scope_limits": [
+    "Original receipts/native snapshots are retained byte-for-byte. This manifest is a separate owner summary; file hashes cover all retained inputs except the manifest itself.",
+    "GIL-enabled CPython 3.12-3.14 selected-call observation; Linux /proc process observation only. Existing diagnostics retain Python 3.11-3.14 support. Sampling is neither atomic nor continuous; true peak is unavailable.",
+    "Provider gates do not establish universal consumer adoption, scientific speedup or resource-allocation policy.",
+    "Historical local task prefix/module paths are disposable resources; retained public evidence remains independent of their lifecycle.",
+    "The original shared development prefix has existing unrelated pip-check conflicts; it was preserved. Clean isolated source and public-prefix claims apply only to their recorded environments.",
+    "A local temporary-storage quota failure was recovered by retiring only task-owned resources and relocating only the disposable Conda cache. No source/installed hosted gate was waived.",
+    "No public tag or package bytes were overwritten. Promotion adds main to the same staged file. Later documentary main commits do not move the tag or rebuild this artifact.",
+    "No 0.23.0 DOI claim is made; optional archival was not elected."
+  ],
+  "retained_file_sha256": {
+    "candidate_distribution.json": "b327ed23364e1461e3d1b8e1c5d74b9d260dc701f66ad897c12582c8f7b7c4ed",
+    "candidate_distribution_promotion.json": "7f309cd9f12bddc25dad92da3904f6d00b6301570d0068965ab3ec035917a81d",
+    "installed-test-tools-linux-64-py3.11/installed-test-tools.json": "303b44ba68309ed1d7cac529de74a8a203d67e6fcb2d5abd098d3991c00996ad",
+    "installed-test-tools-linux-64-py3.12/installed-test-tools.json": "a2dcd341e9c444a25b8e8f47af5e7e3ed66282c9c991282168b6cb2369df2f21",
+    "installed-test-tools-linux-64-py3.13/installed-test-tools.json": "9df7851d7b4e2e8680e17aad24f7b9790e4582d04d10d723f91945a37206ac63",
+    "installed-test-tools-linux-64-py3.14/installed-test-tools.json": "dd968c9c0885466565487df3d9aac3d3a569f34584c903e591d8fee4a9db0e6f",
+    "installed-test-tools-osx-arm64-py3.11/installed-test-tools.json": "11bae428a036431f011f74c57b7e5d4e3d731c97dbe8468ec7ca3f3a278f35c2",
+    "installed-test-tools-osx-arm64-py3.12/installed-test-tools.json": "f9c11777d73f58824fc24f65c47d0821a042ecd7553c52a1725261f4ac0626e4",
+    "installed-test-tools-osx-arm64-py3.13/installed-test-tools.json": "5767927c3af0717fdf67495d7221f8ba3bf655e6fc77938f1bfed7e476d9a101",
+    "installed-test-tools-osx-arm64-py3.14/installed-test-tools.json": "ddca9766a274fae90dd90ad3ec92d4e05dbf07cc2b850b7052e0b4ffa5564e81",
+    "installed-test-tools-win-64-py3.11/installed-test-tools.json": "1f8bfd173b8559954a7f6b4bab4e86117a02b45bfd9b94d6455195cb48911c7a",
+    "installed-test-tools-win-64-py3.12/installed-test-tools.json": "8930063b56cdee37de03eeef25136427ce3588a770c395994061f15282eff007",
+    "installed-test-tools-win-64-py3.13/installed-test-tools.json": "34bdcc189dafea739d6b1394b616b115dd41abb663c6bed1557f3436af7dcd7b",
+    "installed-test-tools-win-64-py3.14/installed-test-tools.json": "27efd9f47252210a9f4dbd8c7e6f956baa28782161c1460636c2c0a2bf8fa9fa",
+    "installed_matrix_hosted.json": "3ca54d540b1929cec1db0397f36cc22ea31eeeb8d785ce16783cebbb79c875d9",
+    "installed_matrix_independent.json": "a9d8048d70023c5d155aca414b37e7055eda3608dad1a443bcadbb077ccae7d2",
+    "installed_release_plan.toml": "f6476d8c150e8bfbce0a58c1da90c2c91be9a89c0fd5c02e130a8691b354ebe4",
+    "installed_resources.toml": "f5300a7900d09d3246b6a3e66b610fdee8c27161cd37df0700ce2fa62bef494c",
+    "installed_source_binding.json": "b473349ace35fcc1065940deb3bc665c208db19652063dd227e3d6afd87a1c6b",
+    "local_source_coverage_totals.json": "1118bc8fe433d7c305fd06a7ddd9e4730c376ec3c3e793ac3461a019cdf92787",
+    "local_source_environment.json": "4af5a89870627dca8d5ef46b052dbb57c97cff73d7f434b91a837f3a49cace56",
+    "producer_events.json": "90cac6978b57c5638d508ee07c123d8a70d4984a5cfa3424733129bc3265b6c6",
+    "promotion_receipt.json": "a5e7afa2c036af916c3cb0bd780b67a40ae55573f78b6ea602cafb47a77a5d29",
+    "public_receiving.json": "8ebccf32b4f2c3047cb4eae116de4ab0baa95fba312251d1c909d3ca4870ff1c",
+    "public_receiving.py.txt": "426444a9c03cf5dfea6289a4db7327dade9c27c9c8f21561d082b3970b86994c",
+    "public_runtime.json": "ff6c0df63898881a85e688abcf7d75ab1e3af719381230f355c1dfb2658c37e4",
+    "public_verification_hosted.json": "3ce29b5fb6315a3161c4ecb836369c5f17f964162c5fe7adbb809bf69e4920b8",
+    "public_verification_independent.json": "c9241a44a6df7e4187cc87db8a4e207ba715ae854d96e3fa8ce49c326931a919",
+    "publication_tools_source.json": "eb609b509543f3ca5dce279a252c0857d9c72f82d5f807002e5b9c7d1ddd7776",
+    "resources_preflight.json": "09d4e8db81585170ed600b9342c83efba79918119d1137bbf767a10bbd1cd1ed",
+    "route_producer.json": "b3d1054f8dedf21f274a0a5d190f9decde4ee04b0bbb8b30445643dcf845b391",
+    "route_promotion.json": "c02ba0eaebe6a49b419ab21e42aea0eb8861ad811d75d5bd268efb96f4e42a35",
+    "run-42949176725-native.json": "3abe203450d88c37d127d6a5b125ed0de36c1a5e8099e51763e22b1ace10a4a9",
+    "run-42949176734-native.json": "023f7ec970eb13d00b9b1e87a4294e45763f38d6d421456e0780b463901179a9",
+    "run-42949176814-native.json": "5ecf2c549e4955d477f6c8ea472ba031e8929af83d2dc9975866d7cc4ab9cc3b",
+    "run-42949177257-native.json": "941d21ad715c5add963be64b6ec963c0d8aaaa730f75ab296846a4d24f97fb70",
+    "run-42949342319-native.json": "93dbf3073c833698cebdab840c7978f7985592a61fdbc75799f58873cf1538c6",
+    "run-42950020732-native.json": "165c37801104acbf7ad60dbafd95f9ce42654d32273bd4b358c42e8e7c14065c",
+    "run-42951310668-native.json": "31475b8bdc1bcc4c8aa968301f6aa7a7bdc19eb8401f41a407662bb714371fcd",
+    "run-42954230622-native.json": "562ca65de46b5a039aa10320765bc62c3938e6d643df126b8386dbd1ca59e4c4",
+    "run-42954538083-native.json": "511f5dfca3c024bf550a51311f517b4c17363871485264185837823350dc02e7",
+    "run-42954538123-native.json": "630f85880f98a27d1554dfb3df0ee7ac4c2213438d379db4fa6ea4cff5ced449",
+    "run-42955042087-native.json": "0960cb716d480a669d8ba67b77bbdf4c945f993ff028252dbd3878b5d7bb605f",
+    "source_gates.json": "323c88392c18afe0770532f35129a60c349d65cdfd6a973c4628ae8c2b7a1f52",
+    "staging_artifact.json": "8beb5d2cc6a44da7b69138cd976f832e6a4e60ac8051b0838224babd2ed4427f",
+    "staging_independent.json": "dc5c091a584566884986bf1e34ec890579ed873754a917f7fef6c66845f136e3",
+    "upload_receipt.json": "473bc9f4d9edb250f82fd83390305e93b2cc33d2a3aafc6e361890c2e14581d1"
+  }
+}

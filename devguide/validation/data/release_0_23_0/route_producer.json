@@ -1,0 +1,19 @@
+{
+  "candidate_sha": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+  "checked_at": "2026-11-11T03:02:31.188880+00:00",
+  "decision_by": "Diego Prada Gracia via Codex on 2026-11-10, authorized publication in #67",
+  "gates": [
+    {
+      "run_id": 42949342319,
+      "workflow": ".github/workflows/CI_full_matrix.yaml"
+    },
+    {
+      "run_id": 42949177257,
+      "workflow": ".github/workflows/molsyssuite-policy.yml"
+    }
+  ],
+  "reason": "Additive explicit provider-root binding and opt-in selected-call/Linux process-family observation (#63-#66) introduce new public compatibility surfaces. Qualify the exact source and installed noarch archive on all twelve supported cells before public visibility, with explicit unavailable-backend controls and separate required collective E2E/bootstrap evidence.",
+  "route": "staged",
+  "schema": "smonitor.conda-route@1",
+  "version": "0.23.0"
+}

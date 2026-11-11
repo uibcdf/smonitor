@@ -1,0 +1,10 @@
+{
+  "commit": "25363f2a2c902c04b2cdc8b301a3e1c1ff0c0918",
+  "files": {
+    "verify_installed_matrix.py": "feb1fb32a2c2a6d45a67e22bcbee46c43aaf1ac2aecc1359faa8c514ed5e2bae",
+    "verify_public_conda.py": "bb743343ec7a58659b90e6cbae1a06380c7fd8e2328b1b7c11c85e52fc890567",
+    "conda_release_contract.py": "ce166c0990f386eb5b020192ef9b8d8381a3da47aa8d95507a6adb51d30009f3",
+    "_release_artifacts.py": "006e97bc5ef671942dcb2fbd9ab9047f8b3ca95021faa506de77530061d7fd77",
+    "_release_http.py": "f5ce9f0ba894f252dc6364862c800a21e18a6af7775418a5db6bef21776262ad"
+  }
+}

@@ -28,15 +28,23 @@ historical context live in `SPEC_SMONITOR.md`.
 
 ## Current Status (Checkpoint)
 - **Public release status:** [latest stable GitHub Release](https://github.com/uibcdf/smonitor/releases/latest).
-  The latest verified publication at this checkpoint is **0.22.1**
-  (2026-11-04): signal/callback fixes, layout audits, dependency floors and
-  SPDX/build/provider reviews. All twelve source and twelve installed cells
-  pass. The public `smonitor-0.22.1-py_0.tar.bz2` file has SHA-256
-  `e9ce6c77a682dddec3a6e724f9cc98cca31c4d6732453d554107ffcf61f23e7e`.
+  The latest verified publication at this checkpoint is **0.23.0**
+  (2026-11-10): explicit provider binding, corrected executable signal examples,
+  opt-in selected-call observation and Linux process-family/resource observation.
+  All twelve source and twelve installed cells pass. Existing diagnostics
+  support Python 3.11–3.14; the new call backend requires GIL-enabled CPython
+  3.12–3.14 and process observation requires Linux `/proc`. The public
+  `smonitor-0.23.0-py_0.tar.bz2` file has SHA-256
+  `32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35`.
   Exact-file promotion, independent main-label/solver checks and clean public
-  Python 3.14 receiving pass. [#62](https://github.com/uibcdf/smonitor/issues/62)
-  and the [retained receipts](validation/data/release_0_22_1/receipt.json) record
+  Python 3.14.10 receiving pass. [#67](https://github.com/uibcdf/smonitor/issues/67)
+  and the [retained receipts](validation/data/release_0_23_0/receipt.json) record
   source, installed, public and client-receiving scope separately.
+  MolSysSuite [#183](https://github.com/uibcdf/molsyssuite/issues/183) owns the
+  release notice; guide delivery and any selected consumer adoption retain
+  their linked owners. See the maintained
+  [observation contract](../docs/content/developer/observation.md) for sampling,
+  identity, privacy, availability and cleanup limits.
 - **Historical 0.21.0 qualification (2026-10-14).** The exact candidate
   `066b69cad8896cdc126d5586fd53268af4ea6490` passed the twelve-cell
   [source](https://github.com/uibcdf/smonitor/actions/runs/38524363789) and

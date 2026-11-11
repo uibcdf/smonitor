@@ -1,0 +1,147 @@
+"""Independent public-prefix controls for SMonitor 0.23.0, Linux/Python 3.14."""
+import gc
+import hashlib
+import importlib
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import threading
+from pathlib import Path
+from unittest.mock import patch
+
+import smonitor
+from smonitor.integrations import bind_provider, emit_from_catalog
+from smonitor.profiling import NativeCallTarget, ObservationError, observe_calls, observe_process_family
+
+ROOT = Path(__file__).resolve().parent
+EXPECTED = "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35"
+PREFIX = Path(sys.prefix).resolve()
+assert smonitor.__version__ == "0.23.0"
+origins = {}
+for name in ("smonitor", "smonitor._call_observation", "smonitor._process_observation", "smonitor.profiling", "smonitor.integrations.core"):
+    path = Path(importlib.import_module(name).__file__).resolve()
+    assert path.is_relative_to(PREFIX), (name, path)
+    origins[name] = str(path)
+metadata = json.loads((PREFIX / "conda-meta/smonitor-0.23.0-py_0.json").read_text())
+assert metadata["version"] == "0.23.0" and metadata["build"] == "py_0"
+assert metadata.get("sha256") == EXPECTED
+assert metadata["url"] == "https://conda.anaconda.org/uibcdf/noarch/smonitor-0.23.0-py_0.tar.bz2"
+checks = {"public_installed_identity": True}
+
+class Handler:
+    def handle(self, event, *, profile):
+        pass
+
+smonitor.configure(profile="agent", level="WARNING", handlers=[Handler()], event_buffer_size=32)
+with tempfile.TemporaryDirectory(prefix="public-provider-", dir=ROOT) as temporary:
+    provider = Path(temporary)
+    (provider / "_smonitor.py").write_text('PROFILE="user"\nCODES={"PUBLIC-W001":{"message":"Count {count}."}}\n')
+    bound = bind_provider(provider)
+    entry = {"code":"PUBLIC-W001", "level":"WARNING", "source":"public.receiving"}
+    assert emit_from_catalog(entry, package_root=bound, extra={"count":1})["message"] == "Count 1."
+    with patch.object(Path, "resolve", side_effect=AssertionError("unexpected warm resolution")):
+        for _ in range(10):
+            assert emit_from_catalog(entry, package_root=bound, extra={"count":2})["message"] == "Count 2."
+    assert smonitor.get_manager().config.profile == "agent"
+checks["bound_emission_and_application_policy"] = True
+
+expected_error = ValueError("private receiving detail")
+def inner(fail=False):
+    if fail:
+        raise expected_error
+    return 17
+
+def outer(fail=False):
+    return inner(fail)
+
+original_code = outer.__code__
+profile, trace, callbacks = sys.getprofile(), sys.gettrace(), gc.callbacks[:]
+with observe_calls({"outer":outer, "inner":inner}, identity="callable", threads="all") as calls:
+    assert outer() == 17
+    try:
+        outer(True)
+    except ValueError as caught:
+        assert caught is expected_error
+    else:
+        raise AssertionError("native error missing")
+    thread = threading.Thread(target=outer)
+    thread.start()
+    thread.join(5)
+    assert not thread.is_alive()
+call_report = calls.report()
+assert call_report["status"] == "observed"
+for label in ("outer", "inner"):
+    rows = [row["targets"][label] for row in call_report["threads"] if label in row["targets"]]
+    assert sum(row["calls"] for row in rows) == 3
+    assert sum(row["returns"] for row in rows) == 2
+    assert sum(row["unwinds"] for row in rows) == 1
+assert outer.__code__ is original_code
+assert (sys.getprofile(), sys.gettrace(), gc.callbacks) == (profile, trace, callbacks)
+assert "private receiving detail" not in json.dumps(call_report)
+checks["call_identity_threads_errors_and_policy"] = True
+
+items = [9]
+def consume(values):
+    return values.pop()
+
+with observe_calls({"pop":NativeCallTarget(consume, items.pop)}, mode="counts") as native:
+    assert consume(items) == 9
+    try:
+        consume(items)
+    except IndexError:
+        pass
+native_report = native.report()
+row = native_report["threads"][0]["targets"]["pop"]
+assert (row["calls"], row["returns"], row["unwinds"]) == (2,1,1)
+assert row["inclusive_thread_cpu_ns"] is None
+assert native_report["status"] == "observed"
+checks["native_receiver_return_and_raise"] = True
+
+try:
+    with observe_process_family(os.getpid()):
+        pass
+except ObservationError as error:
+    assert error.code == "SMONITOR-OBSERVATION-CONFLICT"
+else:
+    raise AssertionError("self root admitted")
+checks["process_scope_refusal"] = True
+
+source = "import sys; data=bytearray(1048576); print('ready',flush=True); sys.stdin.readline(); sys.exit(17)"
+process = subprocess.Popen([sys.executable,"-c",source],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
+try:
+    assert process.stdout.readline().strip() == "ready"
+    with observe_process_family(process.pid, interval_s=0.01, max_samples=100, include_host=True) as family:
+        assert process.poll() is None
+    family_report = family.report()
+    assert family_report["observer_exit_code"] == 0
+    assert not family_report["observer_cleanup_pending"]
+    assert family_report["samples"]
+    assert any(sample["family_pss_bytes"] is not None and sample["family_pss_bytes"] > 0 for sample in family_report["samples"])
+    assert family_report["true_peak_pss_bytes"] is None
+    assert process.poll() is None
+    process.communicate("finish\n",timeout=5)
+    assert process.returncode == 17
+finally:
+    if process.poll() is None:
+        process.kill()
+        process.communicate(timeout=5)
+checks["process_sampling_owned_exit_and_cleanup"] = True
+
+cli = []
+for args in (["--help"],["pytest-check","--help"],["pytest-baseline","--help"]):
+    result = subprocess.run([str(PREFIX/"bin/smonitor"),*args],capture_output=True,text=True)
+    assert result.returncode == 0, result.stderr
+    cli.append({"args":args,"exit_code":result.returncode})
+checks["installed_cli_commands"] = True
+
+report = {"state":"passed", "version":smonitor.__version__, "python":sys.version,
+          "prefix":str(PREFIX), "origins":origins, "file_sha256":EXPECTED,
+          "conda_url":metadata["url"], "checks":checks, "cli":cli,
+          "call_observation":call_report, "native_observation":native_report,
+          "family_observation":family_report,
+          "scope":"Linux x86_64 Python3.14 public artifact controls; explicit sampled coverage"}
+(ROOT/"public_receiving.json").write_text(json.dumps(report,indent=2))
+print(json.dumps({"state":report["state"],"checks":checks,"python":sys.version.split()[0],
+                  "family_read_failures":family_report["read_failures"],"cli_controls":len(cli)}))

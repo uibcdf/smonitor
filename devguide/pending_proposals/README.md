@@ -17,8 +17,6 @@ The table below is generated from front matter by
 
 <!-- generated: devguide_index -->
 
-| entry | status | issue | summary |
-| --- | --- | --- | --- |
-| [`publish_0_23_0.md`](publish_0_23_0.md) | `active` | [uibcdf/smonitor#67](https://github.com/uibcdf/smonitor/issues/67) | Qualify and publish explicit binding and bounded observation in SMonitor 0.23.0. |
+_No entries._
 
 <!-- /generated -->

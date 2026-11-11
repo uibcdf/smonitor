@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-11-11T03:12:24.671863+00:00",
+  "state": "verified staging",
+  "filename": "smonitor-0.23.0-py_0.tar.bz2",
+  "sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+  "bytes": 69009,
+  "labels": [
+    "staging"
+  ],
+  "index": {
+    "arch": null,
+    "build": "py_0",
+    "build_number": 0,
+    "depends": [
+      "python >=3.11,<3.15"
+    ],
+    "license": "MIT",
+    "name": "smonitor",
+    "noarch": "python",
+    "platform": null,
+    "subdir": "noarch",
+    "timestamp": 1794366274340,
+    "version": "0.23.0"
+  },
+  "metadata_version": "0.23.0",
+  "requires_python": "<3.15,>=3.11",
+  "requires_dist": [
+    "rich>=13; extra == \"rich\"",
+    "pytest>=8; extra == \"pytest\"",
+    "pytest-receptor>=1.2; extra == \"pytest\""
+  ],
+  "new_module_source_hashes": {
+    "_call_observation.py": "7e88ed12401aee1a344f5c5f316331cabd5d50510dae8c6dec9ebf882d036879",
+    "_process_observation.py": "724797f09a83b132f4eef403148d48f70ec16935d0915fad8e47bd41882d9565",
+    "profiling.py": "7b05575d321b7d55d7355808632c49379d70c2aca15c59d1571e9b4623d85095",
+    "_diagnostics.py": "4871b49202b355919c17cd159bca503c445e075fd7d6ad7ac3e81e8c14403ab4",
+    "integrations/core.py": "6d476cd4d638e4f934a4368db5b92710a813d8bfd2739983b102cf5cf86ea7d9"
+  },
+  "license_path": "site-packages/smonitor-0.23.0.dist-info/licenses/LICENSE",
+  "license_sha256": "201cca3f4381a6fe589d0ee2a0f88092d8d01465744df6eda0a16ac8ec2c35fc",
+  "source": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c"
+}

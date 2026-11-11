@@ -1,0 +1,21 @@
+{
+  "python": "3.14.10 | packaged by conda-forge | (main, Oct 26 2026, 11:35:38) [GCC 15.3.0]",
+  "platform": "Linux",
+  "machine": "x86_64",
+  "packages": [
+    [
+      "pip",
+      "26.2.2"
+    ],
+    [
+      "smonitor",
+      "0.23.0"
+    ]
+  ],
+  "license_sha256": "201cca3f4381a6fe589d0ee2a0f88092d8d01465744df6eda0a16ac8ec2c35fc",
+  "license_path": "/tmp/smonitor-0.23.0-m5qp5yws/public-prefix/lib/python3.14/site-packages/smonitor-0.23.0.dist-info/licenses/LICENSE",
+  "pip_check": {
+    "exit_code": 0,
+    "stdout": "No broken requirements found."
+  }
+}

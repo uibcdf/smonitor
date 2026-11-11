@@ -1,0 +1,25 @@
+{
+  "events": [
+    {
+      "artifact": "smonitor-0.23.0-py_0.tar.bz2",
+      "build": "success",
+      "kind": "conda.package",
+      "platform": "noarch",
+      "sha256": "32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35",
+      "upload": "not_requested"
+    }
+  ],
+  "producer": {
+    "ref": "87c70b1443d5f22d738ee3ddf812bdbe0152f6c2",
+    "repository": "uibcdf/action-build-and-upload-conda-packages"
+  },
+  "schema": "gh-run-receptor.events@1",
+  "subject": {
+    "head_sha": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+    "job_key": "conda_deployment_with_new_tag",
+    "matrix_index": null,
+    "repository": "uibcdf/smonitor",
+    "run_attempt": 1,
+    "run_id": 42950020732
+  }
+}

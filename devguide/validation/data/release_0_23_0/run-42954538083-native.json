@@ -1,0 +1,161 @@
+{
+  "attempt": 1,
+  "conclusion": "success",
+  "createdAt": "2026-11-11T03:42:45Z",
+  "databaseId": 42954538083,
+  "event": "release",
+  "headSha": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+  "jobs": [
+    {
+      "completedAt": "2026-11-11T03:43:18Z",
+      "conclusion": "success",
+      "databaseId": 130306398755,
+      "name": "Sphinx docs to gh-pages",
+      "startedAt": "2026-11-11T03:42:48Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-11T03:42:49Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-11T03:42:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:42:50Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-11-11T03:42:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:42:50Z",
+          "conclusion": "success",
+          "name": "Additional info about the build",
+          "number": 3,
+          "startedAt": "2026-11-11T03:42:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:42:51Z",
+          "conclusion": "success",
+          "name": "Check out reviewed distribution tools",
+          "number": 4,
+          "startedAt": "2026-11-11T03:42:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:42:51Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 5,
+          "startedAt": "2026-11-11T03:42:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:03Z",
+          "conclusion": "success",
+          "name": "Setup conda env",
+          "number": 6,
+          "startedAt": "2026-11-11T03:42:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:04Z",
+          "conclusion": "success",
+          "name": "Info conda",
+          "number": 7,
+          "startedAt": "2026-11-11T03:43:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:04Z",
+          "conclusion": "success",
+          "name": "Check distribution inputs",
+          "number": 8,
+          "startedAt": "2026-11-11T03:43:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:08Z",
+          "conclusion": "success",
+          "name": "Installing the library",
+          "number": 9,
+          "startedAt": "2026-11-11T03:43:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:08Z",
+          "conclusion": "success",
+          "name": "Test import module",
+          "number": 10,
+          "startedAt": "2026-11-11T03:43:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:11Z",
+          "conclusion": "success",
+          "name": "Build docs",
+          "number": 11,
+          "startedAt": "2026-11-11T03:43:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:16Z",
+          "conclusion": "success",
+          "name": "Running the Sphinx to gh-pages Action",
+          "number": 12,
+          "startedAt": "2026-11-11T03:43:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:16Z",
+          "conclusion": "success",
+          "name": "Post Setup conda env",
+          "number": 21,
+          "startedAt": "2026-11-11T03:43:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:16Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 22,
+          "startedAt": "2026-11-11T03:43:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:16Z",
+          "conclusion": "success",
+          "name": "Post Check out reviewed distribution tools",
+          "number": 23,
+          "startedAt": "2026-11-11T03:43:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:16Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 24,
+          "startedAt": "2026-11-11T03:43:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:43:16Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 25,
+          "startedAt": "2026-11-11T03:43:16Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/uibcdf/smonitor/actions/runs/42954538083/job/130306398755"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-11-11T03:43:19Z",
+  "url": "https://github.com/uibcdf/smonitor/actions/runs/42954538083",
+  "workflowName": "Sphinx docs to gh-pages"
+}

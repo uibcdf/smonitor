@@ -1,0 +1,225 @@
+{
+  "attempt": 1,
+  "conclusion": "success",
+  "createdAt": "2026-11-11T03:47:29Z",
+  "databaseId": 42955042087,
+  "event": "workflow_dispatch",
+  "headSha": "ed3231c51d66d8c51d8ca8a1a798ded07a40952c",
+  "jobs": [
+    {
+      "completedAt": "2026-11-11T03:48:29Z",
+      "conclusion": "success",
+      "databaseId": 130308019903,
+      "name": "Promote the digest-verified noarch package",
+      "startedAt": "2026-11-11T03:47:33Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-11T03:47:36Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-11T03:47:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:41Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-11-11T03:47:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:44Z",
+          "conclusion": "success",
+          "name": "Validate immutable published release identity",
+          "number": 3,
+          "startedAt": "2026-11-11T03:47:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:44Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 4,
+          "startedAt": "2026-11-11T03:47:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:44Z",
+          "conclusion": "success",
+          "name": "Check out reviewed distribution tools",
+          "number": 5,
+          "startedAt": "2026-11-11T03:47:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:51Z",
+          "conclusion": "success",
+          "name": "Install distribution-tool parser requirements",
+          "number": 6,
+          "startedAt": "2026-11-11T03:47:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:54Z",
+          "conclusion": "success",
+          "name": "Check candidate distribution inputs and executed source gates",
+          "number": 7,
+          "startedAt": "2026-11-11T03:47:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:55Z",
+          "conclusion": "success",
+          "name": "Retain exact candidate distribution evidence",
+          "number": 8,
+          "startedAt": "2026-11-11T03:47:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:55Z",
+          "conclusion": "success",
+          "name": "Verify the staged release decision and exact CI gates",
+          "number": 9,
+          "startedAt": "2026-11-11T03:47:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:56Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 10,
+          "startedAt": "2026-11-11T03:47:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:57Z",
+          "conclusion": "success",
+          "name": "Bind the committed installed matrix to the exact archive",
+          "number": 11,
+          "startedAt": "2026-11-11T03:47:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:47:58Z",
+          "conclusion": "success",
+          "name": "Verify every installed cell and executed test step",
+          "number": 12,
+          "startedAt": "2026-11-11T03:47:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:22Z",
+          "conclusion": "success",
+          "name": "Set up the authenticated Anaconda client",
+          "number": 13,
+          "startedAt": "2026-11-11T03:47:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:22Z",
+          "conclusion": "success",
+          "name": "Derive the exact package identity",
+          "number": 14,
+          "startedAt": "2026-11-11T03:48:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:24Z",
+          "conclusion": "success",
+          "name": "Promote the verified staged artifact",
+          "number": 15,
+          "startedAt": "2026-11-11T03:48:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:25Z",
+          "conclusion": "success",
+          "name": "Retain the promotion receipt",
+          "number": 16,
+          "startedAt": "2026-11-11T03:48:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:26Z",
+          "conclusion": "success",
+          "name": "Independently verify the public channel",
+          "number": 17,
+          "startedAt": "2026-11-11T03:48:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:26Z",
+          "conclusion": "success",
+          "name": "Independently verify registry label and solver digest",
+          "number": 18,
+          "startedAt": "2026-11-11T03:48:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:26Z",
+          "conclusion": "success",
+          "name": "Retain independent public verification",
+          "number": 19,
+          "startedAt": "2026-11-11T03:48:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:27Z",
+          "conclusion": "success",
+          "name": "Post Set up the authenticated Anaconda client",
+          "number": 34,
+          "startedAt": "2026-11-11T03:48:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:27Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 35,
+          "startedAt": "2026-11-11T03:48:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:27Z",
+          "conclusion": "success",
+          "name": "Post Check out reviewed distribution tools",
+          "number": 36,
+          "startedAt": "2026-11-11T03:48:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:27Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 37,
+          "startedAt": "2026-11-11T03:48:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:27Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 38,
+          "startedAt": "2026-11-11T03:48:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-11T03:48:27Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 39,
+          "startedAt": "2026-11-11T03:48:27Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/uibcdf/smonitor/actions/runs/42955042087/job/130308019903"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-11-11T03:48:29Z",
+  "url": "https://github.com/uibcdf/smonitor/actions/runs/42955042087",
+  "workflowName": "Promote an exact conda package"
+}

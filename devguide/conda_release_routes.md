@@ -109,3 +109,22 @@ independent public label/index checks and clean public Python 3.14 receiving
 are retained in [the release record](validation/data/release_0_22_1/receipt.json).
 The immutable tag identifies the tested candidate; later documentary closeout
 commits do not move it or replace qualified package bytes.
+
+The `0.23.0` [source matrix](https://github.com/uibcdf/smonitor/actions/runs/42949342319)
+and [installed matrix](https://github.com/uibcdf/smonitor/actions/runs/42951310668)
+pass all twelve required cells at source
+`ed3231c51d66d8c51d8ca8a1a798ded07a40952c`.
+The [producer](https://github.com/uibcdf/smonitor/actions/runs/42950020732)
+builds/tests, inspects and separately uploads `smonitor-0.23.0-py_0.tar.bz2`;
+[promotion](https://github.com/uibcdf/smonitor/actions/runs/42955042087)
+adds `main` to that same file, retaining `staging`. SHA-256 is
+`32f6bff5056a2af967caf676840b4b65ba0e9d370879637cfd60579681755e35`.
+Hosted and independent public-main/solver-index verification and fresh public
+Linux/Python 3.14.10 receiving pass. The release-event job intentionally skips
+duplicate builds/uploads after executing the staged-route guard. Original
+receipts, native job/step snapshots, installed bindings and public controls
+are retained in [the release record](validation/data/release_0_23_0/receipt.json).
+Required collective E2E/bootstrap executes separately in source QA; observation
+backend refusals preserve their explicit interpreter/platform scope. Consumer
+adoption remains independently owned through `uibcdf/molsyssuite#181` and
+the version-specific publication notice `uibcdf/molsyssuite#183`.

@@ -1,0 +1,1 @@
+{"prefix": "/Users/runner/miniconda3/envs/installed", "python": "3.13", "test_dependencies": ["pytest>=8,<10", "pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "pytest-receptor==1.2.0", "pytest-cov>=6,<8", "pytest-xdist>=3.6,<4", "pytest-receptor>=1.2,<2", "rich==15.0.0", "versioningit>=3,<4", "PyYAML>=6,<7", "Jinja2>=3,<4", "packaging>=24,<27"]}
