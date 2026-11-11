@@ -1,2 +1,7 @@
 # Reviewed workflow hashes bind the same bytes on every supported platform.
 .github/workflows/* text eol=lf
+
+# Retained publication receipts keep their original bytes on every platform.
+devguide/validation/data/release_0_23_0/** -text
+# These original hosted receipts use Windows line endings.
+devguide/validation/data/release_0_23_0/installed-test-tools-win-64-*/installed-test-tools.json whitespace=cr-at-eol
