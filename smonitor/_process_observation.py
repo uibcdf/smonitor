@@ -6,6 +6,7 @@ import json
 import math
 import os
 import select
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -388,6 +389,7 @@ class ProcessFamilyObservation:
             include_host=include_host,
         )
         self._worker = self._temporary = self._report = None
+        self._stop_requested = False
 
     def __enter__(self):
         _linux()
@@ -405,8 +407,8 @@ class ProcessFamilyObservation:
                 "SMONITOR-OBSERVATION-IO", extra={"operation": "root_identity"}
             ) from None
         self._config["start_ticks"] = initial["start_ticks"]
-        self._temporary = tempfile.TemporaryDirectory(prefix="smonitor-family-")
-        self._config["report_path"] = str(Path(self._temporary.name) / "report.json")
+        self._temporary = Path(tempfile.mkdtemp(prefix="smonitor-family-"))
+        self._config["report_path"] = str(self._temporary / "report.json")
         startup = time.monotonic_ns()
         try:
             self._worker = subprocess.Popen(
@@ -435,19 +437,25 @@ class ProcessFamilyObservation:
         return self
 
     def stop(self):
-        if self._report is not None:
+        if self._report is not None and not self._report.get("observer_cleanup_pending"):
             return
         worker = self._worker
+        recovered = self._report is not None
         result = {
             "schema": "smonitor.process-family-observation@1",
             "status": "incomplete",
             "observer_failure": "no_report",
+            "root_pid": self._config["pid"],
+            "root_start_ticks": self._config.get("start_ticks"),
+            "observer_pid": worker.pid if worker is not None else None,
             "samples": [],
         }
         try:
             if worker is not None:
                 try:
-                    worker.communicate(input="stop\n", timeout=10)
+                    command = None if self._stop_requested else "stop\n"
+                    self._stop_requested = True
+                    worker.communicate(input=command, timeout=10)
                 except (BrokenPipeError, subprocess.TimeoutExpired):
                     worker.terminate()
                     try:
@@ -468,14 +476,21 @@ class ProcessFamilyObservation:
                 if worker.returncode != 0:
                     result["status"] = "incomplete"
                     result["observer_failure"] = "worker_exit"
+                if recovered:
+                    result["status"] = "incomplete"
+                    result["observer_failure"] = "cleanup_recovered"
         except (OSError, ValueError, subprocess.TimeoutExpired):
             result["status"] = "incomplete"
             result["observer_failure"] = "report_or_cleanup"
         finally:
             self._report = result
-            if self._temporary is not None:
+            pending = worker is not None and worker.poll() is None
+            self._report["observer_cleanup_pending"] = pending
+            if pending:
+                self._report["status"] = "incomplete"
+            elif self._temporary is not None:
                 try:
-                    self._temporary.cleanup()
+                    shutil.rmtree(self._temporary)
                 except OSError:
                     self._report["status"] = "incomplete"
                     self._report["observer_failure"] = "temporary_cleanup"

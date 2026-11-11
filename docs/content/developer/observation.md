@@ -114,6 +114,10 @@ the caller can then release a work barrier. Startup time is outside that sample
 window. The caller keeps its process handle, wait/return-code handling and
 scientific result. The observer closes on normal exit, body exceptions, bounds,
 duration or parent EOF. Cleanup targets only its own worker and temporary files.
+If the bounded cleanup cannot retire its worker, the report marks
+`observer_cleanup_pending` and retains its owned directory. Keep the scope
+object and retry `stop()` to complete retirement. Recovered cleanup retains
+incomplete observation status.
 
 The worker discovers children through every live task's `children` file,
 deduplicates PIDs, verifies start ticks, and retains already discovered

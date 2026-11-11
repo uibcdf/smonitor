@@ -32,3 +32,10 @@ An actual sibling observer discovers a child created by a secondary thread and p
 The linked maintained contract states the supported input/backend and coverage
 boundaries. Consumer receiving is coordinated under uibcdf/molsyssuite#181;
 publication remains separately tracked in uibcdf/smonitor#67.
+
+## 2026-11-10 cleanup verification follow-up
+
+A bounded cleanup timeout now retains the still-active worker's owned temporary
+directory and exposes `observer_cleanup_pending`. A retry can finish retirement
+while retaining incomplete status. The regression injects an unretired worker,
+verifies preservation, then verifies deferred cleanup after its recorded exit.

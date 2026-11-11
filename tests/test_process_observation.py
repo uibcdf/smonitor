@@ -191,7 +191,7 @@ def test_body_exception_preserved_and_temporary_observer_retired():
         with pytest.raises(RuntimeError) as caught:
             with observe_process_family(process.pid) as observation:
                 observer_pid = observation._worker.pid
-                temporary = observation._temporary.name
+                temporary = observation._temporary
                 raise error
         assert caught.value is error
         assert process.poll() is None
@@ -433,7 +433,7 @@ def test_startup_failure_retires_owned_temp_and_preserves_catalog_error(monkeypa
             with pytest.raises(ObservationError) as caught:
                 observation.__enter__()
         assert caught.value.code == "SMONITOR-OBSERVATION-IO"
-        assert not Path(observation._temporary.name).exists()
+        assert not observation._temporary.exists()
         assert process.poll() is None
     finally:
         process.communicate("stop\n", timeout=5)
@@ -516,3 +516,36 @@ def test_visible_cgroup_resource_snapshot_preserves_raw_controls(fake_proc, monk
     assert report["status"] == "observed"
     assert report["host_memory_bytes"]["MemAvailable"] == 102400
     assert report["visible_cgroup_v2_ancestors"][0]["controls"]["cpu.max"] == "max 100000\n"
+
+
+def test_unretired_observer_preserves_its_owned_directory_until_retry(tmp_path):
+    class Worker:
+        pid = 123
+        returncode = None
+
+        def communicate(self, *args, **kwargs):
+            if self.returncode is None:
+                raise subprocess.TimeoutExpired("owned observer", 1)
+
+        def terminate(self):
+            pass
+
+        def kill(self):
+            pass
+
+        def poll(self):
+            return self.returncode
+
+    observation = observe_process_family(7)
+    observation._temporary = tmp_path / "owned"
+    observation._temporary.mkdir()
+    observation._config["report_path"] = str(observation._temporary / "report.json")
+    observation._worker = Worker()
+    observation.stop()
+    assert observation.report()["observer_cleanup_pending"]
+    assert observation._temporary.exists()
+    observation._worker.returncode = -9
+    observation.stop()
+    assert not observation.report()["observer_cleanup_pending"]
+    assert observation.report()["status"] == "incomplete"
+    assert not observation._temporary.exists()
