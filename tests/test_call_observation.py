@@ -467,3 +467,54 @@ def test_final_clock_failure_keeps_body_exception_and_unavailable_clocks(monkeyp
     assert caught.value is error
     assert observation.report()["scope_wall_ns"] is None
     assert observation.report()["tool_released"]
+
+
+@supported
+def test_argument_return_and_receiver_payloads_are_not_retained():
+    import weakref
+
+    class Payload:
+        def __repr__(self):
+            raise AssertionError("payload formatting")
+
+        __str__ = __repr__
+
+    def work(value):
+        return value
+
+    payload = Payload()
+    reference = weakref.ref(payload)
+    with observe_calls({"work": work}) as observation:
+        assert work(payload) is payload
+        del payload
+        assert reference() is None
+    assert observation.report()["status"] == "observed"
+    assert "Payload" not in json.dumps(observation.report())
+
+    class Worker:
+        def run(self):
+            return None
+
+    worker = Worker()
+    reference = weakref.ref(worker)
+    observation = observe_calls({"work": worker.run}, identity="callable")
+    del worker
+    with observation:
+        assert reference().run() is None
+    assert reference() is None
+
+
+@supported
+def test_unavailable_gc_snapshot_preserves_body_exception(monkeypatch):
+    error = RuntimeError("body")
+
+    def failed_stats():
+        raise ValueError("stats")
+
+    with pytest.raises(RuntimeError) as caught:
+        with observe_calls({"work": lambda: None}) as observation:
+            monkeypatch.setattr(gc, "get_stats", failed_stats)
+            raise error
+    assert caught.value is error
+    assert observation.report()["gc_counters_delta"] is None
+    assert observation.report()["tool_released"]
