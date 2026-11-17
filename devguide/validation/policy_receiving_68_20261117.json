@@ -1,0 +1,871 @@
+{
+  "schema": "smonitor.policy-adoption-review@1",
+  "issue": "uibcdf/smonitor#68",
+  "review_date": "2026-11-17",
+  "source_basis": "d12aea807bdc8fba961150fe46b1537133539092",
+  "candidate_identity": "The containing commit is the candidate; publication/hosted/central receiving is not preclaimed.",
+  "policy": {
+    "target": "policy-v1.6.0",
+    "tag_object": "4d20cfc2e6d2aff783561410f23f69d660bca92e",
+    "source": "698fbdfd4b0a53b6b7cc49815e1102cd9c117749",
+    "admission": "already registered; no new input",
+    "actual_caller": ".github/workflows/molsyssuite-policy.yml",
+    "caller_change": "only1.5.4 to1.6.0",
+    "reviewed_workflow_sha256_before": "6cc62208156f765ca0456e3bc5f398934263e03afc7063c69afa692c5dafdffd",
+    "reviewed_workflow_sha256_after": "7000a5b495c77a7dbceedfd4f1089df6919ab576169747bfe9047e3acc103da9"
+  },
+  "candidate_adoption": {
+    "scope": "Initial candidate observation before later canonical-guide delivery and owner PR publication; final branch/source evidence is received centrally.",
+    "published_target": {
+      "release": "policy-v1.6.0",
+      "tag_sha": "4d20cfc2e6d2aff783561410f23f69d660bca92e",
+      "commit": "698fbdfd4b0a53b6b7cc49815e1102cd9c117749"
+    },
+    "records": [
+      {
+        "kind": "guide",
+        "repository": "uibcdf/smonitor",
+        "item": "GH_RUN_RECEPTOR_GUIDE.md",
+        "state": "current",
+        "owner": "uibcdf/smonitor",
+        "expected": "uibcdf/gh-run-receptor:standards/GH_RUN_RECEPTOR_GUIDE.md",
+        "observed": "uibcdf/smonitor:GH_RUN_RECEPTOR_GUIDE.md",
+        "source_revision": "38cd0b08b8739196df5db0aecd8fd4ec1e8cec2d59f194b10c55a7847330c740",
+        "consumer_revision": "38cd0b08b8739196df5db0aecd8fd4ec1e8cec2d59f194b10c55a7847330c740",
+        "exception": "",
+        "next_action": "none"
+      },
+      {
+        "kind": "guide",
+        "repository": "uibcdf/smonitor",
+        "item": "MOLSYSSUITE_GUIDE.md",
+        "state": "current",
+        "owner": "uibcdf/smonitor",
+        "expected": "uibcdf/molsyssuite:MOLSYSSUITE_GUIDE.md",
+        "observed": "uibcdf/smonitor:MOLSYSSUITE_GUIDE.md",
+        "source_revision": "02737e0099e17f94e610334f944fce595c2ab23f0c415c01418726e6d7ee3d82",
+        "consumer_revision": "02737e0099e17f94e610334f944fce595c2ab23f0c415c01418726e6d7ee3d82",
+        "exception": "",
+        "next_action": "none"
+      },
+      {
+        "kind": "guide",
+        "repository": "uibcdf/smonitor",
+        "item": "PYTEST_RECEPTOR_GUIDE.md",
+        "state": "current",
+        "owner": "uibcdf/smonitor",
+        "expected": "uibcdf/pytest-receptor:standards/PYTEST_RECEPTOR_GUIDE.md",
+        "observed": "uibcdf/smonitor:PYTEST_RECEPTOR_GUIDE.md",
+        "source_revision": "0ef80eac29d785d7431cac942d44eeadc81bf85ce2d9cfe89021c8970e2242f2",
+        "consumer_revision": "0ef80eac29d785d7431cac942d44eeadc81bf85ce2d9cfe89021c8970e2242f2",
+        "exception": "",
+        "next_action": "none"
+      },
+      {
+        "kind": "policy",
+        "repository": "uibcdf/smonitor",
+        "item": "policy-caller",
+        "state": "current",
+        "owner": "uibcdf/smonitor",
+        "expected": "policy-v1.6.0",
+        "observed": "policy-v1.6.0",
+        "source_revision": "policy-v1.6.0",
+        "consumer_revision": "policy-v1.6.0",
+        "exception": "",
+        "next_action": "none"
+      }
+    ]
+  },
+  "guides": {
+    "copies": {
+      "PYTEST_RECEPTOR_GUIDE.md": "0ef80eac29d785d7431cac942d44eeadc81bf85ce2d9cfe89021c8970e2242f2",
+      "MOLSYSSUITE_GUIDE.md": "d256eaba4523a0535bf810d9177184e5b1791f797baf6d3218f847fb316b29b5",
+      "GH_RUN_RECEPTOR_GUIDE.md": "38cd0b08b8739196df5db0aecd8fd4ec1e8cec2d59f194b10c55a7847330c740"
+    },
+    "mutation": "Only MOLSYSSUITE_GUIDE.md receives the published routing clarification through official synchronizer; other guide bytes preserved.",
+    "canonical_owner_heads": {
+      "pyunitwizard": "3d7b293480448bba080d4ba2d33bfae86d06eb2c",
+      "gh-run-receptor": "49939d0ebce117c8473fefab129f9db8a12c2b36",
+      "pytest-receptor": "5a30123f2b366fd7fe606d77294e232d4f835e89"
+    },
+    "canonical_source": "a02f2b463d4100b804252130b903ad7b09b0cad6",
+    "canonical_sha256_before": "02737e0099e17f94e610334f944fce595c2ab23f0c415c01418726e6d7ee3d82"
+  },
+  "sdk": {
+    "source": "6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26",
+    "export_sha256": "bc2feba33735612ede033814628d42830f7f231fd81fe644d1b845c06a3e7db6",
+    "scope": "actual clean Git checkout at exact pre-existing CI SDK commit; sparse scripts/registry, no pin change or installation"
+  },
+  "checks": {
+    "selected_cases_passed": 236,
+    "selector": "complete selected governance/distribution/public API/agent/integration-contract modules",
+    "science": "No OpenCASTp scientific conftest, algorithm, native build or benchmark is selected; SMonitor runtime code unchanged.",
+    "relevant_negative": "Restoring the stale digest independently fails the existing source-integrity regression; original candidate restored.",
+    "frozen_conformance_after": [],
+    "ruff": "lint and format pass on actual hydrated source;567OpenCASTp files and141SMonitor files; no assertion about unhydrated historical sources",
+    "cells": [
+      {
+        "owner": "smonitor",
+        "label": "baseline-conformance",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "/tmp/molsyssuite-two-owner-hlakcyt6/policy/devtools/scripts/check_repository.py",
+          ".",
+          "--repository",
+          "uibcdf/smonitor",
+          "--skip-guide-content",
+          "--json"
+        ],
+        "expected_exit": 1,
+        "exit_code": 1,
+        "seconds": 1.02,
+        "log_sha256": "b141ccfaa8d6402b2362fbd4d0487608425beab82af51adc5a9e1343d71d9eb0",
+        "log_bytes": 126,
+        "min_available_ram_bytes": 19046916096,
+        "max_task_scratch_bytes": 30355547,
+        "min_scratch_free_bytes": 12554981376,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "fixed-administrative",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_receptor.plugin",
+          "--receptor=llm",
+          "tests/test_devguide_reports.py",
+          "tests/test_repository_metadata.py",
+          "tests/test_gh_run_receptor_policy.py",
+          "tests/test_guide_sync_readonly.py",
+          "tests/test_distribution_inputs.py",
+          "tests/test_ci_backlog.py",
+          "tests/test_api_contract.py",
+          "tests/test_agent_contract.py",
+          "tests/test_integrations_api_contract.py"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 2.06,
+        "log_sha256": "d5c507047647bc3cfd027be1d66e09f0ff90421e987205b5686e8514fc35ab52",
+        "log_bytes": 34,
+        "min_available_ram_bytes": 19019968512,
+        "max_task_scratch_bytes": 31212615,
+        "min_scratch_free_bytes": 12553752576,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "fixed-conformance",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "/tmp/molsyssuite-two-owner-hlakcyt6/policy/devtools/scripts/check_repository.py",
+          ".",
+          "--repository",
+          "uibcdf/smonitor",
+          "--skip-guide-content",
+          "--json"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 1.03,
+        "log_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "log_bytes": 3,
+        "min_available_ram_bytes": 19111256064,
+        "max_task_scratch_bytes": 32702231,
+        "min_scratch_free_bytes": 12551749632,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "scoped-lint",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "ruff",
+          "check",
+          "."
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 1.03,
+        "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+        "log_bytes": 19,
+        "min_available_ram_bytes": 19104718848,
+        "max_task_scratch_bytes": 32703083,
+        "min_scratch_free_bytes": 12551745536,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "scoped-format",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "ruff",
+          "format",
+          "--check",
+          "."
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 1.03,
+        "log_sha256": "8d08b150ad35cf62e82f71589e9d6ce72d022530cc8c54f9307ee13fb9b31724",
+        "log_bytes": 28,
+        "min_available_ram_bytes": 19105079296,
+        "max_task_scratch_bytes": 32713183,
+        "min_scratch_free_bytes": 12551700480,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "stale-digest-negative",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_receptor.plugin",
+          "--receptor=llm",
+          "tests/test_distribution_inputs.py::test_reviewed_provider_checkouts_and_workflow_bytes_match_inventory"
+        ],
+        "expected_exit": 1,
+        "exit_code": 1,
+        "seconds": 1.03,
+        "log_sha256": "87ef0cf8e5b23fa19863b9e37ebce8d8ff288d2b5b4057711971b651a4520c26",
+        "log_bytes": 488,
+        "min_available_ram_bytes": 19074531328,
+        "max_task_scratch_bytes": 32735050,
+        "min_scratch_free_bytes": 12559114240,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "final-administrative",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_receptor.plugin",
+          "--receptor=llm",
+          "tests/test_devguide_reports.py",
+          "tests/test_repository_metadata.py",
+          "tests/test_gh_run_receptor_policy.py",
+          "tests/test_guide_sync_readonly.py",
+          "tests/test_distribution_inputs.py",
+          "tests/test_ci_backlog.py",
+          "tests/test_api_contract.py",
+          "tests/test_agent_contract.py",
+          "tests/test_integrations_api_contract.py"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 2.06,
+        "log_sha256": "a09aae6a38c540d25539734d4df4388eeb3908777e46d1695a65c0a482f9e255",
+        "log_bytes": 88,
+        "min_available_ram_bytes": 19086299136,
+        "max_task_scratch_bytes": 32737149,
+        "min_scratch_free_bytes": 12558938112,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "actual-installed-bounds",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "devtools/check_distribution_inputs.py",
+          "--suite-root",
+          "/tmp/molsyssuite-two-owner-hlakcyt6/smonitor-sdk",
+          "--output",
+          "/tmp/molsyssuite-two-owner-hlakcyt6/smonitor-installed-bounds.json"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 1.04,
+        "log_sha256": "795d9942c97b216108072866a666fa9e590d1a4e440e3c4dcbfff2203630cf93",
+        "log_bytes": 76,
+        "min_available_ram_bytes": 19125907456,
+        "max_task_scratch_bytes": 32738388,
+        "min_scratch_free_bytes": 12559093760,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "resource-controls",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-c",
+          "import os,resource,json; print(json.dumps({'affinity':sorted(os.sched_getaffinity(0)),'nice':os.getpriority(os.PRIO_PROCESS,0),'address_space_limit':resource.getrlimit(resource.RLIMIT_AS),'cpu_seconds_limit':resource.getrlimit(resource.RLIMIT_CPU)}))"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 1.03,
+        "log_sha256": "68a9d05dc5ec6167477e10b9c2f61a4dc9ed852d9c3f39b950daea3c73e215a9",
+        "log_bytes": 110,
+        "min_available_ram_bytes": 19094974464,
+        "max_task_scratch_bytes": 32752494,
+        "min_scratch_free_bytes": 12559056896,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "delivery-report-controls",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_receptor.plugin",
+          "--receptor=llm",
+          "tests/test_devguide_reports.py",
+          "tests/test_repository_metadata.py",
+          "tests/test_gh_run_receptor_policy.py",
+          "tests/test_guide_sync_readonly.py",
+          "tests/test_distribution_inputs.py",
+          "tests/test_ci_backlog.py",
+          "tests/test_api_contract.py",
+          "tests/test_agent_contract.py",
+          "tests/test_integrations_api_contract.py"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 2.09,
+        "log_sha256": "3e7fbd3bebfefe16b2abb86aedc40b5312cfb648efa014455f75d675d6998f43",
+        "log_bytes": 34,
+        "min_available_ram_bytes": 19075137536,
+        "max_task_scratch_bytes": 32763073,
+        "min_scratch_free_bytes": 12558635008,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "pr-source-controls",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_receptor.plugin",
+          "--receptor=llm",
+          "tests/test_devguide_reports.py",
+          "tests/test_repository_metadata.py",
+          "tests/test_gh_run_receptor_policy.py",
+          "tests/test_guide_sync_readonly.py",
+          "tests/test_distribution_inputs.py",
+          "tests/test_ci_backlog.py",
+          "tests/test_api_contract.py",
+          "tests/test_agent_contract.py",
+          "tests/test_integrations_api_contract.py"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 2.06,
+        "log_sha256": "e642ea04d1280461d6f537f2cbc385c4d47a499bb88aa0cda3360917e799fc39",
+        "log_bytes": 34,
+        "min_available_ram_bytes": 19659071488,
+        "max_task_scratch_bytes": 34382433,
+        "min_scratch_free_bytes": 12560822272,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      },
+      {
+        "owner": "smonitor",
+        "label": "pr-conformance",
+        "command": [
+          "/home/diego/Myopt/miniconda3/envs/molsyssuite@uibcdf_3.14/bin/python",
+          "/tmp/molsyssuite-two-owner-hlakcyt6/policy/devtools/scripts/check_repository.py",
+          ".",
+          "--repository",
+          "uibcdf/smonitor",
+          "--skip-guide-content",
+          "--json"
+        ],
+        "expected_exit": 0,
+        "exit_code": 0,
+        "seconds": 1.03,
+        "log_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "log_bytes": 3,
+        "min_available_ram_bytes": 19675365376,
+        "max_task_scratch_bytes": 34384444,
+        "min_scratch_free_bytes": 12560834560,
+        "stop": null,
+        "protection": "one inherited CPU/nice10/native threads1; per-process AS2GiB/CPU60s; owned session monitored wall180s/reserve13GiB; no aggregate RAM/reservation proof"
+      }
+    ],
+    "final_selection": "236passed/no skips after canonical delivery"
+  },
+  "preserved_inputs": {
+    "unmodified_hydrated_source_files": 383,
+    "manifest_sha256": "ded21c3865773669414bafe75862e2dcbd4632100e02b8d713b2896aca9b71f1",
+    "scope": "Runtime/numerical/API and other SDK fields are unchanged relative to current owner base. One published common guide is deliberately synchronized; owner concurrent source work is inherited, not ours."
+  },
+  "resource": {
+    "loaded_guide_sha256": "d256eaba4523a0535bf810d9177184e5b1791f797baf6d3218f847fb316b29b5",
+    "loaded_rule_sha256": "185ab7b08583e4342dcb8f3450e03c01e41c9f36bb93cb2040372945add23939",
+    "budget": {
+      "material_jobs": 1,
+      "inherited_cpu_affinity": 1,
+      "native_threads": 1,
+      "estimated_ram_mib": 1024,
+      "scratch_mib": 384,
+      "wall_seconds_per_job": 180
+    },
+    "actual_controls": "one inherited CPU affinity,nice10,native threads1,per-process AS2GiB/CPU60s and monitored owned-session wall180s/reserve13GiB",
+    "actual_probe": "affinity[0],nice10,AS2147483648,CPU60 as reported by each real child",
+    "min_observed_available_ram_bytes": 19019968512,
+    "max_observed_task_scratch_bytes": 34384444,
+    "limits": "No advertised scheduler/site admission policy, reservation, aggregate RAM enforcement/peak proof or simultaneous admission claim; larger workloads remain owner-reviewed."
+  },
+  "receptors": [
+    {
+      "name": "pytest-receptor",
+      "version": "1.2.3",
+      "url": "https://files.pythonhosted.org/packages/e0/a1/f13e25abf28c2dbd0b458778923a166f050c995630455297fccb77098dcf/pytest_receptor-1.2.3-py3-none-any.whl",
+      "sha256": "8e1b7d603e21838ab6a310a99f11507fdda8c7c7b6481ac6b79a56010b06c916",
+      "verified": "official PyPI version metadata and downloaded bytes"
+    },
+    {
+      "name": "gh-run-receptor",
+      "version": "1.5.0",
+      "url": "https://conda.anaconda.org/uibcdf/noarch/gh-run-receptor-1.5.0-py_0.tar.bz2",
+      "sha256": "d2684bde9ff51c5c9b12a5f79f2beab5288c69af984ce1d92c0ced39bc4246ca",
+      "verified": "official Anaconda version metadata and downloaded bytes"
+    }
+  ],
+  "preparation_attempts": [
+    "OpenCASTp HTTPS clone lacked noninteractive authentication; same authorized repository obtained through existing SSH access.",
+    "Initial SDK source export was replaced before tests by a clean actual Git checkout because the unchanged owner adapter requires exact HEAD/status identity.",
+    "OpenCASTp initial sparse Ruff runs classify missing package modules differently; real source context hydrated and both checks pass without import/numerical edits."
+  ],
+  "hosted": "Owner PR automatic gates pending actual publication and execution; no manual dispatch or default-branch adoption claimed.",
+  "remaining": "Original scientific/native/GPU/performance/installed/public/platform and broader collective gates retain their owners; this is source governance receiving only. Preserve#82shared-prefix pause, primary human work and existing owner scratch.",
+  "actual_distribution_preflight": {
+    "installed_check_required": true,
+    "installed_versions": {
+      "python": "3.14.7"
+    },
+    "package": "smonitor",
+    "proof_domain": "numeric-release-versions",
+    "provider_commit": "6d6172d6cd00c5ac2d4ebadb71df554ec5b7fa26",
+    "qualification": "declared-and-installed-public-bounds",
+    "routes": [
+      {
+        "kind": "noarch-dependencies",
+        "package": "smonitor",
+        "path": "devtools/conda-build/meta.yaml",
+        "resources": {
+          "path": "devtools/conda-build/resources.toml",
+          "required_paths": [
+            "site-packages/smonitor/__init__.py",
+            "site-packages/smonitor/_version.py",
+            "site-packages/smonitor/_diagnostics.py",
+            "site-packages/smonitor/profiling.py",
+            "site-packages/smonitor/_call_observation.py",
+            "site-packages/smonitor/_process_observation.py",
+            "site-packages/smonitor/bundle.py",
+            "site-packages/smonitor/config/__init__.py",
+            "site-packages/smonitor/core/capture.py",
+            "site-packages/smonitor/core/manager.py",
+            "site-packages/smonitor/integrations/provider.py",
+            "site-packages/smonitor/cli.py",
+            "site-packages/smonitor/pytest_plugin.py",
+            "site-packages/smonitor/pytest_policy.py",
+            "site-packages/smonitor/templates/_smonitor.py",
+            "site-packages/smonitor/templates/README.md"
+          ],
+          "scope": "declared-resources",
+          "version_file": "site-packages/smonitor/_version.py"
+        },
+        "scope": "declared-noarch-dependencies"
+      },
+      {
+        "kind": "build-only",
+        "path": "devtools/conda-envs/build_env.yaml"
+      },
+      {
+        "kind": "runtime",
+        "narrowed": [
+          "python"
+        ],
+        "path": "devtools/conda-envs/development_env.yaml",
+        "purpose": "development",
+        "selectors": [
+          {
+            "build": null,
+            "original": "python=3.14",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "pip",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "setuptools >=77.0.3",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "wheel",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "ruff=0.16.5",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "pytest",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-cov",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-receptor=1.2.0",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "versioningit",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "sphinx",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "myst-nb",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pydata-sphinx-theme",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pyyaml >=6,<7",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "jinja2 >=3,<4",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "packaging >=24",
+            "version_kind": "range"
+          }
+        ]
+      },
+      {
+        "kind": "runtime",
+        "narrowed": [
+          "python"
+        ],
+        "path": "devtools/conda-envs/docs_env.yaml",
+        "purpose": "documentation",
+        "selectors": [
+          {
+            "build": null,
+            "original": "python=3.14",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "pip",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "sphinx",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "sphinx-copybutton",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "sphinx-remove-toctrees",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "sphinx-design",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "sphinx-favicon",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "myst-nb",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pydata-sphinx-theme",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "nbsphinx",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "ipykernel",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pandoc",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "versioningit",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pyyaml >=6,<7",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "jinja2 >=3,<4",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "packaging >=24",
+            "version_kind": "range"
+          }
+        ]
+      },
+      {
+        "kind": "runtime",
+        "narrowed": [],
+        "path": "devtools/conda-envs/qa_env.yaml",
+        "purpose": "test",
+        "selectors": [
+          {
+            "build": null,
+            "original": "python >=3.11,<3.15",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pip",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "setuptools >=77.0.3",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "wheel",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-cov",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-xdist",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-receptor=1.2.0",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "rich=15.0.0",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "ruff=0.16.5",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "versioningit",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pyyaml >=6,<7",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "jinja2 >=3,<4",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "packaging >=24",
+            "version_kind": "range"
+          }
+        ]
+      },
+      {
+        "kind": "runtime",
+        "narrowed": [],
+        "path": "devtools/conda-envs/test_env.yaml",
+        "purpose": "test",
+        "selectors": [
+          {
+            "build": null,
+            "original": "python >=3.11,<3.15",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pip",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-cov",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-xdist",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pytest-receptor=1.2.0",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "rich=15.0.0",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "ruff=0.16.5",
+            "version_kind": "prefix"
+          },
+          {
+            "build": null,
+            "original": "versioningit",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "pyyaml >=6,<7",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "jinja2 >=3,<4",
+            "version_kind": "range"
+          },
+          {
+            "build": null,
+            "original": "packaging >=24",
+            "version_kind": "range"
+          }
+        ]
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/CI.yaml",
+        "sha256": "45ed025961a91fea3082c18a26090ea3a52bea2fc32e8b64648b791e851c9608"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/CI_full_matrix.yaml",
+        "sha256": "57e3dde405b6c7f3fe85ecdecef0994d6a8e85f4c7df4f0ac2d91ee20ca03516"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/build_and_upload_conda_packages.yaml",
+        "sha256": "0c89801c386aad6d6cadbac35c77acd515bbd85625c2e44c580a95dfdc01b0aa"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/docs_ci.yaml",
+        "sha256": "b5480397b0994d08d46dbe069a0b0e8990cf09a1479305ab8ad7cba9d58d243a"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/molsyssuite-policy.yml",
+        "sha256": "7000a5b495c77a7dbceedfd4f1089df6919ab576169747bfe9047e3acc103da9"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/promote_conda_package.yaml",
+        "sha256": "b6642e94314f2a63bce9a84cbfe76642c9e3666dc26a9814536c2025c8f4b381"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/qa_ci.yaml",
+        "sha256": "8e3771b1885c5d7c14fc292c3e5013b1b358bbb849addfad1409b26ffdd6d342"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/sphinx_docs_to_gh_pages.yaml",
+        "sha256": "7b986208f31732fa6bcb77504d1533debd13fe40df0d1eb64e0191e9e4a7c09c"
+      },
+      {
+        "kind": "reviewed-workflow",
+        "path": ".github/workflows/test_staged_conda_package.yaml",
+        "sha256": "9930bfb576947020bd49f182697f2ad2b032d1ec9bff597298b481715e4a9f0a"
+      }
+    ],
+    "schema": "molsyssuite.dependency-routes@2",
+    "source_dependencies": []
+  },
+  "actual_distribution_limit": "Existing SDK verifies15declared/installed dependency-bound routes against the current administrative interpreter metadata; this does not qualify an original/public SMonitor package or fresh solver/platform.",
+  "original_inspected_source": "d12aea807bdc8fba961150fe46b1537133539092",
+  "delivery_route": "Owner-reviewed PR from the MolSysSuite coordination task; no push to default branch or owner-merge authority inferred."
+}

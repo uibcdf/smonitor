@@ -1,5 +1,19 @@
 # smonitor Developer Guide
 
+## Policy 1.6.0 receiving candidate — 2026-11-17
+
+[Owner #68](https://github.com/uibcdf/smonitor/issues/68) and the
+[current review](archive/latest_policy_1_6_0.md) receive the actual
+immutable caller and matching reviewed workflow digest. The locally tested
+candidate passes 236 selected cases passing with published Pytest Receptor,
+zero frozen conformance findings and current canonical guides. Runtime/science,
+release and installed/public qualifications retain their original scope.
+Owner PR review, default-branch integration and actual hosted results remain
+pending; copying instructions
+or available RAM is not aggregate resource protection. See the review for the
+bounded one-CPU administrative workload and unchanged SDKs.
+
+
 This folder collects developer documentation for `smonitor`.
 
 ## Recommended Reading Order

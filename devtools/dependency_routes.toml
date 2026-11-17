@@ -70,7 +70,7 @@ reason = "Documentation runtime with strict public channels and no-deps installa
 
 [[workflows]]
 path = ".github/workflows/molsyssuite-policy.yml"
-sha256 = "6cc62208156f765ca0456e3bc5f398934263e03afc7063c69afa692c5dafdffd"
+sha256 = "7000a5b495c77a7dbceedfd4f1089df6919ab576169747bfe9047e3acc103da9"
 reason = "Existing versioned shared policy call; no component runtime installation"
 
 [[workflows]]
